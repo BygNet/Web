@@ -1,0 +1,24 @@
+:root
+  --backgroundColor: #bee7f3
+  --foregroundColor: rgba(196, 196, 196, 0.1)
+  --foregroundOpaque: rgb(143, 175, 201)
+  --textColor: rgba(0, 0, 0, 0.9)
+  --accentColor: rgb(117, 188, 232)
+  --shadowColor: rgba(226, 250, 255, 0.8)
+
+@media (prefers-color-scheme: dark)
+  :root
+    --backgroundColor: #001823
+    --foregroundColor: rgba(134, 134, 134, 0.1)
+    --foregroundOpaque: rgb(53, 79, 89)
+    --textColor: rgba(240, 240, 240, 0.9)
+    --accentColor: rgb(20, 86, 209)
+    --shadowColor: rgba(132, 170, 220, 0.8)
+
+// SASS aliases
+$backgroundColor: var(--backgroundColor)
+$foregroundColor: var(--foregroundColor)
+$foregroundOpaque: var(--foregroundOpaque)
+$textColor: var(--textColor)
+$accentColor: var(--accentColor)
+$shadowColor: var(--shadowColor)
