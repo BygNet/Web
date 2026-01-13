@@ -25,15 +25,16 @@
     height: 100vh
 
   main
-    height: 100vh
+    flex-grow: 1
+    height: 100dvh
     max-width: 55rem
-    padding: 0 1rem
+    padding: 0 calc(var(--padding)/2)
     margin: 0 auto
-    overflow: scroll
+    overflow-y: scroll
     scrollbar-width: none
 
   @media (max-width: variables.$mobileWidth)
     .bygApp
-      --padding: 0.75rem
+      --padding: 0.5rem
       flex-direction: column
 </style>

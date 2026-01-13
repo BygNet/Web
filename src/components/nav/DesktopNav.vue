@@ -14,7 +14,10 @@
 
     <VStack>
       <RouterLink v-for="page in BygPages" :to="page.path">
-        <HStack class="desktopNavItem">
+        <HStack
+          class="desktopNavItem"
+          :class="{ selected: router.currentRoute.value.path === page.path }"
+        >
           <Icon
             :icon="
               router.currentRoute.value.path === page.path
@@ -22,7 +25,7 @@
                 : page.icon
             "
           />
-          <h3 :class="{ bold: router.currentRoute.value.path === page.path }">
+          <h3>
             {{ page.title }}
           </h3>
         </HStack>
@@ -46,6 +49,7 @@
     display: none
     align-items: flex-start
     justify-content: space-between
+    min-width: 12rem
     width: 16rem
     padding: var(--padding)
     height: calc(100vh - var(--padding)*2)
@@ -57,9 +61,12 @@
     padding: 0.75rem
     transition: 0.2s ease
 
-    &:hover
+    &:hover, &.selected
       background: colors.$foregroundColor
       border-radius: 5rem
+
+      h3
+        font-weight: 900
 
     svg
       width: 2rem

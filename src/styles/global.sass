@@ -2,18 +2,25 @@
 @use "fonts"
 @use "variables"
 @use "utils"
+@use "buttons"
 
 *
   scroll-behavior: smooth
 
+html
+  overflow: hidden
+  background: colors.$backgroundColor
+
 body
+  position: fixed
   display: flex
   align-items: center
   justify-content: center
+  top: 0
   margin: 0
   padding: 0
+  height: 100dvh
 
-  background: colors.$backgroundColor
   color: colors.$textColor
   user-select: none
   -webkit-user-select: none

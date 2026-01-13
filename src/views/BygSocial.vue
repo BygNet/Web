@@ -5,6 +5,7 @@
   import PostItem from '@/components/posts/PostItem.vue'
   import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import EmptyState from '@/components/layout/EmptyState.vue'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
@@ -57,22 +58,30 @@
 <template>
   <div class="bygSocial">
     <p id="top" />
-    <VStack v-if="!isLoaded">
-      <h3>Loading Posts...</h3>
-    </VStack>
+    <EmptyState v-if="!isLoaded" message="Loading posts." />
 
     <VStack v-else class="postList">
       <NewPostsAvailable v-if="hasNewPosts" @click="reloadAndScroll" />
 
-      <PostItem v-for="post in posts" :key="post.id" :post="post" />
+      <RouterLink
+        class="postLink"
+        v-for="post in posts"
+        :key="post.id"
+        :to="`/details/${post.id}`"
+      >
+        <PostItem :post="post" />
+      </RouterLink>
     </VStack>
   </div>
 </template>
 
 <style scoped lang="sass">
   .bygSocial
-    margin: 1rem 0
+    margin: var(--padding) 0
     min-height: 100vh
+
+  .postLink
+    width: 100%
 
     .postList
       gap: 0.5rem

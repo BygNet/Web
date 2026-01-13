@@ -47,15 +47,17 @@
     border: 0.2rem solid colors.$foregroundColor
 
     .mobileNavItems
+      gap: 0.25rem
 
       .mobileNavItem
         align-items: center
         min-width: 3rem
-        padding: 0.5rem
+        padding: 0.5rem 0.25rem
+        gap: 0
         border-radius: 10rem
 
         &.selected
-          padding: 0.5rem 1rem
+          padding: 0.5rem 0.75rem
           background: colors.$foregroundColor
 
         svg
@@ -63,7 +65,7 @@
           height: 1.5rem
 
         p
-          font-size: small
+          font-size: x-small
 
   @media (max-width: variables.$mobileWidth)
     .bygMobileNav
