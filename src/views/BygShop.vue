@@ -5,9 +5,12 @@
   import EmptyState from '@/components/layout/EmptyState.vue'
   import VStack from '@/components/layout/VStack.vue'
   import HStack from '@/components/layout/HStack.vue'
+  import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   const shops: Ref<BygShop[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
+
+  setHeadMeta({ page: 'Shop', subtitle: 'Byg shopping hub.' })
 
   onMounted(async () => {
     const res = await fetch(`${import.meta.env.VITE_API_BASE}/shops`)
