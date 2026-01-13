@@ -20,6 +20,23 @@
     }).format(date)
   }
 
+  function formatCount(value: number): string {
+    if (value < 1_000) return String(value)
+
+    if (value < 1_000_000) {
+      const v = value / 1_000
+      return `${Math.floor(v * 10) / 10}k`
+    }
+
+    if (value < 1_000_000_000) {
+      const v = value / 1_000_000
+      return `${Math.floor(v * 10) / 10}M`
+    }
+
+    const v = value / 1_000_000_000
+    return `${Math.floor(v * 10) / 10}B`
+  }
+
   function likePost(id: number) {
     fetch(`${import.meta.env.VITE_API_BASE}/like-post/${id}`, {
       method: 'POST',
@@ -44,7 +61,7 @@
     <HStack class="postActions">
       <button @click="likePost(post.id)">
         <Icon icon="solar:hearts-line-duotone" />
-        {{ likes }}
+        {{ formatCount(likes) }}
       </button>
     </HStack>
   </div>
