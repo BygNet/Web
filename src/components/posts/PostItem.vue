@@ -8,6 +8,7 @@
     post: BygPost
   }>()
   const likes: Ref<number> = ref(props.post.likes)
+  defineEmits(['navigate'])
 
   function formatDate(input: string): string {
     const date = new Date(input)
@@ -47,7 +48,7 @@
 </script>
 
 <template>
-  <div class="bygPostItem">
+  <div class="bygPostItem" @click="$emit('navigate')">
     <h4>{{ post.title }}</h4>
     <HStack class="autoSpace postMeta">
       <p>{{ post.author }}</p>
@@ -58,7 +59,7 @@
       {{ post.content }}
     </p>
 
-    <HStack class="postActions">
+    <HStack class="postActions" @click.stop>
       <button @click="likePost(post.id)">
         <Icon icon="solar:hearts-line-duotone" />
         {{ formatCount(likes) }}
@@ -70,15 +71,14 @@
 <style scoped lang="sass">
   @use "@/styles/colors"
   @use "@/styles/variables"
+  @use "@/styles/utils"
 
   .bygPostItem
     --postPadding: 0.75rem
 
+    @include utils.itemBackground
     align-items: flex-start
-    padding: 0.75rem
-    background: colors.$foregroundColor
     width: calc(100% - var(--postPadding)*2)
-    border-radius: 1.75rem
 
     .postMeta
       opacity: 0.7

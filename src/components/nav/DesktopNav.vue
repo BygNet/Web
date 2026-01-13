@@ -9,7 +9,10 @@
 <template>
   <nav class="desktopNav">
     <RouterLink to="/">
-      <h1 class="bygLogo">Byg β</h1>
+      <HStack class="bygLogo">
+        <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />
+        <h1>Byg β</h1>
+      </HStack>
     </RouterLink>
 
     <VStack>
@@ -32,7 +35,7 @@
       </RouterLink>
     </VStack>
 
-    <a href="https://github.com/BygNet">
+    <a href="https://github.com/BygNet" target="_blank">
       <HStack>
         <Icon icon="solar:code-line-duotone" />
         GitHub
@@ -55,6 +58,13 @@
     height: calc(100vh - var(--padding)*2)
 
     border-right: 0.2rem solid colors.$foregroundColor
+
+    .bygLogo
+      align-items: center
+
+      .bygLogoImage
+        width: 2.5rem
+        height: 2.5rem
 
   .desktopNavItem
     margin: 0 -0.75rem

@@ -66,10 +66,12 @@
       <RouterLink
         class="postLink"
         v-for="post in posts"
-        :key="post.id"
         :to="`/details/${post.id}`"
+        :key="post.id"
+        custom
+        v-slot="{ navigate }"
       >
-        <PostItem :post="post" />
+        <PostItem :post="post" @navigate="navigate" />
       </RouterLink>
     </VStack>
   </div>
@@ -79,9 +81,6 @@
   .bygSocial
     margin: var(--padding) 0
     min-height: 100vh
-
-  .postLink
-    width: 100%
 
     .postList
       gap: 0.5rem

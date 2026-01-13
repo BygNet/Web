@@ -27,6 +27,7 @@
   main
     flex-grow: 1
     height: 100dvh
+    width: 100%
     max-width: 55rem
     padding: 0 calc(var(--padding)/2)
     margin: 0 auto
@@ -37,4 +38,7 @@
     .bygApp
       --padding: 0.5rem
       flex-direction: column
+
+    main
+      width: calc(100% - var(--padding)*2)
 </style>

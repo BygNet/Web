@@ -1,3 +1,13 @@
+@use "colors"
+
 .autoSpace
   justify-content: space-between
   width: 100%
+
+.noSpace
+  gap: 0
+
+@mixin itemBackground
+  padding: 0.75rem
+  background: colors.$foregroundColor
+  border-radius: 1.75rem
