@@ -35,11 +35,11 @@
   .bygMobileNav
     display: none
     position: sticky
-    bottom: 0.5rem
+    bottom: calc(env(safe-area-inset-bottom) + 0.5rem)
     left: 0.5rem
     right: 0.5rem
     width: fit-content
-    margin: env(--safe-area-inset-bottom) auto
+    margin: auto
     background: colors.$foregroundColor
     backdrop-filter: blur(0.75rem)
     border-radius: 10rem

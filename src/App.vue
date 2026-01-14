@@ -1,16 +1,16 @@
 <script setup lang="ts">
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import MobileNav from '@/components/nav/MobileNav.vue'
+  import TitleView from '@/components/nav/TitleView.vue'
 </script>
 
 <template>
-  <!--  <div class="bygApp">-->
   <DesktopNav />
   <main>
+    <TitleView />
     <RouterView />
     <MobileNav />
   </main>
-  <!--  </div>-->
 </template>
 
 <style scoped lang="sass">
@@ -23,6 +23,7 @@
     max-width: 55rem
     padding: 0 calc(var(--padding)/2)
     margin: 0 auto
+    gap: 1rem
     overflow-y: scroll
     scrollbar-width: none
 

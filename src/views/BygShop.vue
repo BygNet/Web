@@ -7,10 +7,12 @@
   import HStack from '@/components/layout/HStack.vue'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
   import ContentArea from '@/components/layout/ContentArea.vue'
+  import { title } from '@/data/title.ts'
 
   const shops: Ref<BygShop[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
 
+  title.value = 'Shop'
   setHeadMeta({ page: 'Shop', subtitle: 'Byg shopping hub.' })
 
   onMounted(async () => {

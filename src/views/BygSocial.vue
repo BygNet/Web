@@ -7,6 +7,7 @@
   import setHeadMeta from '@/utils/setHeadMeta.ts'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
+  import { title } from '@/data/title.ts'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
@@ -14,6 +15,7 @@
 
   let interval: number | undefined
 
+  title.value = 'Social'
   setHeadMeta({
     page: 'Social',
     subtitle: 'Byg Social for Web.',
