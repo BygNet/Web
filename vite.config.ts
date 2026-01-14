@@ -23,15 +23,15 @@ export default defineConfig({
           {
             src: '/logos/BygLogo-Pwa.png',
             sizes: '1024x1024',
-            type: 'image/png'
-          }
-        ]
-      }
-    })
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
 })

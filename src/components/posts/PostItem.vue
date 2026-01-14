@@ -2,7 +2,7 @@
   import type { BygPost } from '@/types/contentTypes.ts'
   import HStack from '@/components/layout/HStack.vue'
   import { Icon } from '@iconify/vue'
-  import {ref, type Ref, watchEffect} from 'vue'
+  import { ref, type Ref, watchEffect } from 'vue'
   import { marked } from 'marked'
   import DOMPurify from 'dompurify'
 

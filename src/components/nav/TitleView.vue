@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {Icon} from "@iconify/vue";
-import { title, showBackButton } from '@/data/title.ts'
+  import { Icon } from '@iconify/vue'
+  import { title, showBackButton } from '@/data/title.ts'
   import HStack from '@/components/layout/HStack.vue'
   import { useRouter } from 'vue-router'
 

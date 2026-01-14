@@ -1,0 +1,10 @@
+.gitignore
+.prettierignore
+dist
+node_modules
+bun.lock
+LICENSE.txt
+README.md
+.env
+.vscode
+.idea

@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview --port 5173",
-    "build-only": "vite build",
+    "lint": "eslint . --fix",
+    "format": "prettier --write --experimental-cli --ignore-path .prettierignore .",
     "type-check": "vue-tsc --build",
-    "format": "prettier --write --experimental-cli src/"
+    "build-only": "vite build",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview --port 5173"
   },
   "dependencies": {
     "@iconify/vue": "^5.0.0",
@@ -25,6 +26,9 @@
     "@types/node": "^24.10.4",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/tsconfig": "^0.8.1",
+    "eslint": "^9.39.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.7.4",
     "sass-embedded": "^1.97.2",
