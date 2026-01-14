@@ -1,13 +1,14 @@
 <script setup lang="ts">
-  import { onMounted, ref, type Ref } from 'vue'
   import { Icon } from '@iconify/vue'
-  import type { BygShop } from '@/types/contentTypes.ts'
-  import EmptyState from '@/components/layout/EmptyState.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { onMounted, type Ref, ref } from 'vue'
+
   import ContentArea from '@/components/layout/ContentArea.vue'
+  import EmptyState from '@/components/layout/EmptyState.vue'
+  import HStack from '@/components/layout/HStack.vue'
+  import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title.ts'
+  import type { BygShop } from '@/types/contentTypes.ts'
+  import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   const shops: Ref<BygShop[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)

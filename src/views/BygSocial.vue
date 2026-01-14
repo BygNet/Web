@@ -1,13 +1,14 @@
 <script setup lang="ts">
-  import VStack from '@/components/layout/VStack.vue'
-  import { onMounted, onUnmounted, ref, nextTick, type Ref } from 'vue'
-  import type { BygPost } from '@/types/contentTypes.ts'
-  import PostItem from '@/components/posts/PostItem.vue'
-  import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
-  import EmptyState from '@/components/layout/EmptyState.vue'
+  import { nextTick, onMounted, onUnmounted, type Ref, ref } from 'vue'
+
   import ContentArea from '@/components/layout/ContentArea.vue'
+  import EmptyState from '@/components/layout/EmptyState.vue'
+  import VStack from '@/components/layout/VStack.vue'
+  import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
+  import PostItem from '@/components/posts/PostItem.vue'
   import { title } from '@/data/title.ts'
+  import type { BygPost } from '@/types/contentTypes.ts'
+  import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)

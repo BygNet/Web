@@ -1,9 +1,9 @@
+import { useHead } from '@unhead/vue'
 import type {
   ResolvableArray,
-  ResolvableMeta,
   ResolvableLink,
+  ResolvableMeta,
 } from '@unhead/vue/types'
-import { useHead } from '@unhead/vue'
 
 export default function setHeadMeta(config: {
   page: string

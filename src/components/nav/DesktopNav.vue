@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { BygPages } from '@/data/pages.ts'
   import { Icon } from '@iconify/vue'
+
   import HStack from '@/components/layout/HStack.vue'
-  import router from '@/router.ts'
   import VStack from '@/components/layout/VStack.vue'
+  import { BygPages } from '@/data/pages.ts'
+  import router from '@/router.ts'
 </script>
 
 <template>

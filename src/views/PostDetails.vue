@@ -1,13 +1,14 @@
 <script setup lang="ts">
-  import PostItem from '@/components/posts/PostItem.vue'
-  import { onMounted, onUnmounted, ref, type Ref } from 'vue'
-  import type { BygPost } from '@/types/contentTypes.ts'
-  import EmptyState from '@/components/layout/EmptyState.vue'
+  import { useHead } from '@unhead/vue'
+  import { onMounted, onUnmounted, type Ref, ref } from 'vue'
   import { useRoute } from 'vue-router'
+
   import ContentArea from '@/components/layout/ContentArea.vue'
   import Divider from '@/components/layout/Divider.vue'
-  import { useHead } from '@unhead/vue'
+  import EmptyState from '@/components/layout/EmptyState.vue'
+  import PostItem from '@/components/posts/PostItem.vue'
   import { showBackButton, title } from '@/data/title.ts'
+  import type { BygPost } from '@/types/contentTypes.ts'
 
   const route = useRoute()
   const id = Number(route.params.slug)
