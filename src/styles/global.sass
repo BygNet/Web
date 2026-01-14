@@ -25,6 +25,19 @@ body
   user-select: none
   -webkit-user-select: none
 
+#app
+  --padding: 2rem
+
+  display: flex
+  flex-direction: row
+  width: 100vw
+  height: 100dvh
+
+@media (max-width: variables.$mobileWidth)
+  #app
+    --padding: 0.5rem
+    flex-direction: column
+
 div
   display: flex
   flex-direction: column

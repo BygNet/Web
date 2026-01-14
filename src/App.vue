@@ -4,25 +4,17 @@
 </script>
 
 <template>
-  <div class="bygApp">
-    <DesktopNav />
-    <main>
-      <RouterView />
-      <MobileNav />
-    </main>
-  </div>
+  <!--  <div class="bygApp">-->
+  <DesktopNav />
+  <main>
+    <RouterView />
+    <MobileNav />
+  </main>
+  <!--  </div>-->
 </template>
 
 <style scoped lang="sass">
   @use "@/styles/variables"
-
-  .bygApp
-    --padding: 2rem
-
-    display: flex
-    flex-direction: row
-    width: 100vw
-    height: 100vh
 
   main
     flex-grow: 1
@@ -35,10 +27,6 @@
     scrollbar-width: none
 
   @media (max-width: variables.$mobileWidth)
-    .bygApp
-      --padding: 0.5rem
-      flex-direction: column
-
     main
       width: calc(100% - var(--padding)*2)
 </style>

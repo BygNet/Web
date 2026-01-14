@@ -6,6 +6,7 @@
   import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
   import EmptyState from '@/components/layout/EmptyState.vue'
+  import ContentArea from '@/components/layout/ContentArea.vue'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
@@ -56,7 +57,7 @@
 </script>
 
 <template>
-  <div class="bygSocial">
+  <ContentArea class="bygSocial">
     <p id="top" />
     <EmptyState v-if="!isLoaded" message="Loading posts." />
 
@@ -74,14 +75,10 @@
         <PostItem :post="post" @navigate="navigate" />
       </RouterLink>
     </VStack>
-  </div>
+  </ContentArea>
 </template>
 
 <style scoped lang="sass">
-  .bygSocial
-    margin: var(--padding) 0
-    min-height: 100vh
-
-    .postList
-      gap: 0.5rem
+  .postList
+    gap: 0.5rem
 </style>

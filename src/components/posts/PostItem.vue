@@ -6,6 +6,7 @@
 
   const props = defineProps<{
     post: BygPost
+    detailMode?: boolean
   }>()
   const likes: Ref<number> = ref(props.post.likes)
   defineEmits(['navigate'])
@@ -48,8 +49,14 @@
 </script>
 
 <template>
-  <div class="bygPostItem" @click="$emit('navigate')">
-    <h4>{{ post.title }}</h4>
+  <div
+    class="bygPostItem"
+    @click="$emit('navigate')"
+    :class="{ detailMode: detailMode }"
+  >
+    <h4 v-if="!detailMode">{{ post.title }}</h4>
+    <h2 v-else>{{ post.title }}</h2>
+
     <HStack class="autoSpace postMeta">
       <p>{{ post.author }}</p>
       <p>{{ formatDate(post.createdDate) }}</p>
@@ -62,7 +69,7 @@
     <HStack class="postActions" @click.stop>
       <button @click="likePost(post.id)">
         <Icon icon="solar:hearts-line-duotone" />
-        {{ formatCount(likes) }}
+        {{ detailMode ? likes : formatCount(likes) }}
       </button>
     </HStack>
   </div>
@@ -76,9 +83,12 @@
   .bygPostItem
     --postPadding: 0.75rem
 
-    @include utils.itemBackground
     align-items: flex-start
     width: calc(100% - var(--postPadding)*2)
+
+    &:not(.detailMode)
+      @include utils.itemBackground
+      cursor: pointer
 
     .postMeta
       opacity: 0.7

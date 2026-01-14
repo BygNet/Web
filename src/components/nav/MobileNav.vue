@@ -39,7 +39,7 @@
     left: 0.5rem
     right: 0.5rem
     width: fit-content
-    margin: auto
+    margin: env(--safe-area-inset-bottom) auto
     background: colors.$foregroundColor
     backdrop-filter: blur(0.75rem)
     border-radius: 10rem

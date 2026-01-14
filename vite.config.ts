@@ -21,7 +21,7 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/logos/BygLogo-NoRound.png',
+            src: '/logos/BygLogo-Pwa.png',
             sizes: '1024x1024',
             type: 'image/png'
           }

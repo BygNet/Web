@@ -4,6 +4,8 @@
   import type { BygPost } from '@/types/contentTypes.ts'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import { useRoute } from 'vue-router'
+  import ContentArea from '@/components/layout/ContentArea.vue'
+  import Divider from '@/components/layout/Divider.vue'
 
   const route = useRoute()
   const id = Number(route.params.slug)
@@ -19,15 +21,12 @@
 </script>
 
 <template>
-  <div class="postDetails">
+  <ContentArea class="postDetails">
     <EmptyState message="Post is loading." v-if="post == undefined" />
-    <PostItem v-else :post="post" />
-  </div>
-</template>
+    <PostItem v-else :post="post" detail-mode />
 
-<style scoped lang="sass">
-  .postDetails
-    margin: var(--padding) 0
-    min-height: 100vh
-    min-width: 100%
-</style>
+    <Divider />
+
+    <h3 class="light">No comments yet.</h3>
+  </ContentArea>
+</template>

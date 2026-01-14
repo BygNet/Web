@@ -28,7 +28,7 @@ export const BygPages: BygPage[] = [
   {
     title: 'Pro',
     description: 'Upgraded Byg experience.',
-    path: '/upgrade',
+    path: '/pro',
     icon: 'solar:stars-line-duotone',
   },
 ]

@@ -6,6 +6,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import HStack from '@/components/layout/HStack.vue'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import ContentArea from '@/components/layout/ContentArea.vue'
 
   const shops: Ref<BygShop[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
@@ -20,7 +21,7 @@
 </script>
 
 <template>
-  <div class="bygShop">
+  <ContentArea class="bygShop">
     <EmptyState v-if="!isLoaded" message="Loading shops." />
 
     <VStack v-else class="shopList">
@@ -42,18 +43,13 @@
         </div>
       </a>
     </VStack>
-  </div>
+  </ContentArea>
 </template>
 
 <style scoped lang="sass">
   @use "@/styles/utils"
 
   .shopList
-    width: 100%
-
-  .bygShop
-    margin: var(--padding) 0
-    min-height: 100vh
     width: 100%
 
   .shopLink
