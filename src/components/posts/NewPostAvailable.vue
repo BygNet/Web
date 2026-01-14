@@ -42,5 +42,5 @@
       top: calc(-100% - 2rem)
 
     100%
-      top: 1rem
+      top: 3rem
 </style>

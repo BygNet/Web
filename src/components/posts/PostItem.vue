@@ -2,7 +2,9 @@
   import type { BygPost } from '@/types/contentTypes.ts'
   import HStack from '@/components/layout/HStack.vue'
   import { Icon } from '@iconify/vue'
-  import { ref, type Ref } from 'vue'
+  import {ref, type Ref, watchEffect} from 'vue'
+  import { marked } from 'marked'
+  import DOMPurify from 'dompurify'
 
   const props = defineProps<{
     post: BygPost
@@ -10,6 +12,13 @@
   }>()
   const likes: Ref<number> = ref(props.post.likes)
   defineEmits(['navigate'])
+
+  const renderedContent = ref('')
+
+  watchEffect(async () => {
+    const html = await marked.parse(props.post.content ?? '')
+    renderedContent.value = DOMPurify.sanitize(html)
+  })
 
   function formatDate(input: string): string {
     const date = new Date(input)
@@ -63,7 +72,7 @@
     </HStack>
 
     <p class="bygPostContent">
-      {{ post.content }}
+      <span v-html="renderedContent" />
     </p>
 
     <HStack class="postActions" @click.stop>
