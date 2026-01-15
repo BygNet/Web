@@ -8,6 +8,8 @@
   <DesktopNav />
   <main>
     <TitleView />
+    <h1>Byg Platform is currently locked.</h1>
+    <p>Thanks for using Byg! Come back soon!</p>
     <RouterView />
     <MobileNav />
   </main>

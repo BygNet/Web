@@ -1,7 +1,8 @@
 import { BygPost } from '../../src/types/contentTypes'
 
 const esc = (s: string): string =>
-  s.replace(/&/g, '&amp;')
+  s
+    .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')

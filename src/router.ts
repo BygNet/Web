@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory, type Router } from 'vue-router'
 
+import BygLink from '@/views/BygLink.vue'
 import BygPicture from '@/views/BygPicture.vue'
 import BygPro from '@/views/BygPro.vue'
+import BygProfile from '@/views/BygProfile.vue'
 import BygShop from '@/views/BygShop.vue'
 import BygSocial from '@/views/BygSocial.vue'
-import BygVideo from '@/views/BygVideo.vue'
 import PostDetails from '@/views/PostDetails.vue'
 
 const router: Router = createRouter({
@@ -14,8 +15,9 @@ const router: Router = createRouter({
     { name: 'details', path: '/details/:slug', component: PostDetails },
     { path: '/details', redirect: '/' },
     { name: 'picture', path: '/picture', component: BygPicture },
-    { name: 'video', path: '/video', component: BygVideo },
+    { name: 'link', path: '/link', component: BygLink },
     { name: 'shop', path: '/shop', component: BygShop },
+    { name: 'profile', path: '/me', component: BygProfile },
     { name: 'pro', path: '/pro', component: BygPro },
   ],
 })

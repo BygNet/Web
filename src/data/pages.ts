@@ -14,10 +14,10 @@ export const BygPages: BygPage[] = [
     icon: 'solar:gallery-wide-line-duotone',
   },
   {
-    title: 'Video',
-    description: 'Vertical videos.',
-    path: '/video',
-    icon: 'solar:video-library-line-duotone',
+    title: 'Link',
+    description: 'User-generated link collections.',
+    path: '/link',
+    icon: 'solar:link-minimalistic-2-line-duotone',
   },
   {
     title: 'Shop',
@@ -26,9 +26,9 @@ export const BygPages: BygPage[] = [
     icon: 'solar:shop-line-duotone',
   },
   {
-    title: 'Pro',
-    description: 'Upgraded Byg experience.',
-    path: '/pro',
-    icon: 'solar:stars-line-duotone',
+    title: 'Profile',
+    description: 'Your Byg Account.',
+    path: '/me',
+    icon: 'solar:user-line-duotone',
   },
 ]

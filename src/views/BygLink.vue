@@ -2,11 +2,11 @@
   import UnavailableState from '@/components/layout/UnavailableState.vue'
   import { title } from '@/data/title.ts'
 
-  title.value = 'Video'
+  title.value = 'Link'
 </script>
 
 <template>
-  <UnavailableState title="Byg Video is coming soon." />
+  <UnavailableState title="Byg Link is coming soon." />
 </template>
 
 <style scoped lang="sass"></style>
