@@ -15,6 +15,16 @@ export interface BygPost {
   shares: number
 }
 
+export interface BygImage {
+  id: number
+  title: string
+  imageUrl: string
+  author: string
+  createdDate: string
+  likes: number
+  shares: number
+}
+
 export interface BygShop {
   title: string
   subtitle: string

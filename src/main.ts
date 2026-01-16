@@ -5,7 +5,9 @@ import { createHead } from '@unhead/vue/client'
 import { registerSW } from 'virtual:pwa-register'
 import { createApp } from 'vue'
 
+import { api } from '@/api/client'
 import App from '@/App.vue'
+import { auth } from '@/auth/session'
 import router from '@/router'
 
 registerSW({
@@ -14,6 +16,24 @@ registerSW({
 
 const bygWeb = createApp(App)
 const head: VueHeadClient = createHead()
+
+async function hydrateSession() {
+  if (!auth.token) return
+
+  try {
+    const res = await api('/auth/me')
+    if (!res.ok) throw new Error()
+
+    auth.user = await res.json()
+  } catch {
+    auth.token = null
+    auth.user = null
+    localStorage.removeItem('token')
+  }
+}
+
+hydrateSession()
+
 bygWeb.use(router)
 .use(head)
 .mount('#app')

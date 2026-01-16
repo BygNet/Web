@@ -83,5 +83,6 @@
 
 <style scoped lang="sass">
   .postList
+    width: 100%
     gap: 0.5rem
 </style>
