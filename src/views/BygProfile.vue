@@ -1,12 +1,19 @@
 <script setup lang="ts">
+  import { Icon } from '@iconify/vue'
   import { computed } from 'vue'
   import { useRouter } from 'vue-router'
 
   import { logout } from '@/auth/logout'
   import { auth } from '@/auth/session'
+  import ContentArea from '@/components/layout/ContentArea.vue'
+  import HStack from '@/components/layout/HStack.vue'
+  import VStack from '@/components/layout/VStack.vue'
+  import { title } from '@/data/title.ts'
+  import setHeadMeta from '@/utils/setHeadMeta.ts'
 
+  title.value = 'Profile'
+  setHeadMeta({ page: 'Profile', subtitle: 'Your Byg profile.' })
   const router = useRouter()
-
   const isLoggedIn = computed(() => !!auth.user)
 
   async function doLogout() {
@@ -24,57 +31,45 @@
 </script>
 
 <template>
-  <div class="profile">
-    <h1>Profile</h1>
-
+  <ContentArea class="bygProfile">
     <!-- Logged out -->
-    <div v-if="!isLoggedIn" class="guest">
+    <VStack v-if="!isLoggedIn" class="guest">
+      <h2>Welcome to Byg!</h2>
       <p>You are not logged in.</p>
 
-      <div class="actions">
-        <button @click="goLogin">Log in</button>
-        <button @click="goSignup">Sign up</button>
-      </div>
-    </div>
+      <HStack class="accountActions">
+        <button @click="goLogin">
+          <Icon icon="solar:login-2-line-duotone" />
+          Log in
+        </button>
+        <button @click="goSignup">
+          <Icon icon="solar:user-plus-line-duotone" />
+          Sign up
+        </button>
+      </HStack>
+    </VStack>
 
     <!-- Logged in -->
-    <div v-else class="user">
-      <p><strong>ID:</strong> {{ auth.user!.id }}</p>
+    <VStack v-else class="user">
+      <h2>Hey!</h2>
+      <p><strong>User #:</strong> {{ auth.user!.id }}</p>
       <p><strong>Email:</strong> {{ auth.user!.email }}</p>
       <p><strong>Username:</strong> {{ auth.user!.username }}</p>
 
-      <button class="logout" @click="doLogout">Log out</button>
-    </div>
-  </div>
+      <button class="logout" @click="doLogout">
+        <Icon icon="solar:logout-2-line-duotone" />
+        Log out
+      </button>
+    </VStack>
+  </ContentArea>
 </template>
 
 <style scoped lang="sass">
-  .profile
-    max-width: 520px
-    margin: 4rem auto
-    padding: 2rem
-    display: flex
-    flex-direction: column
-    gap: 1.5rem
+  @use "@/styles/utils"
 
-  h1
-    text-align: center
-
-  .guest,
-  .user
-    display: flex
-    flex-direction: column
-    gap: 1rem
-    align-items: center
-
-  .actions
-    display: flex
-    gap: 1rem
-
-  button
-    padding: 0.6rem 1rem
-    font-size: 1rem
-    cursor: pointer
+  .guest, .user
+    width: 100%
+    @include utils.itemBackground
 
   .logout
     margin-top: 1rem

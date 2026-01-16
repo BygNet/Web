@@ -3,6 +3,7 @@
 @use "variables"
 @use "utils"
 @use "buttons"
+@use "login"
 
 *
   scroll-behavior: smooth
@@ -56,20 +57,34 @@ a
 svg
   color: colors.$textColor
 
+form
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  height: 100%
+  gap: 1rem
+
+label
+  width: 100%
+  display: flex
+  flex-direction: column
+  gap: 0.25rem
+
 input, textarea
   margin: 0.5rem
   padding: 0.25rem
-  border-radius: 0.25rem
+  border-radius: 0.75rem
+  font-size: 1rem
   background: colors.$foregroundColor
   border: none
   color: colors.$textColor
 
 ul, ol
   padding-inline-start: 1.25rem
-  margin: -0.5rem 0
+  margin: -0.25rem 0
 
 li
-  margin: -0.5rem 0
+  margin: -0.25rem 0
 
   &::marker
     color: colors.$foregroundOpaque

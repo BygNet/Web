@@ -1,0 +1,18 @@
+@use "utils"
+
+.loginItems
+  display: grid
+  width: 100%
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
+  gap: 0.5rem
+  align-items: stretch
+
+.loginForm, .accountSide
+  flex-grow: 1
+  @include utils.itemBackground
+
+.loginFormItems
+  width: 100%
+
+.accountSide
+  height: 100%

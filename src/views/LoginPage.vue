@@ -3,9 +3,12 @@
   import { useRouter } from 'vue-router'
 
   import { login } from '@/auth/login'
+  import ContentArea from '@/components/layout/ContentArea.vue'
+  import VStack from '@/components/layout/VStack.vue'
+  import { title } from '@/data/title.ts'
 
+  title.value = 'Login'
   const router = useRouter()
-
   const email = ref('')
   const password = ref('')
   const loading = ref(false)
@@ -27,68 +30,49 @@
 </script>
 
 <template>
-  <div class="login">
-    <h1>Login</h1>
+  <ContentArea class="login">
+    <div class="loginItems">
+      <form @submit.prevent="submit" class="loginForm">
+        <VStack class="loginFormItems">
+          <label>
+            Email
+            <input v-model="email" type="email" autocomplete="email" required />
+          </label>
 
-    <form @submit.prevent="submit">
-      <label>
-        Email
-        <input v-model="email" type="email" autocomplete="email" required />
-      </label>
+          <label>
+            Password
+            <input
+              v-model="password"
+              type="password"
+              autocomplete="current-password"
+              required
+            />
+          </label>
+        </VStack>
 
-      <label>
-        Password
-        <input
-          v-model="password"
-          type="password"
-          autocomplete="current-password"
-          required
-        />
-      </label>
+        <VStack class="loginFormItems">
+          <button type="submit" :disabled="loading">
+            {{ loading ? 'Logging in…' : 'Login' }}
+          </button>
 
-      <button type="submit" :disabled="loading">
-        {{ loading ? 'Logging in…' : 'Login' }}
-      </button>
+          <p v-if="error" class="error">
+            {{ error }}
+          </p>
+        </VStack>
+      </form>
 
-      <p v-if="error" class="error">
-        {{ error }}
-      </p>
-    </form>
-  </div>
+      <VStack class="accountSide">
+        <h2>Return to Byg.</h2>
+        <p>We're happy to see you again!</p>
+        <ul>
+          <li>
+            Facing issues?
+            <a href="mailto:ash@a35.dev" class="prominentLink">Email us</a>.
+          </li>
+        </ul>
+
+        <p>Thank you!</p>
+      </VStack>
+    </div>
+  </ContentArea>
 </template>
-
-<style scoped lang="sass">
-  .login
-    max-width: 420px
-    margin: 4rem auto
-    padding: 2rem
-    display: flex
-    flex-direction: column
-    gap: 1.5rem
-
-  h1
-    text-align: center
-
-  form
-    display: flex
-    flex-direction: column
-    gap: 1rem
-
-  label
-    display: flex
-    flex-direction: column
-    gap: 0.25rem
-
-  input
-    padding: 0.5rem
-    font-size: 1rem
-
-  button
-    padding: 0.6rem
-    font-size: 1rem
-    cursor: pointer
-
-  .error
-    color: red
-    text-align: center
-</style>

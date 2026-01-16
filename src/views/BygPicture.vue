@@ -69,7 +69,7 @@
     display: grid
     width: 100%
     grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr))
-    gap: 1rem
+    gap: 0.5rem
 
     .picCard
       @include utils.itemBackground

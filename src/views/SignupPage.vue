@@ -3,9 +3,12 @@
   import { useRouter } from 'vue-router'
 
   import { signup } from '@/auth/signup'
+  import ContentArea from '@/components/layout/ContentArea.vue'
+  import VStack from '@/components/layout/VStack.vue'
+  import { title } from '@/data/title.ts'
 
+  title.value = 'Signup'
   const router = useRouter()
-
   const email = ref('')
   const username = ref('')
   const password = ref('')
@@ -28,78 +31,55 @@
 </script>
 
 <template>
-  <div class="signup">
-    <h1>Create account</h1>
+  <ContentArea class="signup">
+    <div class="loginItems">
+      <form @submit.prevent="submit" class="loginForm">
+        <label>
+          Email
+          <input v-model="email" type="email" autocomplete="email" required />
+        </label>
 
-    <form @submit.prevent="submit">
-      <label>
-        Email
-        <input v-model="email" type="email" autocomplete="email" required />
-      </label>
+        <label>
+          Username
+          <input
+            v-model="username"
+            type="text"
+            autocomplete="username"
+            required
+          />
+        </label>
 
-      <label>
-        Username
-        <input
-          v-model="username"
-          type="text"
-          autocomplete="username"
-          required
-        />
-      </label>
+        <label>
+          Password
+          <input
+            v-model="password"
+            type="password"
+            autocomplete="new-password"
+            required
+          />
+        </label>
 
-      <label>
-        Password
-        <input
-          v-model="password"
-          type="password"
-          autocomplete="new-password"
-          required
-        />
-      </label>
+        <button type="submit" :disabled="loading">
+          {{ loading ? 'Creating account…' : 'Sign up' }}
+        </button>
 
-      <button type="submit" :disabled="loading">
-        {{ loading ? 'Creating account…' : 'Sign up' }}
-      </button>
+        <p v-if="error" class="error">
+          {{ error }}
+        </p>
+      </form>
 
-      <p v-if="error" class="error">
-        {{ error }}
-      </p>
-    </form>
-  </div>
+      <VStack class="accountSide">
+        <h2>Your Byg account.</h2>
+        <p>With your account, you can:</p>
+
+        <ul>
+          <li>Post content</li>
+          <li>Upload images</li>
+          <li>Create link lists</li>
+        </ul>
+
+        <p>and much more!</p>
+      </VStack>
+    </div>
+  </ContentArea>
 </template>
-
-<style scoped lang="sass">
-  .signup
-    max-width: 420px
-    margin: 4rem auto
-    padding: 2rem
-    display: flex
-    flex-direction: column
-    gap: 1.5rem
-
-  h1
-    text-align: center
-
-  form
-    display: flex
-    flex-direction: column
-    gap: 1rem
-
-  label
-    display: flex
-    flex-direction: column
-    gap: 0.25rem
-
-  input
-    padding: 0.5rem
-    font-size: 1rem
-
-  button
-    padding: 0.6rem
-    font-size: 1rem
-    cursor: pointer
-
-  .error
-    color: red
-    text-align: center
-</style>
