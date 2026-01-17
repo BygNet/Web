@@ -44,21 +44,21 @@
     background: colors.$foregroundColor
     backdrop-filter: blur(0.75rem)
     border-radius: 10rem
-    padding: 0.25rem
+    padding: 0.15rem
     border: 0.2rem solid colors.$foregroundColor
 
     .mobileNavItems
-      gap: 0.25rem
+      gap: 0
 
       .mobileNavItem
         align-items: center
         min-width: 3rem
-        padding: 0.5rem 0.25rem
+        padding: 0.35rem 0.25rem
         gap: 0
         border-radius: 10rem
 
         &.selected
-          padding: 0.5rem 0.75rem
+          padding: 0.35rem 0.5rem
           background: colors.$foregroundColor
 
         svg

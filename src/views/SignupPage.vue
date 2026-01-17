@@ -83,5 +83,10 @@
         <p>and much more!</p>
       </VStack>
     </div>
+
+    <h3>
+      Already have an account?
+      <RouterLink class="prominentLink" to="/login">Log In</RouterLink>
+    </h3>
   </ContentArea>
 </template>

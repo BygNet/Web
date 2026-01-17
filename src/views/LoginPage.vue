@@ -76,5 +76,10 @@
         <p>Thank you!</p>
       </VStack>
     </div>
+
+    <h3>
+      Don't have an account?
+      <RouterLink class="prominentLink" to="/signup">Create one</RouterLink>
+    </h3>
   </ContentArea>
 </template>

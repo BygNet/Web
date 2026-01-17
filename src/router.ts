@@ -8,6 +8,7 @@ import BygPro from '@/views/BygPro.vue'
 import BygProfile from '@/views/BygProfile.vue'
 import BygShop from '@/views/BygShop.vue'
 import BygSocial from '@/views/BygSocial.vue'
+import ImageDetails from '@/views/ImageDetails.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import PostDetails from '@/views/PostDetails.vue'
 import SignupPage from '@/views/SignupPage.vue'
@@ -17,7 +18,13 @@ const router: Router = createRouter({
   routes: [
     { name: 'social', path: '/', component: BygSocial },
     { name: 'details', path: '/details/:slug', component: PostDetails },
+    {
+      name: 'image',
+      path: '/image/:slug',
+      component: ImageDetails,
+    },
     { path: '/details', redirect: '/' },
+    { path: '/image', redirect: '/' },
     { name: 'picture', path: '/picture', component: BygPicture },
     { name: 'link', path: '/link', component: BygLink },
     { name: 'shop', path: '/shop', component: BygShop },

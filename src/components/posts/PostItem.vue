@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
-  import { type Ref, ref, watchEffect } from 'vue'
+  import { ref, watchEffect } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
+  import LikeButton from '@/components/posts/LikeButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
   import type { BygPost } from '@/types/contentTypes.ts'
 
@@ -12,7 +12,6 @@
     post: BygPost
     detailMode?: boolean
   }>()
-  const likes: Ref<number> = ref(props.post.likes)
   defineEmits([ 'navigate' ])
 
   const renderedContent = ref('')
@@ -49,14 +48,6 @@
     const v = value / 1_000_000_000
     return `${Math.floor(v * 10) / 10}B`
   }
-
-  function likePost(id: number) {
-    fetch(`${import.meta.env.VITE_API_BASE}/like-post/${id}`, {
-      method: 'POST',
-    })
-
-    likes.value += 1
-  }
 </script>
 
 <template>
@@ -78,10 +69,12 @@
     </p>
 
     <HStack class="postActions autoSpace" @click.stop>
-      <button @click="likePost(post.id)">
-        <Icon icon="solar:hearts-line-duotone" />
-        {{ detailMode ? likes : formatCount(likes) }}
-      </button>
+      <LikeButton
+        :id="post.id"
+        :likes="post.likes"
+        api-path="/like-post"
+        :compact="!detailMode"
+      />
 
       <ShareButton :id="post.id" :shares="post.shares" api-path="/share-post" />
     </HStack>

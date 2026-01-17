@@ -1,11 +1,9 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { onMounted, ref } from 'vue'
 
   import { api } from '@/api/client'
+  import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title'
   import type { BygImage } from '@/types/contentTypes'
 
@@ -35,29 +33,7 @@
     <p v-else-if="error">{{ error }}</p>
 
     <div v-else class="grid">
-      <div v-for="img in images" :key="img.id" class="picCard">
-        <img :src="img.imageUrl" :alt="img.title" />
-
-        <VStack class="picInfo">
-          <h3>{{ img.title }}</h3>
-
-          <HStack class="autoSpace picMeta">
-            <p>{{ img.author }}</p>
-            <p>{{ new Date(img.createdDate).toLocaleDateString() }}</p>
-          </HStack>
-
-          <HStack class="autoSpace">
-            <button>
-              <Icon icon="solar:hearts-line-duotone" />
-              {{ img.likes }}
-            </button>
-            <button>
-              <Icon icon="solar:share-line-duotone" />
-              {{ img.shares }}
-            </button>
-          </HStack>
-        </VStack>
-      </div>
+      <ImageItem v-for="img in images" :key="img.id" :image="img" />
     </div>
   </ContentArea>
 </template>
@@ -70,18 +46,4 @@
     width: 100%
     grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr))
     gap: 0.5rem
-
-    .picCard
-      @include utils.itemBackground
-      overflow: hidden
-      display: flex
-      flex-direction: column
-
-      img
-        width: 100%
-        height: 20rem
-
-      .picInfo
-        width: 100%
-        padding: 0 1rem
 </style>
