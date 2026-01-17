@@ -4,6 +4,7 @@
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
+  import ErrorState from '@/components/layout/ErrorState.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title.ts'
@@ -12,20 +13,30 @@
 
   const shops: Ref<BygShop[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
+  const error: Ref<string | null> = ref(null)
 
   title.value = 'Shop'
   setHeadMeta({ page: 'Shop', subtitle: 'Byg shopping hub.' })
 
   onMounted(async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE}/shops`)
-    shops.value = (await res.json()) as BygShop[]
-    isLoaded.value = true
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/shops`)
+      if (!res.ok) throw new Error('Failed to load shops')
+
+      shops.value = (await res.json()) as BygShop[]
+    } catch {
+      error.value = 'Failed to load shops.'
+    } finally {
+      isLoaded.value = true
+    }
   })
 </script>
 
 <template>
   <ContentArea class="bygShop">
     <EmptyState v-if="!isLoaded" message="Loading shops." />
+
+    <ErrorState v-else-if="error" :message="error" />
 
     <VStack v-else class="shopList">
       <a v-for="shop in shops" :href="shop.openUrl" class="shopLink">

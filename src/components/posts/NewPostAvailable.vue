@@ -1,4 +1,9 @@
 <script setup lang="ts">
+  import { Icon } from '@iconify/vue'
+
+  import HStack from '@/components/layout/HStack.vue'
+  import VStack from '@/components/layout/VStack.vue'
+
   defineEmits<{
     (e: 'click'): void
   }>()
@@ -6,8 +11,17 @@
 
 <template>
   <div class="newPosts" @click="$emit('click')">
-    <h2>New Posts!</h2>
-    <p class="light">Click to refresh.</p>
+    <HStack>
+      <Icon
+        class="notiIcon"
+        icon="solar:notification-unread-lines-line-duotone"
+      />
+
+      <VStack class="notiText">
+        <h2>New Posts!</h2>
+        <p class="light">Click to refresh.</p>
+      </VStack>
+    </HStack>
   </div>
 </template>
 
@@ -17,14 +31,12 @@
   .newPosts
     position: fixed
     align-items: flex-start
-    min-width: 16rem
-    padding: 1rem
-    margin-left: 1rem
+    padding: 1rem 1.5rem 1rem 1rem
 
-    border-radius: 1.5rem
+    border-radius: 2rem
     background: colors.$foregroundColor
     border: 0.2rem solid colors.$foregroundColor
-    backdrop-filter: blur(2rem)
+    backdrop-filter: blur(0.5rem)
     transition: 0.2s ease
     z-index: 100
     cursor: pointer
@@ -37,10 +49,18 @@
     &:active
       transform: translateY(0)
 
+  .notiIcon
+    width: 2rem
+    height: 2rem
+    padding: 0 1rem 0 0
+
+  .notiText
+    gap: 0
+
   @keyframes slideTop
     0%
       top: calc(-100% - 2rem)
 
     100%
-      top: 3rem
+      top: 3.5rem
 </style>

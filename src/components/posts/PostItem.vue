@@ -31,23 +31,6 @@
       day: 'numeric',
     }).format(date)
   }
-
-  function formatCount(value: number): string {
-    if (value < 1_000) return String(value)
-
-    if (value < 1_000_000) {
-      const v = value / 1_000
-      return `${Math.floor(v * 10) / 10}k`
-    }
-
-    if (value < 1_000_000_000) {
-      const v = value / 1_000_000
-      return `${Math.floor(v * 10) / 10}M`
-    }
-
-    const v = value / 1_000_000_000
-    return `${Math.floor(v * 10) / 10}B`
-  }
 </script>
 
 <template>
@@ -76,7 +59,12 @@
         :compact="!detailMode"
       />
 
-      <ShareButton :id="post.id" :shares="post.shares" api-path="/share-post" />
+      <ShareButton
+        :id="post.id"
+        :shares="post.shares"
+        api-path="/share-post"
+        :compact="!detailMode"
+      />
     </HStack>
   </div>
 </template>

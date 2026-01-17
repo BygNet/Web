@@ -4,6 +4,7 @@
   import { useRouter } from 'vue-router'
 
   import { auth } from '@/auth/session'
+  import { formatNumber, formatStat } from '@/utils/formatters.ts'
 
   const props = defineProps<{
     likes: number
@@ -48,6 +49,6 @@
 <template>
   <button class="likeButton" :disabled="liking" @click="like">
     <Icon icon="solar:hearts-line-duotone" />
-    {{ likeCount }}
+    {{ compact ? formatStat(likeCount) : formatNumber(likeCount) }}
   </button>
 </template>

@@ -1,17 +1,19 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { onMounted, type Ref, ref } from 'vue'
 
   import { api } from '@/api/client'
   import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
+  import EmptyState from '@/components/layout/EmptyState.vue'
+  import ErrorState from '@/components/layout/ErrorState.vue'
   import { title } from '@/data/title'
   import type { BygImage } from '@/types/contentTypes'
 
   title.value = 'Picture'
 
-  const images = ref<BygImage[]>([])
-  const loading = ref(true)
-  const error = ref<string | null>(null)
+  const images: Ref<BygImage[]> = ref([])
+  const loading: Ref<boolean> = ref(true)
+  const error: Ref<string | null> = ref(null)
 
   onMounted(async () => {
     try {
@@ -20,7 +22,7 @@
 
       images.value = await res.json()
     } catch {
-      error.value = 'Failed to load images'
+      error.value = `Failed to load images`
     } finally {
       loading.value = false
     }
@@ -29,8 +31,8 @@
 
 <template>
   <ContentArea class="bygPictures">
-    <p v-if="loading">Loading images…</p>
-    <p v-else-if="error">{{ error }}</p>
+    <EmptyState v-if="loading" message="Loading images..." />
+    <ErrorState v-else-if="error" :message="error" />
 
     <div v-else class="grid">
       <ImageItem v-for="img in images" :key="img.id" :image="img" />

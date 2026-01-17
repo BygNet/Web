@@ -3,6 +3,7 @@
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
+  import ErrorState from '@/components/layout/ErrorState.vue'
   import VStack from '@/components/layout/VStack.vue'
   import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
   import PostItem from '@/components/posts/PostItem.vue'
@@ -12,6 +13,7 @@
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
+  const error: Ref<string | null> = ref(null)
   const hasNewPosts: Ref<boolean> = ref(false)
 
   let interval: number | undefined
@@ -23,10 +25,17 @@
   })
 
   const loadPosts = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
-    posts.value = (await res.json()) as BygPost[]
-    isLoaded.value = true
-    hasNewPosts.value = false
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
+      if (!res.ok) throw new Error('Failed to load posts')
+
+      posts.value = (await res.json()) as BygPost[]
+      hasNewPosts.value = false
+    } catch (err) {
+      error.value = 'Failed to load posts.'
+    } finally {
+      isLoaded.value = true
+    }
   }
 
   const reloadAndScroll = async () => {
@@ -39,13 +48,18 @@
 
   const checkForNewPosts = async () => {
     if (!posts.value.length) return
-    console.log('checking for new posts...')
 
-    const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
-    const latest = (await res.json()) as BygPost[]
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
+      if (!res.ok) return
 
-    if (latest[0]?.id !== posts.value[0]?.id) {
-      hasNewPosts.value = true
+      const latest = (await res.json()) as BygPost[]
+
+      if (latest[0]?.id !== posts.value[0]?.id) {
+        hasNewPosts.value = true
+      }
+    } catch {
+      // silently fail
     }
   }
 
@@ -63,6 +77,8 @@
   <ContentArea class="bygSocial">
     <p id="top" />
     <EmptyState v-if="!isLoaded" message="Loading posts." />
+
+    <ErrorState v-else-if="error" :message="error" />
 
     <VStack v-else class="postList">
       <NewPostsAvailable v-if="hasNewPosts" @click="reloadAndScroll" />

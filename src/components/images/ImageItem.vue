@@ -42,12 +42,14 @@
           :id="image.id"
           :likes="image.likes"
           api-path="/like-image"
+          :compact="!detailMode"
         />
 
         <ShareButton
           :id="image.id"
           :shares="image.shares"
           api-path="/share-image"
+          :compact="!detailMode"
         />
       </HStack>
     </VStack>

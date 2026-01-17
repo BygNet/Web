@@ -2,10 +2,13 @@
   import { Icon } from '@iconify/vue'
   import { onMounted, type Ref, ref } from 'vue'
 
+  import { formatNumber, formatStat } from '@/utils/formatters.ts'
+
   const props = defineProps<{
     shares: number
     id: number
     apiPath: string
+    compact?: boolean
   }>()
 
   const fetchUrl: string = `${import.meta.env.VITE_API_BASE}${props.apiPath}/${props.id}`
@@ -40,6 +43,6 @@
 <template>
   <button class="shareButton" @click="share">
     <Icon icon="solar:share-line-duotone" />
-    {{ shareCount }}
+    {{ compact ? formatStat(shareCount) : formatNumber(shareCount) }}
   </button>
 </template>
