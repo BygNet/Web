@@ -1,6 +1,13 @@
 <script setup lang="ts">
+  import { onMounted } from 'vue'
+
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
+  import { consoleWarn } from '@/utils/consoleWarn.ts'
+
+  onMounted(() => {
+    consoleWarn()
+  })
 </script>
 
 <template>

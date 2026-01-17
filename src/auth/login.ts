@@ -1,8 +1,8 @@
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'
 
-export async function login(email: string, password: string) {
-  const res = await api('/auth/login', {
+export async function login(email: string, password: string): Promise<void> {
+  const res: Response = await api('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ email, password }),
   })
