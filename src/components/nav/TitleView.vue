@@ -27,7 +27,7 @@
     top: 0
     z-index: 101
     background: linear-gradient(to bottom, colors.$backgroundColor, transparent)
-    padding: 0.5rem var(--padding) 1rem
+    padding: 0.5rem 0.5rem 1rem
     margin-bottom: -1rem
 
   button.backButton

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -60,7 +61,8 @@
         </label>
 
         <button type="submit" :disabled="loading">
-          {{ loading ? 'Creating account…' : 'Sign up' }}
+          <Icon icon="solar:user-plus-line-duotone" />
+          {{ loading ? 'Creating Account…' : 'Sign Up' }}
         </button>
 
         <p v-if="error" class="error">

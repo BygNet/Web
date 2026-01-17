@@ -11,7 +11,7 @@ export default defineConfig({
     vueDevTools(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico'],
+      includeAssets: [ 'favicon.ico' ],
       manifest: {
         name: 'Byg Platform',
         short_name: 'Byg',

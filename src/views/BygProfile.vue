@@ -68,7 +68,7 @@
   @use "@/styles/utils"
 
   .guest, .user
-    width: 100%
+    @include utils.maxPostPaddedWidth
     @include utils.itemBackground
 
   .logout

@@ -1,9 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import MobileNav from '@/components/nav/MobileNav.vue'
+</script>
 
 <template>
   <div class="contentArea">
     <slot />
   </div>
+  <MobileNav />
 </template>
 
 <style scoped lang="sass">

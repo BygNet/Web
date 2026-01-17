@@ -51,10 +51,17 @@
 <template>
   <ContentArea class="postDetails">
     <EmptyState message="Post is loading." v-if="post == undefined" />
-    <PostItem v-else :post="post" detail-mode />
+    <PostItem v-else :post="post" detail-mode class="postDetail" />
 
     <Divider />
 
     <h3 class="light">No comments yet.</h3>
   </ContentArea>
 </template>
+
+<style scoped lang="sass">
+  @use "@/styles/utils"
+
+  .postDetail
+    width: 100%
+</style>

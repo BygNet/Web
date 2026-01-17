@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -52,7 +53,8 @@
 
         <VStack class="loginFormItems">
           <button type="submit" :disabled="loading">
-            {{ loading ? 'Logging in…' : 'Login' }}
+            <Icon icon="solar:login-2-line-duotone" />
+            {{ loading ? 'Logging In…' : 'Log In' }}
           </button>
 
           <p v-if="error" class="error">

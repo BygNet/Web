@@ -6,14 +6,14 @@ import vueParser from 'vue-eslint-parser'
 
 export default defineConfig([
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.vue'],
+    files: [ '**/*.ts', '**/*.tsx', '**/*.vue' ],
     languageOptions: {
       parser: vueParser,
       parserOptions: {
         parser: tsParser,
         ecmaVersion: 'latest',
         sourceType: 'module',
-        extraFileExtensions: ['.vue'],
+        extraFileExtensions: [ '.vue' ],
       },
       globals: {
         window: 'readonly',
@@ -30,10 +30,8 @@ export default defineConfig([
       'simple-import-sort/exports': 'error',
       'import/no-duplicates': 'error',
 
-      // chaining (AUTOFIX)
-      'newline-per-chained-call': ['error', { ignoreChainWithDepth: 1 }],
-
-      'object-curly-spacing': ['error', 'always'],
+      // spacing inside array brackets
+      'array-bracket-spacing': [ 'error', 'always' ],
     },
   },
 ])

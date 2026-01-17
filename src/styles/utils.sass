@@ -15,6 +15,14 @@
   text-align: center
 
 @mixin itemBackground
+  --postPadding: 0.75rem
+
   padding: 0.75rem
   background: colors.$foregroundColor
   border-radius: 1.75rem
+
+@mixin maxPaddedWidth
+  width: calc(100% - var(--padding)*2)
+
+@mixin maxPostPaddedWidth
+  width: calc(100% - var(--postPadding)*2)

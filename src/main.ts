@@ -17,11 +17,11 @@ registerSW({
 const bygWeb = createApp(App)
 const head: VueHeadClient = createHead()
 
-async function hydrateSession() {
+async function hydrateSession(): Promise<void> {
   if (!auth.token) return
 
   try {
-    const res = await api('/auth/me')
+    const res: Response = await api('/auth/me')
     if (!res.ok) throw new Error()
 
     auth.user = await res.json()
@@ -32,8 +32,6 @@ async function hydrateSession() {
   }
 }
 
-hydrateSession()
+hydrateSession().then((): void => {})
 
-bygWeb.use(router)
-.use(head)
-.mount('#app')
+bygWeb.use(router).use(head).mount('#app')

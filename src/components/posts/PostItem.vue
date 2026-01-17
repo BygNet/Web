@@ -5,6 +5,7 @@
   import { type Ref, ref, watchEffect } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
+  import ShareButton from '@/components/posts/ShareButton.vue'
   import type { BygPost } from '@/types/contentTypes.ts'
 
   const props = defineProps<{
@@ -12,7 +13,7 @@
     detailMode?: boolean
   }>()
   const likes: Ref<number> = ref(props.post.likes)
-  defineEmits(['navigate'])
+  defineEmits([ 'navigate' ])
 
   const renderedContent = ref('')
 
@@ -29,8 +30,7 @@
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-    })
-.format(date)
+    }).format(date)
   }
 
   function formatCount(value: number): string {
@@ -77,11 +77,13 @@
       <span v-html="renderedContent" />
     </p>
 
-    <HStack class="postActions" @click.stop>
+    <HStack class="postActions autoSpace" @click.stop>
       <button @click="likePost(post.id)">
         <Icon icon="solar:hearts-line-duotone" />
         {{ detailMode ? likes : formatCount(likes) }}
       </button>
+
+      <ShareButton :id="post.id" :shares="post.shares" api-path="/share-post" />
     </HStack>
   </div>
 </template>
@@ -92,8 +94,6 @@
   @use "@/styles/utils"
 
   .bygPostItem
-    --postPadding: 0.75rem
-
     align-items: flex-start
     width: calc(100% - var(--postPadding)*2)
 

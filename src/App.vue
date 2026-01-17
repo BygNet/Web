@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import DesktopNav from '@/components/nav/DesktopNav.vue'
-  import MobileNav from '@/components/nav/MobileNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
 </script>
 
@@ -11,7 +10,6 @@
     <h1>Byg Platform is currently locked.</h1>
     <p>Thanks for using Byg! Come back soon!</p>
     <RouterView />
-    <MobileNav />
   </main>
 </template>
 
