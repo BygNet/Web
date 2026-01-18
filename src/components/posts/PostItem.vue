@@ -76,7 +76,7 @@
 
   .bygPostItem
     align-items: flex-start
-    width: calc(100% - var(--postPadding)*2)
+    @include utils.maxPostPaddedWidth
 
     &:not(.detailMode)
       @include utils.itemBackground

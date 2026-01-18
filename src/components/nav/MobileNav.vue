@@ -34,9 +34,11 @@
   @use "@/styles/colors"
 
   .bygMobileNav
+    --bottom: calc(env(safe-area-inset-bottom, 0.5rem) - var(--padding))
+
     display: none
     position: sticky
-    bottom: calc(env(safe-area-inset-bottom) + 0.5rem)
+    bottom: var(--bottom)
     left: 0.5rem
     right: 0.5rem
     width: fit-content
@@ -45,7 +47,7 @@
     backdrop-filter: blur(0.75rem)
     border-radius: 10rem
     padding: 0.15rem
-    border: 0.2rem solid colors.$foregroundColor
+    border: 0.1rem solid colors.$foregroundColor
 
     .mobileNavItems
       gap: 0

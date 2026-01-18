@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { useRouter } from 'vue-router'
+  import { ProgressiveBlur } from 'vue-progressive-blur'
 
   import HStack from '@/components/layout/HStack.vue'
   import { showBackButton, title } from '@/data/title.ts'
@@ -10,12 +11,16 @@
 
 <template>
   <header class="titleView">
-    <HStack>
+    <HStack class="titleViewContent">
       <button @click="router.back()" v-if="showBackButton" class="backButton">
         <Icon icon="solar:arrow-left-line-duotone" />
       </button>
       <h2>{{ title }}</h2>
     </HStack>
+
+    <div class="titleBlurContainer">
+      <ProgressiveBlur class="titleBlur" :blur="48" :border-radius="0" />
+    </div>
   </header>
 </template>
 
@@ -25,10 +30,13 @@
   .titleView
     position: sticky
     top: 0
-    z-index: 101
+    z-index: 100
     background: linear-gradient(to bottom, colors.$backgroundColor, transparent)
-    padding: 0.5rem 0.5rem 1rem
+    padding: calc(var(--vueuse-safe-area-top) + 0.5rem) 0.5rem 1rem
     margin-bottom: -1rem
+
+    .titleViewContent
+      z-index: 102
 
   button.backButton
     padding: 0.75rem
@@ -36,4 +44,15 @@
     svg
       width: 1.5rem !important
       height: 1.5rem !important
+
+  .titleBlurContainer
+    position: absolute
+    top: 0
+    bottom: -1.5rem
+    left: 0
+    right: 0
+    z-index: -1
+
+    .titleBlur
+      transform: rotate(180deg)
 </style>
