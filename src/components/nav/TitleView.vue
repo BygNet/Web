@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { useRouter } from 'vue-router'
   import { ProgressiveBlur } from 'vue-progressive-blur'
+  import { useRouter } from 'vue-router'
 
   import HStack from '@/components/layout/HStack.vue'
   import { showBackButton, title } from '@/data/title.ts'
@@ -32,11 +32,12 @@
     top: 0
     z-index: 100
     background: linear-gradient(to bottom, colors.$backgroundColor, transparent)
-    padding: calc(var(--vueuse-safe-area-top) + 0.5rem) 0.5rem 1rem
+    padding: 0.5rem 0.5rem 1rem
     margin-bottom: -1rem
 
     .titleViewContent
       z-index: 102
+      margin-top: calc(env(safe-area-inset-top) + 0.5rem)
 
   button.backButton
     padding: 0.75rem

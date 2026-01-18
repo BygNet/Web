@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
-  import { ref, watchEffect } from 'vue'
+  import { nextTick, ref, watchEffect } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
+  import VStack from '@/components/layout/VStack.vue'
   import LikeButton from '@/components/posts/LikeButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
+  import UsernameView from '@/components/posts/UsernameView.vue'
   import type { BygPost } from '@/types/contentTypes.ts'
 
   const props = defineProps<{
@@ -15,10 +17,30 @@
   defineEmits([ 'navigate' ])
 
   const renderedContent = ref('')
+  const expanded = ref(false)
+  const contentEl = ref<HTMLElement | null>(null)
+  const isClippable = ref(false)
 
   watchEffect(async () => {
     const html = await marked.parse(props.post.content ?? '')
     renderedContent.value = DOMPurify.sanitize(html)
+    await nextTick()
+
+    if (contentEl.value && !props.detailMode) {
+      const el = contentEl.value
+
+      // force clamp temporarily to measure overflow
+      el.classList.add('clipped')
+
+      await nextTick()
+
+      isClippable.value = el.scrollHeight > el.clientHeight + 1
+
+      // remove clamp if not needed
+      if (!isClippable.value) {
+        el.classList.remove('clipped')
+      }
+    }
   })
 
   function formatDate(input: string): string {
@@ -43,13 +65,27 @@
     <h2 v-else>{{ post.title }}</h2>
 
     <HStack class="autoSpace postMeta">
-      <p>{{ post.author }}</p>
+      <UsernameView :name="post.author" />
       <p>{{ formatDate(post.createdDate) }}</p>
     </HStack>
 
-    <p class="bygPostContent">
-      <span v-html="renderedContent" />
-    </p>
+    <VStack class="bygPostContentWrapper">
+      <p
+        ref="contentEl"
+        class="bygPostContent"
+        :class="{ clipped: !detailMode && !expanded && isClippable }"
+      >
+        <span v-html="renderedContent" />
+      </p>
+
+      <button
+        v-if="!detailMode && !expanded && isClippable"
+        class="showMore transparent"
+        @click.stop="expanded = true"
+      >
+        Show more
+      </button>
+    </VStack>
 
     <HStack class="postActions autoSpace" @click.stop>
       <LikeButton
@@ -86,9 +122,22 @@
       opacity: 0.7
       margin-bottom: 1rem
 
+    .bygPostContentWrapper
+      position: relative
+
     .bygPostContent
       user-select: text
       --webkit-user-select: text
+
+      &.clipped
+        display: -webkit-box
+        -webkit-line-clamp: 5
+        -webkit-box-orient: vertical
+        overflow: hidden
+        mask: linear-gradient(to bottom, black, black, transparent)
+
+    .showMore
+      margin-top: 0.25rem
 
     .postActions
       margin-top: 0.75rem

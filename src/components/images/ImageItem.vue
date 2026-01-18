@@ -7,6 +7,7 @@
   import LikeButton from '@/components/posts/LikeButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
   import type { BygImage } from '@/types/contentTypes'
+  import UsernameView from "@/components/posts/UsernameView.vue";
 
   const props = defineProps<{
     image: BygImage
@@ -33,7 +34,7 @@
       <h3>{{ image.title }}</h3>
 
       <HStack class="meta autoSpace">
-        <p>{{ image.author }}</p>
+        <UsernameView :name="image.author" />
         <p>{{ createdLabel }}</p>
       </HStack>
 
