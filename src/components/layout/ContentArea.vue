@@ -16,7 +16,8 @@
 
     <p class="light" v-if="!hideTermsLink">
       To use this platform, you agree to the
-      <RouterLink to="/terms" class="prominentLink">Terms of Service</RouterLink>.
+      <RouterLink to="/terms" class="prominentLink">Terms of Service</RouterLink
+      >.
     </p>
   </div>
   <MobileNav />
