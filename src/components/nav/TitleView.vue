@@ -25,13 +25,13 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/colors"
+  @use "@/styles/themes"
 
   .titleView
     position: sticky
     top: 0
     z-index: 100
-    background: linear-gradient(to bottom, colors.$backgroundColor, transparent)
+    background: linear-gradient(to bottom, themes.$backgroundColor, transparent)
     padding: 0.5rem 0.5rem 1rem
     margin-bottom: -1rem
 

@@ -1,0 +1,97 @@
+// Light theme colors
+html.auto, html.light
+  --backgroundColor: #bee7f3
+  --foregroundColor: rgba(111, 163, 161, 0.25)
+  --foregroundOpaque: rgb(89, 165, 172)
+  --textColor: rgba(0, 0, 0, 0.9)
+  --accentColor: rgb(117, 188, 232)
+  --shadowColor: rgba(226, 250, 255, 0.8)
+
+// Dark theme colors
+:root
+  --dark-backgroundColor: #001823
+  --dark-foregroundColor: rgba(59, 94, 108, 0.25)
+  --dark-foregroundOpaque: rgb(96, 138, 156)
+  --dark-textColor: rgba(240, 240, 240, 0.9)
+  --dark-accentColor: rgb(20, 86, 209)
+  --dark-shadowColor: rgba(132, 170, 220, 0.8)
+
+@media (prefers-color-scheme: dark)
+  html.auto
+    --backgroundColor: var(--dark-backgroundColor)
+    --foregroundColor: var(--dark-foregroundColor)
+    --foregroundOpaque: var(--dark-foregroundOpaque)
+    --textColor: var(--dark-textColor)
+    --accentColor: var(--dark-accentColor)
+    --shadowColor: var(--dark-shadowColor)
+
+html.dark
+  --backgroundColor: var(--dark-backgroundColor)
+  --foregroundColor: var(--dark-foregroundColor)
+  --foregroundOpaque: var(--dark-foregroundOpaque)
+  --textColor: var(--dark-textColor)
+  --accentColor: var(--dark-accentColor)
+  --shadowColor: var(--dark-shadowColor)
+
+
+// a35hie themes
+html.a35hie
+  --backgroundColor: #ccbef3
+  --foregroundColor: rgba(154, 131, 188, 0.25)
+  --foregroundOpaque: rgb(162, 143, 201)
+  --textColor: rgba(0, 0, 0, 0.9)
+  --accentColor: rgb(159, 117, 232)
+  --shadowColor: rgba(244, 226, 255, 0.8)
+
+html.a35hie-dark
+  --backgroundColor: #0c0023
+  --foregroundColor: rgba(134, 134, 134, 0.25)
+  --foregroundOpaque: rgb(69, 53, 89)
+  --textColor: rgba(240, 240, 240, 0.9)
+  --accentColor: rgb(90, 20, 209)
+  --shadowColor: rgba(155, 132, 220, 0.8)
+
+// Geist theme
+html.geist
+  --backgroundColor: black
+  --foregroundColor: rgba(85, 85, 85, 0.25)
+  --foregroundOpaque: rgb(110, 110, 110)
+  --textColor: rgba(227, 227, 227, 0.9)
+  --accentColor: rgb(197, 197, 197)
+  --shadowColor: rgba(188, 188, 188, 0.8)
+
+  --globalFont: "Geist", sans-serif
+  --headerFont: var(--globalFont)
+
+  div
+    border-radius: 0.75rem !important
+  *
+    letter-spacing: 0 !important
+    font-weight: 100 !important
+
+// Neon Dark theme
+html.neon
+  --backgroundColor: #1a0755
+  --foregroundColor: rgba(119, 103, 158, 0.25)
+  --foregroundOpaque: rgb(110, 53, 182)
+  --textColor: rgba(255, 218, 147, 0.9)
+  --accentColor: rgb(209, 20, 206)
+  --shadowColor: rgba(70, 43, 151, 0.8)
+
+// Pastel Pink theme
+html.pastel-pink
+  --backgroundColor: #f3a7ff
+  --foregroundColor: rgba(194, 126, 211, 0.25)
+  --foregroundOpaque: rgb(214, 99, 255)
+  --textColor: rgba(37, 0, 112, 0.9)
+  --accentColor: rgb(255, 65, 195)
+  --shadowColor: rgba(80, 9, 94, 0.8)
+
+
+// SASS aliases
+$backgroundColor: var(--backgroundColor)
+$foregroundColor: var(--foregroundColor)
+$foregroundOpaque: var(--foregroundOpaque)
+$textColor: var(--textColor)
+$accentColor: var(--accentColor)
+$shadowColor: var(--shadowColor)

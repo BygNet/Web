@@ -37,7 +37,7 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/colors"
+  @use "@/styles/themes"
 
   .userName
     gap: 0.25rem
@@ -47,7 +47,7 @@
 
     .badge
       gap: 0
-      background: colors.$accentColor
+      background: themes.$accentColor
 
       &.staff
         padding: 0.15rem 0.35rem

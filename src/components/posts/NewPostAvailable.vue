@@ -26,7 +26,7 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/colors"
+  @use "@/styles/themes"
 
   .newPosts
     position: fixed
@@ -34,8 +34,8 @@
     padding: 1rem 1.5rem 1rem 1rem
 
     border-radius: 2rem
-    background: colors.$foregroundColor
-    border: 0.2rem solid colors.$foregroundColor
+    background: themes.$foregroundColor
+    border: 0.2rem solid themes.$foregroundColor
     backdrop-filter: blur(0.5rem)
     transition: 0.2s ease
     z-index: 100

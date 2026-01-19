@@ -106,7 +106,7 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/colors"
+  @use "@/styles/themes"
   @use "@/styles/variables"
   @use "@/styles/utils"
 

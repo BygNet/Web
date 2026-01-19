@@ -47,7 +47,7 @@
 
 <style scoped lang="sass">
   @use "@/styles/variables"
-  @use "@/styles/colors"
+  @use "@/styles/themes"
 
   .desktopNav
     display: none
@@ -58,7 +58,7 @@
     padding: var(--padding)
     height: calc(100vh - var(--padding)*2)
 
-    border-right: 0.2rem solid colors.$foregroundColor
+    border-right: 0.2rem solid themes.$foregroundColor
 
     .bygLogo
       align-items: center
@@ -73,7 +73,7 @@
     transition: 0.2s ease
 
     &:hover, &.selected
-      background: colors.$foregroundColor
+      background: themes.$foregroundColor
       border-radius: 5rem
 
       h3

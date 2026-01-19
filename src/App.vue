@@ -4,9 +4,11 @@
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
   import { consoleWarn } from '@/utils/consoleWarn.ts'
+  import {loadTheme} from "@/data/themes.ts";
 
   onMounted(() => {
     consoleWarn()
+    loadTheme()
   })
 </script>
 

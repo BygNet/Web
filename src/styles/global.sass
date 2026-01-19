@@ -1,4 +1,4 @@
-@use "colors"
+@use "themes"
 @use "fonts"
 @use "variables"
 @use "utils"
@@ -12,7 +12,7 @@ html
   height: 100vh
   width: 100vw
   overflow: hidden
-  background: colors.$backgroundColor
+  background: themes.$backgroundColor
 
 body
   position: fixed
@@ -24,7 +24,7 @@ body
   margin: 0
   padding: 0
 
-  color: colors.$textColor
+  color: themes.$textColor
   user-select: none
   -webkit-user-select: none
 
@@ -53,15 +53,15 @@ a
   align-items: center
   justify-content: center
   text-decoration: none
-  color: colors.$textColor
+  color: themes.$textColor
   cursor: pointer
 
 a.prominentLink
   text-decoration: underline
-  text-decoration-color: colors.$accentColor
+  text-decoration-color: themes.$accentColor
 
 svg
-  color: colors.$textColor
+  color: themes.$textColor
 
 form
   display: flex
@@ -81,9 +81,9 @@ input, textarea
   padding: 0.25rem
   border-radius: 0.75rem
   font-size: 1rem
-  background: colors.$foregroundColor
+  background: themes.$foregroundColor
   border: none
-  color: colors.$textColor
+  color: themes.$textColor
 
 ul, ol
   padding-inline-start: 1.25rem
@@ -93,4 +93,4 @@ li
   margin: -0.25rem 0
 
   &::marker
-    color: colors.$foregroundOpaque
+    color: themes.$foregroundOpaque

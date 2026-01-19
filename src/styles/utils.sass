@@ -1,6 +1,6 @@
-@use "colors"
+@use "themes"
 
-.light
+.light:not(body)
   opacity: 0.4
 
 .transparent
@@ -21,7 +21,7 @@
   --postPadding: 0.75rem
 
   padding: 0.75rem
-  background: colors.$foregroundColor
+  background: themes.$foregroundColor
   border-radius: 1.75rem
 
 @mixin maxPaddedWidth

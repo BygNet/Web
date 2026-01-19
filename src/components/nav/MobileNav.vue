@@ -31,7 +31,7 @@
 
 <style scoped lang="sass">
   @use "@/styles/variables"
-  @use "@/styles/colors"
+  @use "@/styles/themes"
 
   .bygMobileNav
     --bottom: calc(env(safe-area-inset-bottom, 0.5rem) - var(--padding))
@@ -43,11 +43,11 @@
     right: 0.5rem
     width: fit-content
     margin: auto
-    background: colors.$foregroundColor
+    background: themes.$foregroundColor
     backdrop-filter: blur(0.75rem)
     border-radius: 10rem
     padding: 0.15rem
-    border: 0.1rem solid colors.$foregroundColor
+    border: 0.1rem solid themes.$foregroundColor
 
     .mobileNavItems
       gap: 0
@@ -61,7 +61,7 @@
 
         &.selected
           padding: 0.35rem 0.5rem
-          background: colors.$foregroundColor
+          background: themes.$foregroundColor
 
         svg
           width: 1.5rem
