@@ -1,11 +1,5 @@
 import { BygPost } from '../../src/types/contentTypes'
-
-const esc = (s: string): string =>
-  s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
+import { esc } from '../../src/utils/esc'
 
 export const onRequest = async ({ params, env, next }): Promise<Response> => {
   const id: number = Number(params.id)
