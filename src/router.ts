@@ -8,6 +8,7 @@ import BygPro from '@/views/BygPro.vue'
 import BygProfile from '@/views/BygProfile.vue'
 import BygShop from '@/views/BygShop.vue'
 import BygSocial from '@/views/BygSocial.vue'
+import BygTerms from '@/views/BygTerms.vue'
 import ImageDetails from '@/views/ImageDetails.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import PostDetails from '@/views/PostDetails.vue'
@@ -16,6 +17,7 @@ import SignupPage from '@/views/SignupPage.vue'
 const router: Router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { name: 'terms', path: '/terms', component: BygTerms },
     { name: 'social', path: '/', component: BygSocial },
     { name: 'details', path: '/details/:slug', component: PostDetails },
     {
