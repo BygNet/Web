@@ -6,8 +6,8 @@
   import VStack from '@/components/layout/VStack.vue'
   import LikeButton from '@/components/posts/LikeButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
+  import UsernameView from '@/components/posts/UsernameView.vue'
   import type { BygImage } from '@/types/contentTypes'
-  import UsernameView from "@/components/posts/UsernameView.vue";
 
   const props = defineProps<{
     image: BygImage

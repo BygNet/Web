@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { onMounted, type Ref,ref } from 'vue'
-  import {Icon} from "@iconify/vue";
+  import { Icon } from '@iconify/vue'
+  import { onMounted, type Ref, ref } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
   import { OfficialUsers } from '@/data/users.ts'
