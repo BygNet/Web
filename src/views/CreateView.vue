@@ -31,7 +31,7 @@
     loading.value = true
     error.value = null
 
-    const res = await fetch('http://localhost:5001/create-post', {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE}/create-post`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +66,7 @@
     loading.value = true
     error.value = null
 
-    const res = await fetch('http://localhost:5001/upload-image', {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE}/upload-image`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
