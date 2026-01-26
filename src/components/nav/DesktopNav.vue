@@ -5,7 +5,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages } from '@/data/pages.ts'
   import router from '@/router.ts'
-  import { openCreateModal } from '@/utils/openCreateModal.ts'
+  import { openCreateModal } from '@/utils/createModalManager.ts'
 </script>
 
 <template>

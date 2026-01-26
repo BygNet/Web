@@ -9,3 +9,11 @@ export function openCreateModal(): void {
     showingCreateModal.value = true
   }
 }
+
+export function closeCreateModal(): void {
+  showingCreateModal.value = false
+}
+
+export function toggleCreateModal(): void {
+  showingCreateModal.value = !showingCreateModal.value
+}

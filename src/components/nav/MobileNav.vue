@@ -5,10 +5,20 @@
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages } from '@/data/pages.ts'
   import router from '@/router.ts'
+  import {toggleCreateModal} from "@/utils/createModalManager.ts";
+  import {showingCreateModal} from "@/data/visibility.ts";
 </script>
 
 <template>
   <div class="bygMobileNav">
+    <button
+      class="createButton prominent large"
+      @click="toggleCreateModal()"
+      :class="{ open: showingCreateModal }"
+    >
+      <Icon icon="mingcute:add-fill" />
+    </button>
+
     <HStack class="mobileNavItems">
       <RouterLink v-for="page in BygPages" :to="page.path">
         <VStack
@@ -34,23 +44,31 @@
   @use "@/styles/themes"
 
   .bygMobileNav
-    --bottom: calc(env(safe-area-inset-bottom, 0.5rem) - var(--padding))
+    --bottom: calc(max(env(safe-area-inset-bottom), 1rem) - var(--padding))
 
     display: none
+    align-items: flex-end
+    gap: 1rem
     position: sticky
     bottom: var(--bottom)
-    left: 0.5rem
-    right: 0.5rem
-    width: fit-content
-    margin: auto
-    background: themes.$foregroundColor
-    backdrop-filter: blur(0.75rem)
-    border-radius: 10rem
-    padding: 0.15rem
-    border: 0.1rem solid themes.$foregroundColor
+    padding: 0 0.5rem
+    z-index: 5001
+
+    .createButton
+      svg
+        transition: 0.2s ease-in-out
+      &.open
+        svg
+          transform: rotate(45deg)
 
     .mobileNavItems
+      background: themes.$foregroundColor
+      backdrop-filter: blur(0.75rem)
+      border-radius: 10rem
+      padding: 0.15rem
+      border: 0.1rem solid themes.$foregroundColor
       gap: 0
+      margin: auto
 
       .mobileNavItem
         align-items: center
