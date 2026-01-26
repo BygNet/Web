@@ -6,6 +6,7 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
+  import { imageReloader } from '@/data/events.ts'
   import { title } from '@/data/title'
   import type { BygImage } from '@/types/contentTypes'
 
@@ -26,6 +27,34 @@
     } finally {
       loading.value = false
     }
+  })
+
+  async function reloadAndScroll() {
+    loading.value = true
+    error.value = null
+
+    try {
+      const res = await api('/latest-images')
+      if (!res.ok) throw new Error()
+
+      images.value = await res.json()
+
+      // wait for DOM update, then scroll to top
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+      })
+    } catch {
+      error.value = 'Failed to reload images'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  imageReloader.on('reload', () => {
+    reloadAndScroll()
   })
 </script>
 

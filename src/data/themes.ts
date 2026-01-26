@@ -1,4 +1,4 @@
-import {ref, type Ref} from "vue";
+import { type Ref, ref } from 'vue'
 
 const html: HTMLElement = document.querySelector('html')!
 export const currentThemeKey: Ref<string> = ref('')
@@ -35,14 +35,14 @@ export const BygThemes: BygTheme[] = [
   },
   {
     title: 'a35hie Light',
-    description: 'a35hie\'s light mode theme.',
+    description: "a35hie's light mode theme.",
     key: 'a35hie',
     colorPreview: '#ccbef3',
     isDark: false,
   },
   {
     title: 'a35hie Dark',
-    description: 'a35hie\'s dark mode theme.',
+    description: "a35hie's dark mode theme.",
     key: 'a35hie-dark',
     colorPreview: '#0c0023',
     isDark: true,
@@ -67,7 +67,7 @@ export const BygThemes: BygTheme[] = [
     key: 'pastel-pink',
     colorPreview: '#f3a7ff',
     isDark: false,
-  }
+  },
 ]
 
 export function loadTheme(): void {

@@ -20,6 +20,14 @@ button
   &.prominent
     background: themes.$accentColor
 
+    &.large
+      --buttonRadius: 2rem
+      padding: 0.75rem
+
+      svg
+        width: 1.5rem !important
+        height: 1.5rem !important
+
   &:not(.transparent)::after
     content: ""
     position: absolute

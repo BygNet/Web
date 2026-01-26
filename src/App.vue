@@ -3,8 +3,10 @@
 
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
+  import { loadTheme } from '@/data/themes.ts'
+  import { showingCreateModal } from '@/data/visibility.ts'
   import { consoleWarn } from '@/utils/consoleWarn.ts'
-  import {loadTheme} from "@/data/themes.ts";
+  import CreateView from '@/views/CreateView.vue'
 
   onMounted(() => {
     consoleWarn()
@@ -13,6 +15,8 @@
 </script>
 
 <template>
+  <CreateView v-if="showingCreateModal" />
+
   <DesktopNav />
   <main>
     <TitleView />

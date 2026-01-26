@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import {computed, ref, type Ref} from 'vue'
+  import { computed, type Ref, ref } from 'vue'
   import { useRouter } from 'vue-router'
 
   import { logout } from '@/auth/logout'
@@ -8,9 +8,9 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import { BygThemes, currentThemeKey, setTheme } from '@/data/themes.ts'
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
-  import {BygThemes, currentThemeKey, setTheme} from "@/data/themes.ts";
 
   title.value = 'Profile'
   setHeadMeta({ page: 'Profile', subtitle: 'Your Byg profile.' })
@@ -59,12 +59,20 @@
       </HStack>
 
       <VStack class="themeList">
-        <HStack v-for="theme in BygThemes" class="bygTheme" @click="setTheme(theme)">
-          <div class="previewCircle" :style="{background: theme.colorPreview}" :class="{selected: currentThemeKey === theme.key}" />
+        <HStack
+          v-for="theme in BygThemes"
+          class="bygTheme"
+          @click="setTheme(theme)"
+        >
+          <div
+            class="previewCircle"
+            :style="{ background: theme.colorPreview }"
+            :class="{ selected: currentThemeKey === theme.key }"
+          />
 
           <VStack class="themeInfo">
-            <h4>{{theme.title}}</h4>
-            <p class="light">{{theme.description}}</p>
+            <h4>{{ theme.title }}</h4>
+            <p class="light">{{ theme.description }}</p>
           </VStack>
         </HStack>
       </VStack>

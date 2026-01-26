@@ -5,18 +5,26 @@
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages } from '@/data/pages.ts'
   import router from '@/router.ts'
+  import { openCreateModal } from '@/utils/openCreateModal.ts'
 </script>
 
 <template>
   <nav class="desktopNav">
-    <RouterLink to="/">
-      <HStack class="bygLogo">
-        <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />
-        <h1>Byg β</h1>
-      </HStack>
-    </RouterLink>
+    <VStack class="header">
+      <RouterLink to="/">
+        <HStack class="bygLogo">
+          <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />
+          <h1>Byg β</h1>
+        </HStack>
+      </RouterLink>
 
-    <VStack>
+      <button class="prominent large" @click="openCreateModal()">
+        <Icon icon="solar:pen-new-square-line-duotone" />
+        Create...
+      </button>
+    </VStack>
+
+    <VStack class="pages">
       <RouterLink v-for="page in BygPages" :to="page.path">
         <HStack
           class="desktopNavItem"
@@ -59,6 +67,9 @@
     height: calc(100vh - var(--padding)*2)
 
     border-right: 0.2rem solid themes.$foregroundColor
+
+    .header
+      gap: 1.5rem
 
     .bygLogo
       align-items: center

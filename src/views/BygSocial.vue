@@ -7,6 +7,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
   import PostItem from '@/components/posts/PostItem.vue'
+  import { reloader } from '@/data/events.ts'
   import { title } from '@/data/title.ts'
   import type { BygPost } from '@/types/contentTypes.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
@@ -70,6 +71,10 @@
 
   onUnmounted(() => {
     if (interval) clearInterval(interval)
+  })
+
+  reloader.on('reload', () => {
+    reloadAndScroll()
   })
 </script>
 
