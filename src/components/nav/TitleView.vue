@@ -19,7 +19,7 @@
     </HStack>
 
     <div class="titleBlurContainer">
-      <ProgressiveBlur class="titleBlur" :blur="48" :border-radius="0" />
+      <ProgressiveBlur class="titleBlur" :blur="16" :border-radius="0" />
     </div>
   </header>
 </template>

@@ -4,9 +4,9 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages } from '@/data/pages.ts'
+  import { showingCreateModal } from '@/data/visibility.ts'
   import router from '@/router.ts'
-  import {toggleCreateModal} from "@/utils/createModalManager.ts";
-  import {showingCreateModal} from "@/data/visibility.ts";
+  import { toggleCreateModal } from '@/utils/createModalManager.ts'
 </script>
 
 <template>
@@ -63,22 +63,33 @@
 
     .mobileNavItems
       background: themes.$foregroundColor
-      backdrop-filter: blur(0.75rem)
+      backdrop-filter: blur(0.25rem)
       border-radius: 10rem
-      padding: 0.15rem
-      border: 0.1rem solid themes.$foregroundColor
+      padding: 0.25rem
       gap: 0
       margin: auto
+
+      &::after
+        content: ""
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        border: 0.1rem solid themes.$foregroundColor
+        border-radius: 10rem
+        mask: conic-gradient(#000000 0%, #000000 15%, rgba(255,255,255,0) 22%, #000000 28%, rgba(0,0,0,1) 66%, rgba(255,255,255,0) 72%, #000000 78%, #000000 100%)
+        pointer-events: none
 
       .mobileNavItem
         align-items: center
         min-width: 3rem
-        padding: 0.35rem 0.25rem
+        padding: 0.45rem 0.35rem
         gap: 0
         border-radius: 10rem
 
         &.selected
-          padding: 0.35rem 0.5rem
+          padding: 0.45rem 0.5rem
           background: themes.$foregroundColor
 
         svg

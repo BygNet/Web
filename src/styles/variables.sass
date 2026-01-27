@@ -1,1 +1,10 @@
 $mobileWidth: 50rem
+
+:root
+  --tabBarHeight: 0
+
+@media (max-width: $mobileWidth)
+  :root
+    --tabBarHeight: 3.5rem
+
+$tabBarHeight: var(--tabBarHeight)

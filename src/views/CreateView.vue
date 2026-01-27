@@ -1,16 +1,20 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import DOMPurify from 'dompurify'
+  import { marked } from 'marked'
   import { computed, type Ref, ref } from 'vue'
 
   import { auth } from '@/auth/session.ts'
   import HStack from '@/components/layout/HStack.vue'
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import UsernameView from '@/components/posts/UsernameView.vue'
   import { imageReloader, reloader } from '@/data/events.ts'
   import { showingCreateModal } from '@/data/visibility.ts'
   import type { CreateType } from '@/types/unions.ts'
 
   const pickedType: Ref<CreateType | undefined> = ref(undefined)
+  const showingPreview: Ref<boolean> = ref(false)
 
   const postText = ref('')
   const postTitle = ref('')
@@ -21,6 +25,18 @@
 
   const charCount = computed(() => postText.value.length)
   const charLimit = 1000
+
+  const renderedMarkdown = computed(() =>
+    DOMPurify.sanitize(marked.parse(postText.value || '') as string)
+  )
+
+  const formattedDate = computed(() =>
+    new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  )
 
   async function submitPost() {
     if (!auth.token) {
@@ -94,7 +110,7 @@
 </script>
 
 <template>
-  <Modal>
+  <Modal v-if="!showingPreview">
     <div class="createView" :class="{ composer: pickedType != undefined }">
       <VStack v-if="pickedType == undefined">
         <HStack class="autoSpace fullWidth">
@@ -138,14 +154,20 @@
 
         <div v-if="error" class="error">{{ error }}</div>
 
-        <button
-          class="prominent"
-          :disabled="loading || charCount === 0"
-          @click="submitPost"
-        >
-          <Icon icon="solar:upload-minimalistic-bold-duotone" />
-          Post
-        </button>
+        <HStack class="fullWidth autoSpace">
+          <button
+            class="prominent"
+            :disabled="loading || charCount === 0"
+            @click="submitPost"
+          >
+            <Icon icon="solar:upload-minimalistic-bold-duotone" />
+            Post
+          </button>
+
+          <button class="transparent" @click="showingPreview = true">
+            Preview
+          </button>
+        </HStack>
       </VStack>
 
       <VStack v-else-if="pickedType == 'image'" class="form">
@@ -164,6 +186,13 @@
           placeholder="https://example.com/image.png"
         />
 
+        <img
+          class="previewImage"
+          v-if="imageUrl"
+          :src="imageUrl"
+          alt="Preview"
+        />
+
         <div v-if="error" class="error">{{ error }}</div>
 
         <button
@@ -177,12 +206,33 @@
       </VStack>
     </div>
   </Modal>
+
+  <Modal v-else>
+    <div class="createPreview">
+      <HStack class="fullWidth autoSpace">
+        <h2>Preview</h2>
+        <button @click="showingPreview = false">
+          <Icon icon="mingcute:arrow-left-fill" />
+        </button>
+      </HStack>
+
+      <VStack class="postPreview">
+        <h3>{{ postTitle }}</h3>
+        <HStack class="autoSpace fullWidth light">
+          <UsernameView :name="auth.user?.username ?? 'unknown'" />
+          <p>{{ formattedDate }}</p>
+        </HStack>
+
+        <div class="markdownPreview" v-html="renderedMarkdown"></div>
+      </VStack>
+    </div>
+  </Modal>
 </template>
 
 <style scoped lang="sass">
   @use "@/styles/utils"
 
-  .createView
+  .createView, .createPreview
     @include utils.itemBackground
     border-radius: 2rem
     padding: 1rem
@@ -190,6 +240,13 @@
     &.composer
       min-width: 20rem
       max-width: 100%
+
+  .postPreview, .markdownPreview
+    width: 100%
+    align-items: flex-start
+
+    .markdownPreview
+      white-space: normal
 
   .typePicker
     gap: 0.5rem
@@ -219,4 +276,9 @@
     text-align: right
     font-size: small
     opacity: 0.7
+
+  .previewImage
+    max-width: 10rem
+    max-height: 10rem
+    min-height: 2rem
 </style>

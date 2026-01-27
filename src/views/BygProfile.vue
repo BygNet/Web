@@ -132,7 +132,7 @@
     top: 0
     bottom: 0
     right: 0
-    height: calc(100vh - var(--padding)*2 - var(--margin)*2)
+    height: calc(100vh - var(--padding)*2 - var(--margin)*2 - var(--tabBarHeight))
     backdrop-filter: blur(0.5rem)
     width: fit-content
     max-width: 90vw
