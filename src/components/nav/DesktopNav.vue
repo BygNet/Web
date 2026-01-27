@@ -101,7 +101,6 @@
 
     &.selected
       padding: 0.75rem 1rem
-      gap: 0.75rem
 
     &:hover, &.selected
       background: themes.$foregroundColor

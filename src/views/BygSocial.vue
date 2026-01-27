@@ -7,6 +7,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
   import PostItem from '@/components/posts/PostItem.vue'
+  import { postCache, postCacheTime } from '@/data/caches'
   import { reloader } from '@/data/events.ts'
   import { title } from '@/data/title.ts'
   import type { BygPost } from '@/types/contentTypes.ts'
@@ -16,6 +17,7 @@
   const isLoaded: Ref<boolean> = ref(false)
   const error: Ref<string | null> = ref(null)
   const hasNewPosts: Ref<boolean> = ref(false)
+  const CACHE_TTL = 30_000
 
   let interval: number | undefined
 
@@ -27,10 +29,20 @@
 
   const loadPosts = async () => {
     try {
+      // use cache if fresh
+      if (postCache.value && Date.now() - postCacheTime.value < CACHE_TTL) {
+        posts.value = postCache.value
+        hasNewPosts.value = false
+        return
+      }
+
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
       if (!res.ok) throw new Error('Failed to load posts')
 
-      posts.value = (await res.json()) as BygPost[]
+      const data = (await res.json()) as BygPost[]
+      posts.value = data
+      postCache.value = data
+      postCacheTime.value = Date.now()
       hasNewPosts.value = false
     } catch (err) {
       error.value = 'Failed to load posts.'
@@ -40,6 +52,8 @@
   }
 
   const reloadAndScroll = async () => {
+    postCache.value = null
+
     await loadPosts()
     await nextTick()
 
