@@ -18,15 +18,8 @@
 </template>
 
 <style scoped lang="sass">
-  .emptyState
-    display: flex
-    justify-content: center
-    align-items: center
-    gap: 0
-    height: 100vh
-
-    .loader
-      width: 4rem
-      height: 4rem
-      margin: 1rem 0
+  .loader
+    width: 4rem
+    height: 4rem
+    margin: 1rem 0
 </style>

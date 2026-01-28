@@ -41,6 +41,13 @@ body
     --padding: 0.5rem
     flex-direction: column
 
+.emptyState
+  display: flex !important
+  justify-content: center !important
+  align-items: center !important
+  gap: 0 !important
+  height: 100vh !important
+
 div
   display: flex
   flex-direction: column
@@ -56,9 +63,13 @@ a
   color: themes.$textColor
   cursor: pointer
 
-a.prominentLink
+a.prominentLink, span a
   text-decoration: underline
   text-decoration-color: themes.$accentColor
+
+hr
+  opacity: 0.2
+  border-width: 0.1rem
 
 svg
   color: themes.$textColor
