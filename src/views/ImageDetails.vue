@@ -9,6 +9,7 @@
   import EmptyState from '@/components/layout/EmptyState.vue'
   import { showBackButton, title } from '@/data/title'
   import type { BygImage } from '@/types/contentTypes'
+  import CommentsView from '@/views/CommentsView.vue'
 
   const route = useRoute()
   const id = Number(route.params.slug)
@@ -57,7 +58,15 @@
 
     <Divider />
 
-    <h3 class="light">No comments yet.</h3>
+    <EmptyState v-if="image == undefined" message="Comments are loading." />
+    <CommentsView
+      v-else
+      :id="image.id"
+      :author="image.author"
+      get-url="/image-comments"
+      post-url="/comment-image"
+      :count="image.commentCount"
+    />
   </ContentArea>
 </template>
 

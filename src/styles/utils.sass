@@ -22,10 +22,24 @@
 
 @mixin itemBackground
   --postPadding: 0.75rem
+  --cornerRadius: 1.75rem
 
+  position: relative
   padding: 0.75rem
   background: themes.$foregroundColor
-  border-radius: 1.75rem
+  border-radius: var(--cornerRadius)
+
+  &::after
+    content: ""
+    position: absolute
+    top: 0
+    bottom: 0
+    right: 0
+    left: 0
+    box-shadow: inset themes.$shadowColor 0 -0.5rem 1rem
+    border-radius: var(--cornerRadius)
+    opacity: 0.1
+    pointer-events: none
 
 @mixin maxPaddedWidth
   width: calc(100% - var(--padding)*2)

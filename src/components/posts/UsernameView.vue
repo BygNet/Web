@@ -8,6 +8,7 @@
   const props = defineProps<{
     name: string
     verified?: boolean
+    author?: boolean
   }>()
 
   const isStaff: Ref<boolean> = ref(false)
@@ -33,6 +34,11 @@
     <HStack class="badge verified" v-if="verified">
       <Icon icon="solar:verified-check-line-duotone" />
     </HStack>
+
+    <HStack class="badge author" v-if="author">
+      <Icon icon="carbon:user-avatar-filled" />
+      Author
+    </HStack>
   </HStack>
 </template>
 
@@ -49,7 +55,7 @@
       gap: 0
       background: themes.$accentColor
 
-      &.staff
+      &.staff, &.author
         padding: 0.15rem 0.35rem
       &.verified
         padding: 0.35rem

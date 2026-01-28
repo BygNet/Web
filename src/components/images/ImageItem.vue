@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { Icon } from '@iconify/vue'
   import { useRouter } from 'vue-router'
 
   import HStack from '@/components/layout/HStack.vue'
@@ -8,6 +8,7 @@
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import type { BygImage } from '@/types/contentTypes'
+  import { formatDate } from '@/utils/formatters.ts'
 
   const props = defineProps<{
     image: BygImage
@@ -15,10 +16,6 @@
   }>()
 
   const router = useRouter()
-
-  const createdLabel = computed(() =>
-    new Date(props.image.createdDate).toLocaleDateString()
-  )
 
   function openDetails() {
     if (props.detailMode) return
@@ -35,16 +32,23 @@
 
       <HStack class="meta autoSpace">
         <UsernameView :name="image.author" />
-        <p>{{ createdLabel }}</p>
+        <p>{{ formatDate(image.createdDate) }}</p>
       </HStack>
 
       <HStack class="autoSpace actions" @click.stop>
-        <LikeButton
-          :id="image.id"
-          :likes="image.likes"
-          api-path="/like-image"
-          :compact="!detailMode"
-        />
+        <HStack>
+          <LikeButton
+            :id="image.id"
+            :likes="image.likes"
+            api-path="/like-image"
+            :compact="!detailMode"
+          />
+
+          <HStack class="noSpace">
+            <Icon icon="solar:chat-round-line-line-duotone" />
+            {{ image.commentCount }}
+          </HStack>
+        </HStack>
 
         <ShareButton
           :id="image.id"

@@ -12,6 +12,7 @@
   import { imageReloader, reloader } from '@/data/events.ts'
   import { showingCreateModal } from '@/data/visibility.ts'
   import type { CreateType } from '@/types/unions.ts'
+  import { formatDate } from '@/utils/formatters.ts'
 
   const pickedType: Ref<CreateType | undefined> = ref(undefined)
   const showingPreview: Ref<boolean> = ref(false)
@@ -28,14 +29,6 @@
 
   const renderedMarkdown = computed(() =>
     DOMPurify.sanitize(marked.parse(postText.value || '') as string)
-  )
-
-  const formattedDate = computed(() =>
-    new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
   )
 
   async function submitPost() {
@@ -220,7 +213,7 @@
         <h3>{{ postTitle }}</h3>
         <HStack class="autoSpace fullWidth light">
           <UsernameView :name="auth.user?.username ?? 'unknown'" />
-          <p>{{ formattedDate }}</p>
+          <p>{{ formatDate(new Date().toISOString()) }}</p>
         </HStack>
 
         <div class="markdownPreview" v-html="renderedMarkdown"></div>

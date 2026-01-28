@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { nextTick, ref, watchEffect } from 'vue'
@@ -9,6 +10,7 @@
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import type { BygPost } from '@/types/contentTypes.ts'
+  import { formatDate } from '@/utils/formatters.ts'
 
   const props = defineProps<{
     post: BygPost
@@ -42,17 +44,6 @@
       }
     }
   })
-
-  function formatDate(input: string): string {
-    const date = new Date(input)
-    if (Number.isNaN(date.getTime())) return input
-
-    return new Intl.DateTimeFormat(undefined, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(date)
-  }
 </script>
 
 <template>
@@ -88,12 +79,19 @@
     </VStack>
 
     <HStack class="postActions autoSpace" @click.stop>
-      <LikeButton
-        :id="post.id"
-        :likes="post.likes"
-        api-path="/like-post"
-        :compact="!detailMode"
-      />
+      <HStack>
+        <LikeButton
+          :id="post.id"
+          :likes="post.likes"
+          api-path="/like-post"
+          :compact="!detailMode"
+        />
+
+        <HStack class="noSpace">
+          <Icon icon="solar:chat-round-line-line-duotone" />
+          {{ post.commentCount }}
+        </HStack>
+      </HStack>
 
       <ShareButton
         :id="post.id"

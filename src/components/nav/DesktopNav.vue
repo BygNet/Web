@@ -6,6 +6,8 @@
   import { BygPages } from '@/data/pages.ts'
   import router from '@/router.ts'
   import { openCreateModal } from '@/utils/createModalManager.ts'
+
+  const AppVersion = __AppVersion
 </script>
 
 <template>
@@ -49,18 +51,23 @@
       </RouterLink>
     </VStack>
 
-    <a href="https://github.com/BygNet" target="_blank">
-      <HStack>
-        <Icon icon="solar:code-line-duotone" />
-        GitHub
-      </HStack>
-    </a>
+    <HStack class="footer fullWidth autoSpace">
+      <a href="https://github.com/BygNet" target="_blank">
+        <HStack>
+          <Icon icon="solar:code-line-duotone" />
+          GitHub
+        </HStack>
+      </a>
+
+      {{ AppVersion }}
+    </HStack>
   </nav>
 </template>
 
 <style scoped lang="sass">
   @use "@/styles/variables"
   @use "@/styles/themes"
+  @use "@/styles/utils"
 
   @mixin outPad
     margin: 0 -0.75rem
@@ -99,17 +106,19 @@
     &:not(.selected, :hover)
       opacity: 0.9
 
-    &.selected
-      padding: 0.75rem 1rem
-
     &:hover, &.selected
+      @include utils.itemBackground
+
+      --cornerRadius: 5rem
       background: themes.$foregroundColor
-      border-radius: 5rem
       transform-origin: left
       transform: scale(1.1)
 
       h3
         font-weight: 900
+
+    &.selected
+      padding: 0.75rem 1rem
 
     svg
       width: 2rem

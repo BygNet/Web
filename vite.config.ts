@@ -5,7 +5,12 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
+import pkgMeta from './package.json'
+
 export default defineConfig({
+  define: {
+    __AppVersion: JSON.stringify(pkgMeta.version),
+  },
   plugins: [
     vue(),
     vueDevTools(),

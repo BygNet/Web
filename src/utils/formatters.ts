@@ -18,3 +18,14 @@ export function formatStat(value: number): string {
 export function formatNumber(value: number): string {
   return value.toLocaleString(document.querySelector('html')?.lang)
 }
+
+export function formatDate(input: string): string {
+  const date = new Date(input)
+  if (Number.isNaN(date.getTime())) return input
+
+  return new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date)
+}

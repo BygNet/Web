@@ -13,6 +13,7 @@ export interface BygPost {
   createdDate: string
   likes: number
   shares: number
+  commentCount: number
 }
 
 export interface BygImage {
@@ -23,6 +24,14 @@ export interface BygImage {
   createdDate: string
   likes: number
   shares: number
+  commentCount: number
+}
+
+export interface BygComment {
+  id: number
+  author: string
+  content: string
+  createdDate: string
 }
 
 export interface BygShop {

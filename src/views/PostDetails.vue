@@ -9,6 +9,7 @@
   import PostItem from '@/components/posts/PostItem.vue'
   import { showBackButton, title } from '@/data/title.ts'
   import type { BygPost } from '@/types/contentTypes.ts'
+  import CommentsView from '@/views/CommentsView.vue'
 
   const route = useRoute()
   const id = Number(route.params.slug)
@@ -55,7 +56,15 @@
 
     <Divider />
 
-    <h3 class="light">No comments yet.</h3>
+    <EmptyState v-if="post == undefined" message="Comments are loading." />
+    <CommentsView
+      v-else
+      :id="post.id"
+      :author="post.author"
+      getUrl="/post-comments"
+      postUrl="/comment-post"
+      :count="post.commentCount"
+    />
   </ContentArea>
 </template>
 
