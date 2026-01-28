@@ -3,17 +3,17 @@
   import { onMounted, type Ref, ref } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
-  import { OfficialUsers } from '@/data/users.ts'
+  import { StaffUsers } from '@/data/users.ts'
 
   const props = defineProps<{
     name: string
     verified?: boolean
   }>()
 
-  const isOfficial: Ref<boolean> = ref(false)
+  const isStaff: Ref<boolean> = ref(false)
 
   onMounted(() => {
-    isOfficial.value = OfficialUsers.includes(props.name)
+    isStaff.value = StaffUsers.includes(props.name)
   })
 </script>
 
@@ -25,9 +25,9 @@
     </p>
 
     <!-- Authenticity badges -->
-    <HStack class="badge staff" v-if="isOfficial">
+    <HStack class="badge staff" v-if="isStaff">
       <Icon icon="solar:shield-check-line-duotone" />
-      Official
+      Staff
     </HStack>
 
     <HStack class="badge verified" v-if="verified">
