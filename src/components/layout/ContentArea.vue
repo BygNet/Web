@@ -2,6 +2,7 @@
   import { useAttrs } from 'vue'
 
   import MobileNav from '@/components/nav/MobileNav.vue'
+  import VStack from "@/components/layout/VStack.vue";
 
   const attrs = useAttrs()
 
@@ -12,6 +13,11 @@
 
 <template>
   <div class="contentArea" v-bind="attrs">
+    <VStack>
+      <p>Ads</p>
+      <div class="light" id="container-0088a88d3d9e747d59d22c4ea55fa11d" />
+    </VStack>
+
     <slot />
 
     <p class="light" v-if="!hideTermsLink">
