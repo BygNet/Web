@@ -8,6 +8,7 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import LikeButton from '@/components/posts/LikeButton.vue'
+  import ReportButton from '@/components/posts/ReportButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { formatDate } from '@/utils/formatters.ts'
@@ -93,12 +94,16 @@
         </HStack>
       </HStack>
 
-      <ShareButton
-        :id="post.id"
-        :shares="post.shares"
-        api-path="/share-post"
-        :compact="!detailMode"
-      />
+      <HStack>
+        <ShareButton
+          :id="post.id"
+          :shares="post.shares"
+          api-path="/share-post"
+          :compact="!detailMode"
+        />
+
+        <ReportButton />
+      </HStack>
     </HStack>
   </div>
 </template>

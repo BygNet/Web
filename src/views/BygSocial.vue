@@ -8,10 +8,11 @@
   import VStack from '@/components/layout/VStack.vue'
   import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
   import PostItem from '@/components/posts/PostItem.vue'
-  import { postCache, postCacheTime } from '@/data/caches'
+  import { adCache, postCache, postCacheTime } from '@/data/caches'
   import { reloader } from '@/data/events.ts'
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import AdView from '@/views/AdView.vue'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
@@ -102,22 +103,27 @@
     <VStack v-else class="postList">
       <NewPostsAvailable v-if="hasNewPosts" @click="reloadAndScroll" />
 
-      <RouterLink
-        class="postLink"
-        v-for="post in posts"
-        :to="`/details/${post.id}`"
-        :key="post.id"
-        custom
-        v-slot="{ navigate }"
-      >
-        <PostItem :post="post" @navigate="navigate" />
-      </RouterLink>
+      <VStack v-for="post in posts" :key="post.id" class="postContainer">
+        <RouterLink
+          class="postLink"
+          :to="`/details/${post.id}`"
+          custom
+          v-slot="{ navigate }"
+        >
+          <PostItem :post="post" @navigate="navigate" />
+        </RouterLink>
+
+        <AdView
+          v-if="adCache.length > 0 && Math.floor(Math.random() * 5) + 1 == 1"
+          :ad="adCache.randomElement()!"
+        />
+      </VStack>
     </VStack>
   </ContentArea>
 </template>
 
 <style scoped lang="sass">
-  .postList
+  .postList, .postContainer
     width: 100%
     gap: 0.5rem
 </style>

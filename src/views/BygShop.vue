@@ -38,7 +38,7 @@
 
     <ErrorState v-else-if="error" :message="error" />
 
-    <VStack v-else class="shopList">
+    <div v-else class="shopList">
       <a v-for="shop in shops" :href="shop.openUrl" class="shopLink">
         <div class="shopItem">
           <HStack class="shopDetails">
@@ -49,14 +49,14 @@
             />
             <VStack class="noSpace">
               <h3>{{ shop.title }}</h3>
-              <p>{{ shop.subtitle }}</p>
+              <p class="light">{{ shop.subtitle }}</p>
             </VStack>
 
             <Icon class="externIcon" icon="solar:arrow-right-up-line-duotone" />
           </HStack>
         </div>
       </a>
-    </VStack>
+    </div>
   </ContentArea>
 </template>
 
@@ -64,7 +64,10 @@
   @use "@/styles/utils"
 
   .shopList
+    display: grid
     width: 100%
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr))
+    gap: 0.5rem
 
   .shopLink
     width: 100%
@@ -85,4 +88,8 @@
       .shopImage
         width: 4rem
         height: 2rem
+
+  @media (max-width: 35rem)
+    .shopList
+      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
 </style>
