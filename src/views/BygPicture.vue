@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { BygImage } from '@bygnet/types'
   import { onMounted, type Ref, ref } from 'vue'
 
   import { api } from '@/api/client'
@@ -9,7 +10,6 @@
   import { imageCache, imageCacheTime } from '@/data/caches'
   import { imageReloader } from '@/data/events.ts'
   import { title } from '@/data/title'
-  import type { BygImage } from '@/types/contentTypes'
 
   title.value = 'Picture'
 

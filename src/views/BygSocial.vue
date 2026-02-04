@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { BygPost } from '@bygnet/types'
   import { nextTick, onMounted, onUnmounted, type Ref, ref } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -10,7 +11,6 @@
   import { postCache, postCacheTime } from '@/data/caches'
   import { reloader } from '@/data/events.ts'
   import { title } from '@/data/title.ts'
-  import type { BygPost } from '@/types/contentTypes.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   const posts: Ref<BygPost[]> = ref([])

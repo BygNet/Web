@@ -1,4 +1,4 @@
-import type { BygPage } from '@/types/contentTypes.ts'
+import type { BygPage } from '@bygnet/types'
 
 export const BygPages: BygPage[] = [
   {

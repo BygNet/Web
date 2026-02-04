@@ -1,6 +1,5 @@
+import type { BygImage, BygPost } from '@bygnet/types'
 import { type Ref, ref } from 'vue'
-
-import type { BygImage, BygPost } from '@/types/contentTypes.ts'
 
 // Posts Cache
 export const postCache: Ref<BygPost[] | null> = ref(null)

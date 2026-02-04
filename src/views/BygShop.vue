@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { BygShop } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { onMounted, type Ref, ref } from 'vue'
 
@@ -8,7 +9,6 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title.ts'
-  import type { BygShop } from '@/types/contentTypes.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   const shops: Ref<BygShop[]> = ref([])

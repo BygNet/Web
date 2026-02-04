@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { useAttrs } from 'vue'
 
+  import VStack from '@/components/layout/VStack.vue'
   import MobileNav from '@/components/nav/MobileNav.vue'
-  import VStack from "@/components/layout/VStack.vue";
 
   const attrs = useAttrs()
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { BygImage } from '@bygnet/types'
   import { useHead } from '@unhead/vue'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
   import { useRoute } from 'vue-router'
@@ -8,7 +9,6 @@
   import Divider from '@/components/layout/Divider.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import { showBackButton, title } from '@/data/title'
-  import type { BygImage } from '@/types/contentTypes'
   import CommentsView from '@/views/CommentsView.vue'
 
   const route = useRoute()

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { BygImage } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { useRouter } from 'vue-router'
 
@@ -7,7 +8,6 @@
   import LikeButton from '@/components/posts/LikeButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
-  import type { BygImage } from '@/types/contentTypes'
   import { formatDate } from '@/utils/formatters.ts'
 
   const props = defineProps<{

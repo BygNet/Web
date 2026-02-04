@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { CreateType } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
@@ -11,7 +12,6 @@
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { imageReloader, reloader } from '@/data/events.ts'
   import { showingCreateModal } from '@/data/visibility.ts'
-  import type { CreateType } from '@/types/unions.ts'
   import { formatDate } from '@/utils/formatters.ts'
 
   const pickedType: Ref<CreateType | undefined> = ref(undefined)

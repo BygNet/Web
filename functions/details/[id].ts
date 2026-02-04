@@ -1,4 +1,5 @@
-import { BygPost } from '../../src/types/contentTypes'
+import { BygPost } from '@bygnet/types'
+
 import { esc } from '../../src/utils/esc'
 
 export const onRequest = async ({ params, env, next }): Promise<Response> => {

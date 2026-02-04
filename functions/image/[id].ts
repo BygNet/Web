@@ -1,4 +1,5 @@
-import type { BygImage } from '../../src/types/contentTypes'
+import type { BygImage } from '@bygnet/types'
+
 import { esc } from '../../src/utils/esc'
 
 export const onRequest = async ({ params, env, next }): Promise<Response> => {

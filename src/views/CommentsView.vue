@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { BygComment } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { onMounted, type Ref, ref } from 'vue'
 
@@ -8,7 +9,6 @@
   import VStack from '@/components/layout/VStack.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import router from '@/router.ts'
-  import type { BygComment } from '@/types/contentTypes.ts'
   import { formatDate } from '@/utils/formatters.ts'
 
   const comments: Ref<BygComment[]> = ref([])

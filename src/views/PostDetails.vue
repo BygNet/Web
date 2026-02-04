@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { BygPost } from '@bygnet/types'
   import { useHead } from '@unhead/vue'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
   import { useRoute } from 'vue-router'
@@ -8,7 +9,6 @@
   import EmptyState from '@/components/layout/EmptyState.vue'
   import PostItem from '@/components/posts/PostItem.vue'
   import { showBackButton, title } from '@/data/title.ts'
-  import type { BygPost } from '@/types/contentTypes.ts'
   import CommentsView from '@/views/CommentsView.vue'
 
   const route = useRoute()
