@@ -52,7 +52,7 @@
     </VStack>
 
     <HStack class="footer fullWidth autoSpace">
-      <a href="https://github.com/BygNet" target="_blank">
+      <a href="https://git.new/bygpl" target="_blank">
         <HStack>
           <Icon icon="solar:code-line-duotone" />
           GitHub
