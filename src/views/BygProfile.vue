@@ -109,7 +109,7 @@
       </button>
     </VStack>
 
-    <h4>Byg Client: {{AppVersion}}</h4>
+    <h4>Byg Client: {{ AppVersion }}</h4>
   </ContentArea>
 </template>
 
