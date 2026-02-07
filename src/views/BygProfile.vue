@@ -17,6 +17,7 @@
   const router = useRouter()
   const isLoggedIn = computed(() => !!auth.user)
   const showingAppearances: Ref<boolean> = ref(false)
+  const AppVersion = __AppVersion
 
   async function doLogout() {
     await logout()
@@ -107,6 +108,8 @@
         Log out
       </button>
     </VStack>
+
+    <h4>Byg Client: {{AppVersion}}</h4>
   </ContentArea>
 </template>
 
