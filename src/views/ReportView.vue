@@ -24,13 +24,10 @@
     </HStack>
 
     <iframe
-      data-tally-src="https://tally.so/embed/kdEQyo?alignLeft=1&hideTitle=1&transparentBackground=0&dynamicHeight=1"
+      data-tally-src="https://tally.so/embed/kdEQyo?alignLeft=1&hideTitle=1&transparentBackground=0&dynamicHeight=0"
       loading="lazy"
       width="100%"
-      height="200"
-      frameborder="0"
-      marginheight="0"
-      marginwidth="0"
+      height="450"
       title="Byg Platform Trust and Safety"
     />
   </div>
@@ -53,5 +50,6 @@
     gap: 0.75rem
 
     iframe
+      border: none
       border-radius: 1rem
 </style>
