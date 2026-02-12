@@ -43,8 +43,6 @@
       isLoading.value = false
     }
   }
-
-  console.log(props.user)
 </script>
 
 <template>
