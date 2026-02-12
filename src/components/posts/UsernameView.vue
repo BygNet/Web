@@ -7,7 +7,6 @@
   import HStack from '@/components/layout/HStack.vue'
   import {
     getCachedProfile,
-    getCachedSubscriptionState,
     setCachedProfile,
     setCachedSubscriptionState,
   } from '@/data/caches'
@@ -36,13 +35,6 @@
       return
     }
 
-    // Check subscription cache as fallback
-    const cachedSub = getCachedSubscriptionState(props.name)
-    if (cachedSub !== undefined) {
-      subscriptionState.value = cachedSub
-      return
-    }
-
     try {
       const res = await api(`/profile/${props.name}`)
       if (res.ok) {
@@ -50,13 +42,13 @@
         subscriptionState.value = data.user?.subscriptionState ?? null
         avatarUrl.value = data.user?.avatarUrl ?? null
 
-        // Cache the subscription state and profile
-        setCachedSubscriptionState(props.name, subscriptionState.value)
+        // Cache the profile for future use
         setCachedProfile(props.name, {
           user: data.user,
-          followerCount: data.followerCount,
-          followingCount: data.followingCount,
+          followerCount: data.followerCount ?? 0,
+          followingCount: data.followingCount ?? 0,
         })
+        setCachedSubscriptionState(props.name, subscriptionState.value)
       }
     } catch (err) {
       console.error(`Failed to fetch subscription for ${props.name}:`, err)
