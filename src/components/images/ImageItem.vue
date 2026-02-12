@@ -31,10 +31,10 @@
     <VStack class="info">
       <h3>{{ image.title }}</h3>
 
-      <HStack class="meta autoSpace">
+      <VStack class="meta noSpace">
         <UsernameView :name="image.author" />
         <p>{{ formatDate(image.createdDate) }}</p>
-      </HStack>
+      </VStack>
 
       <HStack class="autoSpace actions" @click.stop>
         <HStack>

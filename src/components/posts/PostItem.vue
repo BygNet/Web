@@ -56,10 +56,10 @@
     <h4 v-if="!detailMode">{{ post.title }}</h4>
     <h2 v-else>{{ post.title }}</h2>
 
-    <HStack class="autoSpace postMeta">
+    <VStack class="noSpace postMeta">
       <UsernameView :name="post.author" />
       <p>{{ formatDate(post.createdDate) }}</p>
-    </HStack>
+    </VStack>
 
     <VStack class="bygPostContentWrapper">
       <p

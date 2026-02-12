@@ -1,180 +1,80 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-  import { computed, type Ref, ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import type { BygProfile } from '@bygnet/types'
+  import { computed, onMounted, onUnmounted, type Ref, ref } from 'vue'
+  import { useRoute } from 'vue-router'
 
-  import { logout } from '@/auth/logout'
-  import { auth } from '@/auth/session'
+  import { api } from '@/api/client'
   import ContentArea from '@/components/layout/ContentArea.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { BygThemes, currentThemeKey, setTheme } from '@/data/themes.ts'
-  import { title } from '@/data/title.ts'
+  import EmptyState from '@/components/layout/EmptyState.vue'
+  import ErrorState from '@/components/layout/ErrorState.vue'
+  import ProfileView from '@/components/profile/ProfileView.vue'
+  import { showBackButton, title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
+  const route = useRoute()
+  const username = computed(() => route.params.username as string)
+
+  const profile: Ref<BygProfile | null> = ref(null)
+  const isLoading: Ref<boolean> = ref(true)
+  const error: Ref<string | null> = ref(null)
+  const isFollowing: Ref<boolean> = ref(false)
+  const pageSubtitle: Ref<string> = ref('Loading...')
+
+  // Set initial head meta
   title.value = 'Profile'
-  setHeadMeta({ page: 'Profile', subtitle: 'Your Byg profile.' })
-  const router = useRouter()
-  const isLoggedIn = computed(() => !!auth.user)
-  const showingAppearances: Ref<boolean> = ref(false)
-  const AppVersion = __AppVersion
+  showBackButton.value = true
+  setHeadMeta({ page: title.value, subtitle: pageSubtitle.value })
 
-  async function doLogout() {
-    await logout()
-    await router.push({ name: 'social' })
+  async function loadProfile() {
+    isLoading.value = true
+    error.value = null
+    try {
+      const res = await api(`/profile/${username.value}`)
+      if (!res.ok) {
+        error.value = 'User not found'
+        return
+      }
+      profile.value = await res.json()
+      isFollowing.value = profile.value?.isFollowing ?? false
+
+      title.value = profile.value?.user.username ?? 'Profile'
+      pageSubtitle.value = profile.value?.user.bio ?? 'No bio'
+    } catch (err) {
+      error.value = 'Failed to load profile'
+      console.error(err)
+    } finally {
+      isLoading.value = false
+    }
   }
 
-  function goLogin() {
-    router.push({ name: 'login' })
+  function handleFollow() {
+    if (profile.value) {
+      isFollowing.value = !isFollowing.value
+    }
   }
 
-  function goSignup() {
-    router.push({ name: 'signup' })
-  }
+  onMounted(() => {
+    loadProfile()
+  })
+
+  onUnmounted(() => {
+    showBackButton.value = false
+  })
 </script>
 
 <template>
-  <ContentArea class="bygProfile">
-    <HStack class="quickSettings autoSpace">
-      <h3>Options</h3>
+  <ContentArea class="profilePage">
+    <EmptyState message="Loading profile..." v-if="isLoading" />
+    <ErrorState v-else-if="error" :message="error" />
 
-      <HStack>
-        <button disabled>
-          <Icon icon="solar:stars-line-duotone" />
-          Byg Pro
-        </button>
-
-        <button @click="showingAppearances = true">
-          <Icon icon="solar:pallete-2-line-duotone" />
-          Appearance
-        </button>
-      </HStack>
-    </HStack>
-
-    <VStack v-if="showingAppearances" class="appearanceSidebar">
-      <HStack class="autoSpace">
-        <h2>Themes</h2>
-        <button @click="showingAppearances = false">
-          <Icon icon="mingcute:close-fill" />
-        </button>
-      </HStack>
-
-      <VStack class="themeList">
-        <HStack
-          v-for="theme in BygThemes"
-          class="bygTheme"
-          @click="setTheme(theme)"
-        >
-          <div
-            class="previewCircle"
-            :style="{ background: theme.colorPreview }"
-            :class="{ selected: currentThemeKey === theme.key }"
-          />
-
-          <VStack class="themeInfo">
-            <h4>{{ theme.title }}</h4>
-            <p class="light">{{ theme.description }}</p>
-          </VStack>
-        </HStack>
-      </VStack>
-    </VStack>
-
-    <!-- Logged out -->
-    <VStack v-if="!isLoggedIn" class="guest">
-      <h2>Welcome to Byg!</h2>
-      <p>You are not logged in.</p>
-
-      <HStack class="accountActions">
-        <button @click="goLogin">
-          <Icon icon="solar:login-2-line-duotone" />
-          Log in
-        </button>
-        <button @click="goSignup">
-          <Icon icon="solar:user-plus-line-duotone" />
-          Sign up
-        </button>
-      </HStack>
-    </VStack>
-
-    <!-- Logged in -->
-    <VStack v-else class="user">
-      <h2>Hey!</h2>
-      <p><strong>User #:</strong> {{ auth.user!.id }}</p>
-      <p><strong>Email:</strong> {{ auth.user!.email }}</p>
-      <p><strong>Username:</strong> {{ auth.user!.username }}</p>
-
-      <button class="logout" @click="doLogout">
-        <Icon icon="solar:logout-2-line-duotone" />
-        Log out
-      </button>
-    </VStack>
-
-    <h4>Byg Client: {{ AppVersion }}</h4>
+    <ProfileView
+      v-else-if="profile"
+      :user="profile.user"
+      :is-own-profile="false"
+      :is-following="isFollowing"
+      :follower-count="profile.followerCount"
+      :following-count="profile.followingCount"
+      @follow="handleFollow"
+    />
   </ContentArea>
 </template>
-
-<style scoped lang="sass">
-  @use "@/styles/utils"
-  @use "@/styles/themes"
-
-  .quickSettings
-    margin-bottom: 0.5rem
-
-  .guest, .user, .quickSettings, .bygTheme
-    @include utils.maxPostPaddedWidth
-    @include utils.itemBackground
-
-  .logout
-    margin-top: 1rem
-
-  .appearanceSidebar
-    --padding: 0.75rem
-    --margin: 1rem
-
-    position: fixed
-    top: 0
-    bottom: 0
-    right: 0
-    height: calc(100vh - var(--padding)*2 - var(--margin)*2 - var(--tabBarHeight))
-    backdrop-filter: blur(0.5rem)
-    width: fit-content
-    max-width: 90vw
-    padding: var(--padding)
-    margin: var(--margin)
-
-    background: themes.$foregroundColor
-    border-radius: 1.5rem
-    z-index: 200
-    animation: sidebarSlide 0.4s ease forwards
-
-  @keyframes sidebarSlide
-    0%
-      transform: translateX(100%)
-    100%
-      transform: none
-
-  .themeList
-    flex: 1
-    min-height: 0
-    overflow-y: auto
-    flex-wrap: nowrap
-
-    .bygTheme
-      gap: 1rem
-      cursor: pointer
-
-      .previewCircle
-        width: 2rem
-        height: 2rem
-        border-radius: 50%
-        mask: linear-gradient(to bottom right, black, rgba(0,0,0,0.8), black)
-
-        &:not(.selected)
-          margin: 0.25rem
-
-        &.selected
-          border: 0.25rem solid themes.$accentColor
-
-      .themeInfo
-        gap: 0
-</style>

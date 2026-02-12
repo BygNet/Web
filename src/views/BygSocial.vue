@@ -1,7 +1,16 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import { nextTick, onMounted, onUnmounted, type Ref, ref } from 'vue'
+  import {
+    computed,
+    nextTick,
+    onMounted,
+    onUnmounted,
+    type Ref,
+    ref,
+  } from 'vue'
 
+  import { api } from '@/api/client'
+  import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
@@ -18,7 +27,14 @@
   const isLoaded: Ref<boolean> = ref(false)
   const error: Ref<string | null> = ref(null)
   const hasNewPosts: Ref<boolean> = ref(false)
+  const userSubscriptionState: Ref<string | null> = ref(null)
   const CACHE_TTL = 30_000
+
+  const isFreeUser = computed(() => {
+    return (
+      !userSubscriptionState.value || userSubscriptionState.value === 'free'
+    )
+  })
 
   let interval: number | undefined
 
@@ -52,6 +68,20 @@
     }
   }
 
+  const loadUserSubscription = async () => {
+    if (!auth.user) return
+
+    try {
+      const res = await api('/profile-me')
+      if (res.ok) {
+        const profile = await res.json()
+        userSubscriptionState.value = profile.user?.subscriptionState ?? null
+      }
+    } catch (err) {
+      console.error('Failed to load user subscription:', err)
+    }
+  }
+
   const reloadAndScroll = async () => {
     postCache.value = null
 
@@ -81,6 +111,7 @@
 
   onMounted(async () => {
     await loadPosts()
+    await loadUserSubscription()
     interval = window.setInterval(checkForNewPosts, 10000)
   })
 
@@ -114,7 +145,11 @@
         </RouterLink>
 
         <AdView
-          v-if="adCache.length > 0 && Math.floor(Math.random() * 5) + 1 == 1"
+          v-if="
+            isFreeUser &&
+            adCache.length > 0 &&
+            Math.floor(Math.random() * 5) + 1 == 1
+          "
           :ad="adCache.randomElement()!"
         />
       </VStack>

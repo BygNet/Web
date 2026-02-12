@@ -6,11 +6,13 @@ import BygLink from '@/views/BygLink.vue'
 import BygPicture from '@/views/BygPicture.vue'
 import BygPro from '@/views/BygPro.vue'
 import BygProfile from '@/views/BygProfile.vue'
+import BygSettings from '@/views/BygSettings.vue'
 import BygShop from '@/views/BygShop.vue'
 import BygSocial from '@/views/BygSocial.vue'
 import BygTerms from '@/views/BygTerms.vue'
 import ImageDetails from '@/views/ImageDetails.vue'
 import LoginPage from '@/views/LoginPage.vue'
+import MyBygProfile from '@/views/MyBygProfile.vue'
 import PostDetails from '@/views/PostDetails.vue'
 import SignupPage from '@/views/SignupPage.vue'
 
@@ -33,7 +35,18 @@ const router: Router = createRouter({
     {
       name: 'profile',
       path: '/me',
+      component: MyBygProfile,
+    },
+    {
+      name: 'userProfile',
+      path: '/u/:username',
       component: BygProfile,
+    },
+    {
+      name: 'settings',
+      path: '/settings',
+      component: BygSettings,
+      meta: { requiresAuth: true },
     },
     { name: 'login', path: '/login', component: LoginPage },
     { name: 'signup', path: '/signup', component: SignupPage },
