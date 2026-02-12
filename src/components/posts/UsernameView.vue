@@ -45,8 +45,8 @@
 
 <template>
   <HStack class="userName">
-    <img v-if="avatarUrl" :src="avatarUrl" class="inlineAvatar" alt="Avatar" />
-    <Component :is="displayMode ? 'h2' : 'p'">
+    <img v-if="avatarUrl && !displayMode" :src="avatarUrl" class="inlineAvatar" alt="Avatar" />
+    <Component :is="displayMode ? 'h1' : 'p'">
       <span class="at" v-if="!displayMode && !avatarUrl">@</span>
       <span @click="viewProfile" class="profileLink name">
         {{ name }}
