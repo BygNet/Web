@@ -56,8 +56,8 @@
       // Cache the profile
       setCachedProfile(username.value, {
         user: profile.value?.user,
-        followerCount: profile.value?.followerCount,
-        followingCount: profile.value?.followingCount,
+        followerCount: profile.value?.followerCount ?? 0,
+        followingCount: profile.value?.followingCount ?? 0,
       })
     } catch (err) {
       error.value = 'Failed to load profile'
