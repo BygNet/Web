@@ -7,7 +7,7 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
-  import { IMAGE_CACHE_TTL,imageCache, imageCacheTime } from '@/data/caches'
+  import { IMAGE_CACHE_TTL, imageCache, imageCacheTime } from '@/data/caches'
   import { imageReloader } from '@/data/events.ts'
   import { title } from '@/data/title'
 

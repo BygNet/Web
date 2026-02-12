@@ -1,7 +1,7 @@
 import type { BygAd, BygImage, BygPost } from '@bygnet/types'
 import { type Ref, ref } from 'vue'
 
-// Posts Cache - Heavy caching with 5 minute TTL
+// Posts Cache - Heavy caching with 5-minute TTL
 export const postCache: Ref<BygPost[] | null> = ref(null)
 export const postCacheTime: Ref<number> = ref(0)
 export const POST_CACHE_TTL = 5 * 60 * 1000 // 5 minutes
@@ -27,7 +27,7 @@ interface UserProfileCache {
 }
 
 // Current user data cache (very long TTL - 1 hour)
-export const currentUserCache: Ref<any | null> = ref(null)
+export const currentUserCache: Ref = ref(null)
 export const currentUserCacheTime: Ref<number> = ref(0)
 export const CURRENT_USER_CACHE_TTL = 60 * 60 * 1000 // 1 hour
 
@@ -50,7 +50,7 @@ export function getCachedCurrentUser() {
   return currentUserCache.value
 }
 
-export function setCachedCurrentUser(user: any) {
+export function setCachedCurrentUser(user: any): void {
   currentUserCache.value = user
   currentUserCacheTime.value = Date.now()
 }
@@ -65,7 +65,10 @@ export function getCachedProfile(username: string) {
   return cached
 }
 
-export function setCachedProfile(username: string, profile: ProfileCacheInput) {
+export function setCachedProfile(
+  username: string,
+  profile: ProfileCacheInput
+): void {
   profileCache.value[username] = {
     ...profile,
     timestamp: Date.now(),
@@ -79,11 +82,11 @@ export function getCachedSubscriptionState(username: string) {
 export function setCachedSubscriptionState(
   username: string,
   state: string | null
-) {
+): void {
   subscriptionStateCache.value[username] = state
 }
 
-export function clearUserCaches() {
+export function clearUserCaches(): void {
   currentUserCache.value = null
   currentUserCacheTime.value = 0
   profileCache.value = {}

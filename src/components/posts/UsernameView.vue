@@ -28,17 +28,18 @@
   const avatarUrl: Ref<string | null> = ref(null)
 
   async function fetchSubscriptionStatus() {
-    // Check subscription cache first
-    const cachedSub = getCachedSubscriptionState(props.name)
-    if (cachedSub !== null || subscriptionState.value !== null) {
-      subscriptionState.value = cachedSub
-    }
-
-    // Check profile cache for avatar
+    // Check profile cache first (has user data + subscription)
     const cachedProfile = getCachedProfile(props.name)
     if (cachedProfile) {
       avatarUrl.value = cachedProfile.user?.avatarUrl ?? null
       subscriptionState.value = cachedProfile.user?.subscriptionState ?? null
+      return
+    }
+
+    // Check subscription cache as fallback
+    const cachedSub = getCachedSubscriptionState(props.name)
+    if (cachedSub !== undefined) {
+      subscriptionState.value = cachedSub
       return
     }
 

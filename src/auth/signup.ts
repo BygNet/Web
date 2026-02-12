@@ -1,5 +1,6 @@
 import { api } from '@/api/client.ts'
 import { auth } from '@/auth/session.ts'
+import { setCachedCurrentUser } from '@/data/caches'
 
 export async function signup(
   email: string,
@@ -23,4 +24,5 @@ export async function signup(
   auth.user = data.user
 
   localStorage.setItem('token', data.token)
+  setCachedCurrentUser(data.user)
 }

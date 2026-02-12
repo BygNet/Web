@@ -1,5 +1,6 @@
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'
+import { setCachedCurrentUser } from '@/data/caches'
 
 export async function login(email: string, password: string): Promise<void> {
   const res: Response = await api('/auth/login', {
@@ -15,4 +16,5 @@ export async function login(email: string, password: string): Promise<void> {
   auth.user = data.user
 
   localStorage.setItem('token', data.token)
+  setCachedCurrentUser(data.user)
 }
