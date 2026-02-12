@@ -35,6 +35,7 @@
   const error: Ref<string | null> = ref(null)
   const hasNewPosts: Ref<boolean> = ref(false)
   const userSubscriptionState: Ref<string | null> = ref(null)
+  const subscriptionVerified: Ref<boolean> = ref(false)
 
   const isFreeUser = computed(() => {
     return (
@@ -78,12 +79,16 @@
   }
 
   const loadUserSubscription = async () => {
-    if (!auth.user) return
+    if (!auth.user) {
+      subscriptionVerified.value = true
+      return
+    }
 
     // Check cache first
     const cached = getCachedCurrentUser()
     if (cached) {
       userSubscriptionState.value = cached.subscriptionState ?? null
+      subscriptionVerified.value = true
       return
     }
 
@@ -96,6 +101,8 @@
       }
     } catch (err) {
       console.error('Failed to load user subscription:', err)
+    } finally {
+      subscriptionVerified.value = true
     }
   }
 
@@ -163,6 +170,7 @@
 
         <AdView
           v-if="
+            subscriptionVerified &&
             isFreeUser &&
             adCache.length > 0 &&
             Math.floor(Math.random() * 5) + 1 == 1

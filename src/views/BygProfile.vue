@@ -8,7 +8,11 @@
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
-  import { getCachedProfile, setCachedProfile, setCachedSubscriptionState } from '@/data/caches'
+  import {
+    getCachedProfile,
+    setCachedProfile,
+    setCachedSubscriptionState,
+  } from '@/data/caches'
   import { showBackButton, title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
@@ -59,7 +63,10 @@
         followerCount: profile.value?.followerCount ?? 0,
         followingCount: profile.value?.followingCount ?? 0,
       })
-      setCachedSubscriptionState(username.value, profile.value?.user?.subscriptionState ?? null)
+      setCachedSubscriptionState(
+        username.value,
+        profile.value?.user?.subscriptionState ?? null
+      )
     } catch (err) {
       error.value = 'Failed to load profile'
       console.error(err)
