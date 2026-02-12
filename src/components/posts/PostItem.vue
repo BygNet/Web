@@ -121,7 +121,7 @@
       @include utils.itemBackground
       cursor: pointer
 
-    .postMeta
+    .postMeta p
       opacity: 0.7
       margin-bottom: 1rem
 

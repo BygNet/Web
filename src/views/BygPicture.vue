@@ -7,7 +7,7 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
-  import { imageCache, imageCacheTime } from '@/data/caches'
+  import { IMAGE_CACHE_TTL,imageCache, imageCacheTime } from '@/data/caches'
   import { imageReloader } from '@/data/events.ts'
   import { title } from '@/data/title'
 
@@ -16,12 +16,14 @@
   const images: Ref<BygImage[]> = ref([])
   const loading: Ref<boolean> = ref(true)
   const error: Ref<string | null> = ref(null)
-  const CACHE_TTL = 30_000
 
   onMounted(async () => {
     try {
       // use cache if fresh
-      if (imageCache.value && Date.now() - imageCacheTime.value < CACHE_TTL) {
+      if (
+        imageCache.value &&
+        Date.now() - imageCacheTime.value < IMAGE_CACHE_TTL
+      ) {
         images.value = imageCache.value
         loading.value = false
         return

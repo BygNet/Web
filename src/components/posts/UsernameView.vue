@@ -5,7 +5,14 @@
 
   import { api } from '@/api/client'
   import HStack from '@/components/layout/HStack.vue'
+  import {
+    getCachedProfile,
+    getCachedSubscriptionState,
+    setCachedProfile,
+    setCachedSubscriptionState,
+  } from '@/data/caches'
   import { StaffUsers } from '@/data/users.ts'
+  import { capitalize } from '@/utils/formatters.ts'
 
   const props = defineProps<{
     name: string
@@ -21,12 +28,34 @@
   const avatarUrl: Ref<string | null> = ref(null)
 
   async function fetchSubscriptionStatus() {
+    // Check subscription cache first
+    const cachedSub = getCachedSubscriptionState(props.name)
+    if (cachedSub !== null || subscriptionState.value !== null) {
+      subscriptionState.value = cachedSub
+    }
+
+    // Check profile cache for avatar
+    const cachedProfile = getCachedProfile(props.name)
+    if (cachedProfile) {
+      avatarUrl.value = cachedProfile.user?.avatarUrl ?? null
+      subscriptionState.value = cachedProfile.user?.subscriptionState ?? null
+      return
+    }
+
     try {
       const res = await api(`/profile/${props.name}`)
       if (res.ok) {
         const data = await res.json()
         subscriptionState.value = data.user?.subscriptionState ?? null
         avatarUrl.value = data.user?.avatarUrl ?? null
+
+        // Cache the subscription state and profile
+        setCachedSubscriptionState(props.name, subscriptionState.value)
+        setCachedProfile(props.name, {
+          user: data.user,
+          followerCount: data.followerCount,
+          followingCount: data.followingCount,
+        })
       }
     } catch (err) {
       console.error(`Failed to fetch subscription for ${props.name}:`, err)
@@ -45,7 +74,12 @@
 
 <template>
   <HStack class="userName">
-    <img v-if="avatarUrl && !displayMode" :src="avatarUrl" class="inlineAvatar" alt="Avatar" />
+    <img
+      v-if="avatarUrl && !displayMode"
+      :src="avatarUrl"
+      class="inlineAvatar"
+      alt="Avatar"
+    />
     <Component :is="displayMode ? 'h1' : 'p'">
       <span class="at" v-if="!displayMode && !avatarUrl">@</span>
       <span @click="viewProfile" class="profileLink name">
@@ -73,7 +107,7 @@
       v-if="subscriptionState && subscriptionState !== 'free'"
     >
       <Icon icon="solar:crown-star-line-duotone" />
-      {{ subscriptionState.replace('_legacy', '') }}
+      {{ capitalize(subscriptionState).replace('_legacy', '') }}
     </HStack>
 
     <button class="followButton" @click="viewProfile" v-if="!displayMode">
@@ -119,4 +153,7 @@
       svg
         width: 1rem
         height: 1rem
+
+    .followButton
+      padding: 0.15rem 0.35rem
 </style>

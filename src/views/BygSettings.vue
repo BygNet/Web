@@ -2,7 +2,6 @@
   import type { BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
@@ -10,13 +9,13 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { showBackButton, title } from '@/data/title.ts'
+  import { capitalize } from '@/utils/formatters.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   type SettingSection = 'profile' | 'subscription'
 
   title.value = 'Settings'
   setHeadMeta({ page: 'Settings', subtitle: 'Manage your account settings.' })
-  const router = useRouter()
 
   const activeSection: Ref<SettingSection> = ref('profile')
   const profile: Ref<BygProfile | null> = ref(null)
@@ -70,10 +69,6 @@
     } finally {
       isSaving.value = false
     }
-  }
-
-  function goBack() {
-    router.push({ name: 'profile' })
   }
 
   onMounted(() => {
@@ -182,7 +177,12 @@
                 <VStack class="noSpace">
                   <h3>Current Plan</h3>
                   <p class="light">
-                    {{ profile.user.subscriptionState.replace('_legacy', '') }}
+                    {{
+                      capitalize(profile.user.subscriptionState).replace(
+                        '_legacy',
+                        ''
+                      )
+                    }}
                   </p>
                 </VStack>
               </HStack>

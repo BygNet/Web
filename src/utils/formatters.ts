@@ -29,3 +29,8 @@ export function formatDate(input: string): string {
     day: 'numeric',
   }).format(date)
 }
+
+export function capitalize(str: string): string {
+  if (!str) return str
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

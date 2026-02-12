@@ -17,7 +17,14 @@
   import VStack from '@/components/layout/VStack.vue'
   import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
   import PostItem from '@/components/posts/PostItem.vue'
-  import { adCache, postCache, postCacheTime } from '@/data/caches'
+  import {
+    adCache,
+    getCachedCurrentUser,
+    POST_CACHE_TTL,
+    postCache,
+    postCacheTime,
+    setCachedCurrentUser,
+  } from '@/data/caches'
   import { reloader } from '@/data/events.ts'
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
@@ -28,7 +35,6 @@
   const error: Ref<string | null> = ref(null)
   const hasNewPosts: Ref<boolean> = ref(false)
   const userSubscriptionState: Ref<string | null> = ref(null)
-  const CACHE_TTL = 30_000
 
   const isFreeUser = computed(() => {
     return (
@@ -47,7 +53,10 @@
   const loadPosts = async () => {
     try {
       // use cache if fresh
-      if (postCache.value && Date.now() - postCacheTime.value < CACHE_TTL) {
+      if (
+        postCache.value &&
+        Date.now() - postCacheTime.value < POST_CACHE_TTL
+      ) {
         posts.value = postCache.value
         hasNewPosts.value = false
         return
@@ -71,11 +80,19 @@
   const loadUserSubscription = async () => {
     if (!auth.user) return
 
+    // Check cache first
+    const cached = getCachedCurrentUser()
+    if (cached) {
+      userSubscriptionState.value = cached.subscriptionState ?? null
+      return
+    }
+
     try {
       const res = await api('/profile-me')
       if (res.ok) {
         const profile = await res.json()
         userSubscriptionState.value = profile.user?.subscriptionState ?? null
+        setCachedCurrentUser(profile.user)
       }
     } catch (err) {
       console.error('Failed to load user subscription:', err)

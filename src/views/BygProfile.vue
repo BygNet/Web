@@ -8,6 +8,7 @@
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
+  import { getCachedProfile, setCachedProfile } from '@/data/caches'
   import { showBackButton, title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
@@ -28,6 +29,18 @@
   async function loadProfile() {
     isLoading.value = true
     error.value = null
+
+    // Check cache first
+    const cached = getCachedProfile(username.value)
+    if (cached) {
+      profile.value = cached as any
+      isFollowing.value = profile.value?.isFollowing ?? false
+      title.value = profile.value?.user.username ?? 'Profile'
+      pageSubtitle.value = profile.value?.user.bio ?? 'No bio'
+      isLoading.value = false
+      return
+    }
+
     try {
       const res = await api(`/profile/${username.value}`)
       if (!res.ok) {
@@ -39,6 +52,13 @@
 
       title.value = profile.value?.user.username ?? 'Profile'
       pageSubtitle.value = profile.value?.user.bio ?? 'No bio'
+
+      // Cache the profile
+      setCachedProfile(username.value, {
+        user: profile.value?.user,
+        followerCount: profile.value?.followerCount,
+        followingCount: profile.value?.followingCount,
+      })
     } catch (err) {
       error.value = 'Failed to load profile'
       console.error(err)

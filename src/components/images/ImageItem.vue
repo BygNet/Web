@@ -31,7 +31,7 @@
     <VStack class="info">
       <h3>{{ image.title }}</h3>
 
-      <VStack class="meta noSpace">
+      <VStack class="imageMeta noSpace">
         <UsernameView :name="image.author" />
         <p>{{ formatDate(image.createdDate) }}</p>
       </VStack>
@@ -96,6 +96,6 @@
       width: 100%
       padding: 0.75rem 1rem 0
 
-    .meta
+    .imageMeta p
       opacity: 0.7
 </style>

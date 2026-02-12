@@ -16,6 +16,10 @@ import MyBygProfile from '@/views/MyBygProfile.vue'
 import PostDetails from '@/views/PostDetails.vue'
 import SignupPage from '@/views/SignupPage.vue'
 
+// Scroll position storage per route
+const scrollPositions: { [key: string]: number } = {}
+let lastScrollY = 0
+
 const router: Router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -52,7 +56,28 @@ const router: Router = createRouter({
     { name: 'signup', path: '/signup', component: SignupPage },
     { name: 'pro', path: '/pro', component: BygPro },
   ],
+  scrollBehavior(to, from) {
+    // Save the scroll position of the page we're leaving
+    if (from.name) {
+      scrollPositions[from.name as string] = lastScrollY
+    }
+
+    // If returning to a cached page, return the saved position
+    if (to.name && scrollPositions[to.name as string] !== undefined) {
+      return { top: scrollPositions[to.name as string], behavior: 'auto' }
+    }
+
+    // New pages start at top
+    return { top: 0, behavior: 'auto' }
+  },
 })
+
+// Track scroll position as user scrolls
+if (typeof window !== 'undefined') {
+  window.addEventListener('scroll', () => {
+    lastScrollY = window.scrollY
+  })
+}
 
 let sessionChecked = false
 
