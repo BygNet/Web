@@ -11,11 +11,30 @@
 
 <template>
   <header class="titleView">
-    <HStack class="titleViewContent">
-      <button @click="router.back()" v-if="showBackButton" class="backButton">
-        <Icon icon="solar:arrow-left-line-duotone" />
+    <HStack class="titleViewContent autoSpace">
+      <HStack class="titleMain">
+        <button @click="router.back()" v-if="showBackButton" class="backButton">
+          <Icon icon="solar:arrow-left-line-duotone" />
+        </button>
+        <h2>{{ title }}</h2>
+      </HStack>
+
+      <button
+        class="alertsButton"
+        :class="{
+          selected: router.currentRoute.value.path === '/notifications',
+        }"
+        @click="router.push({ name: 'notifications' })"
+        aria-label="Open alerts"
+      >
+        <Icon
+          :icon="
+            router.currentRoute.value.path === '/notifications'
+              ? 'solar:bell-bing-bold-duotone'
+              : 'solar:bell-line-duotone'
+          "
+        />
       </button>
-      <h2>{{ title }}</h2>
     </HStack>
 
     <div class="titleBlurContainer">
@@ -38,9 +57,23 @@
     .titleViewContent
       z-index: 102
       margin-top: calc(env(safe-area-inset-top) + 0.5rem)
+      gap: 0.75rem
+
+    .titleMain
+      gap: 0.5rem
 
   button.backButton
     padding: 0.75rem
+
+    svg
+      width: 1.5rem !important
+      height: 1.5rem !important
+
+  button.alertsButton
+    padding: 0.75rem
+
+    &.selected
+      background: themes.$foregroundColor
 
     svg
       width: 1.5rem !important

@@ -1,6 +1,7 @@
 import { api } from '@/api/client.ts'
 import { auth } from '@/auth/session.ts'
-import { setCachedCurrentUser } from '@/data/caches'
+import { fetchCurrentUserProfile } from '@/data/profiles'
+import { syncPushSubscription } from '@/data/pushAlerts'
 
 export async function signup(
   email: string,
@@ -24,5 +25,10 @@ export async function signup(
   auth.user = data.user
 
   localStorage.setItem('token', data.token)
-  setCachedCurrentUser(data.user)
+  fetchCurrentUserProfile()
+    .then((): void => {})
+    .catch((): void => {})
+  syncPushSubscription()
+    .then((): void => {})
+    .catch((): void => {})
 }

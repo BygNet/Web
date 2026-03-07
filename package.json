@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -14,7 +14,7 @@
     "preview": "vite preview --port 5173"
   },
   "dependencies": {
-    "@bygnet/types": "^1.3.2",
+    "@bygnet/types": "^1.4.0",
     "@eslint/compat": "^2.0.1",
     "@iconify/vue": "^5.0.0",
     "@typescript-eslint/parser": "^8.53.0",

@@ -1,0 +1,12 @@
+<script setup lang="ts">
+  import UnavailableState from '@/components/layout/UnavailableState.vue'
+  import { title } from '@/data/title.ts'
+
+  title.value = 'Messages'
+</script>
+
+<template>
+  <UnavailableState title="Direct Messages are coming soon." />
+</template>
+
+<style scoped lang="sass"></style>

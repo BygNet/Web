@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory, type Router } from 'vue-router'
 
-import { api } from '@/api/client'
-import { auth } from '@/auth/session'
+import { ensureHydratedSession } from '@/auth/hydrate'
 import BygLink from '@/views/BygLink.vue'
+import BygMessages from '@/views/BygMessages.vue'
+import BygNotifications from '@/views/BygNotifications.vue'
 import BygPicture from '@/views/BygPicture.vue'
 import BygPro from '@/views/BygPro.vue'
 import BygProfile from '@/views/BygProfile.vue'
 import BygSettings from '@/views/BygSettings.vue'
-import BygShop from '@/views/BygShop.vue'
 import BygSocial from '@/views/BygSocial.vue'
 import BygTerms from '@/views/BygTerms.vue'
 import ImageDetails from '@/views/ImageDetails.vue'
@@ -35,7 +35,18 @@ const router: Router = createRouter({
     { path: '/image', redirect: '/' },
     { name: 'picture', path: '/picture', component: BygPicture },
     { name: 'link', path: '/link', component: BygLink },
-    { name: 'shop', path: '/shop', component: BygShop },
+    {
+      name: 'notifications',
+      path: '/notifications',
+      component: BygNotifications,
+      meta: { requiresAuth: true },
+    },
+    {
+      name: 'messages',
+      path: '/messages',
+      component: BygMessages,
+      meta: { requiresAuth: true },
+    },
     {
       name: 'profile',
       path: '/me',
@@ -79,27 +90,12 @@ if (typeof window !== 'undefined') {
   })
 }
 
-let sessionChecked = false
-
 router.beforeEach(async to => {
   if (!to.meta.requiresAuth) return true
 
-  if (!auth.token) {
+  const hasSession = await ensureHydratedSession()
+  if (!hasSession) {
     return { name: 'login' }
-  }
-
-  if (!sessionChecked) {
-    sessionChecked = true
-
-    const res = await api('/auth/me')
-    if (!res.ok) {
-      auth.token = null
-      auth.user = null
-      localStorage.removeItem('token')
-      return { name: 'login' }
-    }
-
-    auth.user = await res.json()
   }
 
   return true

@@ -1,15 +1,10 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { onMounted, type Ref, ref } from 'vue'
+  import { type Ref, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import { api } from '@/api/client'
   import HStack from '@/components/layout/HStack.vue'
-  import {
-    getCachedProfile,
-    setCachedProfile,
-    setCachedSubscriptionState,
-  } from '@/data/caches'
+  import { fetchProfileByUsername } from '@/data/profiles'
   import { StaffUsers } from '@/data/users.ts'
   import { capitalize } from '@/utils/formatters.ts'
 
@@ -19,46 +14,47 @@
     author?: boolean
     displayMode?: boolean
     following?: boolean
+    avatarUrl?: string | null
+    subscriptionState?: string | null
   }>()
 
   const router = useRouter()
   const isStaff: Ref<boolean> = ref(false)
   const subscriptionState: Ref<string | null> = ref(null)
   const avatarUrl: Ref<string | null> = ref(null)
+  let activeRequestId = 0
 
-  async function fetchSubscriptionStatus() {
-    // Check profile cache first (has user data + subscription)
-    const cachedProfile = getCachedProfile(props.name)
-    if (cachedProfile) {
-      avatarUrl.value = cachedProfile.user?.avatarUrl ?? null
-      subscriptionState.value = cachedProfile.user?.subscriptionState ?? null
+  async function hydrateProfileMeta(): Promise<void> {
+    const requestId = ++activeRequestId
+    avatarUrl.value = props.avatarUrl ?? null
+    subscriptionState.value = props.subscriptionState ?? null
+
+    if (
+      props.avatarUrl !== undefined ||
+      props.subscriptionState !== undefined
+    ) {
       return
     }
 
     try {
-      const res = await api(`/profile/${props.name}`)
-      if (res.ok) {
-        const data = await res.json()
-        subscriptionState.value = data.user?.subscriptionState ?? null
-        avatarUrl.value = data.user?.avatarUrl ?? null
+      const profile = await fetchProfileByUsername(props.name)
+      if (!profile || requestId !== activeRequestId) return
 
-        // Cache the profile for future use
-        setCachedProfile(props.name, {
-          user: data.user,
-          followerCount: data.followerCount ?? 0,
-          followingCount: data.followingCount ?? 0,
-        })
-        setCachedSubscriptionState(props.name, subscriptionState.value)
-      }
+      subscriptionState.value = profile.user?.subscriptionState ?? null
+      avatarUrl.value = profile.user?.avatarUrl ?? null
     } catch (err) {
       console.error(`Failed to fetch subscription for ${props.name}:`, err)
     }
   }
 
-  onMounted(() => {
-    isStaff.value = StaffUsers.includes(props.name)
-    fetchSubscriptionStatus()
-  })
+  watch(
+    () => [ props.name, props.avatarUrl, props.subscriptionState ],
+    () => {
+      isStaff.value = StaffUsers.includes(props.name)
+      hydrateProfileMeta()
+    },
+    { immediate: true }
+  )
 
   function viewProfile() {
     router.push({ name: 'userProfile', params: { username: props.name } })

@@ -1,18 +1,13 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
-  import { computed, onMounted, onUnmounted, type Ref, ref } from 'vue'
+  import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import { api } from '@/api/client'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
-  import {
-    getCachedProfile,
-    setCachedProfile,
-    setCachedSubscriptionState,
-  } from '@/data/caches'
+  import { fetchProfileByUsername } from '@/data/profiles'
   import { showBackButton, title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
@@ -34,39 +29,16 @@
     isLoading.value = true
     error.value = null
 
-    // Check cache first
-    const cached = getCachedProfile(username.value)
-    if (cached) {
-      profile.value = cached as any
-      isFollowing.value = profile.value?.isFollowing ?? false
-      title.value = profile.value?.user.username ?? 'Profile'
-      pageSubtitle.value = profile.value?.user.bio ?? 'No bio'
-      isLoading.value = false
-      return
-    }
-
     try {
-      const res = await api(`/profile/${username.value}`)
-      if (!res.ok) {
+      profile.value = await fetchProfileByUsername(username.value)
+      if (!profile.value) {
         error.value = 'User not found'
         return
       }
-      profile.value = await res.json()
       isFollowing.value = profile.value?.isFollowing ?? false
 
       title.value = profile.value?.user.username ?? 'Profile'
       pageSubtitle.value = profile.value?.user.bio ?? 'No bio'
-
-      // Cache the profile
-      setCachedProfile(username.value, {
-        user: profile.value?.user,
-        followerCount: profile.value?.followerCount ?? 0,
-        followingCount: profile.value?.followingCount ?? 0,
-      })
-      setCachedSubscriptionState(
-        username.value,
-        profile.value?.user?.subscriptionState ?? null
-      )
     } catch (err) {
       error.value = 'Failed to load profile'
       console.error(err)
@@ -81,9 +53,13 @@
     }
   }
 
-  onMounted(() => {
-    loadProfile()
-  })
+  watch(
+    () => username.value,
+    () => {
+      loadProfile()
+    },
+    { immediate: true }
+  )
 
   onUnmounted(() => {
     showBackButton.value = false

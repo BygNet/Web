@@ -5,7 +5,7 @@
     "": {
       "name": "byg-web",
       "dependencies": {
-        "@bygnet/types": "^1.3.2",
+        "@bygnet/types": "^1.4.0",
         "@eslint/compat": "^2.0.1",
         "@iconify/vue": "^5.0.0",
         "@typescript-eslint/parser": "^8.53.0",
@@ -40,8 +40,6 @@
     },
   },
   "packages": {
-    "@a35hie/ts-pkg": ["@a35hie/ts-pkg@0.3.1", "", { "peerDependencies": { "typescript": "^5.9.3" }, "bin": { "ts-pkg": "dist/cli.js" } }, "sha512-YQexb8HtH3HlikDBhlTabfi8t6DzbuqigdMYDw5BbiP9+p+Y5Vas7B7hFTTUccyL93okijb84mRu6vV4AyXslQ=="],
-
     "@apideck/better-ajv-errors": ["@apideck/better-ajv-errors@0.3.6", "", { "dependencies": { "json-schema": "^0.4.0", "jsonpointer": "^5.0.0", "leven": "^3.1.0" }, "peerDependencies": { "ajv": ">=8" } }, "sha512-P+ZygBLZtkp0qqOAJJVX4oX/sFo5JR3eBWwwuqHHhK0GIgQOKWrAfiAaWX0aArHkRWHMuggFEgAZNxVPwPZYaA=="],
 
     "@babel/code-frame": ["@babel/code-frame@7.27.1", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.27.1", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg=="],
@@ -238,7 +236,7 @@
 
     "@bufbuild/protobuf": ["@bufbuild/protobuf@2.10.2", "", {}, "sha512-uFsRXwIGyu+r6AMdz+XijIIZJYpoWeYzILt5yZ2d3mCjQrWUTVpVD9WL/jZAbvp+Ed04rOhrsk7FiTcEDseB5A=="],
 
-    "@bygnet/types": ["@bygnet/types@1.3.2", "", { "dependencies": { "@a35hie/ts-pkg": "^0.3.1", "prettier": "^3.8.1" } }, "sha512-D67SidmSPMh0VR3Avgrh4YZZCbQnnSTobd5ip7E85GuTX2kas/TOpHa+GGhfDVaoIsfGBxFCmu05b2f8bZoL8w=="],
+    "@bygnet/types": ["@bygnet/types@1.4.0", "", { "dependencies": { "@opk/ts-pkg": "^0.6.1", "prettier": "^3.8.1" } }, "sha512-O/ccNfWDfqwITsJudqjFlfQAHQMca9A6W3YGZlkIoxkB3GASHphE9K4+2IygLm3H/JsOk37umIjx/4IU5yKQUw=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.27.2", "", { "os": "aix", "cpu": "ppc64" }, "sha512-GZMB+a0mOMZs4MpDbj8RJp4cw+w1WV5NYD6xzgvzUJ5Ek2jerwfO2eADyI6ExDSUED+1X8aMbegahsJi+8mgpw=="],
 
@@ -341,6 +339,8 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
+
+    "@opk/ts-pkg": ["@opk/ts-pkg@0.6.1", "", { "bin": { "ts-pkg": "dist/cli.js" } }, "sha512-L7zr/gNG3uGMFWmqKpGF1yj220gDUKYXKiThlBOi7KSHLfbU3PcrX9yRSRy6wQbk18TH5HwkdX3bz14wJqw9uA=="],
 
     "@parcel/watcher": ["@parcel/watcher@2.5.4", "", { "dependencies": { "detect-libc": "^2.0.3", "is-glob": "^4.0.3", "node-addon-api": "^7.0.0", "picomatch": "^4.0.3" }, "optionalDependencies": { "@parcel/watcher-android-arm64": "2.5.4", "@parcel/watcher-darwin-arm64": "2.5.4", "@parcel/watcher-darwin-x64": "2.5.4", "@parcel/watcher-freebsd-x64": "2.5.4", "@parcel/watcher-linux-arm-glibc": "2.5.4", "@parcel/watcher-linux-arm-musl": "2.5.4", "@parcel/watcher-linux-arm64-glibc": "2.5.4", "@parcel/watcher-linux-arm64-musl": "2.5.4", "@parcel/watcher-linux-x64-glibc": "2.5.4", "@parcel/watcher-linux-x64-musl": "2.5.4", "@parcel/watcher-win32-arm64": "2.5.4", "@parcel/watcher-win32-ia32": "2.5.4", "@parcel/watcher-win32-x64": "2.5.4" } }, "sha512-WYa2tUVV5HiArWPB3ydlOc4R2ivq0IDrlqhMi3l7mVsFEXNcTfxYFPIHXHXIh/ca/y/V5N4E1zecyxdIBjYnkQ=="],
 

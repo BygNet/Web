@@ -1,4 +1,5 @@
 import { auth } from '@/auth/session'
+import { clearUserCaches } from '@/data/caches'
 
 export async function api(path: string, options: RequestInit = {}) {
   const headers = new Headers(options.headers)
@@ -18,6 +19,7 @@ export async function api(path: string, options: RequestInit = {}) {
     auth.token = null
     auth.user = null
     localStorage.removeItem('token')
+    clearUserCaches()
   }
 
   return res

@@ -70,7 +70,12 @@
           </div>
 
           <VStack class="userInfo noSpace">
-            <UsernameView :name="user.username" display-mode />
+            <UsernameView
+              :name="user.username"
+              :avatar-url="user.avatarUrl"
+              :subscription-state="user.subscriptionState"
+              display-mode
+            />
             <p class="light">Joined {{ joinDate }}</p>
           </VStack>
 

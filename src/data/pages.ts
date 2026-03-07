@@ -20,10 +20,10 @@ export const BygPages: BygPage[] = [
     icon: 'solar:link-minimalistic-2-line-duotone',
   },
   {
-    title: 'Shop',
-    description: 'Shopping hub.',
-    path: '/shop',
-    icon: 'solar:shop-line-duotone',
+    title: 'Messages',
+    description: 'Direct messages.',
+    path: '/messages',
+    icon: 'solar:chat-round-line-line-duotone',
   },
   {
     title: 'Profile',

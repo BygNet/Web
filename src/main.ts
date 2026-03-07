@@ -5,9 +5,9 @@ import { createHead } from '@unhead/vue/client'
 import { registerSW } from 'virtual:pwa-register'
 import { createApp } from 'vue'
 
-import { api } from '@/api/client'
 import App from '@/App.vue'
-import { auth } from '@/auth/session'
+import { ensureHydratedSession } from '@/auth/hydrate'
+import { syncPushSubscription } from '@/data/pushAlerts'
 import router from '@/router'
 
 registerSW({
@@ -17,21 +17,13 @@ registerSW({
 const bygWeb = createApp(App)
 const head: VueHeadClient = createHead()
 
-async function hydrateSession(): Promise<void> {
-  if (!auth.token) return
-
-  try {
-    const res: Response = await api('/auth/me')
-    if (!res.ok) throw new Error()
-
-    auth.user = await res.json()
-  } catch {
-    auth.token = null
-    auth.user = null
-    localStorage.removeItem('token')
-  }
-}
-
-hydrateSession().then((): void => {})
+ensureHydratedSession()
+  .then(async hasSession => {
+    if (!hasSession) return
+    await syncPushSubscription()
+  })
+  .catch(error => {
+    console.error('Startup session/push sync failed', error)
+  })
 
 bygWeb.use(router).use(head).mount('#app')

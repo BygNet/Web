@@ -1,5 +1,5 @@
 # Byg Web
-Byg Social for Web. In development.
+Byg Social and other services for Web. In development.
 
 > Terms of Service: [Here](https://byg.a35.dev/terms)
 > 

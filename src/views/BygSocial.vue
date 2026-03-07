@@ -9,7 +9,6 @@
     ref,
   } from 'vue'
 
-  import { api } from '@/api/client'
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
@@ -19,13 +18,12 @@
   import PostItem from '@/components/posts/PostItem.vue'
   import {
     adCache,
-    getCachedCurrentUser,
     POST_CACHE_TTL,
     postCache,
     postCacheTime,
-    setCachedCurrentUser,
   } from '@/data/caches'
   import { reloader } from '@/data/events.ts'
+  import { fetchCurrentUserProfile } from '@/data/profiles'
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
   import AdView from '@/views/AdView.vue'
@@ -84,26 +82,25 @@
       return
     }
 
-    // Check cache first
-    const cached = getCachedCurrentUser()
-    if (cached) {
-      userSubscriptionState.value = cached.subscriptionState ?? null
-      subscriptionVerified.value = true
-      return
-    }
-
     try {
-      const res = await api('/profile-me')
-      if (res.ok) {
-        const profile = await res.json()
-        userSubscriptionState.value = profile.user?.subscriptionState ?? null
-        setCachedCurrentUser(profile.user)
-      }
+      const profile = await fetchCurrentUserProfile()
+      userSubscriptionState.value = profile?.user?.subscriptionState ?? null
     } catch (err) {
       console.error('Failed to load user subscription:', err)
+      userSubscriptionState.value = null
     } finally {
       subscriptionVerified.value = true
     }
+  }
+
+  function shouldRenderAd(index: number): boolean {
+    return (
+      subscriptionVerified.value &&
+      isFreeUser.value &&
+      adCache.value.length > 0 &&
+      index > 0 &&
+      index % 4 === 0
+    )
   }
 
   const reloadAndScroll = async () => {
@@ -158,7 +155,11 @@
     <VStack v-else class="postList">
       <NewPostsAvailable v-if="hasNewPosts" @click="reloadAndScroll" />
 
-      <VStack v-for="post in posts" :key="post.id" class="postContainer">
+      <VStack
+        v-for="(post, index) in posts"
+        :key="post.id"
+        class="postContainer"
+      >
         <RouterLink
           class="postLink"
           :to="`/details/${post.id}`"
@@ -169,13 +170,8 @@
         </RouterLink>
 
         <AdView
-          v-if="
-            subscriptionVerified &&
-            isFreeUser &&
-            adCache.length > 0 &&
-            Math.floor(Math.random() * 5) + 1 == 1
-          "
-          :ad="adCache.randomElement()!"
+          v-if="shouldRenderAd(index)"
+          :ad="adCache[Math.floor(index / 4) % adCache.length]!"
         />
       </VStack>
     </VStack>

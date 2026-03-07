@@ -8,6 +8,7 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import { fetchCurrentUserProfile } from '@/data/profiles'
   import { showBackButton, title } from '@/data/title.ts'
   import { capitalize } from '@/utils/formatters.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
@@ -28,17 +29,15 @@
   const avatarUrl: Ref<string> = ref('')
   const bannerUrl: Ref<string> = ref('')
 
-  async function loadProfile() {
+  async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
     isLoading.value = true
     try {
-      const res = await api('/profile-me')
-      if (res.ok) {
-        profile.value = (await res.json()) as BygProfile
+      profile.value = await fetchCurrentUserProfile(options)
+      if (!profile.value) return
 
-        bio.value = profile.value.user.bio || ''
-        avatarUrl.value = profile.value.user.avatarUrl || ''
-        bannerUrl.value = profile.value.user.bannerUrl || ''
-      }
+      bio.value = profile.value.user.bio || ''
+      avatarUrl.value = profile.value.user.avatarUrl || ''
+      bannerUrl.value = profile.value.user.bannerUrl || ''
     } finally {
       isLoading.value = false
     }
@@ -62,7 +61,7 @@
         setTimeout(() => {
           saveMessage.value = null
         }, 3000)
-        await loadProfile()
+        await loadProfile({ force: true })
       } else {
         saveMessage.value = 'Failed to save profile'
       }

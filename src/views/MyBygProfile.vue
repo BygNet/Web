@@ -4,13 +4,13 @@
   import { computed, onMounted, type Ref, ref } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import { api } from '@/api/client'
   import { logout } from '@/auth/logout'
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
+  import { fetchCurrentUserProfile } from '@/data/profiles'
   import { BygThemes, currentThemeKey, setTheme } from '@/data/themes.ts'
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
@@ -23,11 +23,8 @@
   const profile: Ref<BygProfile | null> = ref(null)
   const AppVersion = __AppVersion
 
-  async function loadProfile() {
-    const res = await api('/profile-me')
-    if (res.ok) {
-      profile.value = await res.json()
-    }
+  async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
+    profile.value = await fetchCurrentUserProfile(options)
   }
 
   async function doLogout() {
