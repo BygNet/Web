@@ -1,5 +1,5 @@
 # Byg Platform Terms of Service
-Last updated: whenever we felt like it
+Last updated: March 8th, 2026
 
 Welcome to **Byg Platform**. If you are reading this, congratulations-you possess free will and literacy. By using Byg, you agree to these Terms of Service ("Terms"). If you do not agree, simply do not use Byg. Close the tab. Walk into the sunset. We respect that.
 
@@ -45,8 +45,6 @@ Do not post:
 
 Posting something "as a joke" does not exempt it from consequences.
 
----
-
 ## 5. Moderation
 Byg reserves the right to:
 - Remove content
@@ -73,8 +71,6 @@ This means:
 
 You agree not to emotionally attach to unfinished features.
 
----
-
 ## 8. Byg Pro
 Byg Pro is an optional paid or enhanced experience (details TBD).
 
@@ -83,7 +79,13 @@ Buying Pro does not:
 - Grant immunity from moderation
 - Turn you into a god
 
-## 9. Termination
+## 9. Data Privacy
+We care about your privacy, but it's important to note that:
+- Byg developers and management may have access to your data.
+- All data stored on Byg Cloud is ONLY data that you explicitly shared.
+- **Our infra providers do NOT have access to your data.**
+
+## 10. Termination
 You may stop using Byg at any time.
 
 We may stop providing Byg to you if you:
@@ -93,7 +95,7 @@ We may stop providing Byg to you if you:
 
 No hard feelings (ok maybe a little).
 
-## 10. Disclaimer
+## 11. Disclaimer
 Byg is provided "as is".
 
 We do not guarantee:
@@ -103,7 +105,7 @@ We do not guarantee:
 
 Use at your own risk, curiosity, and emotional resilience.
 
-## 11. Changes to These Terms
+## 12. Changes to These Terms
 We may update these Terms occasionally.
 
 If we do:
@@ -111,7 +113,7 @@ If we do:
 - The new Terms apply when posted
 - Continuing to use Byg means you agree again (romantic, honestly)
 
-## 12. Final Notes
+## 13. Final Notes
 - We love ash.
 - BYGger = BETter.
 - This is not a gambling site.
