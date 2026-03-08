@@ -34,6 +34,20 @@ export const BygThemes: BygTheme[] = [
     isDark: true,
   },
   {
+    title: 'Experimental Light',
+    description: 'Upcoming Byg light mode theme.',
+    key: 'exp-light',
+    colorPreview: '#fdd1ff',
+    isDark: false,
+  },
+  {
+    title: 'Experimental Dark',
+    description: 'Upcoming Byg dark mode theme.',
+    key: 'exp-dark',
+    colorPreview: '#170023',
+    isDark: false,
+  },
+  {
     title: 'a35hie Light',
     description: "a35hie's light mode theme.",
     key: 'a35hie',
@@ -62,10 +76,10 @@ export const BygThemes: BygTheme[] = [
     isDark: true,
   },
   {
-    title: 'Pastel Pink',
-    description: 'Light, soft pink theme.',
-    key: 'pastel-pink',
-    colorPreview: '#f3a7ff',
+    title: 'Pastel Blue',
+    description: 'Byg Classic pastel blue theme.',
+    key: 'pastel-blue',
+    colorPreview: '#a7f2ff',
     isDark: false,
   },
 ]

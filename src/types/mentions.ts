@@ -6,4 +6,3 @@ export interface BygUserSuggestion {
   avatarUrl: string | null
   subscriptionState: BygSubscription
 }
-

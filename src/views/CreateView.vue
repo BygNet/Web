@@ -14,13 +14,13 @@
   import { imageReloader, reloader } from '@/data/events.ts'
   import { fetchUserSuggestions } from '@/data/mentions'
   import { showingCreateModal } from '@/data/visibility.ts'
+  import type { BygUserSuggestion } from '@/types/mentions'
   import { formatDate } from '@/utils/formatters.ts'
   import {
     applyMention,
     getMentionContext,
     type MentionContext,
   } from '@/utils/mentions'
-  import type { BygUserSuggestion } from '@/types/mentions'
 
   const pickedType: Ref<CreateType | undefined> = ref(undefined)
   const showingPreview: Ref<boolean> = ref(false)
