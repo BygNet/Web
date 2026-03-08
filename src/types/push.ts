@@ -18,7 +18,12 @@ export interface BygPushPublicKeyResponse {
 }
 
 export interface BygPushAlertPayload {
-  type: 'follow' | 'post_comment' | 'image_comment'
+  type:
+    | 'follow'
+    | 'post_comment'
+    | 'image_comment'
+    | 'post_mention'
+    | 'comment_mention'
   title: string
   body: string
   path: string

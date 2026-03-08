@@ -1,6 +1,11 @@
 import type { BygSubscription } from '@bygnet/types'
 
-export type BygNotificationType = 'follow' | 'post_comment' | 'image_comment'
+export type BygNotificationType =
+  | 'follow'
+  | 'post_comment'
+  | 'image_comment'
+  | 'post_mention'
+  | 'comment_mention'
 
 export interface BygNotification {
   id: string

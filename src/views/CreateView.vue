@@ -3,16 +3,24 @@
   import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
-  import { computed, type Ref, ref } from 'vue'
+  import { computed, nextTick, type Ref, ref } from 'vue'
 
   import { auth } from '@/auth/session.ts'
   import HStack from '@/components/layout/HStack.vue'
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { imageReloader, reloader } from '@/data/events.ts'
+  import { fetchUserSuggestions } from '@/data/mentions'
   import { showingCreateModal } from '@/data/visibility.ts'
   import { formatDate } from '@/utils/formatters.ts'
+  import {
+    applyMention,
+    getMentionContext,
+    type MentionContext,
+  } from '@/utils/mentions'
+  import type { BygUserSuggestion } from '@/types/mentions'
 
   const pickedType: Ref<CreateType | undefined> = ref(undefined)
   const showingPreview: Ref<boolean> = ref(false)
@@ -21,6 +29,11 @@
   const postTitle = ref('')
   const imageUrl = ref('')
   const imageTitle = ref('')
+  const postTextarea: Ref<HTMLTextAreaElement | null> = ref(null)
+  const postMentionSuggestions: Ref<BygUserSuggestion[]> = ref([])
+  const postMentionContext: Ref<MentionContext | null> = ref(null)
+  const showingPostMentionSuggestions: Ref<boolean> = ref(false)
+  let postMentionRequestId = 0
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -30,6 +43,61 @@
   const renderedMarkdown = computed(() =>
     DOMPurify.sanitize(marked.parse(postText.value || '') as string)
   )
+
+  function clearPostMentionSuggestions(): void {
+    showingPostMentionSuggestions.value = false
+    postMentionSuggestions.value = []
+    postMentionContext.value = null
+  }
+
+  async function updatePostMentionSuggestions(): Promise<void> {
+    const textarea = postTextarea.value
+    if (!textarea) {
+      clearPostMentionSuggestions()
+      return
+    }
+
+    const caret = textarea.selectionStart ?? postText.value.length
+    const context = getMentionContext(postText.value, caret)
+    if (!context || context.query.length < 1) {
+      clearPostMentionSuggestions()
+      return
+    }
+
+    postMentionContext.value = context
+    const requestId = ++postMentionRequestId
+    const suggestions = await fetchUserSuggestions(context.query)
+
+    if (requestId !== postMentionRequestId) {
+      return
+    }
+
+    postMentionSuggestions.value = suggestions
+    showingPostMentionSuggestions.value = suggestions.length > 0
+  }
+
+  function onPostTextareaInteraction(): void {
+    updatePostMentionSuggestions().catch((): void => {
+      clearPostMentionSuggestions()
+    })
+  }
+
+  async function insertPostMention(username: string): Promise<void> {
+    if (!postMentionContext.value) return
+
+    const result = applyMention(
+      postText.value,
+      postMentionContext.value,
+      username
+    )
+
+    postText.value = result.text
+    clearPostMentionSuggestions()
+
+    await nextTick()
+    postTextarea.value?.focus()
+    postTextarea.value?.setSelectionRange(result.caret, result.caret)
+  }
 
   async function submitPost() {
     if (!auth.token) {
@@ -61,6 +129,7 @@
 
     postText.value = ''
     postTitle.value = ''
+    clearPostMentionSuggestions()
     pickedType.value = undefined
     showingCreateModal.value = false
     reloader.emit('reload')
@@ -137,11 +206,23 @@
 
         <input v-model="postTitle" type="text" placeholder="Post title..." />
 
-        <textarea
-          v-model="postText"
-          :maxlength="charLimit"
-          placeholder="Write something..."
-        />
+        <div class="mentionComposer">
+          <textarea
+            ref="postTextarea"
+            v-model="postText"
+            :maxlength="charLimit"
+            placeholder="Write something..."
+            @input="onPostTextareaInteraction"
+            @keyup="onPostTextareaInteraction"
+            @click="onPostTextareaInteraction"
+          />
+
+          <MentionSuggestions
+            v-if="showingPostMentionSuggestions"
+            :suggestions="postMentionSuggestions"
+            @select="insertPostMention"
+          />
+        </div>
 
         <div class="counter">{{ charCount }} / {{ charLimit }}</div>
 
@@ -259,6 +340,10 @@
 
   textarea
     min-height: 10rem
+
+  .mentionComposer
+    width: 100%
+    gap: 0.25rem
 
   textarea, input
     --padding: 0.25rem

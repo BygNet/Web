@@ -19,6 +19,10 @@
         return 'solar:user-check-line-duotone'
       case 'image_comment':
         return 'solar:gallery-wide-line-duotone'
+      case 'post_mention':
+        return 'solar:at-line-duotone'
+      case 'comment_mention':
+        return 'solar:chat-round-line-line-duotone'
       case 'post_comment':
       default:
         return 'solar:chat-round-line-line-duotone'
