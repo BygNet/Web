@@ -95,4 +95,5 @@
     width: 100%
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr))
     gap: 0.5rem
+    align-items: stretch
 </style>
