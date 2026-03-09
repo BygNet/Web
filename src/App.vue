@@ -4,9 +4,11 @@
   import type { BygAd } from '@bygnet/types'
   import { onMounted } from 'vue'
 
+  import ShareModal from '@/components/messages/ShareModal.vue'
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
   import { adCache } from '@/data/caches.ts'
+  import { showingShareModal } from '@/data/share'
   import { loadTheme } from '@/data/themes.ts'
   import { showingCreateModal, showingReportPopup } from '@/data/visibility.ts'
   import { consoleWarn } from '@/utils/consoleWarn.ts'
@@ -27,6 +29,7 @@
 <template>
   <CreateView v-if="showingCreateModal" />
   <ReportView v-if="showingReportPopup" />
+  <ShareModal v-if="showingShareModal" />
 
   <DesktopNav />
   <main>

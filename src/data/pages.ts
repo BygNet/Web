@@ -20,7 +20,7 @@ export const BygPages: BygPage[] = [
     icon: 'solar:link-minimalistic-2-line-duotone',
   },
   {
-    title: 'Messages',
+    title: 'Chat β',
     description: 'Direct messages.',
     path: '/messages',
     icon: 'solar:chat-round-line-line-duotone',

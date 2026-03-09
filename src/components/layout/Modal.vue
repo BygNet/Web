@@ -14,7 +14,6 @@
   .modalCover
     --margin: 1.5rem
     z-index: 500
-    //justify-content: flex-start
     padding: var(--margin) 0
 
     .modalContent

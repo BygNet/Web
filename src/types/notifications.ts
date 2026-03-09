@@ -6,6 +6,7 @@ export type BygNotificationType =
   | 'image_comment'
   | 'post_mention'
   | 'comment_mention'
+  | 'message'
 
 export interface BygNotification {
   id: string

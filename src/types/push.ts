@@ -24,6 +24,7 @@ export interface BygPushAlertPayload {
     | 'image_comment'
     | 'post_mention'
     | 'comment_mention'
+    | 'message'
   title: string
   body: string
   path: string

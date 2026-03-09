@@ -96,9 +96,15 @@
 
       <HStack>
         <ShareButton
-          :id="post.id"
           :shares="post.shares"
-          api-path="/share-post"
+          :share-item="{
+            type: 'post',
+            id: post.id,
+            title: post.title,
+            author: post.author,
+            content: post.content,
+            shareApiPath: '/share-post',
+          }"
           :compact="!detailMode"
         />
 

@@ -55,9 +55,15 @@
 
         <HStack>
           <ShareButton
-            :id="image.id"
             :shares="image.shares"
-            api-path="/share-image"
+            :share-item="{
+              type: 'image',
+              id: image.id,
+              title: image.title,
+              author: image.author,
+              imageUrl: image.imageUrl,
+              shareApiPath: '/share-image',
+            }"
             :compact="!detailMode"
           />
 
