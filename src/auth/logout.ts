@@ -17,7 +17,7 @@ export async function logout() {
   auth.user = null
   localStorage.removeItem('token')
   clearUserCaches()
-  clearMessagesState()
+  clearMessagesState({ clearDevice: true })
   clearNotificationsState()
   clearProfileRequestState()
   clearHydratedSessionState()

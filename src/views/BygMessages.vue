@@ -323,8 +323,7 @@
   ): boolean {
     const currentUserId = auth.user?.id
     const shouldMarkOutgoingSent =
-      options.markOutgoingSent &&
-      currentUserId === incomingMessage.senderId
+      options.markOutgoingSent && currentUserId === incomingMessage.senderId
 
     const existingIndex = messages.value.findIndex(
       existingMessage => existingMessage.id === incomingMessage.id
@@ -449,7 +448,7 @@
         showAvatar: !outgoing && !groupedWithNext,
         groupPosition,
         deliveryState: outgoing
-          ? outgoingDeliveryByMessageId.value[message.id] ?? null
+          ? (outgoingDeliveryByMessageId.value[message.id] ?? null)
           : null,
       })
     }
@@ -1066,7 +1065,10 @@
 
           <div ref="conversationScroller" class="messageList">
             <template v-for="entry in conversationEntries" :key="entry.key">
-              <p v-if="entry.type === 'timestamp'" class="light messageGapMarker">
+              <p
+                v-if="entry.type === 'timestamp'"
+                class="light messageGapMarker"
+              >
                 {{ entry.label }}
               </p>
               <MessageBubble

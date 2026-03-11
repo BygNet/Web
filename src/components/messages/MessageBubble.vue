@@ -2,13 +2,15 @@
   import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
-  import { type Ref, ref, watch } from 'vue'
+  import { computed, type Ref, ref, watch } from 'vue'
 
   import type { BygMessage } from '@/types/messages'
   import { formatDate } from '@/utils/formatters'
 
   type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
   type MessageDeliveryState = 'sending' | 'sent'
+  const EMOJI_ONLY_PATTERN =
+    /^[\p{Extended_Pictographic}\p{Emoji_Component}\u200D\uFE0F\s]+$/u
 
   const props = withDefaults(
     defineProps<{
@@ -27,6 +29,15 @@
 
   const renderedContent: Ref<string> = ref('')
   const showingTime: Ref<boolean> = ref(false)
+  const isEmojiOnly = computed(() => {
+    if (props.message.sharedPost || props.message.sharedImage) {
+      return false
+    }
+
+    const content = props.message.content.trim()
+    if (!content) return false
+    return EMOJI_ONLY_PATTERN.test(content)
+  })
 
   watch(
     () => props.message.content,
@@ -42,7 +53,10 @@
   <div
     class="messageRow"
     @click="showingTime = !showingTime"
-    :class="[{ outgoing: outgoing }, `group-${props.groupPosition}`]"
+    :class="[
+      { outgoing: outgoing, emojiOnly: isEmojiOnly },
+      `group-${props.groupPosition}`,
+    ]"
   >
     <template v-if="!outgoing">
       <img
@@ -62,7 +76,10 @@
     <div class="bubbleWrap" :class="{ outgoing: outgoing }">
       <div
         class="bubble"
-        :class="[{ outgoing: outgoing }, `group-${props.groupPosition}`]"
+        :class="[
+          { outgoing: outgoing, emojiOnly: isEmojiOnly },
+          `group-${props.groupPosition}`,
+        ]"
       >
         <RouterLink
           v-if="message.sharedPost"
@@ -92,6 +109,7 @@
         <div
           v-if="message.content.trim()"
           class="messageContent"
+          :class="{ emojiOnly: isEmojiOnly }"
           v-html="renderedContent"
         />
       </div>
@@ -178,6 +196,11 @@
     &.outgoing
       background: themes.$accentColor
 
+    &.emojiOnly
+      background: transparent !important
+      padding: 0
+      border-radius: 0
+
   .messageContent
     width: 100%
     min-width: 0
@@ -185,6 +208,11 @@
 
     :deep(p)
       margin: 0
+
+    &.emojiOnly
+      :deep(p)
+        font-size: clamp(2rem, 7vw, 3rem)
+        line-height: 1.2
 
   .sharedEmbed
     width: 100%
