@@ -6,6 +6,7 @@
   import { api } from '@/api/client'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import ReportButton from '@/components/posts/ReportButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
 
   const props = defineProps<{
@@ -78,8 +79,10 @@
             />
             <p class="light">Joined {{ joinDate }}</p>
           </VStack>
+        </HStack>
 
-          <HStack v-if="!isOwnProfile" class="actionButtons">
+        <HStack v-if="!isOwnProfile" class="actionButtons autoSpace">
+          <HStack>
             <button
               @click="handleFollow"
               :disabled="isLoading"
@@ -94,7 +97,16 @@
               />
               {{ isFollowing ? 'Following' : 'Follow' }}
             </button>
+
+            <RouterLink :to="'/messages?with=' + user.username">
+              <button>
+                <Icon icon="solar:chat-round-like-line-duotone" />
+                Chat
+              </button>
+            </RouterLink>
           </HStack>
+
+          <ReportButton />
         </HStack>
 
         <button
@@ -140,52 +152,55 @@
     gap: 0
     overflow: hidden
     margin-bottom: 1rem
+    padding: 0
 
-  .banner, .bannerPlaceholder
-    width: 100%
-    aspect-ratio: 3/1
-    background-size: cover
-    background-position: center
+    .banner, .bannerPlaceholder
+      width: 100%
+      aspect-ratio: 3/1
+      background-size: cover
+      background-position: center
+      mask: linear-gradient(to bottom, black, transparent)
 
-  .bannerPlaceholder
-    background: linear-gradient(135deg, themes.$accentColor 0%, rgba(0,0,0,0.1) 100%)
+    .bannerPlaceholder
+      background: linear-gradient(135deg, themes.$accentColor 0%, rgba(0,0,0,0.1) 100%)
 
-  .profileContent
-    padding: 0 0.5rem 0.5rem
-    margin-top: -1.5rem
-    gap: 1rem
+    .profileContent
+      padding: var(--padding)
+      margin-top: -2.5rem
+      gap: 1rem
+      width: 100%
 
-  .avatarSection
-    gap: 1rem
-    align-items: flex-end
+      .avatarSection
+        gap: 1rem
+        align-items: flex-end
 
-  .avatar, .avatarPlaceholder
-    width: 6rem
-    height: 6rem
-    border-radius: 50%
-    background: themes.$backgroundColor
-    flex-shrink: 0
+        .avatar, .avatarPlaceholder
+          width: 6rem
+          height: 6rem
+          border-radius: 50%
+          background: themes.$backgroundColor
+          flex-shrink: 0
 
-  .avatar
-    object-fit: cover
+        .avatar
+          object-fit: cover
 
-  .avatarPlaceholder
-    display: flex
-    align-items: center
-    justify-content: center
+        .avatarPlaceholder
+          display: flex
+          align-items: center
+          justify-content: center
 
-    svg
-      width: 2.5rem
-      height: 2.5rem
-      opacity: 0.5
+          svg
+            width: 2.5rem
+            height: 2.5rem
+            opacity: 0.5
 
-  .bio
-    line-height: 1.5
+      .bio
+        line-height: 1.5
 
-  .stats
-    gap: 2rem
-    padding-top: 1rem
+      .stats
+        gap: 2rem
+        padding-top: 1rem
 
-  .stat
-    gap: 0.25rem
+      .stat
+        gap: 0.25rem
 </style>

@@ -130,8 +130,8 @@
         @edit-profile="goSettings"
       />
 
-      <VStack class="accountInfo">
-        <button class="logout" @click="doLogout">
+      <VStack class="accountInfo fullWidth">
+        <button class="logout fullWidth" @click="doLogout">
           <Icon icon="solar:logout-2-line-duotone" />
           Log out
         </button>
@@ -152,9 +152,6 @@
   .guest, .quickSettings, .bygTheme
     @include utils.maxPostPaddedWidth
     @include utils.itemBackground
-
-  .logout
-    margin-top: 1rem
 
   .appearanceSidebar
     --padding: 0.75rem

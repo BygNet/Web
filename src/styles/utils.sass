@@ -16,6 +16,9 @@
 .noSpace
   gap: 0
 
+.noRound
+  border-radius: 0
+
 .error
   color: red
   text-align: center
@@ -42,7 +45,7 @@
     pointer-events: none
 
 @mixin maxPaddedWidth
-  width: calc(100% - var(--padding)*2)
+  width: 100%
 
 @mixin maxPostPaddedWidth
-  width: calc(100% - var(--postPadding)*2)
+  width: 100%

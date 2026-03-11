@@ -46,11 +46,14 @@
       comments.value = []
       return
     }
-    comments.value = (await res.json()) as BygComment[]
-  }
+    const data = (await res.json()) as BygComment[]
 
-  function renderComment(content: string): string {
-    return DOMPurify.sanitize(marked.parse(content ?? '') as string)
+    for (const c of data) {
+      const html = await marked.parse(c.content ?? '')
+      ;(c as any).rendered = DOMPurify.sanitize(html)
+    }
+
+    comments.value = data
   }
 
   function clearMentionSuggestions(): void {
@@ -176,7 +179,7 @@
           <p>{{ formatDate(comment.createdDate) }}</p>
         </HStack>
 
-        <div class="commentContent" v-html="renderComment(comment.content)" />
+        <div class="commentContent" v-html="(comment as any).rendered" />
       </div>
     </VStack>
 

@@ -76,11 +76,12 @@
     display: none
     align-items: flex-start
     justify-content: space-between
-    min-width: 12rem
-    width: 16rem
+    min-width: 14rem
+    width: 20rem
+    flex-grow: 1
     gap: 2rem
     padding: var(--padding)
-    height: calc(100vh - var(--padding)*2)
+    height: 100vh
     overflow-y: scroll
     border-right: 0.2rem solid themes.$foregroundColor
 

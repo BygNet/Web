@@ -47,12 +47,15 @@
     --bottom: calc(max(env(safe-area-inset-bottom), 1rem) - var(--padding))
 
     display: none
-    align-items: flex-end
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: space-between
     gap: 1rem
     position: sticky
     bottom: var(--bottom)
     padding: 0 0.5rem
     z-index: 5001
+    width: 100%
 
     .createButton
       svg
@@ -67,7 +70,6 @@
       border-radius: 10rem
       padding: 0.25rem
       gap: 0
-      margin: auto
 
       &::after
         content: ""
@@ -83,7 +85,7 @@
 
       .mobileNavItem
         align-items: center
-        min-width: 3rem
+        min-width: 3.75rem
         padding: 0.45rem 0.35rem
         gap: 0
         border-radius: 10rem

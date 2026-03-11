@@ -6,11 +6,16 @@
 
   import ShareModal from '@/components/messages/ShareModal.vue'
   import DesktopNav from '@/components/nav/DesktopNav.vue'
+  import MobileNav from '@/components/nav/MobileNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
   import { adCache } from '@/data/caches.ts'
   import { showingShareModal } from '@/data/share'
   import { loadTheme } from '@/data/themes.ts'
-  import {showingCreateModal, showingNavigation, showingReportPopup} from '@/data/visibility.ts'
+  import {
+    showingCreateModal,
+    showingNavigation,
+    showingReportPopup,
+  } from '@/data/visibility.ts'
   import { consoleWarn } from '@/utils/consoleWarn.ts'
   import CreateView from '@/views/CreateView.vue'
   import ReportView from '@/views/ReportView.vue'
@@ -32,9 +37,10 @@
   <ShareModal v-if="showingShareModal" />
 
   <DesktopNav v-if="showingNavigation" />
-  <main :class="{ expanded: !showingNavigation }">
+  <main>
     <TitleView v-if="showingNavigation" />
     <RouterView />
+    <MobileNav v-if="showingNavigation" />
   </main>
 </template>
 
@@ -42,19 +48,19 @@
   @use "@/styles/variables"
 
   main
-    flex-grow: 1
+    display: flex
+    flex-direction: column
+    align-items: center
+    flex-grow: 3
     height: 100dvh
     width: 100%
-    padding: 0 calc(var(--padding)/2)
+    padding: 0
     margin: 0 auto
     gap: 1rem
     overflow-y: scroll
     scrollbar-width: none
 
-    &:not(.expanded)
-      max-width: 65rem
-
   @media (max-width: variables.$mobileWidth)
     main
-      width: calc(100% - var(--padding)*2)
+      width: 100%
 </style>

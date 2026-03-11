@@ -1,4 +1,5 @@
 import '@/styles/global.sass'
+import '@/utils/marked'
 
 import type { VueHeadClient } from '@unhead/vue'
 import { createHead } from '@unhead/vue/client'

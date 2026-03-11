@@ -46,7 +46,7 @@
   title.value = 'Social'
   setHeadMeta({
     page: 'Social',
-    subtitle: 'Byg Social for Web.',
+    subtitle: 'Browse posts on Byg Social.',
   })
 
   const loadPosts = async () => {

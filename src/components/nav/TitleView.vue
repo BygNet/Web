@@ -37,8 +37,9 @@
       </button>
     </HStack>
 
+    <div class="titleMaskContainer" />
     <div class="titleBlurContainer">
-      <ProgressiveBlur class="titleBlur" :blur="16" :border-radius="0" />
+      <ProgressiveBlur class="titleBlur" :blur="24" :border-radius="0" />
     </div>
   </header>
 </template>
@@ -46,16 +47,14 @@
 <style scoped lang="sass">
   @use "@/styles/themes"
   @use "@/styles/utils"
+  @use "@/styles/variables"
 
   .titleView
-    @include utils.maxPaddedWidth
-
+    width: 100%
     position: sticky
     top: 0
     z-index: 100
-    background: linear-gradient(to bottom, themes.$backgroundColor, transparent)
-    padding: 0.5rem 0.5rem 1rem
-    margin-bottom: -1rem
+    padding: 0.5rem var(--padding) 0
 
     .titleViewContent
       z-index: 102
@@ -95,13 +94,21 @@
       width: 1.5rem !important
       height: 1.5rem !important
 
+  .titleMaskContainer
+    background: linear-gradient(to bottom, themes.$backgroundColor, transparent)
+    opacity: 0.7
+    z-index: -1
+
   .titleBlurContainer
+    z-index: -2
+
+  .titleBlurContainer, .titleMaskContainer
     position: absolute
     top: 0
     bottom: -1.5rem
     left: 0
     right: 0
-    z-index: -1
+    border-radius: 0
 
     .titleBlur
       transform: rotate(180deg)

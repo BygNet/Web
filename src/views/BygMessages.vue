@@ -15,6 +15,7 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import HStack from '@/components/layout/HStack.vue'
+  import VStack from '@/components/layout/VStack.vue'
   import MessageBubble from '@/components/messages/MessageBubble.vue'
   import MessageThreadItem from '@/components/messages/MessageThreadItem.vue'
   import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
@@ -27,6 +28,7 @@
     sendTypingEvent,
   } from '@/data/messages'
   import { title } from '@/data/title.ts'
+  import { showingNavigation } from '@/data/visibility.ts'
   import type { BygUserSuggestion } from '@/types/mentions'
   import type {
     BygMessage,
@@ -35,8 +37,6 @@
     BygMessageThread,
   } from '@/types/messages'
   import setHeadMeta from '@/utils/setHeadMeta'
-  import VStack from "@/components/layout/VStack.vue";
-  import {showingNavigation} from "@/data/visibility.ts";
 
   title.value = 'Chat'
   setHeadMeta({
@@ -1198,7 +1198,7 @@
         width: 100%
 
       .starterInput
-        width: calc(100% - 1.5rem)
+        width: 100%
         padding: 0.75rem
         border-radius: 1rem
 
@@ -1279,6 +1279,6 @@
 
   @media (max-width: variables.$mobileWidth)
     .messagesLayout
-      height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 2rem)
+      height: calc(100dvh - 1rem)
       padding-bottom: calc(max(env(safe-area-inset-bottom), 0.75rem) + 0.15rem)
 </style>

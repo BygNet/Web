@@ -221,7 +221,7 @@
   .shareModal
     @include utils.itemBackground
     width: 24rem
-    max-width: calc(100vw - var(--padding)*2 - 1rem)
+    max-width: calc(100vw - 1rem)
     padding: 1rem
     border-radius: 1.5rem
     align-items: flex-start
@@ -229,9 +229,9 @@
 
   .shareItemPreview
     @include utils.itemBackground
-    width: calc(100% - 1.5rem)
-    align-items: flex-start
     --cornerRadius: 1rem
+
+    align-items: flex-start
     gap: 0
 
     img

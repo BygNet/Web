@@ -10,8 +10,13 @@
   import { IMAGE_CACHE_TTL, imageCache, imageCacheTime } from '@/data/caches'
   import { imageReloader } from '@/data/events.ts'
   import { title } from '@/data/title'
+  import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   title.value = 'Picture'
+  setHeadMeta({
+    page: 'Picture',
+    subtitle: 'Browse images on Byg Picture.',
+  })
 
   const images: Ref<BygImage[]> = ref([])
   const loading: Ref<boolean> = ref(true)

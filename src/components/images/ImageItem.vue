@@ -29,7 +29,7 @@
     <img :src="image.imageUrl" :alt="image.title" loading="lazy" />
 
     <VStack class="info">
-      <VStack>
+      <VStack class="noRound">
         <h3>{{ image.title }}</h3>
 
         <VStack class="imageMeta noSpace">
@@ -83,6 +83,9 @@
     flex-direction: column
     cursor: pointer
 
+    &.detail
+      border-radius: 0
+
     &:not(.detail)
       @include utils.itemBackground
 
@@ -103,7 +106,7 @@
     .info
       flex-grow: 1
       width: 100%
-      padding: 0.75rem 1rem 0
+      border-radius: 0
       justify-content: space-between
 
       .imageMeta p
