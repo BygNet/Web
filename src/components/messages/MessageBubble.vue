@@ -184,10 +184,7 @@
       border-bottom-right-radius: var(--groupCornerRadius)
 
     &.group-middle
-      border-top-left-radius: var(--groupCornerRadius)
-      border-top-right-radius: var(--groupCornerRadius)
-      border-bottom-left-radius: var(--groupCornerRadius)
-      border-bottom-right-radius: var(--groupCornerRadius)
+      border-radius: var(--groupCornerRadius)
 
     &.group-bottom
       border-top-left-radius: var(--groupCornerRadius)
