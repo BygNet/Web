@@ -257,8 +257,6 @@ export function createMessagesSocket(
   const ws = new WebSocket(buildMessagesSocketUrl())
 
   ws.addEventListener('open', () => {
-    onConnectedChange?.(true)
-
     const token = auth.token
     if (!token) {
       onConnectedChange?.(false)
@@ -297,13 +295,16 @@ export function sendTypingEvent(
   socket: WebSocket | null,
   toUserId: number,
   isTyping: boolean
-): void {
-  if (!socket || socket.readyState !== WebSocket.OPEN) return
+): boolean {
+  if (!socket || socket.readyState !== WebSocket.OPEN) return false
+  const normalizedToUserId = Number(toUserId)
+  if (!Number.isFinite(normalizedToUserId)) return false
 
   const payload: BygMessageLiveClientEvent = {
     type: 'typing',
-    toUserId,
+    toUserId: normalizedToUserId,
     isTyping,
   }
   socket.send(JSON.stringify(payload))
+  return true
 }

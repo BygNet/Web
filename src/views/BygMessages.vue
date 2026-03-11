@@ -51,10 +51,31 @@
   const threads: Ref<BygMessageThread[]> = ref([])
   const selectedThread: Ref<BygMessageThread | null> = ref(null)
   const messages: Ref<BygMessage[]> = ref([])
+  const outgoingDeliveryByMessageId: Ref<Record<number, MessageDeliveryState>> =
+    ref({})
   const composerText: Ref<string> = ref('')
   const sendingMessage: Ref<boolean> = ref(false)
   const connectedLive: Ref<boolean> = ref(false)
   const typingByUserId: Ref<Record<number, boolean>> = ref({})
+
+  type MessageDeliveryState = 'sending' | 'sent'
+  type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
+  type ConversationTimestampEntry = {
+    type: 'timestamp'
+    key: string
+    label: string
+  }
+  type ConversationMessageEntry = {
+    type: 'message'
+    key: string
+    message: BygMessage
+    outgoing: boolean
+    showAvatar: boolean
+    groupPosition: MessageGroupPosition
+    deliveryState: MessageDeliveryState | null
+  }
+  type ConversationEntry = ConversationTimestampEntry | ConversationMessageEntry
+  const CONTINUATION_GAP_MS = 3 * 60 * 60 * 1000
 
   const starterQuery: Ref<string> = ref('')
   const starterSuggestions: Ref<BygUserSuggestion[]> = ref([])
@@ -68,6 +89,8 @@
   let typingStopTimer: number | undefined
   const typingClearTimers = new Map<number, number>()
   let sentTypingState = false
+  let typingTargetUserId: number | null = null
+  let nextOptimisticMessageId = -1
   let allowSocketReconnect = true
   let mainEl: HTMLElement | null = null
   let savedOverflowY = ''
@@ -95,6 +118,12 @@
 
   function normalizeUsername(value: string): string {
     return value.trim().toLowerCase()
+  }
+
+  function normalizeUserId(value: number): number | null {
+    const normalized = Number(value)
+    if (!Number.isFinite(normalized)) return null
+    return Math.trunc(normalized)
   }
 
   function sortThreadsByDate(input: BygMessageThread[]): BygMessageThread[] {
@@ -205,6 +234,229 @@
     )
   }
 
+  function setOutgoingDeliveryState(
+    messageId: number,
+    state: MessageDeliveryState | null,
+    options: {
+      exclusive?: boolean
+    } = {}
+  ): void {
+    const nextState = options.exclusive
+      ? {}
+      : {
+          ...outgoingDeliveryByMessageId.value,
+        }
+
+    if (!state) {
+      delete nextState[messageId]
+    } else {
+      nextState[messageId] = state
+    }
+
+    outgoingDeliveryByMessageId.value = nextState
+  }
+
+  function resetOutgoingDeliveryState(): void {
+    outgoingDeliveryByMessageId.value = {}
+  }
+
+  function parseMessageTimestamp(input: string): number | null {
+    const parsed = new Date(input).getTime()
+    return Number.isFinite(parsed) ? parsed : null
+  }
+
+  function hasLongGap(previous: BygMessage, current: BygMessage): boolean {
+    const previousTime = parseMessageTimestamp(previous.createdDate)
+    const currentTime = parseMessageTimestamp(current.createdDate)
+    if (previousTime === null || currentTime === null) return false
+    return currentTime - previousTime >= CONTINUATION_GAP_MS
+  }
+
+  function formatConversationTimestamp(input: string): string {
+    const date = new Date(input)
+    if (Number.isNaN(date.getTime())) return input
+
+    const now = new Date()
+    const shouldIncludeYear = date.getFullYear() !== now.getFullYear()
+
+    return new Intl.DateTimeFormat(undefined, {
+      month: 'short',
+      day: 'numeric',
+      ...(shouldIncludeYear ? { year: 'numeric' as const } : {}),
+      hour: 'numeric',
+      minute: '2-digit',
+    }).format(date)
+  }
+
+  function removeMessageById(messageId: number): void {
+    messages.value = messages.value.filter(message => message.id !== messageId)
+    setOutgoingDeliveryState(messageId, null)
+  }
+
+  function findMatchingOptimisticIndex(confirmed: BygMessage): number {
+    for (let index = messages.value.length - 1; index >= 0; index -= 1) {
+      const candidate = messages.value[index]
+      if (!candidate || candidate.id >= 0) continue
+      if (candidate.senderId !== confirmed.senderId) continue
+      if (candidate.recipientId !== confirmed.recipientId) continue
+      if (candidate.content !== confirmed.content) continue
+
+      const candidateTime = parseMessageTimestamp(candidate.createdDate)
+      const confirmedTime = parseMessageTimestamp(confirmed.createdDate)
+      if (candidateTime !== null && confirmedTime !== null) {
+        if (Math.abs(candidateTime - confirmedTime) > 45_000) {
+          continue
+        }
+      }
+
+      return index
+    }
+
+    return -1
+  }
+
+  function upsertConversationMessage(
+    incomingMessage: BygMessage,
+    options: {
+      markOutgoingSent?: boolean
+    } = {}
+  ): boolean {
+    const currentUserId = auth.user?.id
+    const shouldMarkOutgoingSent =
+      options.markOutgoingSent &&
+      currentUserId === incomingMessage.senderId
+
+    const existingIndex = messages.value.findIndex(
+      existingMessage => existingMessage.id === incomingMessage.id
+    )
+    if (existingIndex >= 0) {
+      messages.value.splice(existingIndex, 1, incomingMessage)
+      if (shouldMarkOutgoingSent) {
+        setOutgoingDeliveryState(incomingMessage.id, 'sent', {
+          exclusive: true,
+        })
+      }
+      return false
+    }
+
+    const optimisticIndex = findMatchingOptimisticIndex(incomingMessage)
+    if (optimisticIndex >= 0) {
+      const optimisticMessage = messages.value[optimisticIndex]
+      messages.value.splice(optimisticIndex, 1, incomingMessage)
+      if (optimisticMessage) {
+        setOutgoingDeliveryState(optimisticMessage.id, null)
+      }
+      setOutgoingDeliveryState(incomingMessage.id, 'sent', {
+        exclusive: true,
+      })
+      return false
+    }
+
+    messages.value = [ ...messages.value, incomingMessage ]
+    if (shouldMarkOutgoingSent) {
+      setOutgoingDeliveryState(incomingMessage.id, 'sent', {
+        exclusive: true,
+      })
+    }
+    return true
+  }
+
+  function buildOptimisticOutgoingMessage(
+    content: string,
+    thread: BygMessageThread,
+    recipientId: number
+  ): BygMessage | null {
+    if (!auth.user) return null
+
+    let senderSubscriptionState: BygMessage['senderSubscriptionState'] = 'free'
+    let senderAvatarUrl: string | null = null
+
+    for (let index = messages.value.length - 1; index >= 0; index -= 1) {
+      const message = messages.value[index]
+      if (!message) continue
+      if (message.senderId !== auth.user.id) continue
+
+      senderSubscriptionState = message.senderSubscriptionState
+      senderAvatarUrl = message.senderAvatarUrl
+      break
+    }
+
+    const optimisticMessage: BygMessage = {
+      id: nextOptimisticMessageId,
+      senderId: auth.user.id,
+      senderUsername: auth.user.username,
+      senderAvatarUrl,
+      senderSubscriptionState,
+      recipientId,
+      recipientUsername: thread.username,
+      recipientAvatarUrl: thread.avatarUrl,
+      recipientSubscriptionState: thread.subscriptionState,
+      content,
+      createdDate: new Date().toISOString(),
+      sharedPost: null,
+      sharedImage: null,
+    }
+    nextOptimisticMessageId -= 1
+    return optimisticMessage
+  }
+
+  const conversationEntries = computed<ConversationEntry[]>(() => {
+    const renderedEntries: ConversationEntry[] = []
+    const currentUserId = auth.user?.id
+
+    for (let index = 0; index < messages.value.length; index += 1) {
+      const message = messages.value[index]
+      if (!message) continue
+
+      const previousMessage = messages.value[index - 1]
+      const nextMessage = messages.value[index + 1]
+
+      const separatedFromPrevious =
+        !!previousMessage && hasLongGap(previousMessage, message)
+      const groupedWithPrevious =
+        !!previousMessage &&
+        !separatedFromPrevious &&
+        previousMessage.senderId === message.senderId
+      const groupedWithNext =
+        !!nextMessage &&
+        !hasLongGap(message, nextMessage) &&
+        nextMessage.senderId === message.senderId
+
+      if (separatedFromPrevious) {
+        renderedEntries.push({
+          type: 'timestamp',
+          key: `time-${previousMessage.id}-${message.id}`,
+          label: formatConversationTimestamp(message.createdDate),
+        })
+      }
+
+      let groupPosition: MessageGroupPosition = 'single'
+      if (!groupedWithPrevious && groupedWithNext) {
+        groupPosition = 'top'
+      } else if (groupedWithPrevious && groupedWithNext) {
+        groupPosition = 'middle'
+      } else if (groupedWithPrevious) {
+        groupPosition = 'bottom'
+      }
+
+      const outgoing = message.senderId === currentUserId
+
+      renderedEntries.push({
+        type: 'message',
+        key: `message-${message.id}`,
+        message,
+        outgoing,
+        showAvatar: !outgoing && !groupedWithNext,
+        groupPosition,
+        deliveryState: outgoing
+          ? outgoingDeliveryByMessageId.value[message.id] ?? null
+          : null,
+      })
+    }
+
+    return renderedEntries
+  })
+
   async function scrollConversationToBottom(): Promise<void> {
     await nextTick()
 
@@ -243,6 +495,7 @@
 
       if (!conversation) {
         messages.value = []
+        resetOutgoingDeliveryState()
         return
       }
 
@@ -261,6 +514,7 @@
       upsertThread(selectedThread.value)
 
       messages.value = conversation.messages
+      resetOutgoingDeliveryState()
       await scrollConversationToBottom()
     } catch {
       error.value = 'Failed to load conversation.'
@@ -276,6 +530,14 @@
       syncQuery?: boolean
     } = {}
   ): Promise<void> {
+    if (
+      selectedThread.value &&
+      selectedThread.value.userId !== thread.userId &&
+      sentTypingState
+    ) {
+      stopTypingSignal()
+    }
+
     selectedThread.value = thread
 
     if (options.syncQuery !== false) {
@@ -381,6 +643,8 @@
 
       case 'auth:error':
         connectedLive.value = false
+        sentTypingState = false
+        typingTargetUserId = null
         return
 
       case 'typing': {
@@ -407,10 +671,8 @@
         upsertThreadFromMessage(event.message)
 
         if (isMessageInSelectedThread(event.message)) {
-          if (
-            !messages.value.some(existing => existing.id === event.message.id)
-          ) {
-            messages.value = [ ...messages.value, event.message ]
+          const addedNewMessage = upsertConversationMessage(event.message)
+          if (addedNewMessage) {
             scrollConversationToBottom()
           }
           markThreadTyping(event.message.senderId, false)
@@ -420,6 +682,8 @@
       }
 
       case 'auth:required':
+        connectedLive.value = false
+        return
       case 'error':
       default:
         return
@@ -446,6 +710,10 @@
       },
       connected => {
         connectedLive.value = connected
+        if (!connected) {
+          sentTypingState = false
+          typingTargetUserId = null
+        }
       }
     )
     liveSocket.value = socket
@@ -457,18 +725,43 @@
   }
 
   function stopTypingSignal(): void {
-    if (!selectedThread.value || !sentTypingState) return
+    if (!sentTypingState || typingTargetUserId === null) return
 
-    sendTypingEvent(liveSocket.value, selectedThread.value.userId, false)
+    sendTypingEvent(liveSocket.value, typingTargetUserId, false)
     sentTypingState = false
+    typingTargetUserId = null
   }
 
   function onComposerInput(): void {
     if (!selectedThread.value) return
+    if (!connectedLive.value) {
+      sentTypingState = false
+      typingTargetUserId = null
+      return
+    }
 
-    if (!sentTypingState) {
-      sendTypingEvent(liveSocket.value, selectedThread.value.userId, true)
+    const recipientId = normalizeUserId(selectedThread.value.userId)
+    if (recipientId === null) return
+
+    if (
+      sentTypingState &&
+      typingTargetUserId !== null &&
+      typingTargetUserId !== recipientId
+    ) {
+      stopTypingSignal()
+    }
+
+    const didSendTypingSignal = sendTypingEvent(
+      liveSocket.value,
+      recipientId,
+      true
+    )
+    if (didSendTypingSignal) {
       sentTypingState = true
+      typingTargetUserId = recipientId
+    } else {
+      sentTypingState = false
+      typingTargetUserId = null
     }
 
     if (typingStopTimer) {
@@ -484,30 +777,57 @@
   async function sendCurrentMessage(): Promise<void> {
     if (!selectedThread.value || sendingMessage.value) return
 
+    const thread = selectedThread.value
+    const recipientId = normalizeUserId(thread.userId)
+    if (recipientId === null) {
+      error.value = 'Invalid chat recipient.'
+      return
+    }
+
     const content = composerText.value.trim()
     if (!content) return
 
     sendingMessage.value = true
     error.value = null
 
+    const optimisticMessage = buildOptimisticOutgoingMessage(
+      content,
+      thread,
+      recipientId
+    )
+    if (optimisticMessage) {
+      messages.value = [ ...messages.value, optimisticMessage ]
+      setOutgoingDeliveryState(optimisticMessage.id, 'sending', {
+        exclusive: true,
+      })
+    }
+
+    composerText.value = ''
+    stopTypingSignal()
+    await scrollConversationToBottom()
+
     const sent = await sendMessage({
-      recipientId: selectedThread.value.userId,
+      recipientId,
       content,
     })
 
     sendingMessage.value = false
 
     if (!sent) {
+      if (optimisticMessage) {
+        removeMessageById(optimisticMessage.id)
+      }
+      composerText.value = content
       error.value = 'Failed to send message.'
       return
     }
 
-    composerText.value = ''
-    stopTypingSignal()
     upsertThreadFromMessage(sent)
 
-    if (!messages.value.some(message => message.id === sent.id)) {
-      messages.value = [ ...messages.value, sent ]
+    const addedNewMessage = upsertConversationMessage(sent, {
+      markOutgoingSent: true,
+    })
+    if (addedNewMessage) {
       await scrollConversationToBottom()
     }
   }
@@ -706,25 +1026,27 @@
             <div class="conversationTitle">
               <h3 v-if="selectedThread">@{{ selectedThread.username }}</h3>
               <h3 v-else>Select a chat</h3>
-              <p
-                class="light"
+
+              <HStack
+                class="typingIndicator"
                 v-if="selectedThread && typingByUserId[selectedThread.userId]"
               >
-                Typing...
-              </p>
+                <Icon icon="solar:keyboard-line-duotone" />
+                <p class="light">Typing...</p>
+              </HStack>
+
+              <HStack class="connectionState">
+                <Icon
+                  :icon="
+                    connectedLive
+                      ? 'solar:cloud-check-line-duotone'
+                      : 'solar:cloud-cross-line-duotone'
+                  "
+                />
+                <p class="light">{{ connectedLive ? 'Live' : 'Offline' }}</p>
+              </HStack>
             </div>
           </HStack>
-
-          <div class="connectionState">
-            <Icon
-              :icon="
-                connectedLive
-                  ? 'solar:cloud-check-line-duotone'
-                  : 'solar:cloud-cross-line-duotone'
-              "
-            />
-            <p class="light">{{ connectedLive ? 'Live' : 'Offline' }}</p>
-          </div>
         </header>
 
         <ErrorState v-if="error" :message="error" />
@@ -743,12 +1065,19 @@
           </p>
 
           <div ref="conversationScroller" class="messageList">
-            <MessageBubble
-              v-for="message in messages"
-              :key="message.id"
-              :message="message"
-              :outgoing="message.senderId === auth.user?.id"
-            />
+            <template v-for="entry in conversationEntries" :key="entry.key">
+              <p v-if="entry.type === 'timestamp'" class="light messageGapMarker">
+                {{ entry.label }}
+              </p>
+              <MessageBubble
+                v-else
+                :message="entry.message"
+                :outgoing="entry.outgoing"
+                :show-avatar="entry.showAvatar"
+                :group-position="entry.groupPosition"
+                :delivery-state="entry.deliveryState"
+              />
+            </template>
           </div>
 
           <div class="composer" @click.stop>
@@ -785,10 +1114,11 @@
 
   .messagesLayout
     width: 100%
-    height: calc(100vh - 7rem)
+    height: calc(100dvh - 7rem)
     align-items: stretch
     flex-wrap: nowrap
     gap: 0.75rem
+    padding-bottom: max(env(safe-area-inset-bottom), 0rem)
 
     .threadsPane
       min-width: 20rem
@@ -835,11 +1165,10 @@
       .conversationHeader
         gap: 0.5rem
 
-        .conversationTitleWrap
+        .conversationTitleWrap, .conversationTitle
           align-items: flex-start
 
-        .connectionState
-          flex-direction: row
+        .connectionState, .typingIndicator
           gap: 0.25rem
 
       .conversationBody
@@ -856,6 +1185,13 @@
           overflow: auto
           width: 100%
           border-radius: 0
+          padding-bottom: 0.2rem
+
+          .messageGapMarker
+            margin: 0.45rem auto 0.65rem
+            width: fit-content
+            font-size: x-small
+            text-align: center
 
         .composer
           flex-direction: row
@@ -870,8 +1206,9 @@
 
   @media (max-width: variables.$mobileWidth)
     .messagesLayout
-      height: calc(100vh - 7rem - 3.5rem)
+      height: calc(100dvh - 7rem - 3.5rem)
       padding-top: 1rem
+      padding-bottom: calc(max(env(safe-area-inset-bottom), 0.75rem) + 0.15rem)
 </style>
 
 <style lang="sass">

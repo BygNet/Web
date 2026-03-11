@@ -7,10 +7,23 @@
   import type { BygMessage } from '@/types/messages'
   import { formatDate } from '@/utils/formatters'
 
-  const props = defineProps<{
-    message: BygMessage
-    outgoing: boolean
-  }>()
+  type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
+  type MessageDeliveryState = 'sending' | 'sent'
+
+  const props = withDefaults(
+    defineProps<{
+      message: BygMessage
+      outgoing: boolean
+      showAvatar?: boolean
+      groupPosition?: MessageGroupPosition
+      deliveryState?: MessageDeliveryState | null
+    }>(),
+    {
+      showAvatar: true,
+      groupPosition: 'single',
+      deliveryState: null,
+    }
+  )
 
   const renderedContent: Ref<string> = ref('')
   const showingTime: Ref<boolean> = ref(false)
@@ -29,22 +42,28 @@
   <div
     class="messageRow"
     @click="showingTime = !showingTime"
-    :class="{ outgoing: outgoing }"
+    :class="[{ outgoing: outgoing }, `group-${props.groupPosition}`]"
   >
-    <img
-      v-if="!outgoing && message.senderAvatarUrl"
-      class="senderAvatar"
-      :src="message.senderAvatarUrl"
-      :alt="`${message.senderUsername}'s avatar`"
-    />
-    <Icon
-      v-else-if="!outgoing"
-      class="senderAvatar fallback"
-      icon="solar:user-circle-line-duotone"
-    />
+    <template v-if="!outgoing">
+      <img
+        v-if="props.showAvatar && message.senderAvatarUrl"
+        class="senderAvatar"
+        :src="message.senderAvatarUrl"
+        :alt="`${message.senderUsername}'s avatar`"
+      />
+      <Icon
+        v-else-if="props.showAvatar"
+        class="senderAvatar fallback"
+        icon="solar:user-circle-line-duotone"
+      />
+      <span v-else class="senderAvatar spacer" aria-hidden="true" />
+    </template>
 
     <div class="bubbleWrap" :class="{ outgoing: outgoing }">
-      <div class="bubble" :class="{ outgoing: outgoing }">
+      <div
+        class="bubble"
+        :class="[{ outgoing: outgoing }, `group-${props.groupPosition}`]"
+      >
         <RouterLink
           v-if="message.sharedPost"
           class="sharedEmbed postEmbed"
@@ -77,6 +96,17 @@
         />
       </div>
 
+      <div class="bubbleMeta light" v-if="outgoing && props.deliveryState">
+        <Icon
+          :icon="
+            props.deliveryState === 'sent'
+              ? 'solar:check-read-line-duotone'
+              : 'solar:clock-circle-line-duotone'
+          "
+        />
+        <p>{{ props.deliveryState === 'sent' ? 'Sent' : 'Sending…' }}</p>
+      </div>
+
       <p class="bubbleTime light" v-if="showingTime">
         {{ formatDate(message.createdDate) }}
       </p>
@@ -107,6 +137,10 @@
     &.fallback
       border-radius: 0
 
+    &.spacer
+      display: block
+      flex-shrink: 0
+
   .bubbleWrap
     max-width: min(38rem, 86%)
     min-width: 0
@@ -118,19 +152,31 @@
 
   .bubble
     --cornerRadius: 1.25rem
+    --groupCornerRadius: 0.55rem
     width: fit-content
     max-width: 100%
     align-items: flex-start
     gap: 0.45rem
     padding: 0.55rem 0.7rem
     border-radius: var(--cornerRadius)
-    border-bottom-left-radius: 0.5rem
     background: themes.$foregroundColor
+
+    &.group-top
+      border-bottom-left-radius: var(--groupCornerRadius)
+      border-bottom-right-radius: var(--groupCornerRadius)
+
+    &.group-middle
+      border-top-left-radius: var(--groupCornerRadius)
+      border-top-right-radius: var(--groupCornerRadius)
+      border-bottom-left-radius: var(--groupCornerRadius)
+      border-bottom-right-radius: var(--groupCornerRadius)
+
+    &.group-bottom
+      border-top-left-radius: var(--groupCornerRadius)
+      border-top-right-radius: var(--groupCornerRadius)
 
     &.outgoing
       background: themes.$accentColor
-      border-bottom-right-radius: 0.5rem
-      border-bottom-left-radius: var(--cornerRadius)
 
   .messageContent
     width: 100%
@@ -174,4 +220,14 @@
   .bubbleTime
     font-size: x-small
     margin: 0.1rem 0.25rem
+
+  .bubbleMeta
+    flex-direction: row
+    align-items: center
+    gap: 0.2rem
+    margin: 0 0.25rem
+
+    p
+      margin: 0
+      font-size: x-small
 </style>
