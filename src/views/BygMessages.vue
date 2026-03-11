@@ -36,6 +36,7 @@
   } from '@/types/messages'
   import setHeadMeta from '@/utils/setHeadMeta'
   import VStack from "@/components/layout/VStack.vue";
+  import {showingNavigation} from "@/data/visibility.ts";
 
   title.value = 'Chat'
   setHeadMeta({
@@ -924,6 +925,8 @@
   }
 
   onMounted(async () => {
+    showingNavigation.value = false
+
     mainEl = document.querySelector('main')
     if (mainEl) {
       savedOverflowY = mainEl.style.overflowY
@@ -938,6 +941,7 @@
   })
 
   onUnmounted(() => {
+    showingNavigation.value = true
     allowSocketReconnect = false
     stopTypingSignal()
     clearTypingIndicators()
@@ -1014,7 +1018,14 @@
         :class="{ only: !shouldShowConversationPane }"
       >
         <header class="threadsHeader">
-          <h3>Chats</h3>
+          <RouterLink to="/">
+            <button class="backButton transparent">
+              <Icon icon="solar:alt-arrow-left-line-duotone" />
+              Back
+            </button>
+          </RouterLink>
+
+          <h3>Byg Chat</h3>
 
           <button
             class="refreshThreadsButton"
@@ -1022,6 +1033,7 @@
             @click="loadThreads({ force: true })"
           >
             <Icon icon="solar:refresh-line-duotone" />
+            Reload
           </button>
         </header>
 
@@ -1169,14 +1181,15 @@
 
   .messagesLayout
     width: 100%
-    height: calc(100dvh - 7rem)
+    height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 3rem)
+    padding-top: env(safe-area-inset-top)
     align-items: stretch
     flex-wrap: nowrap
     gap: 0.75rem
     padding-bottom: max(env(safe-area-inset-bottom), 0rem)
 
     .threadsPane
-      min-width: 20rem
+      min-width: 18rem
       display: flex
       flex-direction: column
       gap: 1rem
@@ -1266,12 +1279,6 @@
 
   @media (max-width: variables.$mobileWidth)
     .messagesLayout
-      height: calc(100dvh - 7rem - 3.5rem)
-      padding-top: 1rem
+      height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 2rem)
       padding-bottom: calc(max(env(safe-area-inset-bottom), 0.75rem) + 0.15rem)
-</style>
-
-<style lang="sass">
-  .bygMobileNav > .createButton
-    display: none
 </style>

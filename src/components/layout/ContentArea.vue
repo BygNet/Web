@@ -2,6 +2,7 @@
   import { useAttrs } from 'vue'
 
   import MobileNav from '@/components/nav/MobileNav.vue'
+  import {showingNavigation} from "@/data/visibility.ts";
 
   const attrs = useAttrs()
 
@@ -20,7 +21,8 @@
       >.
     </p>
   </div>
-  <MobileNav />
+
+  <MobileNav v-if="showingNavigation" />
 </template>
 
 <style scoped lang="sass">

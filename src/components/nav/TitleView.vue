@@ -45,8 +45,11 @@
 
 <style scoped lang="sass">
   @use "@/styles/themes"
+  @use "@/styles/utils"
 
   .titleView
+    @include utils.maxPaddedWidth
+
     position: sticky
     top: 0
     z-index: 100
@@ -58,9 +61,22 @@
       z-index: 102
       margin-top: calc(env(safe-area-inset-top) + 0.5rem)
       gap: 0.75rem
+      flex-wrap: nowrap
 
     .titleMain
       gap: 0.5rem
+      flex-shrink: 1
+      flex-wrap: nowrap
+      min-width: 0
+
+      h2
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+        min-width: 0
+        flex-grow: 1
+        flex-shrink: 1
+        max-width: 100%
 
   button.backButton
     padding: 0.75rem

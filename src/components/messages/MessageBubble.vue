@@ -203,6 +203,10 @@
     min-width: 0
     align-items: flex-start
 
+    :deep(img)
+      max-width: 100%
+      border-radius: 0.75rem
+
     :deep(p)
       margin: 0
 
