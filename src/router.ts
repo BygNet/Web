@@ -7,7 +7,8 @@ import BygNotifications from '@/views/BygNotifications.vue'
 import BygPicture from '@/views/BygPicture.vue'
 import BygPro from '@/views/BygPro.vue'
 import BygProfile from '@/views/BygProfile.vue'
-import BygSearch from '@/views/BygSearch.vue'
+import BygSearchHome from '@/views/BygSearchHome.vue'
+import BygSearchResults from '@/views/BygSearchResults.vue'
 import BygSettings from '@/views/BygSettings.vue'
 import BygSocial from '@/views/BygSocial.vue'
 import BygTerms from '@/views/BygTerms.vue'
@@ -61,7 +62,12 @@ const router: Router = createRouter({
     {
       name: 'search',
       path: '/search',
-      component: BygSearch,
+      component: BygSearchHome,
+    },
+    {
+      name: 'search-results',
+      path: '/search/results',
+      component: BygSearchResults,
     },
     {
       name: 'settings',

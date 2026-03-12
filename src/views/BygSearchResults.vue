@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import {computed, onMounted, onUnmounted, type Ref, ref, watch} from 'vue'
+  import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -10,13 +10,9 @@
   import VStack from '@/components/layout/VStack.vue'
   import { fetchBygSearch } from '@/data/search'
   import { title } from '@/data/title.ts'
-  import type {
-    BygSearchCategory,
-    BygSearchResponse,
-    BygSearchResult,
-  } from '@/types/search'
+  import { showingNavigation } from '@/data/visibility.ts'
+  import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
-  import {showingNavigation} from "@/data/visibility.ts";
 
   interface SearchCategoryOption {
     id: BygSearchCategory
@@ -101,9 +97,8 @@
 
   const selectedCategoryLabel = computed(() => {
     return (
-      searchCategoryOptions.find(
-        option => option.id === selectedCategory.value
-      )?.label ?? 'Web'
+      searchCategoryOptions.find(option => option.id === selectedCategory.value)
+        ?.label ?? 'Web'
     )
   })
 
@@ -130,8 +125,7 @@
   }
 
   function pageFromRoute(rawPage: unknown): number {
-    const parsed =
-      typeof rawPage === 'string' ? Number(rawPage) : Number.NaN
+    const parsed = typeof rawPage === 'string' ? Number(rawPage) : Number.NaN
     if (!Number.isFinite(parsed)) return 1
     return Math.max(1, Math.trunc(parsed))
   }
@@ -188,7 +182,7 @@
   ): Promise<void> {
     if (!nextQuery.trim()) {
       await router.replace({
-        name: 'search',
+        name: 'search-results',
         query: {
           category: nextCategory === 'web' ? undefined : nextCategory,
         },
@@ -197,7 +191,7 @@
     }
 
     await router.replace({
-      name: 'search',
+      name: 'search-results',
       query: {
         q: nextQuery.trim(),
         category: nextCategory === 'web' ? undefined : nextCategory,
@@ -222,12 +216,20 @@
 
   async function goToPreviousPage(): Promise<void> {
     if (page.value <= 1 || loading.value) return
-    await pushRouteSearchState(query.value, selectedCategory.value, page.value - 1)
+    await pushRouteSearchState(
+      query.value,
+      selectedCategory.value,
+      page.value - 1
+    )
   }
 
   async function goToNextPage(): Promise<void> {
     if (loading.value || !query.value.trim()) return
-    await pushRouteSearchState(query.value, selectedCategory.value, page.value + 1)
+    await pushRouteSearchState(
+      query.value,
+      selectedCategory.value,
+      page.value + 1
+    )
   }
 
   watch(
@@ -240,12 +242,9 @@
 </script>
 
 <template>
-  <ContentArea>
+  <ContentArea class="bygSearchResults" left-align>
     <RouterLink to="/search">
-      <VStack class="logo">
-        <h1>Byg Search</h1>
-        <h3 class="light">Search the web privately.</h3>
-      </VStack>
+      <h1>Byg Search</h1>
     </RouterLink>
 
     <VStack class="searchHeaderCard">
@@ -260,7 +259,6 @@
 
           <button class="prominent searchSubmitButton" :disabled="loading">
             <Icon icon="solar:minimalistic-magnifer-line-duotone" />
-            {{ loading ? 'Searching...' : 'Search' }}
           </button>
         </HStack>
       </form>
@@ -328,8 +326,7 @@
     <VStack v-else class="searchResultsSection">
       <HStack class="resultsMeta autoSpace">
         <p>
-          {{ searchResponse.totalResults?.toLocaleString() ?? '?' }}
-          results for <b>{{ searchResponse.query }}</b>
+          Showing results for <b>{{ searchResponse.query }}</b>
         </p>
         <p class="light">~{{ searchResponse.tookMs }} ms</p>
       </HStack>
@@ -346,7 +343,7 @@
           class="suggestionButton"
           @click="pickSuggestion(suggestion)"
         >
-          <Icon icon="solar:refresh-circle-line-duotone" />
+          <Icon icon="solar:minimalistic-magnifer-line-duotone" />
           {{ suggestion }}
         </button>
       </HStack>
@@ -388,21 +385,23 @@
           target="_blank"
           rel="noopener noreferrer"
         >
-          <HStack class="resultHeading">
-            <Icon icon="solar:global-line-duotone" />
-            <h3>{{ result.title }}</h3>
-          </HStack>
+          <VStack class="result">
+            <HStack class="resultHeading">
+              <Icon icon="solar:global-line-duotone" />
+              <h3>{{ result.title }}</h3>
+            </HStack>
 
-          <p class="light resultSnippet">
-            {{ result.snippet || 'Open this result' }}
-          </p>
-
-          <HStack class="resultFooter autoSpace">
-            <p>{{ hostnameFromUrl(result.url) }}</p>
-            <p class="light">
-              {{ result.engine ?? result.engines[0] ?? 'Byg Search' }}
+            <p class="light resultSnippet">
+              {{ result.snippet || 'Open this result' }}
             </p>
-          </HStack>
+
+            <HStack class="resultFooter autoSpace">
+              <p>{{ hostnameFromUrl(result.url) }}</p>
+              <p class="light">
+                {{ result.engine ?? result.engines[0] ?? 'Byg Search' }}
+              </p>
+            </HStack>
+          </VStack>
         </a>
       </VStack>
 
@@ -425,18 +424,9 @@
   @use "@/styles/themes"
   @use "@/styles/variables"
 
-  .logo
-    align-items: center
-    gap: 0
-
-    h1
-      font-size: 3rem
-      font-style: italic
-
   .searchHeaderCard, .searchLandingCard, .searchResultsSection
     width: 100%
-    max-width: 70rem
-    border-radius: 1.5rem
+    max-width: 60rem
     margin: 0.75rem 0
 
   .searchHeaderCard
@@ -447,40 +437,14 @@
       height: auto
       gap: 0.5rem
 
-      .searchInputWrap
-        width: 100%
-        flex-wrap: nowrap
-        gap: 0.5rem
-
-        .searchInput
-          flex: 1 1 auto
-          min-width: 0
-          padding: 0.75rem 1rem
-          border-radius: 1rem
-
-        .searchSubmitButton
-          flex-shrink: 0
-          white-space: nowrap
-          padding: 0.75rem 1rem
-
     .searchCategoryBar
       width: 100%
+      overflow: scroll
+      flex-wrap: nowrap
       gap: 0.5rem
 
       .searchCategoryButton
-        padding: 0.5rem 0.75rem
-
-  .searchLandingCard
-    align-items: center
-    text-align: center
-    gap: 0.75rem
-
-    .starterSuggestionGrid
-      width: 100%
-      justify-content: center
-
-      .starterSuggestionButton
-        padding: 0.5rem 0.75rem
+        flex-shrink: 0
 
   .searchResultsSection
     gap: 0.75rem
@@ -505,8 +469,11 @@
     .suggestionRow
       width: 100%
       gap: 0.5rem
+      overflow: scroll
+      flex-wrap: nowrap
 
       .suggestionButton
+        flex-shrink: 0
         padding: 0.45rem 0.7rem
 
     .resultList
@@ -516,17 +483,18 @@
       .resultCard
         width: 100%
         background: themes.$foregroundColor
-        border: 0.1rem solid themes.$foregroundOpaque
-        border-radius: 1rem
-        padding: 0.9rem
+        border-radius: 1.5rem
+        padding: 1rem
         align-items: flex-start
         text-align: left
         gap: 0.45rem
 
+        .result
+          width: 100%
+
         .resultHeading
           width: 100%
           flex-wrap: nowrap
-          align-items: center
           gap: 0.35rem
 
           h3
@@ -606,19 +574,4 @@
 
       p
         margin: 0
-
-  @media (max-width: variables.$mobileWidth)
-    .searchHeaderCard
-      .searchForm
-        .searchInputWrap
-          flex-wrap: wrap
-
-          .searchSubmitButton
-            width: 100%
-
-    .searchResultsSection
-      .resultList
-        .resultCard
-          .resultHeading h3
-            white-space: normal
 </style>

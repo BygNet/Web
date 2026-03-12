@@ -7,16 +7,17 @@
 
   defineProps<{
     hideTermsLink?: boolean
+    leftAlign?: boolean
   }>()
+
+  defineOptions({
+    inheritAttrs: false,
+  })
 </script>
 
 <template>
-  <div
-    class="contentArea"
-    v-bind="attrs"
-    :class="{ expanded: !showingNavigation }"
-  >
-    <div class="contentContainer">
+  <div class="contentArea" :class="{ expanded: !showingNavigation }">
+    <div class="contentContainer" v-bind="attrs" :class="{ leftAlign }">
       <slot />
 
       <p class="light termsLink" v-if="!hideTermsLink">
@@ -38,10 +39,14 @@
     &:not(.expanded)
       max-width: 65rem
 
+
     .contentContainer
       width: 100%
       height: 100%
       min-height: 100vh
+
+      &.leftAlign
+        align-items: flex-start
 
       .termsLink
         text-align: center

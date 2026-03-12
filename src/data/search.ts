@@ -118,7 +118,9 @@ export async function fetchBygSearch(
     return null
   }
 
-  const parsed = normalizeSearchResponse((await res.json()) as BygSearchResponse)
+  const parsed = normalizeSearchResponse(
+    (await res.json()) as BygSearchResponse
+  )
   searchCache.set(cacheKey, {
     value: parsed,
     timestamp: Date.now(),
