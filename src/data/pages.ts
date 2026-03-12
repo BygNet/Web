@@ -14,12 +14,6 @@ export const BygPages: BygPage[] = [
     icon: 'solar:gallery-wide-line-duotone',
   },
   {
-    title: 'Search',
-    description: 'Search the web with Byg Search.',
-    path: '/search',
-    icon: 'solar:minimalistic-magnifer-line-duotone',
-  },
-  {
     title: 'Chat',
     description: 'Direct messages.',
     path: '/messages',
@@ -34,6 +28,12 @@ export const BygPages: BygPage[] = [
 ]
 
 export const MorePages: BygPage[] = [
+  {
+    title: 'Search',
+    description: 'Search the web with Byg Search.',
+    path: '/search',
+    icon: 'solar:minimalistic-magnifer-line-duotone',
+  },
   {
     title: 'Link',
     description: 'User-generated link collections.',
