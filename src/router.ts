@@ -7,6 +7,7 @@ import BygNotifications from '@/views/BygNotifications.vue'
 import BygPicture from '@/views/BygPicture.vue'
 import BygPro from '@/views/BygPro.vue'
 import BygProfile from '@/views/BygProfile.vue'
+import BygSearch from '@/views/BygSearch.vue'
 import BygSettings from '@/views/BygSettings.vue'
 import BygSocial from '@/views/BygSocial.vue'
 import BygTerms from '@/views/BygTerms.vue'
@@ -56,6 +57,11 @@ const router: Router = createRouter({
       name: 'userProfile',
       path: '/u/:username',
       component: BygProfile,
+    },
+    {
+      name: 'search',
+      path: '/search',
+      component: BygSearch,
     },
     {
       name: 'settings',

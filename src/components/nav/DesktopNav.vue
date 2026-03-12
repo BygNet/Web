@@ -1,13 +1,15 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import { type Ref, ref } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { BygPages } from '@/data/pages.ts'
+  import { BygPages, MorePages } from '@/data/pages.ts'
   import router from '@/router.ts'
   import { openCreateModal } from '@/utils/createModalManager.ts'
 
   const AppVersion = __AppVersion
+  const showingMoreItems: Ref<boolean> = ref(false)
 </script>
 
 <template>
@@ -49,6 +51,32 @@
           </h3>
         </HStack>
       </RouterLink>
+
+      <HStack
+        class="desktopNavItem"
+        @click="showingMoreItems = !showingMoreItems"
+        :class="{
+          selected: MorePages.some(
+            p => p.path === router.currentRoute.value.path
+          ),
+        }"
+      >
+        <Icon icon="solar:menu-dots-line-duotone" />
+        <h3>More</h3>
+      </HStack>
+
+      <VStack
+        class="morePages"
+        v-if="showingMoreItems"
+        @click="showingMoreItems = false"
+      >
+        <RouterLink v-for="page in MorePages" :to="page.path">
+          <HStack class="moreDesktopNavItem">
+            <Icon :icon="page.icon" />
+            <h3>{{ page.title }}</h3>
+          </HStack>
+        </RouterLink>
+      </VStack>
     </VStack>
 
     <HStack class="footer fullWidth autoSpace">
@@ -103,6 +131,7 @@
 
     padding: 0.75rem
     transition: 0.2s ease
+    cursor: pointer
 
     &:not(.selected, :hover)
       opacity: 0.9
@@ -124,6 +153,22 @@
     svg
       width: 2rem
       height: 2rem
+
+  .pages
+    position: relative
+    width: 100%
+
+    .morePages
+      position: absolute
+      bottom: -5rem
+      background: themes.$foregroundOpaque
+      border-radius: 1.5rem
+      width: 100%
+      padding: 0.75rem
+
+      svg
+        width: 1.5rem
+        height: 1.5rem
 
   @media (min-width: variables.$mobileWidth)
     .desktopNav
