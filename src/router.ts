@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, type Router } from 'vue-router'
 
 import { ensureHydratedSession } from '@/auth/hydrate'
+import BygAppsEmbed from '@/views/BygAppsEmbed.vue'
+import BygChatEmbed from '@/views/BygChatEmbed.vue'
 import BygLink from '@/views/BygLink.vue'
 import BygMessages from '@/views/BygMessages.vue'
 import BygNotifications from '@/views/BygNotifications.vue'
@@ -78,6 +80,8 @@ const router: Router = createRouter({
     { name: 'login', path: '/login', component: LoginPage },
     { name: 'signup', path: '/signup', component: SignupPage },
     { name: 'pro', path: '/pro', component: BygPro },
+    { name: 'apps-embed', path: '/embeds/apps', component: BygAppsEmbed },
+    { name: 'chat-embed', path: '/embeds/chat/:id', component: BygChatEmbed },
   ],
   scrollBehavior(to, from) {
     // Save the scroll position of the page we're leaving

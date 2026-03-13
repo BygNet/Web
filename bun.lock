@@ -5,7 +5,7 @@
     "": {
       "name": "byg-web",
       "dependencies": {
-        "@bygnet/types": "^1.4.0",
+        "@bygnet/types": "^1.4.2",
         "@eslint/compat": "^2.0.1",
         "@iconify/vue": "^5.0.0",
         "@typescript-eslint/parser": "^8.53.0",
@@ -238,7 +238,7 @@
 
     "@bufbuild/protobuf": ["@bufbuild/protobuf@2.10.2", "", {}, "sha512-uFsRXwIGyu+r6AMdz+XijIIZJYpoWeYzILt5yZ2d3mCjQrWUTVpVD9WL/jZAbvp+Ed04rOhrsk7FiTcEDseB5A=="],
 
-    "@bygnet/types": ["@bygnet/types@1.4.0", "", { "dependencies": { "@opk/ts-pkg": "^0.6.1", "prettier": "^3.8.1" } }, "sha512-O/ccNfWDfqwITsJudqjFlfQAHQMca9A6W3YGZlkIoxkB3GASHphE9K4+2IygLm3H/JsOk37umIjx/4IU5yKQUw=="],
+    "@bygnet/types": ["@bygnet/types@1.4.2", "", { "dependencies": { "@opk/ts-pkg": "^0.6.1", "prettier": "^3.8.1" } }, "sha512-qZTxTQ7LdLMKSuYrqcR6S/7oYINRWKASvOJJPcPNMsSwAE+KqYzPKm2Pod7J9d68Pmd+BfBv9lKJgBpBFgEy1A=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.27.2", "", { "os": "aix", "cpu": "ppc64" }, "sha512-GZMB+a0mOMZs4MpDbj8RJp4cw+w1WV5NYD6xzgvzUJ5Ek2jerwfO2eADyI6ExDSUED+1X8aMbegahsJi+8mgpw=="],
 

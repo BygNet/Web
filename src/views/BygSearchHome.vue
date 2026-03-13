@@ -6,9 +6,15 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { showingNavigation } from '@/data/visibility.ts'
+  import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   const router = useRouter()
   const query = ref('')
+
+  setHeadMeta({
+    page: 'Search',
+    subtitle: 'Search the web privately.',
+  })
 
   async function submitSearch() {
     if (!query.value.trim()) return
