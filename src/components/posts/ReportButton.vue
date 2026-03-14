@@ -11,7 +11,6 @@
 <template>
   <button class="reportButton" @click="showReportPopup()">
     <Icon icon="solar:flag-line-duotone" />
-    Report
   </button>
 </template>
 

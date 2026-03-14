@@ -8,6 +8,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import ReportButton from '@/components/posts/ReportButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
+  import { capitalize } from '@/utils/formatters.ts'
 
   const props = defineProps<{
     user: BygUser
@@ -118,7 +119,8 @@
           Edit Profile
         </button>
 
-        <!-- Bio -->
+        <!-- Bio & Sub -->
+        <p class="light">Byg {{ capitalize(user.subscriptionState) }}</p>
         <p v-if="user.bio" class="bio">{{ user.bio }}</p>
 
         <!-- Stats -->

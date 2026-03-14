@@ -18,8 +18,7 @@
       <RouterLink to="/">
         <HStack class="bygLogo">
           <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />
-          <h1>Byg β</h1>
-          <p class="light">This is Byg Platform.</p>
+          <h1>Byg</h1>
         </HStack>
       </RouterLink>
 
@@ -111,7 +110,16 @@
     padding: var(--padding)
     height: 100vh
     overflow-y: scroll
-    border-right: 0.2rem solid themes.$foregroundColor
+    background: linear-gradient(to left, themes.$backgroundColor, themes.$foregroundColor)
+    animation: slideIn 0.3s ease-in-out
+
+    @keyframes slideIn
+      from
+        transform: translateX(-100%)
+        opacity: 0.4
+      to
+        transform: translateX(0)
+        opacity: 1
 
     .header
       gap: 1rem

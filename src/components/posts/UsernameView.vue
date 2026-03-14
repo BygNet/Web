@@ -6,7 +6,6 @@
   import HStack from '@/components/layout/HStack.vue'
   import { fetchProfileByUsername } from '@/data/profiles'
   import { StaffUsers } from '@/data/users.ts'
-  import { capitalize } from '@/utils/formatters.ts'
 
   const props = defineProps<{
     name: string
@@ -96,7 +95,6 @@
       v-if="subscriptionState && subscriptionState !== 'free'"
     >
       <Icon icon="solar:crown-star-line-duotone" />
-      {{ capitalize(subscriptionState).replace('_legacy', '') }}
     </HStack>
 
     <button class="followButton" @click="viewProfile" v-if="!displayMode">
@@ -132,9 +130,9 @@
       gap: 0
       background: themes.$accentColor
 
-      &.staff, &.author, &.subscription
+      &.staff, &.author
         padding: 0.15rem 0.35rem
-      &.verified
+      &.verified, &.subscription
         padding: 0.35rem
       &.subscription
         background: rgba(255, 215, 0, 0.6)

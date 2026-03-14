@@ -2,9 +2,10 @@
   import '@/utils/randomElement.ts'
 
   import type { BygAd } from '@bygnet/types'
-  import { onMounted } from 'vue'
+  import { onMounted, type Ref, ref } from 'vue'
 
   import ShareModal from '@/components/messages/ShareModal.vue'
+  import Byg2Modal from '@/components/modals/Byg2Modal.vue'
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import MobileNav from '@/components/nav/MobileNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
@@ -17,8 +18,11 @@
     showingReportPopup,
   } from '@/data/visibility.ts'
   import { consoleWarn } from '@/utils/consoleWarn.ts'
+  import { getFlag } from '@/utils/setUserFlag.ts'
   import CreateView from '@/views/CreateView.vue'
   import ReportView from '@/views/ReportView.vue'
+
+  const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
 
   onMounted(async () => {
     consoleWarn()
@@ -35,6 +39,7 @@
   <CreateView v-if="showingCreateModal" />
   <ReportView v-if="showingReportPopup" />
   <ShareModal v-if="showingShareModal" />
+  <Byg2Modal v-if="showingByg2Alpha" @close="showingByg2Alpha = false" />
 
   <DesktopNav v-if="showingNavigation" />
   <main>

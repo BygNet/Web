@@ -145,7 +145,7 @@
 
       <VStack class="targetsSection fullWidth">
         <HStack class="fullWidth autoSpace">
-          <h3>Send in Messages</h3>
+          <h3>Send in Chat</h3>
           <button @click="loadShareTargets">
             <Icon icon="solar:refresh-line-duotone" />
           </button>
@@ -223,14 +223,11 @@
     width: 24rem
     max-width: calc(100vw - 1rem)
     padding: 1rem
-    border-radius: 1.5rem
+    border-radius: 2rem
     align-items: flex-start
     gap: 0.75rem
 
   .shareItemPreview
-    @include utils.itemBackground
-    --cornerRadius: 1rem
-
     align-items: flex-start
     gap: 0
 

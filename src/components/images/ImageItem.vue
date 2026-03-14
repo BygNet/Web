@@ -88,9 +88,13 @@
 
     &:not(.detail)
       @include utils.itemBackground
+      padding: 0
 
       img
         border-radius: 1rem
+
+      .info
+        padding: 0 0.75rem 0.75rem
 
     &.detail
       cursor: default
