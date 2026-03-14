@@ -16,10 +16,9 @@
   <Modal>
     <VStack class="byg2Modal">
       <h2>Welcome to Byg 2.0!</h2>
-      <p>
-        Byg 2.0 is still a work in progress, but you'll probably see some
-        changes to the UI!
-      </p>
+
+      <!-- prettier-ignore -->
+      <p>Byg 2.0 is still a work in progress, but you'll probably see some changes to the UI!</p>
       <p>Feedback? Contact us via Byg Chat.</p>
 
       <ModalActions>

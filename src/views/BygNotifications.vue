@@ -26,7 +26,7 @@
   title.value = 'Notifications'
   setHeadMeta({
     page: 'Notifications',
-    subtitle: 'See recent follows and comments.',
+    subtitle: 'See recent follows, comments, and chats.',
   })
 
   const notifications: Ref<BygNotification[]> = ref([])

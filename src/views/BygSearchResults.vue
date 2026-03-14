@@ -424,6 +424,9 @@
   @use "@/styles/themes"
   @use "@/styles/variables"
 
+  :deep(.bygSearchResults)
+    margin-top: env(safe-area-inset-top)
+
   .searchHeaderCard, .searchLandingCard, .searchResultsSection
     width: 100%
     max-width: 60rem

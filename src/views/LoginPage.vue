@@ -21,7 +21,7 @@
 
     try {
       await login(email.value, password.value)
-      await router.push({ name: 'profile' })
+      await router.push({ name: 'after-login' })
     } catch {
       error.value = 'Invalid email or password'
     } finally {

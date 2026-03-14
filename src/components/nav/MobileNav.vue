@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { type Ref, ref } from 'vue'
+  import { ProgressiveBlur } from 'vue-progressive-blur'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
@@ -21,6 +22,7 @@
       v-if="!extendedDisplayMode"
     >
       <Icon icon="mingcute:add-fill" />
+      Create...
     </button>
 
     <HStack class="mobileNavItems" :class="{ extended: extendedDisplayMode }">
@@ -58,6 +60,8 @@
         <p>{{ extendedDisplayMode ? 'Less' : 'More' }}</p>
       </VStack>
     </HStack>
+
+    <ProgressiveBlur :blur="24" :border-radius="0" class="navBlur" />
   </div>
 </template>
 
@@ -69,15 +73,16 @@
     --bottom: calc(max(env(safe-area-inset-bottom), 1rem) - var(--padding))
 
     display: none
-    flex-direction: row
     flex-wrap: wrap
-    justify-content: space-between
+    align-items: flex-end
     gap: 1rem
     position: sticky
-    bottom: var(--bottom)
+    bottom: 0
     padding: 0 0.5rem
     z-index: 5001
     width: 100%
+    border-radius: 0
+    background: linear-gradient(to top, themes.$backgroundColor, transparent)
 
     .createButton
       svg
@@ -87,32 +92,19 @@
           transform: rotate(45deg)
 
     .mobileNavItems
-      --borderRadius: 10rem
-
-      background: themes.$foregroundColor
-      backdrop-filter: blur(0.25rem)
-      border-radius: var(--borderRadius)
+      width: 100%
       padding: 0.25rem
       gap: 0
-
-      &::after
-        content: ""
-        position: absolute
-        top: 0
-        left: 0
-        right: 0
-        bottom: 0
-        border: 0.1rem solid themes.$foregroundColor
-        border-radius: var(--borderRadius)
-        mask: conic-gradient(#000000 0%, #000000 15%, rgba(255,255,255,0) 22%, #000000 28%, rgba(0,0,0,1) 66%, rgba(255,255,255,0) 72%, #000000 78%, #000000 100%)
-        pointer-events: none
+      justify-content: space-around
+      margin-bottom: var(--bottom)
 
       &.extended
-        --borderRadius: 1.5rem
-
+        border-radius: 1.5rem
         width: 100%
         flex-direction: column
         align-items: flex-start
+        background: themes.$foregroundColor
+        backdrop-filter: blur(0.25rem)
 
         .mobileNavItem
           flex-direction: row
@@ -128,16 +120,23 @@
         gap: 0
         border-radius: 10rem
 
-        &.selected
-          padding: 0.45rem 0.5rem
-          background: themes.$foregroundColor
+        &.selected *
+          color: themes.$accentColor
 
         svg
-          width: 1.5rem
-          height: 1.5rem
+          width: 1.75rem
+          height: 1.75rem
 
         p
-          font-size: x-small
+          font-size: 0.75rem
+
+    .navBlur
+      position: absolute
+      bottom: 0
+      width: 100%
+      height: 100%
+      z-index: -1
+      border-radius: var(--borderRadius)
 
   @media (max-width: variables.$mobileWidth)
     .bygMobileNav

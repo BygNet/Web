@@ -2,14 +2,17 @@
   import '@/utils/randomElement.ts'
 
   import type { BygAd } from '@bygnet/types'
-  import { onMounted, type Ref, ref } from 'vue'
+  import { computed, onMounted, type Ref, ref } from 'vue'
 
+  import { auth } from '@/auth/session.ts'
   import ShareModal from '@/components/messages/ShareModal.vue'
   import Byg2Modal from '@/components/modals/Byg2Modal.vue'
+  import NotificationsModal from '@/components/modals/NotificationsModal.vue'
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import MobileNav from '@/components/nav/MobileNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
   import { adCache } from '@/data/caches.ts'
+  import { getPushPermissionState } from '@/data/pushAlerts.ts'
   import { showingShareModal } from '@/data/share'
   import { loadTheme } from '@/data/themes.ts'
   import {
@@ -23,10 +26,24 @@
   import ReportView from '@/views/ReportView.vue'
 
   const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
+  const pushPermission: Ref<NotificationPermission | 'unsupported'> =
+    ref('unsupported')
+  const showingNotificationsModal: Ref<boolean> = ref(false)
+  const canEnablePush = computed(() => {
+    return (
+      pushPermission.value === 'default' || pushPermission.value === 'granted'
+    )
+  })
+  const pushEnabled = computed(() => pushPermission.value === 'granted')
 
   onMounted(async () => {
     consoleWarn()
     loadTheme()
+    pushPermission.value = getPushPermissionState()
+
+    if (canEnablePush.value && !pushEnabled.value && auth.token) {
+      showingNotificationsModal.value = true
+    }
 
     const adsRes: Response = await fetch(
       `${import.meta.env.VITE_ADS_BASE}/index.json`
@@ -40,6 +57,10 @@
   <ReportView v-if="showingReportPopup" />
   <ShareModal v-if="showingShareModal" />
   <Byg2Modal v-if="showingByg2Alpha" @close="showingByg2Alpha = false" />
+  <NotificationsModal
+    v-if="showingNotificationsModal && !showingByg2Alpha"
+    @close="showingNotificationsModal = false"
+  />
 
   <DesktopNav v-if="showingNavigation" />
   <main>
