@@ -7,6 +7,7 @@
   import { auth } from '@/auth/session.ts'
   import ShareModal from '@/components/messages/ShareModal.vue'
   import Byg2Modal from '@/components/modals/Byg2Modal.vue'
+  import CookieBanner from '@/components/modals/CookieBanner.vue'
   import NotificationsModal from '@/components/modals/NotificationsModal.vue'
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import MobileNav from '@/components/nav/MobileNav.vue'
@@ -16,7 +17,8 @@
   import { showingShareModal } from '@/data/share'
   import { loadTheme } from '@/data/themes.ts'
   import {
-    blurContent, showingCookieBanner,
+    blurContent,
+    showingCookieBanner,
     showingCreateModal,
     showingNavigation,
     showingReportPopup,
@@ -25,7 +27,6 @@
   import { getFlag } from '@/utils/setUserFlag.ts'
   import CreateView from '@/views/CreateView.vue'
   import ReportView from '@/views/ReportView.vue'
-  import CookieBanner from "@/components/modals/CookieBanner.vue";
 
   const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
@@ -60,7 +61,10 @@
   <ReportView v-if="showingReportPopup" />
   <ShareModal v-if="showingShareModal" />
   <Byg2Modal v-if="showingByg2Alpha" @close="showingByg2Alpha = false" />
-  <CookieBanner v-if="showingCookieBanner" @close="showingCookieBanner = false" />
+  <CookieBanner
+    v-if="showingCookieBanner"
+    @close="showingCookieBanner = false"
+  />
   <NotificationsModal
     v-if="showingNotificationsModal && !showingByg2Alpha"
     @close="showingNotificationsModal = false"
