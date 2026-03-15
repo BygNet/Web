@@ -3,4 +3,5 @@ import { type Ref, ref } from 'vue'
 export const showingCreateModal: Ref<boolean> = ref(false)
 export const showingReportPopup: Ref<boolean> = ref(false)
 export const showingNavigation: Ref<boolean> = ref(true)
+export const showingCookieBanner: Ref<boolean> = ref(false)
 export const blurContent: Ref<boolean> = ref(false)

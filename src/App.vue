@@ -16,7 +16,7 @@
   import { showingShareModal } from '@/data/share'
   import { loadTheme } from '@/data/themes.ts'
   import {
-    blurContent,
+    blurContent, showingCookieBanner,
     showingCreateModal,
     showingNavigation,
     showingReportPopup,
@@ -25,6 +25,7 @@
   import { getFlag } from '@/utils/setUserFlag.ts'
   import CreateView from '@/views/CreateView.vue'
   import ReportView from '@/views/ReportView.vue'
+  import CookieBanner from "@/components/modals/CookieBanner.vue";
 
   const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
@@ -41,6 +42,7 @@
     consoleWarn()
     loadTheme()
     pushPermission.value = getPushPermissionState()
+    showingCookieBanner.value = getFlag('showCookieBanner', true)
 
     if (canEnablePush.value && !pushEnabled.value && auth.token) {
       showingNotificationsModal.value = true
@@ -58,6 +60,7 @@
   <ReportView v-if="showingReportPopup" />
   <ShareModal v-if="showingShareModal" />
   <Byg2Modal v-if="showingByg2Alpha" @close="showingByg2Alpha = false" />
+  <CookieBanner v-if="showingCookieBanner" @close="showingCookieBanner = false" />
   <NotificationsModal
     v-if="showingNotificationsModal && !showingByg2Alpha"
     @close="showingNotificationsModal = false"
