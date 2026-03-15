@@ -5,7 +5,7 @@ node_modules
 bun.lock
 LICENSE.txt
 README.md
-.env
+.env.example
 .vscode
 .idea
 public
