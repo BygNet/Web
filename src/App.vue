@@ -16,6 +16,7 @@
   import { showingShareModal } from '@/data/share'
   import { loadTheme } from '@/data/themes.ts'
   import {
+    blurContent,
     showingCreateModal,
     showingNavigation,
     showingReportPopup,
@@ -62,8 +63,12 @@
     @close="showingNotificationsModal = false"
   />
 
-  <DesktopNav v-if="showingNavigation" />
-  <main>
+  <DesktopNav
+    class="blurrable"
+    v-if="showingNavigation"
+    :class="{ blurred: blurContent }"
+  />
+  <main class="blurrable" :class="{ blurred: blurContent }">
     <TitleView v-if="showingNavigation" />
     <RouterView />
     <MobileNav v-if="showingNavigation" />
@@ -85,6 +90,12 @@
     gap: 1rem
     overflow-y: scroll
     scrollbar-width: none
+
+  .blurrable
+    transition: 0.1s ease
+
+    &.blurred
+      filter: blur(0.5rem)
 
   @media (max-width: variables.$mobileWidth)
     main

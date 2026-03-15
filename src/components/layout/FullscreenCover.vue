@@ -23,8 +23,6 @@
     z-index: 5
 
     opacity: 0
-    background: rgba(73, 73, 73, 0.15)
-    backdrop-filter: blur(0.25rem)
     border-radius: 0
     animation: opacity 0.2s ease forwards
 

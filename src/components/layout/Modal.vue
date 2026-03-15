@@ -1,5 +1,15 @@
 <script setup lang="ts">
+  import { onMounted, onUnmounted } from 'vue'
+
   import FullscreenCover from '@/components/layout/FullscreenCover.vue'
+  import { blurContent } from '@/data/visibility.ts'
+
+  onMounted(() => {
+    blurContent.value = true
+  })
+  onUnmounted(() => {
+    blurContent.value = false
+  })
 </script>
 
 <template>
