@@ -14,6 +14,7 @@ import BygSearchHome from '@/views/BygSearchHome.vue'
 import BygSearchResults from '@/views/BygSearchResults.vue'
 import BygSettings from '@/views/BygSettings.vue'
 import BygSocial from '@/views/BygSocial.vue'
+import BygTab from '@/views/BygTab.vue'
 import BygTerms from '@/views/BygTerms.vue'
 import ImageDetails from '@/views/ImageDetails.vue'
 import LoginPage from '@/views/LoginPage.vue'
@@ -72,6 +73,7 @@ const router: Router = createRouter({
       path: '/search/results',
       component: BygSearchResults,
     },
+    { name: 'tab', path: '/tab', component: BygTab },
     {
       name: 'settings',
       path: '/settings',

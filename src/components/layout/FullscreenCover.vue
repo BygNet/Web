@@ -20,7 +20,7 @@
     height: 100dvh
     align-items: center
     justify-content: center
-    z-index: 5
+    z-index: 10
 
     opacity: 0
     border-radius: 0

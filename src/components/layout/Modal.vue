@@ -4,7 +4,12 @@
   import FullscreenCover from '@/components/layout/FullscreenCover.vue'
   import { blurContent } from '@/data/visibility.ts'
 
+  const props = defineProps<{
+    independent?: boolean
+  }>()
+
   onMounted(() => {
+    if (props.independent) return
     blurContent.value = true
   })
   onUnmounted(() => {
@@ -13,7 +18,7 @@
 </script>
 
 <template>
-  <FullscreenCover class="modalCover">
+  <FullscreenCover class="modalCover" :class="{ blurred: independent }">
     <div class="modalContent">
       <slot />
     </div>
@@ -25,6 +30,9 @@
     --margin: 1.5rem
     z-index: 500
     padding: var(--margin) 0
+
+    &.blurred
+      backdrop-filter: blur(0.5rem)
 
     .modalContent
       width: fit-content
