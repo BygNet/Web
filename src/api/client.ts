@@ -1,4 +1,4 @@
-import { auth } from '@/auth/session'
+import { auth, clearActiveSession } from '@/auth/session'
 import { clearUserCaches } from '@/data/caches'
 
 export async function api(path: string, options: RequestInit = {}) {
@@ -16,9 +16,7 @@ export async function api(path: string, options: RequestInit = {}) {
   })
 
   if (res.status === 401) {
-    auth.token = null
-    auth.user = null
-    localStorage.removeItem('token')
+    clearActiveSession()
     clearUserCaches()
   }
 

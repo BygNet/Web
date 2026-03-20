@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import { computed, onMounted, type Ref, ref } from 'vue'
+  import { computed, onMounted, type Ref, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
   import { logout } from '@/auth/logout'
@@ -9,6 +9,7 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
   import { fetchCurrentUserProfile } from '@/data/profiles'
   import { BygThemes, currentThemeKey, setTheme } from '@/data/themes.ts'
@@ -19,6 +20,7 @@
   setHeadMeta({ page: 'Profile', subtitle: 'Your Byg profile.' })
   const router = useRouter()
   const isLoggedIn = computed(() => !!auth.user)
+  const hasAccounts = computed(() => auth.accounts.length > 0)
   const showingAppearances: Ref<boolean> = ref(false)
   const profile: Ref<BygProfile | null> = ref(null)
   const AppVersion = __AppVersion
@@ -49,6 +51,18 @@
       loadProfile()
     }
   })
+
+  watch(
+    () => auth.user?.id,
+    async (nextId, previousId) => {
+      if (!nextId) {
+        profile.value = null
+        return
+      }
+      if (nextId === previousId) return
+      await loadProfile({ force: true })
+    }
+  )
 </script>
 
 <template>
@@ -129,13 +143,13 @@
         :following-count="profile.followingCount"
         @edit-profile="goSettings"
       />
+    </VStack>
 
-      <VStack class="accountInfo fullWidth">
-        <button class="logout fullWidth" @click="doLogout">
-          <Icon icon="solar:logout-2-line-duotone" />
-          Log out
-        </button>
-      </VStack>
+    <VStack v-if="hasAccounts" class="accountSwitcherSection fullWidth">
+      <HStack class="autoSpace">
+        <h3>Accounts</h3>
+      </HStack>
+      <AccountSwitcher variant="profile" />
     </VStack>
 
     <h4>Byg Client: {{ AppVersion }}</h4>
@@ -203,4 +217,8 @@
 
       .themeInfo
         gap: 0
+
+  .accountSwitcherSection
+    @include utils.maxPostPaddedWidth
+    @include utils.itemBackground
 </style>

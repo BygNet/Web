@@ -4,6 +4,7 @@
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
   import { BygPages, MorePages } from '@/data/pages.ts'
   import router from '@/router.ts'
   import { openCreateModal } from '@/utils/createModalManager.ts'
@@ -78,16 +79,20 @@
       </VStack>
     </VStack>
 
-    <HStack class="footer fullWidth autoSpace">
-      <a href="https://git.new/bygpl" target="_blank">
-        <HStack>
-          <Icon icon="solar:code-line-duotone" />
-          GitHub
-        </HStack>
-      </a>
+    <VStack class="accountSection">
+      <AccountSwitcher class="accountWidget" />
 
-      {{ AppVersion }}
-    </HStack>
+      <HStack class="footer fullWidth autoSpace">
+        <a href="https://git.new/bygpl" target="_blank">
+          <HStack>
+            <Icon icon="solar:code-line-duotone" />
+            GitHub
+          </HStack>
+        </a>
+
+        {{ AppVersion }}
+      </HStack>
+    </VStack>
   </nav>
 </template>
 
@@ -177,6 +182,10 @@
       svg
         width: 1.5rem
         height: 1.5rem
+
+  .accountSection
+    gap: 1rem
+    width: 100%
 
   @media (min-width: variables.$mobileWidth)
     .desktopNav

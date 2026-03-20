@@ -161,12 +161,15 @@ function writeShareTargetsDeviceCache(
   writeLocalCache(shareTargetsCacheKey(userId), cache)
 }
 
-function clearDeviceMessageCache(): void {
+function clearDeviceMessageCache(userId?: number): void {
   try {
     const keysToRemove: string[] = []
+    const prefix = userId
+      ? `${MESSAGE_STORAGE_PREFIX}:${userId}:`
+      : `${MESSAGE_STORAGE_PREFIX}:`
     for (let index = 0; index < localStorage.length; index += 1) {
       const key = localStorage.key(index)
-      if (!key || !key.startsWith(`${MESSAGE_STORAGE_PREFIX}:`)) {
+      if (!key || !key.startsWith(prefix)) {
         continue
       }
       keysToRemove.push(key)
@@ -195,7 +198,7 @@ function buildMessagesSocketUrl(): string {
 }
 
 export function clearMessagesState(
-  options: { clearDevice?: boolean } = {}
+  options: { clearDevice?: boolean; userId?: number } = {}
 ): void {
   threadsCache = null
   shareTargetsCache = null
@@ -204,7 +207,7 @@ export function clearMessagesState(
   shareTargetRequest = null
   conversationRequests.clear()
   if (options.clearDevice) {
-    clearDeviceMessageCache()
+    clearDeviceMessageCache(options.userId)
   }
 }
 
