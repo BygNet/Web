@@ -7,7 +7,7 @@
   import { auth, removeAccount, setActiveAccount } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import UsernameView from "@/components/posts/UsernameView.vue";
+  import UsernameView from '@/components/posts/UsernameView.vue'
 
   const props = defineProps<{
     variant?: 'sidebar' | 'profile'
@@ -22,7 +22,10 @@
 
   const activeAccount = computed(() => {
     if (auth.activeAccountId === null) return null
-    return accounts.value.find(account => account.id === auth.activeAccountId) ?? null
+    return (
+      accounts.value.find(account => account.id === auth.activeAccountId) ??
+      null
+    )
   })
 
   const isExpanded = computed(() => {
@@ -67,7 +70,10 @@
     >
       <HStack class="activeAccountMain">
         <VStack class="accountInfo noSpace">
-          <UsernameView :name="activeAccount.user.username" hide-follow-button />
+          <UsernameView
+            :name="activeAccount.user.username"
+            hide-follow-button
+          />
           <p class="light">{{ activeAccount.user.email }}</p>
         </VStack>
       </HStack>
@@ -135,7 +141,11 @@
           <Icon icon="solar:user-plus-rounded-line-duotone" />
           Add
         </button>
-        <button v-if="activeAccount" class="logoutAccount" @click="logoutActive">
+        <button
+          v-if="activeAccount"
+          class="logoutAccount"
+          @click="logoutActive"
+        >
           <Icon icon="solar:logout-2-line-duotone" />
           Log Out
         </button>

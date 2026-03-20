@@ -98,7 +98,11 @@
       <Icon icon="solar:crown-star-line-duotone" />
     </HStack>
 
-    <button class="followButton" @click="viewProfile" v-if="!displayMode && !hideFollowButton">
+    <button
+      class="followButton"
+      @click="viewProfile"
+      v-if="!displayMode && !hideFollowButton"
+    >
       <Icon icon="solar:user-check-line-duotone" />
       {{ following ? 'Following' : 'Follow' }}
     </button>

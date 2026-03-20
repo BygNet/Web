@@ -26,7 +26,12 @@ export async function ensureHydratedSession(
     return true
   }
 
-  if (!options.force && sessionHydrated && auth.user && hydratedToken === auth.token) {
+  if (
+    !options.force &&
+    sessionHydrated &&
+    auth.user &&
+    hydratedToken === auth.token
+  ) {
     return true
   }
 

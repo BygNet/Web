@@ -19,7 +19,9 @@ export interface AuthAccount {
   lastUsed: number
 }
 
-function normalizeUser(user: Partial<AuthUser> | null | undefined): AuthUser | null {
+function normalizeUser(
+  user: Partial<AuthUser> | null | undefined
+): AuthUser | null {
   if (!user) return null
   if (typeof user.id !== 'number' || !Number.isFinite(user.id)) return null
   if (typeof user.username !== 'string' || !user.username.trim()) return null
@@ -39,7 +41,8 @@ function normalizeUser(user: Partial<AuthUser> | null | undefined): AuthUser | n
 function normalizeAccount(raw: unknown): AuthAccount | null {
   if (!raw || typeof raw !== 'object') return null
   const candidate = raw as Partial<AuthAccount>
-  if (typeof candidate.token !== 'string' || !candidate.token.trim()) return null
+  if (typeof candidate.token !== 'string' || !candidate.token.trim())
+    return null
   const user = normalizeUser(candidate.user)
   if (!user) return null
 
@@ -48,7 +51,8 @@ function normalizeAccount(raw: unknown): AuthAccount | null {
     token: candidate.token,
     user,
     lastUsed:
-      typeof candidate.lastUsed === 'number' && Number.isFinite(candidate.lastUsed)
+      typeof candidate.lastUsed === 'number' &&
+      Number.isFinite(candidate.lastUsed)
         ? candidate.lastUsed
         : 0,
   }
@@ -125,7 +129,7 @@ function resolveInitialSession(): void {
   const storedActive =
     storedActiveId === null
       ? null
-      : auth.accounts.find(account => account.id === storedActiveId) ?? null
+      : (auth.accounts.find(account => account.id === storedActiveId) ?? null)
   if (storedActive) {
     applyActiveAccount(storedActive)
     return
@@ -150,7 +154,9 @@ resolveInitialSession()
 
 export function getActiveAccount(): AuthAccount | null {
   if (auth.activeAccountId === null) return null
-  return auth.accounts.find(account => account.id === auth.activeAccountId) ?? null
+  return (
+    auth.accounts.find(account => account.id === auth.activeAccountId) ?? null
+  )
 }
 
 export function setActiveAccount(accountId: number | null): void {

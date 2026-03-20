@@ -15,7 +15,10 @@
   import TitleView from '@/components/nav/TitleView.vue'
   import { adCache } from '@/data/caches.ts'
   import { loadNotificationReadState } from '@/data/notifications'
-  import { getPushPermissionState, syncPushSubscription } from '@/data/pushAlerts.ts'
+  import {
+    getPushPermissionState,
+    syncPushSubscription,
+  } from '@/data/pushAlerts.ts'
   import { showingShareModal } from '@/data/share'
   import { loadTheme } from '@/data/themes.ts'
   import {
