@@ -1,12 +1,14 @@
 import { api } from '@/api/client'
-import { auth } from '@/auth/session'
+import { auth, clearActiveSession, upsertAccount } from '@/auth/session'
 
 let sessionHydrated = false
 let hydrationPromise: Promise<boolean> | null = null
+let hydratedToken: string | null = null
 
 export function clearHydratedSessionState(): void {
   sessionHydrated = false
   hydrationPromise = null
+  hydratedToken = null
 }
 
 export async function ensureHydratedSession(
@@ -20,10 +22,16 @@ export async function ensureHydratedSession(
 
   if (!options.force && auth.user) {
     sessionHydrated = true
+    hydratedToken = auth.token
     return true
   }
 
-  if (!options.force && sessionHydrated && auth.user) {
+  if (
+    !options.force &&
+    sessionHydrated &&
+    auth.user &&
+    hydratedToken === auth.token
+  ) {
     return true
   }
 
@@ -38,14 +46,19 @@ export async function ensureHydratedSession(
         throw new Error('Unauthorized')
       }
 
-      auth.user = await res.json()
+      const user = await res.json()
+      const token = auth.token
+      if (!token) {
+        throw new Error('Missing token during hydration')
+      }
+      upsertAccount(token, user)
       sessionHydrated = true
+      hydratedToken = token
       return true
     } catch {
-      auth.token = null
-      auth.user = null
-      localStorage.removeItem('token')
+      clearActiveSession()
       sessionHydrated = false
+      hydratedToken = null
       return false
     } finally {
       hydrationPromise = null

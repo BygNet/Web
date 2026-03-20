@@ -1,5 +1,5 @@
 import { api } from '@/api/client'
-import { auth } from '@/auth/session'
+import { upsertAccount } from '@/auth/session'
 import { fetchCurrentUserProfile } from '@/data/profiles'
 import { syncPushSubscription } from '@/data/pushAlerts'
 
@@ -13,10 +13,7 @@ export async function login(email: string, password: string): Promise<void> {
 
   const data = await res.json()
 
-  auth.token = data.token
-  auth.user = data.user
-
-  localStorage.setItem('token', data.token)
+  upsertAccount(data.token, data.user)
   fetchCurrentUserProfile()
     .then((): void => {})
     .catch((): void => {})

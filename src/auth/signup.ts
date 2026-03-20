@@ -1,5 +1,5 @@
 import { api } from '@/api/client.ts'
-import { auth } from '@/auth/session.ts'
+import { upsertAccount } from '@/auth/session.ts'
 import { fetchCurrentUserProfile } from '@/data/profiles'
 import { syncPushSubscription } from '@/data/pushAlerts'
 
@@ -21,10 +21,7 @@ export async function signup(
 
   const data = await res.json()
 
-  auth.token = data.token
-  auth.user = data.user
-
-  localStorage.setItem('token', data.token)
+  upsertAccount(data.token, data.user)
   fetchCurrentUserProfile()
     .then((): void => {})
     .catch((): void => {})

@@ -2,8 +2,9 @@
   import '@/utils/randomElement.ts'
 
   import type { BygAd } from '@bygnet/types'
-  import { computed, onMounted, type Ref, ref } from 'vue'
+  import { computed, onMounted, type Ref, ref, watch } from 'vue'
 
+  import { resetActiveAccountState } from '@/auth/accountState'
   import { auth } from '@/auth/session.ts'
   import ShareModal from '@/components/messages/ShareModal.vue'
   import Byg2Modal from '@/components/modals/Byg2Modal.vue'
@@ -13,7 +14,11 @@
   import MobileNav from '@/components/nav/MobileNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
   import { adCache } from '@/data/caches.ts'
-  import { getPushPermissionState } from '@/data/pushAlerts.ts'
+  import { loadNotificationReadState } from '@/data/notifications'
+  import {
+    getPushPermissionState,
+    syncPushSubscription,
+  } from '@/data/pushAlerts.ts'
   import { showingShareModal } from '@/data/share'
   import { loadTheme } from '@/data/themes.ts'
   import {
@@ -32,6 +37,7 @@
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
     ref('unsupported')
   const showingNotificationsModal: Ref<boolean> = ref(false)
+  const activeAccountKey = computed(() => auth.activeAccountId ?? 'guest')
   const canEnablePush = computed(() => {
     return (
       pushPermission.value === 'default' || pushPermission.value === 'granted'
@@ -54,6 +60,21 @@
     )
     adCache.value = (await adsRes.json()) as BygAd[]
   })
+
+  watch(
+    () => auth.activeAccountId,
+    async (next, previous) => {
+      if (next === previous) return
+      resetActiveAccountState()
+      loadNotificationReadState()
+      if (!auth.token) return
+      try {
+        await syncPushSubscription()
+      } catch (error) {
+        console.error('Push sync failed after account change', error)
+      }
+    }
+  )
 </script>
 
 <template>
@@ -77,7 +98,7 @@
   />
   <main class="blurrable" :class="{ blurred: blurContent }">
     <TitleView v-if="showingNavigation" />
-    <RouterView />
+    <RouterView :key="activeAccountKey" />
     <MobileNav v-if="showingNavigation" />
   </main>
 </template>

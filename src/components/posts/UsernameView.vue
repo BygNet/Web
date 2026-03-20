@@ -15,6 +15,7 @@
     following?: boolean
     avatarUrl?: string | null
     subscriptionState?: string | null
+    hideFollowButton?: boolean
   }>()
 
   const router = useRouter()
@@ -97,7 +98,11 @@
       <Icon icon="solar:crown-star-line-duotone" />
     </HStack>
 
-    <button class="followButton" @click="viewProfile" v-if="!displayMode">
+    <button
+      class="followButton"
+      @click="viewProfile"
+      v-if="!displayMode && !hideFollowButton"
+    >
       <Icon icon="solar:user-check-line-duotone" />
       {{ following ? 'Following' : 'Follow' }}
     </button>
