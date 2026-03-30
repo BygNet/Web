@@ -16,6 +16,7 @@ import BygSettings from '@/views/BygSettings.vue'
 import BygSocial from '@/views/BygSocial.vue'
 import BygTab from '@/views/BygTab.vue'
 import BygTerms from '@/views/BygTerms.vue'
+import BygVerification from '@/views/BygVerification.vue'
 import ImageDetails from '@/views/ImageDetails.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import MyBygProfile from '@/views/MyBygProfile.vue'
@@ -84,6 +85,7 @@ const router: Router = createRouter({
     { name: 'signup', path: '/signup', component: SignupPage },
     { name: 'after-login', path: '/after-login', component: AfterLogin },
     { name: 'pro', path: '/pro', component: BygPro },
+    { name: 'verification', path: '/verification', component: BygVerification },
     { name: 'apps-embed', path: '/embeds/apps', component: BygAppsEmbed },
     { name: 'chat-embed', path: '/embeds/chat/:id', component: BygChatEmbed },
   ],

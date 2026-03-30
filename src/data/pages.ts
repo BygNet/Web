@@ -46,4 +46,11 @@ export const MorePages: BygPage[] = [
     icon: 'solar:link-minimalistic-2-line-duotone',
     color: '#e03c72',
   },
+  {
+    title: 'Verification',
+    description: 'Get your verified checkmark!',
+    path: '/verification',
+    icon: 'solar:verified-check-line-duotone',
+    color: '#aa89e9',
+  },
 ]
