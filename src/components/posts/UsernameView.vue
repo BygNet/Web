@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { BygVerification } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { type Ref, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
@@ -6,10 +7,10 @@
   import HStack from '@/components/layout/HStack.vue'
   import { fetchProfileByUsername } from '@/data/profiles'
   import { StaffUsers } from '@/data/users.ts'
+  import { getVerificationColor } from '@/utils/verificationData.ts'
 
   const props = defineProps<{
     name: string
-    verified?: boolean
     author?: boolean
     displayMode?: boolean
     following?: boolean
@@ -20,6 +21,7 @@
 
   const router = useRouter()
   const isStaff: Ref<boolean> = ref(false)
+  const verification: Ref<BygVerification | null> = ref(null)
   const subscriptionState: Ref<string | null> = ref(null)
   const avatarUrl: Ref<string | null> = ref(null)
   let activeRequestId = 0
@@ -29,18 +31,12 @@
     avatarUrl.value = props.avatarUrl ?? null
     subscriptionState.value = props.subscriptionState ?? null
 
-    if (
-      props.avatarUrl !== undefined ||
-      props.subscriptionState !== undefined
-    ) {
-      return
-    }
-
     try {
       const profile = await fetchProfileByUsername(props.name)
       if (!profile || requestId !== activeRequestId) return
 
       subscriptionState.value = profile.user?.subscriptionState ?? null
+      verification.value = profile.user?.verification ?? null
       avatarUrl.value = profile.user?.avatarUrl ?? null
     } catch (err) {
       console.error(`Failed to fetch subscription for ${props.name}:`, err)
@@ -77,13 +73,19 @@
     </Component>
 
     <!-- Authenticity badges -->
+    <RouterLink to="/verification">
+      <Icon
+        v-if="verification"
+        class="verificationBadge"
+        :class="{ largeBadge: displayMode }"
+        icon="solar:verified-check-bold"
+        :style="{ color: getVerificationColor(verification) }"
+      />
+    </RouterLink>
+
     <HStack class="badge staff" v-if="isStaff">
       <Icon icon="solar:shield-check-line-duotone" />
       Staff
-    </HStack>
-
-    <HStack class="badge verified" v-if="verified">
-      <Icon icon="solar:verified-check-line-duotone" />
     </HStack>
 
     <HStack class="badge author" v-if="author">
@@ -131,13 +133,21 @@
         text-decoration: underline
         text-decoration-color: themes.$accentColor
 
+    .verificationBadge
+      width: 1.25rem
+      height: 1.25rem
+
+      &.largeBadge
+        width: 2.5rem
+        height: 2.5rem
+
     .badge
       gap: 0
       background: themes.$accentColor
 
       &.staff, &.author
         padding: 0.15rem 0.35rem
-      &.verified, &.subscription
+      &.subscription
         padding: 0.35rem
       &.subscription
         background: rgba(255, 215, 0, 0.6)
