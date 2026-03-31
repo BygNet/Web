@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { BygVerification } from '@bygnet/types'
+  import type { BygProfile, BygVerification } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { type Ref, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
@@ -13,6 +13,7 @@
     name: string
     author?: boolean
     displayMode?: boolean
+    minimal?: boolean
     following?: boolean
     avatarUrl?: string | null
     subscriptionState?: string | null
@@ -32,7 +33,9 @@
     subscriptionState.value = props.subscriptionState ?? null
 
     try {
-      const profile = await fetchProfileByUsername(props.name)
+      const profile = (await fetchProfileByUsername(
+        props.name
+      )) as BygProfile | null
       if (!profile || requestId !== activeRequestId) return
 
       subscriptionState.value = profile.user?.subscriptionState ?? null
@@ -83,21 +86,23 @@
       />
     </RouterLink>
 
-    <HStack class="badge staff" v-if="isStaff">
-      <Icon icon="solar:shield-check-line-duotone" />
-      Staff
-    </HStack>
+    <HStack class="badges" v-if="!minimal">
+      <HStack class="badge staff" v-if="isStaff">
+        <Icon icon="solar:shield-check-line-duotone" />
+        Staff
+      </HStack>
 
-    <HStack class="badge author" v-if="author">
-      <Icon icon="carbon:user-avatar-filled" />
-      Author
-    </HStack>
+      <HStack class="badge author" v-if="author">
+        <Icon icon="carbon:user-avatar-filled" />
+        Author
+      </HStack>
 
-    <HStack
-      class="badge subscription"
-      v-if="subscriptionState && subscriptionState !== 'free'"
-    >
-      <Icon icon="solar:crown-star-line-duotone" />
+      <HStack
+        class="badge subscription"
+        v-if="subscriptionState && subscriptionState !== 'free'"
+      >
+        <Icon icon="solar:crown-star-line-duotone" />
+      </HStack>
     </HStack>
 
     <button
@@ -140,6 +145,9 @@
       &.largeBadge
         width: 2.5rem
         height: 2.5rem
+
+    .badges
+      gap: 0.25rem
 
     .badge
       gap: 0

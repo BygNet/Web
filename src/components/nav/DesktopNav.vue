@@ -112,7 +112,7 @@
     width: 20rem
     flex-grow: 1
     gap: 2rem
-    padding: var(--padding)
+    padding: var(--padding) calc(var(--padding) / 2) var(--padding) var(--padding)
     height: 100vh
     overflow-y: scroll
     background: linear-gradient(to left, themes.$backgroundColor, themes.$foregroundColor)
@@ -173,11 +173,12 @@
 
     .morePages
       position: absolute
-      bottom: -5rem
+      bottom: -8rem
       background: themes.$foregroundOpaque
       border-radius: 1.5rem
       width: 100%
       padding: 0.75rem
+      z-index: 1000
 
       svg
         width: 1.5rem
@@ -186,6 +187,10 @@
   .accountSection
     gap: 1rem
     width: 100%
+
+    .accountWidget
+      @include outPad
+      width: calc(100% + 1.5rem)
 
   @media (min-width: variables.$mobileWidth)
     .desktopNav

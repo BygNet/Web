@@ -72,6 +72,7 @@
         <VStack class="accountInfo noSpace">
           <UsernameView
             :name="activeAccount.user.username"
+            minimal
             hide-follow-button
           />
           <p class="light">{{ activeAccount.user.email }}</p>
@@ -115,8 +116,11 @@
         >
           <HStack class="accountMain">
             <VStack class="accountInfo noSpace">
-              <UsernameView :name="account.user.username" hide-follow-button />
-              <p class="light">{{ account.user.email }}</p>
+              <UsernameView
+                :name="account.user.username"
+                minimal
+                hide-follow-button
+              />
             </VStack>
           </HStack>
 
