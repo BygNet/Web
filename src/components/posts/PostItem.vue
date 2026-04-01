@@ -135,7 +135,7 @@
       position: relative
 
       :deep(img)
-        width: 100%
+        max-width: 100%
         max-height: 28rem
         border-radius: 0.5rem
 
