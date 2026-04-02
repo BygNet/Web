@@ -10,6 +10,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
   import { fetchCurrentUserProfile } from '@/data/profiles'
+  import { taskList } from '@/data/tasks.ts'
   import {
     currentThemeKey,
     isThemeDark,
@@ -86,6 +87,7 @@
   }
 
   async function saveProfile() {
+    taskList.value.push('saving')
     isSaving.value = true
     saveMessage.value = null
     try {
@@ -111,6 +113,7 @@
         saveMessage.value = 'Failed to save profile'
       }
     } finally {
+      taskList.value.remove('saving')
       isSaving.value = false
     }
   }

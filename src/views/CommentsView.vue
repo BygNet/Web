@@ -12,6 +12,7 @@
   import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { fetchUserSuggestions } from '@/data/mentions'
+  import { taskList } from '@/data/tasks.ts'
   import router from '@/router.ts'
   import type { BygUserSuggestion } from '@/types/mentions'
   import { formatDate } from '@/utils/formatters.ts'
@@ -122,6 +123,7 @@
     }
 
     sendingComment.value = true
+    taskList.value.push('commenting')
 
     const res = await api(props.postUrl, {
       method: 'POST',
@@ -138,6 +140,7 @@
     await fetchComments()
 
     sendingComment.value = false
+    taskList.value.remove('commenting')
   }
 
   onMounted(() => {

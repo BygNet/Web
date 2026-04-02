@@ -13,6 +13,7 @@
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { imageReloader, reloader } from '@/data/events.ts'
   import { fetchUserSuggestions } from '@/data/mentions'
+  import { taskList } from '@/data/tasks.ts'
   import { showingCreateModal } from '@/data/visibility.ts'
   import type { BygUserSuggestion } from '@/types/mentions'
   import { formatDate } from '@/utils/formatters.ts'
@@ -105,6 +106,7 @@
       return
     }
 
+    taskList.value.push('posting')
     loading.value = true
     error.value = null
 
@@ -121,6 +123,7 @@
     })
 
     loading.value = false
+    taskList.value.remove('posting')
 
     if (!res.ok) {
       error.value = 'Failed to create post'
@@ -141,6 +144,7 @@
       return
     }
 
+    taskList.value.push('uploading')
     loading.value = true
     error.value = null
 
@@ -156,6 +160,7 @@
       }),
     })
 
+    taskList.value.remove('uploading')
     loading.value = false
 
     if (!res.ok) {

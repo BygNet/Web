@@ -6,6 +6,7 @@
   import { login } from '@/auth/login'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import { taskList } from '@/data/tasks.ts'
   import { title } from '@/data/title.ts'
 
   title.value = 'Login'
@@ -18,6 +19,7 @@
   async function submit() {
     error.value = null
     loading.value = true
+    taskList.value.push('login')
 
     try {
       await login(email.value, password.value)
@@ -26,6 +28,7 @@
       error.value = 'Invalid email or password'
     } finally {
       loading.value = false
+      taskList.value.remove('login')
     }
   }
 </script>

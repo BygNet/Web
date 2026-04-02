@@ -24,6 +24,7 @@
   } from '@/data/caches'
   import { reloader } from '@/data/events.ts'
   import { fetchCurrentUserProfile } from '@/data/profiles'
+  import { taskList } from '@/data/tasks.ts'
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
   import AdView from '@/views/AdView.vue'
@@ -61,6 +62,7 @@
         return
       }
 
+      taskList.value.push('loading posts')
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
       if (!res.ok) throw new Error('Failed to load posts')
 
@@ -70,8 +72,10 @@
       postCacheTime.value = Date.now()
       hasNewPosts.value = false
     } catch (err) {
+      taskList.value.remove('loading posts')
       error.value = 'Failed to load posts.'
     } finally {
+      taskList.value.remove('loading posts')
       isLoaded.value = true
     }
   }

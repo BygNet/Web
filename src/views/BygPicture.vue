@@ -9,6 +9,7 @@
   import SkeletonImage from '@/components/layout/skeletons/SkeletonImage.vue'
   import { IMAGE_CACHE_TTL, imageCache, imageCacheTime } from '@/data/caches'
   import { imageReloader } from '@/data/events.ts'
+  import { taskList } from '@/data/tasks.ts'
   import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
@@ -34,6 +35,7 @@
         return
       }
 
+      taskList.value.push('loading images')
       const res = await api('/latest-images')
       if (!res.ok) throw new Error()
 
@@ -42,8 +44,10 @@
       imageCache.value = data
       imageCacheTime.value = Date.now()
     } catch {
+      taskList.value.remove('loading images')
       error.value = `Failed to load images`
     } finally {
+      taskList.value.remove('loading images')
       loading.value = false
     }
   })
