@@ -24,6 +24,7 @@
   const comments: Ref<BygComment[]> = ref([])
   const writtenComment: Ref<string> = ref('')
   const commentTextarea: Ref<HTMLTextAreaElement | null> = ref(null)
+  const sendingComment: Ref<boolean> = ref(false)
   const mentionSuggestions: Ref<BygUserSuggestion[]> = ref([])
   const mentionContext: Ref<MentionContext | null> = ref(null)
   const showingMentionSuggestions: Ref<boolean> = ref(false)
@@ -120,6 +121,8 @@
       return
     }
 
+    sendingComment.value = true
+
     const res = await api(props.postUrl, {
       method: 'POST',
       body: JSON.stringify({ id: props.id, content: writtenComment.value }),
@@ -133,6 +136,8 @@
     writtenComment.value = ''
     clearMentionSuggestions()
     await fetchComments()
+
+    sendingComment.value = false
   }
 
   onMounted(() => {
@@ -163,7 +168,7 @@
         />
       </VStack>
 
-      <button @click="postComment">
+      <button @click="postComment" :disabled="sendingComment">
         <Icon icon="solar:plain-line-duotone" />
         Post
       </button>
