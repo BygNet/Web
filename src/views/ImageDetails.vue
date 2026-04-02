@@ -7,11 +7,12 @@
   import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import Divider from '@/components/layout/Divider.vue'
-  import EmptyState from '@/components/layout/EmptyState.vue'
+  import SkeletonComment from '@/components/layout/skeletons/SkeletonComment.vue'
+  import SkeletonText from '@/components/layout/skeletons/SkeletonText.vue'
+  import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
+  import VStack from '@/components/layout/VStack.vue'
   import { showBackButton, title } from '@/data/title'
   import CommentsView from '@/views/CommentsView.vue'
-  import VStack from "@/components/layout/VStack.vue";
-  import SkeletonComment from "@/components/layout/skeletons/SkeletonComment.vue";
 
   const route = useRoute()
   const id = Number(route.params.slug)
@@ -54,7 +55,11 @@
 
 <template>
   <ContentArea class="imageDetails">
-    <EmptyState v-if="image == undefined" message="Image is loading." />
+    <VStack v-if="image == undefined" class="fullWidth">
+      <div class="fullWidth skeleton" style="height: 50vh" />
+      <SkeletonUser />
+      <SkeletonText :lines="1" />
+    </VStack>
 
     <ImageItem v-else :image="image" detail-mode class="imageDetail" />
 

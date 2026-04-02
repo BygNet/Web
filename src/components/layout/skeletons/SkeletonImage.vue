@@ -22,5 +22,5 @@
     .image
       width: calc(100% + 0.75rem*2)
       height: 18rem
-      margin: -0.75rem
+      margin: -0.75rem -0.75rem 0.5rem
 </style>
