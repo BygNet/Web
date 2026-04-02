@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.0.0-alpha7",
+  "version": "2.0.0-alpha8",
   "private": false,
   "type": "module",
   "scripts": {
