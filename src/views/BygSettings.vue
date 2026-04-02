@@ -1,16 +1,23 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import { onMounted, onUnmounted, type Ref, ref } from 'vue'
+  import { computed, onMounted, onUnmounted, type Ref, ref } from 'vue'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import ProfileView from '@/components/profile/ProfileView.vue'
   import { fetchCurrentUserProfile } from '@/data/profiles'
+  import {
+    currentThemeKey,
+    isThemeDark,
+    systemPrefersDark,
+  } from '@/data/themes.ts'
   import { showBackButton, title } from '@/data/title.ts'
   import { capitalize } from '@/utils/formatters.ts'
+  import { buildProfileThemeVars } from '@/utils/profileTheme.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   type SettingSection = 'profile' | 'subscription'
@@ -28,6 +35,40 @@
   const bio: Ref<string> = ref('')
   const avatarUrl: Ref<string> = ref('')
   const bannerUrl: Ref<string> = ref('')
+  const color: Ref<string> = ref('')
+
+  const canEditProfileColor = computed(() => {
+    const subscriptionState = profile.value?.user.subscriptionState
+    return subscriptionState != null && subscriptionState !== 'free'
+  })
+
+  const previewThemeStyle = computed(() => {
+    currentThemeKey.value
+    systemPrefersDark.value
+    return buildProfileThemeVars(color.value || null, isThemeDark())
+  })
+
+  const colorPickerValue = computed({
+    get() {
+      return color.value || '#e875b6'
+    },
+    set(value: string) {
+      color.value = value
+    },
+  })
+
+  const previewUser = computed(() => {
+    const currentProfile = profile.value
+    if (!currentProfile) return null
+
+    return {
+      ...currentProfile.user,
+      bio: bio.value || null,
+      avatarUrl: avatarUrl.value || null,
+      bannerUrl: bannerUrl.value || null,
+      color: color.value || null,
+    }
+  })
 
   async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
     isLoading.value = true
@@ -38,6 +79,7 @@
       bio.value = profile.value.user.bio || ''
       avatarUrl.value = profile.value.user.avatarUrl || ''
       bannerUrl.value = profile.value.user.bannerUrl || ''
+      color.value = profile.value.user.color || ''
     } finally {
       isLoading.value = false
     }
@@ -53,6 +95,7 @@
           bio: bio.value || null,
           avatarUrl: avatarUrl.value || null,
           bannerUrl: bannerUrl.value || null,
+          ...(canEditProfileColor.value ? { color: color.value || null } : {}),
         }),
       })
 
@@ -62,6 +105,8 @@
           saveMessage.value = null
         }, 3000)
         await loadProfile({ force: true })
+      } else if (res.status === 403) {
+        saveMessage.value = 'Profile colors are only available for paid plans'
       } else {
         saveMessage.value = 'Failed to save profile'
       }
@@ -143,6 +188,52 @@
               />
               <div v-if="bannerUrl" class="preview">
                 <img :src="bannerUrl" :alt="auth.user?.username" />
+              </div>
+            </VStack>
+
+            <VStack v-if="canEditProfileColor" class="formGroup">
+              <label>Profile Accent</label>
+              <HStack class="colorRow">
+                <input
+                  v-model="colorPickerValue"
+                  type="color"
+                  class="colorInput"
+                />
+                <input
+                  v-model="color"
+                  type="text"
+                  placeholder="#e875b6"
+                  maxlength="7"
+                />
+                <button @click="color = ''" type="button">Reset</button>
+              </HStack>
+              <p class="light">
+                This accent recolors your profile page for visitors.
+              </p>
+            </VStack>
+
+            <VStack v-else class="formGroup">
+              <label>Profile Accent</label>
+              <p class="light">
+                Upgrade your subscription to unlock a custom profile color.
+              </p>
+            </VStack>
+
+            <VStack v-if="previewUser" class="formGroup previewGroup">
+              <label>Preview</label>
+              <div
+                class="profileThemePreview"
+                :class="{ themedProfile: !!color }"
+                :style="previewThemeStyle ?? undefined"
+              >
+                <ProfileView
+                  :user="previewUser"
+                  :follower-count="profile?.followerCount"
+                  :following-count="profile?.followingCount"
+                  :is-own-profile="true"
+                  :apply-theme-to-document="false"
+                  :show-actions="false"
+                />
               </div>
             </VStack>
 
@@ -236,10 +327,32 @@
 
     .formGroup
       width: 100%
+      gap: 0.5rem
 
       textarea, input
         --padding: 0.25rem
         @include utils.maxPaddedWidth
+
+    .colorRow
+      width: 100%
+      align-items: center
+      gap: 0.75rem
+      flex-wrap: wrap
+
+      .colorInput
+        width: 3.5rem
+        min-width: 3.5rem
+        height: 3rem
+        padding: 0.2rem
+
+    .previewGroup
+      gap: 0.75rem
+
+    .profileThemePreview
+      width: 100%
+      padding: 1rem
+      border-radius: 1.5rem
+      background: themes.$backgroundColor
 
     .preview img
       height: 4rem

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import { computed, onMounted, type Ref, ref, watch } from 'vue'
+  import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
   import { logout } from '@/auth/logout'
@@ -14,6 +14,10 @@
   import { fetchCurrentUserProfile } from '@/data/profiles'
   import { BygThemes, currentThemeKey, setTheme } from '@/data/themes.ts'
   import { title } from '@/data/title.ts'
+  import {
+    applyProfileThemeToDocument,
+    clearDocumentProfileTheme,
+  } from '@/utils/profileTheme.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   title.value = 'My Profile'
@@ -23,7 +27,9 @@
   const hasAccounts = computed(() => auth.accounts.length > 0)
   const showingAppearances: Ref<boolean> = ref(false)
   const profile: Ref<BygProfile | null> = ref(null)
+  const isPreviewingBaseTheme: Ref<boolean> = ref(false)
   const AppVersion = __AppVersion
+  let themePreviewTimeout: number | null = null
 
   async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
     profile.value = await fetchCurrentUserProfile(options)
@@ -46,9 +52,31 @@
     router.push({ name: 'settings' })
   }
 
+  function previewAndSetTheme(theme: (typeof BygThemes)[number]) {
+    if (themePreviewTimeout != null) {
+      window.clearTimeout(themePreviewTimeout)
+    }
+
+    isPreviewingBaseTheme.value = true
+    setTheme(theme)
+    clearDocumentProfileTheme()
+
+    themePreviewTimeout = window.setTimeout(() => {
+      isPreviewingBaseTheme.value = false
+      applyProfileThemeToDocument(profile.value?.user.color)
+      themePreviewTimeout = null
+    }, 900)
+  }
+
   onMounted(() => {
     if (isLoggedIn.value) {
       loadProfile()
+    }
+  })
+
+  onUnmounted(() => {
+    if (themePreviewTimeout != null) {
+      window.clearTimeout(themePreviewTimeout)
     }
   })
 
@@ -100,7 +128,7 @@
         <HStack
           v-for="theme in BygThemes"
           class="bygTheme"
-          @click="setTheme(theme)"
+          @click="previewAndSetTheme(theme)"
         >
           <div
             class="previewCircle"
@@ -139,6 +167,7 @@
         v-if="profile"
         :user="profile.user"
         :is-own-profile="true"
+        :apply-theme-to-document="!isPreviewingBaseTheme"
         :follower-count="profile.followerCount"
         :following-count="profile.followingCount"
         @edit-profile="goSettings"

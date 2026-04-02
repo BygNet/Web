@@ -1,7 +1,9 @@
 import { type Ref, ref } from 'vue'
 
 const html: HTMLElement = document.querySelector('html')!
+const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
 export const currentThemeKey: Ref<string> = ref('')
+export const systemPrefersDark: Ref<boolean> = ref(systemThemeQuery.matches)
 
 export interface BygTheme {
   title: string
@@ -83,6 +85,22 @@ export const BygThemes: BygTheme[] = [
     isDark: false,
   },
 ]
+
+systemThemeQuery.addEventListener('change', event => {
+  systemPrefersDark.value = event.matches
+})
+
+export function getThemeByKey(key: string): BygTheme | undefined {
+  return BygThemes.find(theme => theme.key === key)
+}
+
+export function isThemeDark(key: string = currentThemeKey.value): boolean {
+  if (key === 'auto') {
+    return systemPrefersDark.value
+  }
+
+  return getThemeByKey(key)?.isDark ?? false
+}
 
 export function loadTheme(): void {
   const savedTheme: string | null = localStorage.getItem('bygTheme')

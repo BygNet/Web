@@ -21,7 +21,7 @@
         "vue-router": "^5.0.3",
       },
       "devDependencies": {
-        "@bygnet/types": "^1.5.0",
+        "@bygnet/types": "^1.6.1",
         "@tsconfig/node24": "^24.0.3",
         "@types/node": "^25.5.0",
         "@vitejs/plugin-vue": "^6.0.3",
@@ -238,7 +238,7 @@
 
     "@bufbuild/protobuf": ["@bufbuild/protobuf@2.10.2", "", {}, "sha512-uFsRXwIGyu+r6AMdz+XijIIZJYpoWeYzILt5yZ2d3mCjQrWUTVpVD9WL/jZAbvp+Ed04rOhrsk7FiTcEDseB5A=="],
 
-    "@bygnet/types": ["@bygnet/types@1.5.0", "", { "dependencies": { "@opk/ts-pkg": "^0.6.1", "prettier": "^3.8.1" } }, "sha512-B7YrwCiTjticq6wE307WeUwpaZTaMXc1utZ4yj9hsBIRI8P0AHjKFhaszKsC50rwq5d/4Ka3TESJOqziwo85lg=="],
+    "@bygnet/types": ["@bygnet/types@1.6.1", "", {}, "sha512-D2rGu1hMLtp5I7BJ2byvEPHS2HEg1kVr0osB8EQFhe0c+2uF4mlCPzM9OPFvffJI4CpzeG4MBlJhVbJRu80Z0w=="],
 
     "@emnapi/core": ["@emnapi/core@1.9.0", "", { "dependencies": { "@emnapi/wasi-threads": "1.2.0", "tslib": "^2.4.0" } }, "sha512-0DQ98G9ZQZOxfUcQn1waV2yS8aWdZ6kJMbYCJB3oUBecjWYO1fqJ+a1DRfPF3O5JEkwqwP1A9QEN/9mYm2Yd0w=="],
 
@@ -297,8 +297,6 @@
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.1.1", "", { "dependencies": { "@emnapi/core": "^1.7.1", "@emnapi/runtime": "^1.7.1", "@tybys/wasm-util": "^0.10.1" } }, "sha512-p64ah1M1ld8xjWv3qbvFwHiFVWrq1yFvV4f7w+mzaqiR4IlSgkqhcRdHwsGgomwzBH51sRY4NEowLxnaBjcW/A=="],
-
-    "@opk/ts-pkg": ["@opk/ts-pkg@0.6.1", "", { "bin": { "ts-pkg": "dist/cli.js" } }, "sha512-L7zr/gNG3uGMFWmqKpGF1yj220gDUKYXKiThlBOi7KSHLfbU3PcrX9yRSRy6wQbk18TH5HwkdX3bz14wJqw9uA=="],
 
     "@oxc-project/runtime": ["@oxc-project/runtime@0.115.0", "", {}, "sha512-Rg8Wlt5dCbXhQnsXPrkOjL1DTSvXLgb2R/KYfnf1/K+R0k6UMLEmbQXPM+kwrWqSmWA2t0B1EtHy2/3zikQpvQ=="],
 

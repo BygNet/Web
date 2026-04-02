@@ -1,22 +1,35 @@
 <script setup lang="ts">
   import type { BygUser } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import { computed, type Ref, ref } from 'vue'
+  import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
 
   import { api } from '@/api/client'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import ReportButton from '@/components/posts/ReportButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
+  import { currentThemeKey, systemPrefersDark } from '@/data/themes.ts'
   import { capitalize } from '@/utils/formatters.ts'
+  import {
+    applyProfileThemeToDocument,
+    clearDocumentProfileTheme,
+  } from '@/utils/profileTheme.ts'
 
-  const props = defineProps<{
-    user: BygUser
-    isOwnProfile?: boolean
-    isFollowing?: boolean
-    followerCount?: number
-    followingCount?: number
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      user: BygUser
+      isOwnProfile?: boolean
+      isFollowing?: boolean
+      followerCount?: number
+      followingCount?: number
+      applyThemeToDocument?: boolean
+      showActions?: boolean
+    }>(),
+    {
+      applyThemeToDocument: true,
+      showActions: true,
+    }
+  )
 
   const emit = defineEmits<{
     follow: []
@@ -45,6 +58,33 @@
       isLoading.value = false
     }
   }
+
+  watch(
+    () => [ props.user.color, props.applyThemeToDocument ] as const,
+    ([ color, shouldApply ]) => {
+      if (!shouldApply) {
+        clearDocumentProfileTheme()
+        return
+      }
+
+      applyProfileThemeToDocument(color)
+    },
+    { immediate: true }
+  )
+
+  watch(
+    () => [ currentThemeKey.value, systemPrefersDark.value ] as const,
+    () => {
+      if (!props.applyThemeToDocument) return
+      applyProfileThemeToDocument(props.user.color)
+    }
+  )
+
+  onUnmounted(() => {
+    if (props.applyThemeToDocument) {
+      clearDocumentProfileTheme()
+    }
+  })
 </script>
 
 <template>
@@ -82,7 +122,10 @@
           </VStack>
         </HStack>
 
-        <HStack v-if="!isOwnProfile" class="actionButtons autoSpace">
+        <HStack
+          v-if="!isOwnProfile && showActions"
+          class="actionButtons autoSpace"
+        >
           <HStack>
             <button
               @click="handleFollow"
@@ -111,7 +154,7 @@
         </HStack>
 
         <button
-          v-if="isOwnProfile"
+          v-if="isOwnProfile && showActions"
           class="editButton"
           @click="emit('editProfile')"
         >
