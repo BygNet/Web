@@ -1,13 +1,14 @@
 <script setup lang="ts">
   import SkeletonText from '@/components/layout/skeletons/SkeletonText.vue'
   import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
+  import VStack from "@/components/layout/VStack.vue";
 </script>
 
 <template>
-  <div class="skeletonComment">
+  <VStack class="skeletonComment">
     <SkeletonUser />
     <SkeletonText :lines="Math.floor(Math.random() * 3) + 1" />
-  </div>
+  </VStack>
 </template>
 
 <style scoped lang="sass">
@@ -15,4 +16,5 @@
 
   .skeletonComment
     @include utils.itemBackground
+    width: 100%
 </style>

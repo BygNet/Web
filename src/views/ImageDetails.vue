@@ -10,6 +10,8 @@
   import EmptyState from '@/components/layout/EmptyState.vue'
   import { showBackButton, title } from '@/data/title'
   import CommentsView from '@/views/CommentsView.vue'
+  import VStack from "@/components/layout/VStack.vue";
+  import SkeletonComment from "@/components/layout/skeletons/SkeletonComment.vue";
 
   const route = useRoute()
   const id = Number(route.params.slug)
@@ -58,7 +60,11 @@
 
     <Divider />
 
-    <EmptyState v-if="image == undefined" message="Comments are loading." />
+    <VStack v-if="image == undefined" class="fullWidth">
+      <h2>Comments</h2>
+      <SkeletonComment v-for="i in 5" :key="i" />
+    </VStack>
+
     <CommentsView
       v-else
       :id="image.id"

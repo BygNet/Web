@@ -60,7 +60,7 @@
 
     <VStack v-if="post == undefined" class="fullWidth">
       <h2>Comments</h2>
-      <SkeletonComment v-for="i in 5" :key="i" class="fullWidth" />
+      <SkeletonComment v-for="i in 5" :key="i" />
     </VStack>
 
     <CommentsView
