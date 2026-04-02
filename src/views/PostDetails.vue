@@ -6,7 +6,9 @@
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import Divider from '@/components/layout/Divider.vue'
-  import EmptyState from '@/components/layout/EmptyState.vue'
+  import SkeletonComment from '@/components/layout/skeletons/SkeletonComment.vue'
+  import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
+  import VStack from '@/components/layout/VStack.vue'
   import PostItem from '@/components/posts/PostItem.vue'
   import { showBackButton, title } from '@/data/title.ts'
   import CommentsView from '@/views/CommentsView.vue'
@@ -51,12 +53,16 @@
 
 <template>
   <ContentArea class="postDetails">
-    <EmptyState message="Post is loading." v-if="post == undefined" />
+    <SkeletonPost v-if="post == undefined" class="fullWidth" />
     <PostItem v-else :post="post" detail-mode class="postDetail" />
 
     <Divider />
 
-    <EmptyState v-if="post == undefined" message="Comments are loading." />
+    <VStack v-if="post == undefined" class="fullWidth">
+      <h2>Comments</h2>
+      <SkeletonComment v-for="i in 5" :key="i" class="fullWidth" />
+    </VStack>
+
     <CommentsView
       v-else
       :id="post.id"

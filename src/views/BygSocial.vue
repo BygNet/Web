@@ -11,8 +11,8 @@
 
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
-  import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
+  import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
   import VStack from '@/components/layout/VStack.vue'
   import NewPostsAvailable from '@/components/posts/NewPostAvailable.vue'
   import PostItem from '@/components/posts/PostItem.vue'
@@ -148,7 +148,10 @@
 <template>
   <ContentArea class="bygSocial">
     <p id="top" />
-    <EmptyState v-if="!isLoaded" message="Loading posts." />
+
+    <VStack v-if="!isLoaded" class="postList">
+      <SkeletonPost v-for="i in 100" :key="i" class="fullWidth" />
+    </VStack>
 
     <ErrorState v-else-if="error" :message="error" />
 

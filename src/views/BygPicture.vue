@@ -5,8 +5,8 @@
   import { api } from '@/api/client'
   import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
-  import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
+  import SkeletonImage from '@/components/layout/skeletons/SkeletonImage.vue'
   import { IMAGE_CACHE_TTL, imageCache, imageCacheTime } from '@/data/caches'
   import { imageReloader } from '@/data/events.ts'
   import { title } from '@/data/title'
@@ -83,7 +83,10 @@
 
 <template>
   <ContentArea class="bygPictures">
-    <EmptyState v-if="loading" message="Loading images..." />
+    <div v-if="loading" class="grid">
+      <SkeletonImage v-for="i in 100" :key="i" />
+    </div>
+
     <ErrorState v-else-if="error" :message="error" />
 
     <div v-else class="grid">

@@ -1,0 +1,25 @@
+<script setup lang="ts">
+  import SkeletonText from '@/components/layout/skeletons/SkeletonText.vue'
+  import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
+  import VStack from '@/components/layout/VStack.vue'
+</script>
+
+<template>
+  <div class="skeletonPost">
+    <VStack class="fullWidth">
+      <SkeletonText :lines="1" class="title" />
+      <SkeletonUser />
+      <SkeletonText :lines="Math.floor(Math.random() * 9) + 4" />
+    </VStack>
+  </div>
+</template>
+
+<style scoped lang="sass">
+  @use "@/styles/utils"
+
+  .skeletonPost
+    @include utils.itemBackground
+
+    .title
+      width: 40%
+</style>
