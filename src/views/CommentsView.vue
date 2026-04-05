@@ -1,27 +1,27 @@
 <script setup lang="ts">
   import type { BygComment } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { nextTick, onMounted, type Ref, ref } from 'vue'
 
   import { api } from '@/api/client'
-  import { auth } from '@/auth/session.ts'
+  import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { fetchUserSuggestions } from '@/data/mentions'
-  import { taskList } from '@/data/tasks.ts'
-  import router from '@/router.ts'
+  import { taskList } from '@/data/tasks'
+  import router from '@/router'
   import type { BygUserSuggestion } from '@/types/mentions'
-  import { formatDate } from '@/utils/formatters.ts'
-  import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
+  import { formatDate } from '@/utils/formatters'
   import {
     applyMention,
     getMentionContext,
     type MentionContext,
   } from '@/utils/mentions'
+  import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
+  import { sanitizeHtml } from '@/utils/sanitizeHtml'
 
   const comments: Ref<BygComment[]> = ref([])
   const writtenComment: Ref<string> = ref('')
@@ -53,7 +53,7 @@
 
     for (const c of data) {
       const html = await marked.parse(c.content ?? '')
-      ;(c as any).rendered = DOMPurify.sanitize(html)
+      ;(c as any).rendered = sanitizeHtml(html)
     }
 
     comments.value = data

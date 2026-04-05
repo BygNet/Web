@@ -6,7 +6,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import type { BygNotification } from '@/types/notifications'
-  import { formatDate } from '@/utils/formatters.ts'
+  import { formatDate } from '@/utils/formatters'
 
   const props = defineProps<{
     notification: BygNotification

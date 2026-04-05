@@ -1,6 +1,6 @@
-import { auth } from '@/auth/session.ts'
-import { showingCreateModal } from '@/data/visibility.ts'
-import router from '@/router.ts'
+import { auth } from '@/auth/session'
+import { showingCreateModal } from '@/data/visibility'
+import router from '@/router'
 
 export function openCreateModal(): void {
   if (!auth.user) {

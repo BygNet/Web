@@ -13,13 +13,13 @@
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
   import { fetchCurrentUserProfile } from '@/data/profiles'
-  import { BygThemes, currentThemeKey, setTheme } from '@/data/themes.ts'
-  import { title } from '@/data/title.ts'
+  import { BygThemes, currentThemeKey, setTheme } from '@/data/themes'
+  import { title } from '@/data/title'
   import {
     applyProfileThemeToDocument,
     clearDocumentProfileTheme,
-  } from '@/utils/profileTheme.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  } from '@/utils/profileTheme'
+  import setHeadMeta from '@/utils/setHeadMeta'
 
   title.value = 'My Profile'
   setHeadMeta({ page: 'Profile', subtitle: 'Your Byg profile.' })

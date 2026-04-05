@@ -5,10 +5,10 @@
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { BygPages, MorePages } from '@/data/pages.ts'
-  import { showingCreateModal } from '@/data/visibility.ts'
-  import router from '@/router.ts'
-  import { toggleCreateModal } from '@/utils/createModalManager.ts'
+  import { BygPages, MorePages } from '@/data/pages'
+  import { showingCreateModal } from '@/data/visibility'
+  import router from '@/router'
+  import { toggleCreateModal } from '@/utils/createModalManager'
 
   const extendedDisplayMode: Ref<boolean> = ref(false)
 </script>

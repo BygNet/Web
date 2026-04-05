@@ -1,4 +1,5 @@
 import { type Ref, ref } from 'vue'
+
 import { getStorage } from '@/utils/storage'
 
 const html: HTMLElement | null =

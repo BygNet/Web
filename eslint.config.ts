@@ -6,6 +6,14 @@ import vueParser from 'vue-eslint-parser'
 
 export default defineConfig([
   {
+    ignores: [
+      '**/.nuxt/**',
+      '**/.output/**',
+      '**/dist/**',
+      '**/node_modules/**',
+    ],
+  },
+  {
     files: [ '**/*.ts', '**/*.tsx', '**/*.vue' ],
     languageOptions: {
       parser: vueParser,

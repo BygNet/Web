@@ -1,5 +1,5 @@
-import { api } from '@/api/client.ts'
-import { upsertAccount } from '@/auth/session.ts'
+import { api } from '@/api/client'
+import { upsertAccount } from '@/auth/session'
 import { fetchCurrentUserProfile } from '@/data/profiles'
 import { syncPushSubscription } from '@/data/pushAlerts'
 

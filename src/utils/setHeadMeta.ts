@@ -1,9 +1,9 @@
-import { useHead } from 'nuxt/app'
 import type {
   ResolvableArray,
   ResolvableLink,
   ResolvableMeta,
 } from '@unhead/vue/types'
+import { useHead } from 'nuxt/app'
 
 export default function setHeadMeta(config: {
   page: string

@@ -6,8 +6,8 @@
   import { login } from '@/auth/login'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { taskList } from '@/data/tasks.ts'
-  import { title } from '@/data/title.ts'
+  import { taskList } from '@/data/tasks'
+  import { title } from '@/data/title'
 
   title.value = 'Login'
   const router = useRouter()

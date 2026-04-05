@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useAttrs } from 'vue'
 
-  import { showingNavigation } from '@/data/visibility.ts'
+  import { showingNavigation } from '@/data/visibility'
 
   const attrs = useAttrs()
 

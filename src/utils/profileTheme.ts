@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'vue'
 
-import { isThemeDark } from '@/data/themes.ts'
+import { isThemeDark } from '@/data/themes'
 
 const profileThemeClass = 'themedProfile'
 const profileVarKeys = [

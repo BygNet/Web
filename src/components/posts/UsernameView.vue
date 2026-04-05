@@ -6,8 +6,8 @@
 
   import HStack from '@/components/layout/HStack.vue'
   import { fetchProfileByUsername } from '@/data/profiles'
-  import { StaffUsers } from '@/data/users.ts'
-  import { getVerificationColor } from '@/utils/verificationData.ts'
+  import { StaffUsers } from '@/data/users'
+  import { getVerificationColor } from '@/utils/verificationData'
 
   const props = defineProps<{
     name: string

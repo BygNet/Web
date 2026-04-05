@@ -1,11 +1,6 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
-  import {
-    useAsyncData,
-    useHead,
-    useRequestURL,
-    useSeoMeta,
-  } from 'nuxt/app'
+  import { useAsyncData, useHead, useRequestURL, useSeoMeta } from 'nuxt/app'
   import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -13,7 +8,7 @@
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
-  import { showBackButton, title } from '@/data/title.ts'
+  import { showBackButton, title } from '@/data/title'
   import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
 
   const route = useRoute()
@@ -26,11 +21,7 @@
   title.value = 'Profile'
   showBackButton.value = true
 
-  const {
-    data,
-    error,
-    status,
-  } = await useAsyncData(
+  const { data, error, status } = await useAsyncData(
     () => `profile:${username.value}`,
     async () => {
       try {

@@ -6,9 +6,9 @@
   import HStack from '@/components/layout/HStack.vue'
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showingNavigation } from '@/data/visibility.ts'
-  import router from '@/router.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { showingNavigation } from '@/data/visibility'
+  import router from '@/router'
+  import setHeadMeta from '@/utils/setHeadMeta'
   import { getStorage } from '@/utils/storage'
 
   interface FavoriteItem {

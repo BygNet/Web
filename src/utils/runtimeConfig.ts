@@ -18,7 +18,9 @@ export function setRuntimeConfigValues(
   runtimeConfigValues.appBase = values.appBase ?? runtimeConfigValues.appBase
 }
 
-function readNuxtConfigValue<TValue>(selector: (config: any) => TValue): TValue | null {
+function readNuxtConfigValue<TValue>(
+  selector: (config: any) => TValue
+): TValue | null {
   const nuxtConfig = (globalThis as any).__NUXT__?.config
   if (!nuxtConfig) return null
 

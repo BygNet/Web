@@ -2,7 +2,7 @@
   import Modal from '@/components/layout/Modal.vue'
   import ModalActions from '@/components/layout/ModalActions.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { setFlag } from '@/utils/setUserFlag.ts'
+  import { setFlag } from '@/utils/setUserFlag'
 
   const emit = defineEmits([ 'close' ])
 

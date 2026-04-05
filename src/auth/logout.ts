@@ -1,6 +1,6 @@
-import { api } from '@/api/client.ts'
+import { api } from '@/api/client'
 import { resetActiveAccountState } from '@/auth/accountState'
-import { auth, clearActiveSession } from '@/auth/session.ts'
+import { auth, clearActiveSession } from '@/auth/session'
 import { unsubscribePushAlerts } from '@/data/pushAlerts'
 
 export async function logout() {

@@ -18,10 +18,14 @@ export function formatStat(value: number): string {
 export function formatNumber(value: number): string {
   const locale =
     typeof document !== 'undefined'
-      ? document.querySelector('html')?.lang
+      ? document.documentElement.lang.trim() || undefined
       : undefined
 
-  return value.toLocaleString(locale)
+  try {
+    return value.toLocaleString(locale)
+  } catch {
+    return value.toLocaleString()
+  }
 }
 
 export function formatDate(input: string): string {

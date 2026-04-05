@@ -3,6 +3,7 @@
 
   definePageMeta({
     name: 'image',
+    path: '/image/:slug',
   })
 </script>
 

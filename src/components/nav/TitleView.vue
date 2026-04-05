@@ -4,10 +4,13 @@
   import { useRouter } from 'vue-router'
 
   import HStack from '@/components/layout/HStack.vue'
-  import { taskList } from '@/data/tasks.ts'
-  import { showBackButton, title } from '@/data/title.ts'
+  import { taskList } from '@/data/tasks'
+  import { showBackButton, title } from '@/data/title'
 
   const router = useRouter()
+  defineProps<{
+    forceTitle?: string
+  }>()
 </script>
 
 <template>
@@ -17,7 +20,7 @@
         <button @click="router.back()" v-if="showBackButton" class="backButton">
           <Icon icon="solar:arrow-left-line-duotone" />
         </button>
-        <h2>{{ title }}</h2>
+        <h2>{{ forceTitle ?? title }}</h2>
 
         <div class="tasksIndicator" v-if="taskList.length > 0">
           <p class="tasksCount" v-if="taskList.length > 1">

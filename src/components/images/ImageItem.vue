@@ -9,7 +9,7 @@
   import ReportButton from '@/components/posts/ReportButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
-  import { formatDate } from '@/utils/formatters.ts'
+  import { formatDate } from '@/utils/formatters'
 
   const props = defineProps<{
     image: BygImage

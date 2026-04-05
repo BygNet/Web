@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { computed, type Ref, ref, watch } from 'vue'
 
   import type { BygMessage } from '@/types/messages'
   import { formatDate } from '@/utils/formatters'
+  import { sanitizeHtml } from '@/utils/sanitizeHtml'
 
   type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
   type MessageDeliveryState = 'sending' | 'sent'
@@ -43,7 +43,7 @@
     () => props.message.content,
     async () => {
       const parsed = await marked.parse(props.message.content ?? '')
-      renderedContent.value = DOMPurify.sanitize(parsed as string)
+      renderedContent.value = sanitizeHtml(parsed as string)
     },
     { immediate: true }
   )

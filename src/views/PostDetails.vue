@@ -1,11 +1,6 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import {
-    useAsyncData,
-    useHead,
-    useRequestURL,
-    useSeoMeta,
-  } from 'nuxt/app'
+  import { useAsyncData, useHead, useRequestURL, useSeoMeta } from 'nuxt/app'
   import { computed, onUnmounted, watchEffect } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -16,7 +11,7 @@
   import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
   import VStack from '@/components/layout/VStack.vue'
   import PostItem from '@/components/posts/PostItem.vue'
-  import { showBackButton, title } from '@/data/title.ts'
+  import { showBackButton, title } from '@/data/title'
   import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
   import CommentsView from '@/views/CommentsView.vue'
 
@@ -33,7 +28,8 @@
     status,
   } = await useAsyncData(
     () => `post-details:${id.value}`,
-    () => $fetch<BygPost>(joinUrl(getApiBaseUrl(), `/post-details/${id.value}`)),
+    () =>
+      $fetch<BygPost>(joinUrl(getApiBaseUrl(), `/post-details/${id.value}`)),
     {
       watch: [ id ],
     }

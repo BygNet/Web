@@ -2,7 +2,7 @@
   import { onMounted } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
-  import { showingNavigation } from '@/data/visibility.ts'
+  import { showingNavigation } from '@/data/visibility'
 
   defineProps<{
     title: string

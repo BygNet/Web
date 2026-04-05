@@ -2,24 +2,22 @@
   import type { BygAd } from '@bygnet/types'
   import { computed, onMounted, type Ref, ref, watch } from 'vue'
 
-  import { ensureHydratedSession } from '@/auth/hydrate'
   import { resetActiveAccountState } from '@/auth/accountState'
+  import { ensureHydratedSession } from '@/auth/hydrate'
   import { auth } from '@/auth/session'
   import ShareModal from '@/components/messages/ShareModal.vue'
-  import CreateView from '@/views/CreateView.vue'
-  import ReportView from '@/views/ReportView.vue'
   import Byg2Modal from '@/components/modals/Byg2Modal.vue'
   import CookieBanner from '@/components/modals/CookieBanner.vue'
   import NotificationsModal from '@/components/modals/NotificationsModal.vue'
   import DesktopNav from '@/components/nav/DesktopNav.vue'
   import MobileNav from '@/components/nav/MobileNav.vue'
   import TitleView from '@/components/nav/TitleView.vue'
-  import { adCache } from '@/data/caches.ts'
+  import { adCache } from '@/data/caches'
   import { loadNotificationReadState } from '@/data/notifications'
   import {
     getPushPermissionState,
     syncPushSubscription,
-  } from '@/data/pushAlerts.ts'
+  } from '@/data/pushAlerts'
   import { showingShareModal } from '@/data/share'
   import {
     blurContent,
@@ -27,10 +25,14 @@
     showingCreateModal,
     showingNavigation,
     showingReportPopup,
-  } from '@/data/visibility.ts'
-  import { consoleWarn } from '@/utils/consoleWarn.ts'
+  } from '@/data/visibility'
+  import { consoleWarn } from '@/utils/consoleWarn'
   import { getAdsBaseUrl } from '@/utils/runtimeConfig'
-  import { getFlag } from '@/utils/setUserFlag.ts'
+  import { getFlag } from '@/utils/setUserFlag'
+  import CreateView from '@/views/CreateView.vue'
+  import ReportView from '@/views/ReportView.vue'
+  import ContentArea from '~/components/layout/ContentArea.vue'
+  import SkeletonText from '~/components/layout/skeletons/SkeletonText.vue'
 
   const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
@@ -86,7 +88,17 @@
 
 <template>
   <div id="appLoading" v-if="!pageLoaded">
-    <h1>Byg is Loading...</h1>
+    <DesktopNav loading />
+
+    <main>
+      <TitleView force-title="Loading..." />
+
+      <ContentArea>
+        <SkeletonText :lines="100" />
+      </ContentArea>
+
+      <MobileNav />
+    </main>
   </div>
 
   <CreateView v-if="showingCreateModal" />
@@ -124,7 +136,6 @@
     left: 0
     right: 0
     bottom: 0
-    justify-content: center
     background: themes.$backgroundColor
     border-radius: 0
     z-index: 10000

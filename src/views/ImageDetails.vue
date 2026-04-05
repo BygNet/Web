@@ -1,11 +1,6 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import {
-    useAsyncData,
-    useHead,
-    useRequestURL,
-    useSeoMeta,
-  } from 'nuxt/app'
+  import { useAsyncData, useHead, useRequestURL, useSeoMeta } from 'nuxt/app'
   import { computed, onUnmounted, watchEffect } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -102,7 +97,12 @@
 
     <ErrorState v-else-if="error" message="Failed to load image." />
 
-    <ImageItem v-else-if="image" :image="image" detail-mode class="imageDetail" />
+    <ImageItem
+      v-else-if="image"
+      :image="image"
+      detail-mode
+      class="imageDetail"
+    />
 
     <Divider />
 

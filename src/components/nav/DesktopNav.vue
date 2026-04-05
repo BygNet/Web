@@ -6,13 +6,17 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
-  import { BygPages, MorePages } from '@/data/pages.ts'
-  import router from '@/router.ts'
-  import { openCreateModal } from '@/utils/createModalManager.ts'
+  import { BygPages, MorePages } from '@/data/pages'
+  import router from '@/router'
+  import { openCreateModal } from '@/utils/createModalManager'
 
   const config = useRuntimeConfig()
   const AppVersion = config.public.appVersion
   const showingMoreItems: Ref<boolean> = ref(false)
+
+  defineProps<{
+    loading?: boolean
+  }>()
 </script>
 
 <template>
@@ -82,7 +86,7 @@
     </VStack>
 
     <VStack class="accountSection">
-      <AccountSwitcher class="accountWidget" />
+      <AccountSwitcher class="accountWidget" v-if="!loading" />
 
       <HStack class="footer fullWidth autoSpace">
         <a href="https://git.new/bygpl" target="_blank">

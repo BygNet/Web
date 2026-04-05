@@ -3,6 +3,7 @@
 
   definePageMeta({
     name: 'userProfile',
+    path: '/u/:username',
   })
 </script>
 

@@ -1,4 +1,5 @@
-import { defineNuxtPlugin } from 'nuxt/app'
 import '@/utils/arrayEnhance'
+
+import { defineNuxtPlugin } from 'nuxt/app'
 
 export default defineNuxtPlugin(() => {})

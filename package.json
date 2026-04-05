@@ -18,6 +18,7 @@
     "@iconify/vue": "^5.0.0",
     "@typescript-eslint/parser": "^8.53.0",
     "@unhead/vue": "^2.1.12",
+    "@vite-pwa/nuxt": "^1.1.1",
     "dompurify": "^3.3.3",
     "marked": "^17.0.4",
     "marked-shiki": "^1.2.1",

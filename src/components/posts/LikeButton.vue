@@ -4,7 +4,7 @@
   import { useRouter } from 'vue-router'
 
   import { auth } from '@/auth/session'
-  import { formatNumber, formatStat } from '@/utils/formatters.ts'
+  import { formatNumber, formatStat } from '@/utils/formatters'
   import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
 
   const props = defineProps<{

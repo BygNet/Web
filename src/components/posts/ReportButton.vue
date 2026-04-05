@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
 
-  import { showingReportPopup } from '@/data/visibility.ts'
+  import { showingReportPopup } from '@/data/visibility'
 
   function showReportPopup(): void {
     showingReportPopup.value = true

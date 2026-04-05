@@ -6,7 +6,7 @@
   import { signup } from '@/auth/signup'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { title } from '@/data/title.ts'
+  import { title } from '@/data/title'
 
   title.value = 'Signup'
   const router = useRouter()
