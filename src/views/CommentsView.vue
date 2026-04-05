@@ -16,6 +16,7 @@
   import router from '@/router.ts'
   import type { BygUserSuggestion } from '@/types/mentions'
   import { formatDate } from '@/utils/formatters.ts'
+  import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
   import {
     applyMention,
     getMentionContext,
@@ -41,7 +42,7 @@
 
   const fetchComments = async () => {
     const res = await fetch(
-      `${import.meta.env.VITE_API_BASE}${props.getUrl}/${props.id}`
+      joinUrl(getApiBaseUrl(), `${props.getUrl}/${props.id}`)
     )
     if (!res.ok) {
       console.error('Failed to fetch comments')

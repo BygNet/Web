@@ -200,6 +200,8 @@ export function buildProfileThemeVars(
 }
 
 export function clearDocumentProfileTheme(): void {
+  if (typeof document === 'undefined') return
+
   const html = document.documentElement
 
   html.classList.remove(profileThemeClass)
@@ -212,6 +214,8 @@ export function clearDocumentProfileTheme(): void {
 export function applyProfileThemeToDocument(
   color: string | null | undefined
 ): void {
+  if (typeof document === 'undefined') return
+
   const vars = buildProfileThemeVars(color)
 
   if (!vars) {

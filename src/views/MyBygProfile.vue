@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
+  import { useRuntimeConfig } from 'nuxt/app'
   import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -28,7 +29,8 @@
   const showingAppearances: Ref<boolean> = ref(false)
   const profile: Ref<BygProfile | null> = ref(null)
   const isPreviewingBaseTheme: Ref<boolean> = ref(false)
-  const AppVersion = __AppVersion
+  const config = useRuntimeConfig()
+  const AppVersion = config.public.appVersion
   let themePreviewTimeout: number | null = null
 
   async function loadProfile(options: { force?: boolean } = {}): Promise<void> {

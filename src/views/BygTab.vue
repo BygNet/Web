@@ -9,6 +9,7 @@
   import { showingNavigation } from '@/data/visibility.ts'
   import router from '@/router.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { getStorage } from '@/utils/storage'
 
   interface FavoriteItem {
     id: string
@@ -97,27 +98,33 @@
   watch(
     favorites,
     value => {
-      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(value))
+      getStorage()?.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(value))
     },
     { deep: true }
   )
 
   watch(wallpaperUrl, value => {
+    const storage = getStorage()
+    if (!storage) return
+
     if (!value) {
-      localStorage.removeItem(WALLPAPER_STORAGE_KEY)
+      storage.removeItem(WALLPAPER_STORAGE_KEY)
       return
     }
 
-    localStorage.setItem(WALLPAPER_STORAGE_KEY, value)
+    storage.setItem(WALLPAPER_STORAGE_KEY, value)
   })
 
   watch(customWallpaperUrl, value => {
+    const storage = getStorage()
+    if (!storage) return
+
     if (!value) {
-      localStorage.removeItem(CUSTOM_WALLPAPER_STORAGE_KEY)
+      storage.removeItem(CUSTOM_WALLPAPER_STORAGE_KEY)
       return
     }
 
-    localStorage.setItem(CUSTOM_WALLPAPER_STORAGE_KEY, value)
+    storage.setItem(CUSTOM_WALLPAPER_STORAGE_KEY, value)
   })
 
   onMounted(() => {
@@ -288,7 +295,12 @@
   }
 
   function loadFavorites(): FavoriteItem[] {
-    const raw = localStorage.getItem(FAVORITES_STORAGE_KEY)
+    const storage = getStorage()
+    if (!storage) {
+      return DEFAULT_FAVORITES
+    }
+
+    const raw = storage.getItem(FAVORITES_STORAGE_KEY)
     if (!raw) return DEFAULT_FAVORITES
 
     try {
@@ -323,11 +335,11 @@
   }
 
   function loadSavedWallpaper(): string {
-    return localStorage.getItem(WALLPAPER_STORAGE_KEY) ?? ''
+    return getStorage()?.getItem(WALLPAPER_STORAGE_KEY) ?? ''
   }
 
   function loadCustomWallpaper(): string {
-    return localStorage.getItem(CUSTOM_WALLPAPER_STORAGE_KEY) ?? ''
+    return getStorage()?.getItem(CUSTOM_WALLPAPER_STORAGE_KEY) ?? ''
   }
 
   function saveCustomWallpaper() {

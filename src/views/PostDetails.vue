@@ -1,49 +1,87 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import { useHead } from '@unhead/vue'
-  import { onMounted, onUnmounted, type Ref, ref } from 'vue'
+  import {
+    useAsyncData,
+    useHead,
+    useRequestURL,
+    useSeoMeta,
+  } from 'nuxt/app'
+  import { computed, onUnmounted, watchEffect } from 'vue'
   import { useRoute } from 'vue-router'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import Divider from '@/components/layout/Divider.vue'
+  import ErrorState from '@/components/layout/ErrorState.vue'
   import SkeletonComment from '@/components/layout/skeletons/SkeletonComment.vue'
   import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
   import VStack from '@/components/layout/VStack.vue'
   import PostItem from '@/components/posts/PostItem.vue'
   import { showBackButton, title } from '@/data/title.ts'
+  import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
   import CommentsView from '@/views/CommentsView.vue'
 
   const route = useRoute()
-  const id = Number(route.params.slug)
-  const post: Ref<BygPost | undefined> = ref()
+  const requestUrl = useRequestURL()
+  const id = computed(() => Number(route.params.slug))
 
   title.value = 'Loading...'
   showBackButton.value = true
-  useHead(() => {
-    if (!post.value) {
-      return {
-        title: 'Loading Byg post...',
-      }
-    }
 
-    return {
-      title: `Post: "${post.value.title}"`,
-      meta: [
-        {
-          name: 'description',
-          content: `View ${post.value.author}'s post on Byg.`,
-        },
-      ],
+  const {
+    data: post,
+    error,
+    status,
+  } = await useAsyncData(
+    () => `post-details:${id.value}`,
+    () => $fetch<BygPost>(joinUrl(getApiBaseUrl(), `/post-details/${id.value}`)),
+    {
+      watch: [ id ],
     }
+  )
+
+  const pageTitle = computed(() => {
+    if (!post.value) return 'Loading Byg post...'
+    return `Post: "${post.value.title}"`
   })
 
-  onMounted(async () => {
-    const data = await fetch(
-      `${import.meta.env.VITE_API_BASE}/post-details/${id}`
-    )
-    post.value = (await data.json()) as BygPost
+  const pageDescription = computed(() => {
+    if (!post.value) return 'View a post on Byg.'
 
-    title.value = `${post.value.author}'s Post`
+    const preview = (post.value.content ?? '').trim().replace(/\s+/g, ' ')
+    const excerpt = preview ? ` ${preview.slice(0, 140)}` : ''
+    return `View ${post.value.author}'s post on Byg.${excerpt}`.trim()
+  })
+
+  const canonicalUrl = computed(() => {
+    return new URL(`/details/${id.value}`, requestUrl.origin).toString()
+  })
+
+  useSeoMeta({
+    title: pageTitle,
+    description: pageDescription,
+    ogTitle: pageTitle,
+    ogDescription: pageDescription,
+    ogType: 'article',
+    ogUrl: canonicalUrl,
+    twitterCard: 'summary',
+    twitterTitle: pageTitle,
+    twitterDescription: pageDescription,
+    robots: computed(() =>
+      error.value ? 'noindex, nofollow' : 'index, follow'
+    ),
+  })
+
+  useHead(() => ({
+    link: [
+      {
+        rel: 'canonical',
+        href: canonicalUrl.value,
+      },
+    ],
+  }))
+
+  watchEffect(() => {
+    title.value = post.value ? `${post.value.author}'s Post` : 'Loading...'
   })
 
   onUnmounted(() => {
@@ -53,18 +91,19 @@
 
 <template>
   <ContentArea class="postDetails">
-    <SkeletonPost v-if="post == undefined" class="fullWidth" />
-    <PostItem v-else :post="post" detail-mode class="postDetail" />
+    <SkeletonPost v-if="status === 'pending'" class="fullWidth" />
+    <ErrorState v-else-if="error" message="Failed to load post." />
+    <PostItem v-else-if="post" :post="post" detail-mode class="postDetail" />
 
     <Divider />
 
-    <VStack v-if="post == undefined" class="fullWidth">
+    <VStack v-if="status === 'pending'" class="fullWidth">
       <h2>Comments</h2>
       <SkeletonComment v-for="i in 5" :key="i" />
     </VStack>
 
     <CommentsView
-      v-else
+      v-else-if="post"
       :id="post.id"
       :author="post.author"
       getUrl="/post-comments"

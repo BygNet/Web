@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import { useRuntimeConfig } from 'nuxt/app'
   import { type Ref, ref } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
@@ -9,7 +10,8 @@
   import router from '@/router.ts'
   import { openCreateModal } from '@/utils/createModalManager.ts'
 
-  const AppVersion = __AppVersion
+  const config = useRuntimeConfig()
+  const AppVersion = config.public.appVersion
   const showingMoreItems: Ref<boolean> = ref(false)
 </script>
 

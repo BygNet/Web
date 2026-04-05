@@ -1,9 +1,16 @@
 import { type Ref, ref } from 'vue'
+import { getStorage } from '@/utils/storage'
 
-const html: HTMLElement = document.querySelector('html')!
-const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+const html: HTMLElement | null =
+  typeof document !== 'undefined' ? document.querySelector('html') : null
+const systemThemeQuery =
+  typeof window !== 'undefined'
+    ? window.matchMedia('(prefers-color-scheme: dark)')
+    : null
 export const currentThemeKey: Ref<string> = ref('')
-export const systemPrefersDark: Ref<boolean> = ref(systemThemeQuery.matches)
+export const systemPrefersDark: Ref<boolean> = ref(
+  systemThemeQuery?.matches ?? false
+)
 
 export interface BygTheme {
   title: string
@@ -86,7 +93,30 @@ export const BygThemes: BygTheme[] = [
   },
 ]
 
-systemThemeQuery.addEventListener('change', event => {
+const themeClassKeys = BygThemes.map(theme => theme.key)
+
+function getHtmlElement(): HTMLElement | null {
+  return typeof document !== 'undefined' ? document.documentElement : html
+}
+
+export function clearThemeClasses(): void {
+  const nextHtml = getHtmlElement()
+  if (!nextHtml) return
+
+  for (const themeKey of themeClassKeys) {
+    nextHtml.classList.remove(themeKey)
+  }
+}
+
+export function applyThemeClass(themeKey: string): void {
+  const nextHtml = getHtmlElement()
+  if (!nextHtml) return
+
+  clearThemeClasses()
+  nextHtml.classList.add(themeKey)
+}
+
+systemThemeQuery?.addEventListener('change', event => {
   systemPrefersDark.value = event.matches
 })
 
@@ -103,27 +133,17 @@ export function isThemeDark(key: string = currentThemeKey.value): boolean {
 }
 
 export function loadTheme(): void {
-  const savedTheme: string | null = localStorage.getItem('bygTheme')
-  let toSet: string
+  const storage = getStorage()
+  const savedTheme: string | null = storage?.getItem('bygTheme') ?? null
+  const toSet = savedTheme ?? 'auto'
 
-  if (savedTheme != null) {
-    toSet = savedTheme
-  } else {
-    toSet = 'auto'
-  }
-
-  html.classList.add(toSet)
+  applyThemeClass(toSet)
   currentThemeKey.value = toSet
 }
 
 export function setTheme(theme: BygTheme): void {
-  const savedTheme: string | null = localStorage.getItem('bygTheme')
-
-  if (savedTheme != null) {
-    html.classList.remove(savedTheme)
-  }
-
-  localStorage.setItem('bygTheme', theme.key)
-  html.classList.add(theme.key)
+  const storage = getStorage()
+  storage?.setItem('bygTheme', theme.key)
+  applyThemeClass(theme.key)
   currentThemeKey.value = theme.key
 }

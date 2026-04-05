@@ -65,7 +65,7 @@
             left: 0
             right: 0
             border-radius: 1rem
-            background: linear-gradient(to bottom, var(--tint), hsl(from var(--tint) calc(h - 40) s l))
+            background: linear-gradient(to bottom, var(--tint), color-mix(in srgb, var(--tint) 72%, black))
 
         .appInfo
           gap: 0

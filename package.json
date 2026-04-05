@@ -4,14 +4,14 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "dev": "VITE_API_BASE=http://localhost:5001 vite --host",
+    "dev": "NUXT_PUBLIC_API_BASE=http://localhost:5001 nuxt dev --port 5173 --host",
     "style": "bun run format && bun run lint",
     "lint": "eslint . --fix",
     "format": "prettier --write --experimental-cli --ignore-path .prettierignore .",
-    "type-check": "vue-tsc --build",
-    "build-only": "vite build",
+    "type-check": "nuxt typecheck",
+    "build-only": "nuxt build",
     "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview --port 5173"
+    "preview": "nuxt preview"
   },
   "dependencies": {
     "@eslint/compat": "^2.0.1",
@@ -22,6 +22,7 @@
     "marked": "^17.0.4",
     "marked-shiki": "^1.2.1",
     "mitt": "^3.0.1",
+    "nuxt": "^4.4.2",
     "pinia": "^3.0.4",
     "shiki": "^4.0.2",
     "vue": "^3.5.30",

@@ -27,6 +27,7 @@
   import { taskList } from '@/data/tasks.ts'
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
   import AdView from '@/views/AdView.vue'
 
   const posts: Ref<BygPost[]> = ref([])
@@ -63,7 +64,7 @@
       }
 
       taskList.value.push('loading posts')
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
+      const res = await fetch(joinUrl(getApiBaseUrl(), '/latest-posts'))
       if (!res.ok) throw new Error('Failed to load posts')
 
       const data = (await res.json()) as BygPost[]
@@ -121,7 +122,7 @@
     if (!posts.value.length) return
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
+      const res = await fetch(joinUrl(getApiBaseUrl(), '/latest-posts'))
       if (!res.ok) return
 
       const latest = (await res.json()) as BygPost[]

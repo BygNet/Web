@@ -24,14 +24,18 @@ body
   justify-content: center
   top: 0
   bottom: 0
+  left: 0
+  right: 0
   margin: 0
   padding: 0
+  width: 100vw
+  height: 100dvh
 
   color: themes.$textColor
   user-select: none
   -webkit-user-select: none
 
-#app
+#__nuxt
   --padding: 2rem
 
   display: flex
@@ -40,7 +44,7 @@ body
   height: 100dvh
 
 @media (max-width: variables.$mobileWidth)
-  #app
+  #__nuxt
     --padding: 0.5rem
     flex-direction: column
 

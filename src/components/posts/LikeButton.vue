@@ -5,6 +5,7 @@
 
   import { auth } from '@/auth/session'
   import { formatNumber, formatStat } from '@/utils/formatters.ts'
+  import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
 
   const props = defineProps<{
     likes: number
@@ -15,7 +16,10 @@
 
   const router = useRouter()
 
-  const fetchUrl: string = `${import.meta.env.VITE_API_BASE}${props.apiPath}/${props.id}`
+  const fetchUrl: string = joinUrl(
+    getApiBaseUrl(),
+    `${props.apiPath}/${props.id}`
+  )
 
   const likeCount: Ref<number> = ref(0)
   const liking: Ref<boolean> = ref(false)

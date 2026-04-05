@@ -3,6 +3,7 @@ import { type Ref, ref } from 'vue'
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'
 import type { BygNotification } from '@/types/notifications'
+import { getStorage } from '@/utils/storage'
 
 const NOTIFICATIONS_CACHE_TTL = 45 * 1000
 const DEFAULT_NOTIFICATIONS_LIMIT = 50
@@ -18,14 +19,14 @@ function readTimestampStorageKey(): string {
 }
 
 export function loadNotificationReadState(): void {
-  const raw = localStorage.getItem(readTimestampStorageKey())
+  const raw = getStorage()?.getItem(readTimestampStorageKey())
   notificationsLastReadAt.value = raw ? Number(raw) || 0 : 0
 }
 
 export function markNotificationsRead(): void {
   const now = Date.now()
   notificationsLastReadAt.value = now
-  localStorage.setItem(readTimestampStorageKey(), now.toString())
+  getStorage()?.setItem(readTimestampStorageKey(), now.toString())
 }
 
 export function isUnreadNotification(notification: BygNotification): boolean {

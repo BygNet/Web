@@ -9,6 +9,8 @@ import type {
   BygMessageShareTarget,
   BygMessageThread,
 } from '@/types/messages'
+import { getApiBaseUrl } from '@/utils/runtimeConfig'
+import { getStorage } from '@/utils/storage'
 
 const THREAD_CACHE_TTL_MS = 20 * 60 * 1000
 const CONVERSATION_CACHE_TTL_MS = 12 * 60 * 60 * 1000
@@ -60,7 +62,10 @@ function buildCacheKey(userId: number, scope: string): string {
 
 function readLocalCache<TValue>(key: string): TimedCache<TValue> | null {
   try {
-    const raw = localStorage.getItem(key)
+    const storage = getStorage()
+    if (!storage) return null
+
+    const raw = storage.getItem(key)
     if (!raw) return null
 
     const parsed = JSON.parse(raw) as Partial<TimedCache<TValue>>
@@ -78,7 +83,10 @@ function readLocalCache<TValue>(key: string): TimedCache<TValue> | null {
 
 function writeLocalCache<TValue>(key: string, cache: TimedCache<TValue>): void {
   try {
-    localStorage.setItem(key, JSON.stringify(cache))
+    const storage = getStorage()
+    if (!storage) return
+
+    storage.setItem(key, JSON.stringify(cache))
   } catch {
     // ignore storage write failures
   }
@@ -86,7 +94,7 @@ function writeLocalCache<TValue>(key: string, cache: TimedCache<TValue>): void {
 
 function removeLocalCache(key: string): void {
   try {
-    localStorage.removeItem(key)
+    getStorage()?.removeItem(key)
   } catch {
     // ignore storage removal failures
   }
@@ -163,12 +171,15 @@ function writeShareTargetsDeviceCache(
 
 function clearDeviceMessageCache(userId?: number): void {
   try {
+    const storage = getStorage()
+    if (!storage) return
+
     const keysToRemove: string[] = []
     const prefix = userId
       ? `${MESSAGE_STORAGE_PREFIX}:${userId}:`
       : `${MESSAGE_STORAGE_PREFIX}:`
-    for (let index = 0; index < localStorage.length; index += 1) {
-      const key = localStorage.key(index)
+    for (let index = 0; index < storage.length; index += 1) {
+      const key = storage.key(index)
       if (!key || !key.startsWith(prefix)) {
         continue
       }
@@ -176,7 +187,7 @@ function clearDeviceMessageCache(userId?: number): void {
     }
 
     for (const key of keysToRemove) {
-      localStorage.removeItem(key)
+      storage.removeItem(key)
     }
   } catch {
     // ignore storage read failures
@@ -184,7 +195,7 @@ function clearDeviceMessageCache(userId?: number): void {
 }
 
 function buildMessagesSocketUrl(): string {
-  const apiBase = String(import.meta.env.VITE_API_BASE).replace(/\/+$/, '')
+  const apiBase = String(getApiBaseUrl()).replace(/\/+$/, '')
 
   if (apiBase.startsWith('https://')) {
     return `${apiBase.replace('https://', 'wss://')}/messages/live`

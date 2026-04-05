@@ -1,6 +1,8 @@
 import type { BygUser } from '@bygnet/types'
 import { reactive } from 'vue'
 
+import { getStorage } from '@/utils/storage'
+
 const ACCOUNTS_STORAGE_KEY = 'byg:auth:accounts'
 const ACTIVE_ACCOUNT_STORAGE_KEY = 'byg:auth:active'
 const LEGACY_TOKEN_STORAGE_KEY = 'token'
@@ -17,6 +19,10 @@ export interface AuthAccount {
   token: string
   user: AuthUser
   lastUsed: number
+}
+
+function canUseStorage(): boolean {
+  return getStorage() !== null
 }
 
 function normalizeUser(
@@ -59,8 +65,13 @@ function normalizeAccount(raw: unknown): AuthAccount | null {
 }
 
 function readStoredAccounts(): AuthAccount[] {
+  if (!canUseStorage()) return []
+
   try {
-    const raw = localStorage.getItem(ACCOUNTS_STORAGE_KEY)
+    const storage = getStorage()
+    if (!storage) return []
+
+    const raw = storage.getItem(ACCOUNTS_STORAGE_KEY)
     if (!raw) return []
     const parsed = JSON.parse(raw) as unknown
     if (!Array.isArray(parsed)) return []
@@ -73,7 +84,12 @@ function readStoredAccounts(): AuthAccount[] {
 }
 
 function readStoredActiveAccountId(): number | null {
-  const raw = localStorage.getItem(ACTIVE_ACCOUNT_STORAGE_KEY)
+  if (!canUseStorage()) return null
+
+  const storage = getStorage()
+  if (!storage) return null
+
+  const raw = storage.getItem(ACTIVE_ACCOUNT_STORAGE_KEY)
   if (!raw) return null
   const parsed = Number(raw)
   if (!Number.isFinite(parsed)) return null
@@ -81,19 +97,26 @@ function readStoredActiveAccountId(): number | null {
 }
 
 function persistAccounts(accounts: AuthAccount[]): void {
+  if (!canUseStorage()) return
+
   try {
-    localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts))
+    const storage = getStorage()
+    if (!storage) return
+
+    storage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts))
   } catch {
     // ignore storage failures
   }
 }
 
 function persistActiveAccountId(accountId: number | null): void {
+  if (!canUseStorage()) return
+
   if (accountId === null) {
-    localStorage.removeItem(ACTIVE_ACCOUNT_STORAGE_KEY)
+    getStorage()?.removeItem(ACTIVE_ACCOUNT_STORAGE_KEY)
     return
   }
-  localStorage.setItem(ACTIVE_ACCOUNT_STORAGE_KEY, String(accountId))
+  getStorage()?.setItem(ACTIVE_ACCOUNT_STORAGE_KEY, String(accountId))
 }
 
 function pickDefaultAccount(accounts: AuthAccount[]): AuthAccount | null {
@@ -114,7 +137,9 @@ export const auth = reactive<{
 })
 
 export function clearLegacyToken(): void {
-  localStorage.removeItem(LEGACY_TOKEN_STORAGE_KEY)
+  if (!canUseStorage()) return
+
+  getStorage()?.removeItem(LEGACY_TOKEN_STORAGE_KEY)
 }
 
 function applyActiveAccount(account: AuthAccount | null): void {
@@ -125,6 +150,13 @@ function applyActiveAccount(account: AuthAccount | null): void {
 }
 
 function resolveInitialSession(): void {
+  if (!canUseStorage()) {
+    auth.token = null
+    auth.user = null
+    auth.activeAccountId = null
+    return
+  }
+
   const storedActiveId = auth.activeAccountId
   const storedActive =
     storedActiveId === null
@@ -141,7 +173,7 @@ function resolveInitialSession(): void {
     return
   }
 
-  const legacyToken = localStorage.getItem(LEGACY_TOKEN_STORAGE_KEY)
+  const legacyToken = getStorage()?.getItem(LEGACY_TOKEN_STORAGE_KEY)
   if (legacyToken) {
     auth.token = legacyToken
     auth.user = null

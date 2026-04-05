@@ -16,7 +16,12 @@ export function formatStat(value: number): string {
 }
 
 export function formatNumber(value: number): string {
-  return value.toLocaleString(document.querySelector('html')?.lang)
+  const locale =
+    typeof document !== 'undefined'
+      ? document.querySelector('html')?.lang
+      : undefined
+
+  return value.toLocaleString(locale)
 }
 
 export function formatDate(input: string): string {

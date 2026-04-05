@@ -1,5 +1,6 @@
 import { auth, clearActiveSession } from '@/auth/session'
 import { clearUserCaches } from '@/data/caches'
+import { getApiBaseUrl, joinUrl } from '@/utils/runtimeConfig'
 
 export async function api(path: string, options: RequestInit = {}) {
   const headers = new Headers(options.headers)
@@ -10,7 +11,7 @@ export async function api(path: string, options: RequestInit = {}) {
 
   headers.set('Content-Type', 'application/json')
 
-  const res = await fetch(import.meta.env.VITE_API_BASE + path, {
+  const res = await fetch(joinUrl(getApiBaseUrl(), path), {
     ...options,
     headers,
   })

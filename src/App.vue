@@ -1,12 +1,13 @@
 <script setup lang="ts">
-  import '@/utils/arrayEnhance.ts'
-
   import type { BygAd } from '@bygnet/types'
   import { computed, onMounted, type Ref, ref, watch } from 'vue'
 
+  import { ensureHydratedSession } from '@/auth/hydrate'
   import { resetActiveAccountState } from '@/auth/accountState'
-  import { auth } from '@/auth/session.ts'
+  import { auth } from '@/auth/session'
   import ShareModal from '@/components/messages/ShareModal.vue'
+  import CreateView from '@/views/CreateView.vue'
+  import ReportView from '@/views/ReportView.vue'
   import Byg2Modal from '@/components/modals/Byg2Modal.vue'
   import CookieBanner from '@/components/modals/CookieBanner.vue'
   import NotificationsModal from '@/components/modals/NotificationsModal.vue'
@@ -20,7 +21,6 @@
     syncPushSubscription,
   } from '@/data/pushAlerts.ts'
   import { showingShareModal } from '@/data/share'
-  import { loadTheme } from '@/data/themes.ts'
   import {
     blurContent,
     showingCookieBanner,
@@ -29,9 +29,8 @@
     showingReportPopup,
   } from '@/data/visibility.ts'
   import { consoleWarn } from '@/utils/consoleWarn.ts'
+  import { getAdsBaseUrl } from '@/utils/runtimeConfig'
   import { getFlag } from '@/utils/setUserFlag.ts'
-  import CreateView from '@/views/CreateView.vue'
-  import ReportView from '@/views/ReportView.vue'
 
   const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
@@ -44,10 +43,11 @@
     )
   })
   const pushEnabled = computed(() => pushPermission.value === 'granted')
+  const pageLoaded: Ref<boolean> = ref(false)
 
   onMounted(async () => {
     consoleWarn()
-    loadTheme()
+    pageLoaded.value = true
     pushPermission.value = getPushPermissionState()
     showingCookieBanner.value = getFlag('showCookieBanner', true)
 
@@ -55,10 +55,17 @@
       showingNotificationsModal.value = true
     }
 
-    const adsRes: Response = await fetch(
-      `${import.meta.env.VITE_ADS_BASE}/index.json`
-    )
-    adCache.value = (await adsRes.json()) as BygAd[]
+    const adsBase = getAdsBaseUrl()
+    if (!adsBase) return
+
+    try {
+      const adsRes: Response = await fetch(`${adsBase}/index.json`)
+      if (adsRes.ok) {
+        adCache.value = (await adsRes.json()) as BygAd[]
+      }
+    } catch (error) {
+      console.error('Failed to load ads index', error)
+    }
   })
 
   watch(
@@ -78,6 +85,10 @@
 </script>
 
 <template>
+  <div id="appLoading" v-if="!pageLoaded">
+    <h1>Byg is Loading...</h1>
+  </div>
+
   <CreateView v-if="showingCreateModal" />
   <ReportView v-if="showingReportPopup" />
   <ShareModal v-if="showingShareModal" />
@@ -98,13 +109,25 @@
   />
   <main class="blurrable" :class="{ blurred: blurContent }">
     <TitleView v-if="showingNavigation" />
-    <RouterView :key="activeAccountKey" />
+    <NuxtPage :key="activeAccountKey" />
     <MobileNav v-if="showingNavigation" />
   </main>
 </template>
 
 <style scoped lang="sass">
   @use "@/styles/variables"
+  @use "@/styles/themes"
+
+  #appLoading
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    justify-content: center
+    background: themes.$backgroundColor
+    border-radius: 0
+    z-index: 10000
 
   main
     display: flex

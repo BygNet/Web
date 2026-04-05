@@ -4,6 +4,8 @@ import type {
   BygPushPublicKeyResponse,
   BygPushSubscription,
 } from '@/types/push'
+import { getAppBaseUrl } from '@/utils/runtimeConfig'
+import { getStorage } from '@/utils/storage'
 
 let cachedPublicKey: string | null = null
 let activeSyncRequest: Promise<boolean> | null = null
@@ -33,16 +35,19 @@ function base64ToArrayBuffer(base64String: string): ArrayBuffer {
 }
 
 function getStoredPublicKey(): string | null {
-  return localStorage.getItem(PUSH_PUBLIC_KEY_STORAGE_KEY)
+  return getStorage()?.getItem(PUSH_PUBLIC_KEY_STORAGE_KEY) ?? null
 }
 
 function setStoredPublicKey(value: string | null): void {
+  const storage = getStorage()
+  if (!storage) return
+
   if (value === null) {
-    localStorage.removeItem(PUSH_PUBLIC_KEY_STORAGE_KEY)
+    storage.removeItem(PUSH_PUBLIC_KEY_STORAGE_KEY)
     return
   }
 
-  localStorage.setItem(PUSH_PUBLIC_KEY_STORAGE_KEY, value)
+  storage.setItem(PUSH_PUBLIC_KEY_STORAGE_KEY, value)
 }
 
 function withTimeout<T>(
@@ -78,7 +83,7 @@ async function getServiceWorkerRegistration(): Promise<ServiceWorkerRegistration
     return existing
   }
 
-  const swUrl = `${import.meta.env.BASE_URL}sw.js`
+  const swUrl = `${getAppBaseUrl()}sw.js`
 
   try {
     const registration = await navigator.serviceWorker.register(swUrl)

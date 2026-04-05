@@ -97,8 +97,11 @@
   let mainEl: HTMLElement | null = null
   let savedOverflowY = ''
 
-  const mobileMediaQuery = window.matchMedia('(max-width: 50rem)')
-  isMobileViewport.value = mobileMediaQuery.matches
+  const mobileMediaQuery =
+    typeof window !== 'undefined'
+      ? window.matchMedia('(max-width: 50rem)')
+      : null
+  isMobileViewport.value = mobileMediaQuery?.matches ?? false
 
   function onMobileMediaChange(event: MediaQueryListEvent): void {
     isMobileViewport.value = event.matches
@@ -933,7 +936,7 @@
       mainEl.style.overflowY = 'hidden'
     }
 
-    mobileMediaQuery.addEventListener('change', onMobileMediaChange)
+    mobileMediaQuery?.addEventListener('change', onMobileMediaChange)
 
     await loadThreads()
     await hydrateInitialThread()
@@ -959,7 +962,7 @@
     liveSocket.value?.close()
     liveSocket.value = null
 
-    mobileMediaQuery.removeEventListener('change', onMobileMediaChange)
+    mobileMediaQuery?.removeEventListener('change', onMobileMediaChange)
 
     if (mainEl) {
       mainEl.style.overflowY = savedOverflowY

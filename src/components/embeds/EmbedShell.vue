@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { onMounted } from 'vue'
+
   import HStack from '@/components/layout/HStack.vue'
   import { showingNavigation } from '@/data/visibility.ts'
 
@@ -8,8 +10,9 @@
 
   showingNavigation.value = false
 
-  // use dark color theme
-  document.documentElement.classList.add('dark')
+  onMounted(() => {
+    document.documentElement.classList.add('dark')
+  })
 </script>
 
 <template>

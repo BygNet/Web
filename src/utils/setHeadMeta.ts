@@ -1,4 +1,4 @@
-import { useHead } from '@unhead/vue'
+import { useHead } from 'nuxt/app'
 import type {
   ResolvableArray,
   ResolvableLink,
