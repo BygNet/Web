@@ -3,7 +3,6 @@
   import { computed, onMounted, type Ref, ref, watch } from 'vue'
 
   import { resetActiveAccountState } from '@/auth/accountState'
-  import { ensureHydratedSession } from '@/auth/hydrate'
   import { auth } from '@/auth/session'
   import ShareModal from '@/components/messages/ShareModal.vue'
   import Byg2Modal from '@/components/modals/Byg2Modal.vue'
