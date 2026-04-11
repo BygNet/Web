@@ -8,7 +8,7 @@ export const onRequest = async ({ params, env, next }): Promise<Response> => {
 
   let image: BygImage
   try {
-    const res = await fetch(`${env.API_BASE}/image-details/${id}`)
+    const res = await fetch(`${env.VITE_API_BASE}/image-details/${id}`)
 
     if (!res.ok) return next()
     image = (await res.json()) as BygImage
@@ -23,7 +23,7 @@ export const onRequest = async ({ params, env, next }): Promise<Response> => {
     <meta property="og:title" content="Image: &quot;${esc(image.title)}&quot;" />
     <meta property="og:description" content="View ${esc(image.author)}'s image on Byg." />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://byg.app/image/${id}" />
+    <meta property="og:url" content="https://byg.gg/image/${id}" />
     <meta property="og:site_name" content="Byg" />
 
     <meta name="twitter:card" content="summary_large_image" />

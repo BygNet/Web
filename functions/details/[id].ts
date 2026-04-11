@@ -7,7 +7,7 @@ export const onRequest = async ({ params, env, next }): Promise<Response> => {
 
   let post: BygPost
   try {
-    const res: Response = await fetch(`${env.API_BASE}/post-details/${id}`)
+    const res: Response = await fetch(`${env.VITE_API_BASE}/post-details/${id}`)
     post = (await res.json()) as BygPost
   } catch {
     return next()
@@ -20,7 +20,7 @@ export const onRequest = async ({ params, env, next }): Promise<Response> => {
     <meta property="og:title" content="${esc(post.title)}" />
     <meta property="og:description" content="View ${esc(post.author)}'s post on Byg." />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://byg.app/post/${id}" />
+    <meta property="og:url" content="https://byg.gg/post/${id}" />
     <meta property="og:site_name" content="Byg" />
 
     <meta name="twitter:card" content="summary_large_image" />
