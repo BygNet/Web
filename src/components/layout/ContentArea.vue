@@ -88,13 +88,12 @@
 
 <style scoped lang="sass">
   .contentArea
-    margin: 0
+    margin: 0 0 var(--padding)
     width: 100%
     padding: 0 var(--padding)
 
     &:not(.expanded)
       max-width: 65rem
-
 
     .contentContainer
       width: 100%
