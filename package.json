@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.0.0-alpha11",
+  "version": "2.0.0-alpha12",
   "private": false,
   "type": "module",
   "scripts": {
@@ -30,7 +30,7 @@
     "vue-router": "^5.0.3"
   },
   "devDependencies": {
-    "@bygnet/types": "^1.6.1",
+    "@bygnet/types": "^1.7.0",
     "@tsconfig/node24": "^24.0.3",
     "@types/node": "^25.5.0",
     "@vitejs/plugin-vue": "^6.0.3",

@@ -1,16 +1,11 @@
-import type { BygUser } from '@bygnet/types'
+import type { BygAuthUser } from '@bygnet/types'
 import { reactive } from 'vue'
 
 const ACCOUNTS_STORAGE_KEY = 'byg:auth:accounts'
 const ACTIVE_ACCOUNT_STORAGE_KEY = 'byg:auth:active'
 const LEGACY_TOKEN_STORAGE_KEY = 'token'
 
-export type AuthUser = Pick<
-  BygUser,
-  'id' | 'email' | 'username' | 'avatarUrl' | 'bannerUrl' | 'bio'
-> & {
-  subscriptionState?: BygUser['subscriptionState'] | null
-}
+export type AuthUser = BygAuthUser
 
 export interface AuthAccount {
   id: number
@@ -32,9 +27,11 @@ function normalizeUser(
     username: user.username,
     email: user.email,
     avatarUrl: user.avatarUrl ?? null,
-    subscriptionState: user.subscriptionState ?? null,
     bannerUrl: user.bannerUrl ?? null,
     bio: user.bio ?? null,
+    subscriptionState: user.subscriptionState ?? null,
+    emailVerificationCode: user.emailVerificationCode ?? null,
+    twoFactorEnabled: user.twoFactorEnabled ?? false,
   }
 }
 
@@ -209,6 +206,11 @@ export function upsertAccount(
   if (options.makeActive !== false) {
     setActiveAccount(updatedAccount.id)
   }
+}
+
+export function updateActiveUser(user: AuthUser): void {
+  if (!auth.token) return
+  upsertAccount(auth.token, user)
 }
 
 export function removeAccount(accountId: number): void {

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import type { BygProfile } from '@bygnet/types'
+  import type { BygAuthUser, BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, onUnmounted, type Ref, ref } from 'vue'
 
   import { api } from '@/api/client'
-  import { auth } from '@/auth/session'
+  import { auth, updateActiveUser } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
@@ -21,7 +21,13 @@
   import { buildProfileThemeVars } from '@/utils/profileTheme.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
-  type SettingSection = 'profile' | 'subscription'
+  type SettingSection = 'profile' | 'subscription' | 'security'
+
+  interface TwoFactorSetup {
+    secret: string
+    manualEntryKey: string
+    otpauthUrl: string
+  }
 
   title.value = 'Settings'
   setHeadMeta({ page: 'Settings', subtitle: 'Manage your account settings.' })
@@ -32,7 +38,16 @@
   const isSaving: Ref<boolean> = ref(false)
   const saveMessage: Ref<string | null> = ref(null)
 
-  // Form fields
+  const securityMessage = ref<string | null>(null)
+  const securityError = ref<string | null>(null)
+  const emailCode = ref('')
+  const isResendingEmail = ref(false)
+  const isVerifyingEmail = ref(false)
+  const isLoadingTwoFactorSetup = ref(false)
+  const isSavingTwoFactor = ref(false)
+  const twoFactorCode = ref('')
+  const twoFactorSetup = ref<TwoFactorSetup | null>(null)
+
   const bio: Ref<string> = ref('')
   const avatarUrl: Ref<string> = ref('')
   const bannerUrl: Ref<string> = ref('')
@@ -42,6 +57,8 @@
     const subscriptionState = profile.value?.user.subscriptionState
     return subscriptionState != null && subscriptionState !== 'free'
   })
+
+  const isEmailVerified = computed(() => !auth.user?.emailVerificationCode)
 
   const previewThemeStyle = computed(() => {
     currentThemeKey.value
@@ -70,6 +87,15 @@
       color: color.value || null,
     }
   })
+
+  function applyAuthUser(user: BygAuthUser): void {
+    updateActiveUser(user)
+  }
+
+  function clearSecurityFeedback(): void {
+    securityMessage.value = null
+    securityError.value = null
+  }
 
   async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
     isLoading.value = true
@@ -118,6 +144,128 @@
     }
   }
 
+  async function resendVerificationEmail(): Promise<void> {
+    clearSecurityFeedback()
+    isResendingEmail.value = true
+
+    try {
+      const res = await api('/auth/resend-email-verification', {
+        method: 'POST',
+      })
+
+      if (!res.ok) {
+        securityError.value = 'Could not resend the verification email'
+        return
+      }
+
+      securityMessage.value = 'Verification email sent.'
+    } finally {
+      isResendingEmail.value = false
+    }
+  }
+
+  async function verifyEmail(): Promise<void> {
+    clearSecurityFeedback()
+    isVerifyingEmail.value = true
+
+    try {
+      const res = await api('/auth/verify-email', {
+        method: 'POST',
+        body: JSON.stringify({
+          code: emailCode.value,
+        }),
+      })
+
+      if (!res.ok) {
+        securityError.value = 'That email verification code is not valid'
+        return
+      }
+
+      if (auth.user) {
+        applyAuthUser({
+          ...auth.user,
+          emailVerificationCode: null,
+        })
+      }
+
+      emailCode.value = ''
+      securityMessage.value = 'Your email is verified.'
+    } finally {
+      isVerifyingEmail.value = false
+    }
+  }
+
+  async function loadTwoFactorSetup(): Promise<void> {
+    clearSecurityFeedback()
+    isLoadingTwoFactorSetup.value = true
+
+    try {
+      const res = await api('/auth/2fa/setup')
+
+      if (!res.ok) {
+        securityError.value = 'Could not create a 2FA setup key'
+        return
+      }
+
+      twoFactorSetup.value = await res.json()
+      twoFactorCode.value = ''
+    } finally {
+      isLoadingTwoFactorSetup.value = false
+    }
+  }
+
+  async function enableTwoFactor(): Promise<void> {
+    if (!twoFactorSetup.value) return
+
+    clearSecurityFeedback()
+    isSavingTwoFactor.value = true
+
+    try {
+      const res = await api('/auth/2fa/enable', {
+        method: 'POST',
+        body: JSON.stringify({
+          secret: twoFactorSetup.value.secret,
+          code: twoFactorCode.value,
+        }),
+      })
+
+      if (!res.ok) {
+        securityError.value = 'That authenticator code was not accepted'
+        return
+      }
+
+      applyAuthUser(await res.json())
+      twoFactorSetup.value = null
+      twoFactorCode.value = ''
+      securityMessage.value = 'Authenticator app 2FA is enabled.'
+    } finally {
+      isSavingTwoFactor.value = false
+    }
+  }
+
+  async function disableTwoFactor(): Promise<void> {
+    clearSecurityFeedback()
+    isSavingTwoFactor.value = true
+
+    try {
+      const res = await api('/auth/2fa/disable', {
+        method: 'POST',
+      })
+
+      if (!res.ok) {
+        securityError.value = 'Could not disable authenticator app 2FA'
+        return
+      }
+
+      applyAuthUser(await res.json())
+      twoFactorSetup.value = null
+      twoFactorCode.value = ''
+      securityMessage.value = 'Authenticator app 2FA is disabled.'
+    } finally {
+      isSavingTwoFactor.value = false
+    }
+  }
+
   onMounted(() => {
     loadProfile()
     showBackButton.value = true
@@ -131,7 +279,6 @@
 <template>
   <ContentArea class="settingsPage">
     <HStack class="mainContainer">
-      <!-- Sidebar -->
       <VStack class="sidebar">
         <button
           @click="activeSection = 'profile'"
@@ -140,6 +287,15 @@
         >
           <Icon icon="solar:user-circle-line-duotone" />
           Profile
+        </button>
+
+        <button
+          @click="activeSection = 'security'"
+          :class="{ prominent: activeSection === 'security' }"
+          class="menuItem"
+        >
+          <Icon icon="solar:shield-keyhole-line-duotone" />
+          Security
         </button>
 
         <button
@@ -152,9 +308,7 @@
         </button>
       </VStack>
 
-      <!-- Content -->
       <VStack class="content">
-        <!-- Profile Section -->
         <VStack v-show="activeSection === 'profile'" class="section">
           <h2>Edit Profile</h2>
 
@@ -255,7 +409,131 @@
           </VStack>
         </VStack>
 
-        <!-- Subscription Section -->
+        <VStack v-show="activeSection === 'security'" class="section">
+          <h2>Security</h2>
+
+          <VStack class="securityCard">
+            <HStack class="securityHeader">
+              <Icon icon="solar:letter-line-duotone" />
+              <VStack class="noSpace">
+                <h3>Email Verification</h3>
+                <p class="light">
+                  {{ isEmailVerified ? 'Verified' : 'Verification pending' }}
+                </p>
+              </VStack>
+            </HStack>
+
+            <template v-if="!isEmailVerified">
+              <label>
+                Verification Code
+                <input
+                  v-model="emailCode"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="one-time-code"
+                  maxlength="6"
+                  placeholder="123456"
+                />
+              </label>
+
+              <HStack class="actionRow">
+                <button
+                  class="prominent"
+                  @click="verifyEmail"
+                  :disabled="isVerifyingEmail"
+                >
+                  {{ isVerifyingEmail ? 'Verifying...' : 'Verify Email' }}
+                </button>
+
+                <button
+                  @click="resendVerificationEmail"
+                  :disabled="isResendingEmail"
+                >
+                  {{ isResendingEmail ? 'Sending...' : 'Resend Code' }}
+                </button>
+              </HStack>
+            </template>
+          </VStack>
+
+          <VStack class="securityCard">
+            <HStack class="securityHeader">
+              <Icon icon="solar:shield-keyhole-line-duotone" />
+              <VStack class="noSpace">
+                <h3>Authenticator App</h3>
+                <p class="light">
+                  {{
+                    auth.user?.twoFactorEnabled ? 'Enabled' : 'Not enabled yet'
+                  }}
+                </p>
+              </VStack>
+            </HStack>
+
+            <p class="description">
+              Protect your login with a 6-digit TOTP code from an authenticator
+              app.
+            </p>
+
+            <template v-if="auth.user?.twoFactorEnabled">
+              <button @click="disableTwoFactor" :disabled="isSavingTwoFactor">
+                {{ isSavingTwoFactor ? 'Disabling...' : 'Disable 2FA' }}
+              </button>
+            </template>
+
+            <template v-else>
+              <button
+                @click="loadTwoFactorSetup"
+                :disabled="isLoadingTwoFactorSetup"
+              >
+                {{
+                  isLoadingTwoFactorSetup
+                    ? 'Generating Key...'
+                    : twoFactorSetup
+                      ? 'Regenerate Setup Key'
+                      : 'Generate Setup Key'
+                }}
+              </button>
+
+              <VStack v-if="twoFactorSetup" class="setupBox">
+                <label>
+                  Manual Entry Key
+                  <input :value="twoFactorSetup.manualEntryKey" readonly />
+                </label>
+
+                <label>
+                  Authenticator Code
+                  <input
+                    v-model="twoFactorCode"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    maxlength="6"
+                    placeholder="123456"
+                  />
+                </label>
+
+                <a :href="twoFactorSetup.otpauthUrl" class="prominentLink">
+                  Open In Authenticator App
+                </a>
+
+                <button
+                  class="prominent"
+                  @click="enableTwoFactor"
+                  :disabled="isSavingTwoFactor"
+                >
+                  {{ isSavingTwoFactor ? 'Enabling...' : 'Enable 2FA' }}
+                </button>
+              </VStack>
+            </template>
+          </VStack>
+
+          <p v-if="securityMessage" class="message success">
+            {{ securityMessage }}
+          </p>
+          <p v-if="securityError" class="message">
+            {{ securityError }}
+          </p>
+        </VStack>
+
         <VStack v-show="activeSection === 'subscription'" class="section">
           <h2>Subscription</h2>
 
@@ -317,7 +595,6 @@
 
   .content
     @include utils.itemBackground
-
     min-width: 15rem
     flex-grow: 2
 
@@ -362,14 +639,39 @@
       width: 4rem
       border-radius: 0.75rem
 
-  .subscriptionHeader
+  .securityCard, .subscriptionCard
+    gap: 1rem
+    padding: 1rem
+    border-radius: 1rem
+    background: color-mix(in srgb, var(--foreground) 3%, var(--background))
+
+  .securityHeader, .subscriptionHeader
+    align-items: center
+    gap: 1rem
+
+    svg
+      width: 2.25rem
+      height: 2.25rem
+
     .subscriptionIcon
       width: 4rem
       height: 4rem
+
+  .setupBox
+    width: 100%
+    gap: 0.75rem
+
+  .actionRow
+    gap: 0.75rem
+    flex-wrap: wrap
 
   .message
     color: #c33
 
     &.success
       color: #3c3
+
+  @media (max-width: 900px)
+    .mainContainer
+      flex-direction: column
 </style>

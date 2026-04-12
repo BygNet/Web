@@ -13,8 +13,10 @@
   const router = useRouter()
   const email = ref('')
   const password = ref('')
+  const twoFactorCode = ref('')
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const requiresTwoFactor = ref(false)
 
   async function submit() {
     error.value = null
@@ -22,10 +24,23 @@
     taskList.value.push('login')
 
     try {
-      await login(email.value, password.value)
+      const result = await login(
+        email.value,
+        password.value,
+        requiresTwoFactor.value ? twoFactorCode.value : undefined
+      )
+
+      if (result === 'two-factor-required') {
+        requiresTwoFactor.value = true
+        error.value = 'Enter your authenticator app code to continue'
+        return
+      }
+
       await router.push({ name: 'after-login' })
     } catch {
-      error.value = 'Invalid email or password'
+      error.value = requiresTwoFactor.value
+        ? 'Invalid authenticator code'
+        : 'Invalid email or password'
     } finally {
       loading.value = false
       taskList.value.remove('login')
@@ -49,6 +64,18 @@
               v-model="password"
               type="password"
               autocomplete="current-password"
+              required
+            />
+          </label>
+
+          <label v-if="requiresTwoFactor">
+            Authenticator Code
+            <input
+              v-model="twoFactorCode"
+              type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
               required
             />
           </label>
