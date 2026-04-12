@@ -1,16 +1,13 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { type Ref, ref } from 'vue'
   import { ProgressiveBlur } from 'vue-progressive-blur'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { BygPages, MorePages } from '@/data/pages.ts'
+  import { BygPages, MorePage } from '@/data/pages.ts'
   import { showingCreateModal } from '@/data/visibility.ts'
   import router from '@/router.ts'
   import { toggleCreateModal } from '@/utils/createModalManager.ts'
-
-  const extendedDisplayMode: Ref<boolean> = ref(false)
 </script>
 
 <template>
@@ -19,19 +16,13 @@
       class="createButton prominent large"
       @click="toggleCreateModal()"
       :class="{ open: showingCreateModal }"
-      v-if="!extendedDisplayMode"
     >
       <Icon icon="mingcute:add-fill" />
       Create...
     </button>
 
-    <HStack class="mobileNavItems" :class="{ extended: extendedDisplayMode }">
-      <RouterLink
-        v-for="page in extendedDisplayMode
-          ? [...BygPages, ...MorePages]
-          : BygPages"
-        :to="page.path"
-      >
+    <HStack class="mobileNavItems">
+      <RouterLink v-for="page in [...BygPages, MorePage]" :to="page.path">
         <VStack
           class="mobileNavItem"
           :class="{ selected: router.currentRoute.value.path === page.path }"
@@ -46,19 +37,6 @@
           <p>{{ page.title }}</p>
         </VStack>
       </RouterLink>
-
-      <VStack
-        class="mobileNavItem"
-        @click="extendedDisplayMode = !extendedDisplayMode"
-        :class="{
-          selected: MorePages.some(
-            p => p.path === router.currentRoute.value.path
-          ),
-        }"
-      >
-        <Icon icon="solar:menu-dots-line-duotone" />
-        <p>{{ extendedDisplayMode ? 'Less' : 'More' }}</p>
-      </VStack>
     </HStack>
 
     <ProgressiveBlur :blur="24" :border-radius="0" class="navBlur" />
@@ -97,21 +75,6 @@
       gap: 0
       justify-content: space-around
       margin-bottom: var(--bottom)
-
-      &.extended
-        border-radius: 1.5rem
-        width: 100%
-        flex-direction: column
-        align-items: flex-start
-        background: themes.$foregroundColor
-        backdrop-filter: blur(0.25rem)
-
-        .mobileNavItem
-          flex-direction: row
-          gap: 0.5rem
-
-          p
-            font-size: medium
 
       .mobileNavItem
         align-items: center

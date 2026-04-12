@@ -201,10 +201,10 @@
     --margin: 1rem
 
     position: fixed
-    top: 0
+    top: env(safe-area-inset-top)
     bottom: 0
     right: 0
-    height: calc(100vh - var(--padding)*2 - var(--margin)*2 - var(--tabBarHeight))
+    height: calc(100vh - var(--padding)*2 - var(--margin)*2 - var(--tabBarHeight) - env(safe-area-inset-top) - env(safe-area-inset-bottom))
     backdrop-filter: blur(0.5rem)
     width: fit-content
     max-width: 90vw

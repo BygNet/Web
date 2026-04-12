@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type Router } from 'vue-router'
 
 import { ensureHydratedSession } from '@/auth/hydrate'
 import AfterLogin from '@/views/AfterLogin.vue'
+import BygApps from '@/views/BygApps.vue'
 import BygAppsEmbed from '@/views/BygAppsEmbed.vue'
 import BygChatEmbed from '@/views/BygChatEmbed.vue'
 import BygLink from '@/views/BygLink.vue'
@@ -84,6 +85,7 @@ const router: Router = createRouter({
     },
     { name: 'login', path: '/login', component: LoginPage },
     { name: 'signup', path: '/signup', component: SignupPage },
+    { name: 'apps', path: '/apps', component: BygApps },
     { name: 'after-login', path: '/after-login', component: AfterLogin },
     { name: 'pro', path: '/pro', component: BygPro },
     { name: 'verification', path: '/verification', component: BygVerification },

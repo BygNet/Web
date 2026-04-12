@@ -5,6 +5,7 @@
 
   import { login } from '@/auth/login'
   import ContentArea from '@/components/layout/ContentArea.vue'
+  import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { taskList } from '@/data/tasks.ts'
   import { title } from '@/data/title.ts'
@@ -50,7 +51,7 @@
 
 <template>
   <ContentArea class="login">
-    <div class="loginItems">
+    <HStack class="loginItems">
       <form @submit.prevent="submit" class="loginForm">
         <VStack class="loginFormItems">
           <label>
@@ -105,9 +106,9 @@
 
         <p>Thank you!</p>
       </VStack>
-    </div>
+    </HStack>
 
-    <h3>
+    <h3 class="centerText">
       Don't have an account?
       <RouterLink class="prominentLink" to="/signup">Create one</RouterLink>
     </h3>

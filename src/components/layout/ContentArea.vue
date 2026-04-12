@@ -88,7 +88,7 @@
 
 <style scoped lang="sass">
   .contentArea
-    margin: var(--padding) 0
+    margin: 0
     width: 100%
     padding: 0 var(--padding)
 

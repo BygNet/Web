@@ -3,7 +3,7 @@
   import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
-  import { computed, nextTick, type Ref, ref } from 'vue'
+  import { computed, nextTick, type Ref, ref, watchEffect } from 'vue'
 
   import { auth } from '@/auth/session.ts'
   import HStack from '@/components/layout/HStack.vue'
@@ -41,9 +41,12 @@
   const charCount = computed(() => postText.value.length)
   const charLimit = 1000
 
-  const renderedMarkdown = computed(() =>
-    DOMPurify.sanitize(marked.parse(postText.value || '') as string)
-  )
+  const renderedMarkdown = ref('')
+
+  watchEffect(async () => {
+    const html = await marked.parse(postText.value || '')
+    renderedMarkdown.value = DOMPurify.sanitize(html)
+  })
 
   function clearPostMentionSuggestions(): void {
     showingPostMentionSuggestions.value = false
@@ -332,6 +335,8 @@
 
     .type
       @include utils.itemBackground
+      --cornerRadius: 1.25rem
+
       cursor: pointer
       font-size: large
 

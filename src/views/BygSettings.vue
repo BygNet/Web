@@ -484,6 +484,7 @@
                 @click="loadTwoFactorSetup"
                 :disabled="isLoadingTwoFactorSetup"
               >
+                <Icon icon="solar:key-minimalistic-line-duotone" />
                 {{
                   isLoadingTwoFactorSetup
                     ? 'Generating Key...'
@@ -520,6 +521,7 @@
                   @click="enableTwoFactor"
                   :disabled="isSavingTwoFactor"
                 >
+                  <Icon icon="solar:lock-keyhole-line-duotone" />
                   {{ isSavingTwoFactor ? 'Enabling...' : 'Enable 2FA' }}
                 </button>
               </VStack>
@@ -641,7 +643,6 @@
 
   .securityCard, .subscriptionCard
     gap: 1rem
-    padding: 1rem
     border-radius: 1rem
     background: color-mix(in srgb, var(--foreground) 3%, var(--background))
 

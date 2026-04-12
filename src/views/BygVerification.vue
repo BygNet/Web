@@ -17,7 +17,7 @@
 
 <template>
   <ContentArea class="bygVerification">
-    <h2>Verification Types</h2>
+    <h2>Types</h2>
 
     <HStack class="fullWidth autoSpace verificationTypes">
       <VStack>

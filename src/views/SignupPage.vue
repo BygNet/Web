@@ -5,6 +5,7 @@
 
   import { signup } from '@/auth/signup'
   import ContentArea from '@/components/layout/ContentArea.vue'
+  import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title.ts'
 
@@ -33,7 +34,7 @@
 
 <template>
   <ContentArea class="signup">
-    <div class="loginItems">
+    <HStack class="loginItems">
       <form @submit.prevent="submit" class="loginForm">
         <label>
           Email
@@ -82,9 +83,9 @@
 
         <p>and much more!</p>
       </VStack>
-    </div>
+    </HStack>
 
-    <h3>
+    <h3 class="centerText">
       Already have an account?
       <RouterLink class="prominentLink" to="/login">Log In</RouterLink>
     </h3>

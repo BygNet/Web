@@ -59,16 +59,20 @@
 
   .titleView
     width: 100%
+    display: flex
+    justify-content: center
     position: sticky
     top: 0
     z-index: 100
-    padding: 0.5rem var(--padding) 0
+    padding: 0.5rem 0
 
     .titleViewContent
       z-index: 102
       margin-top: calc(env(safe-area-inset-top) + 0.5rem)
       gap: 0.75rem
       flex-wrap: nowrap
+      width: 65rem
+      padding: 0 var(--padding)
 
     .titleMain
       gap: 0.5rem

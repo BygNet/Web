@@ -1,16 +1,14 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { type Ref, ref } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
-  import { BygPages, MorePages } from '@/data/pages.ts'
+  import { BygPages, MorePage } from '@/data/pages.ts'
   import router from '@/router.ts'
   import { openCreateModal } from '@/utils/createModalManager.ts'
 
   const AppVersion = __AppVersion
-  const showingMoreItems: Ref<boolean> = ref(false)
 </script>
 
 <template>
@@ -34,7 +32,7 @@
     </VStack>
 
     <VStack class="pages">
-      <RouterLink v-for="page in BygPages" :to="page.path">
+      <RouterLink v-for="page in [...BygPages, MorePage]" :to="page.path">
         <HStack
           class="desktopNavItem"
           :class="{ selected: router.currentRoute.value.path === page.path }"
@@ -51,32 +49,6 @@
           </h3>
         </HStack>
       </RouterLink>
-
-      <HStack
-        class="desktopNavItem"
-        @click="showingMoreItems = !showingMoreItems"
-        :class="{
-          selected: MorePages.some(
-            p => p.path === router.currentRoute.value.path
-          ),
-        }"
-      >
-        <Icon icon="solar:menu-dots-line-duotone" />
-        <h3>More</h3>
-      </HStack>
-
-      <VStack
-        class="morePages"
-        v-if="showingMoreItems"
-        @click="showingMoreItems = false"
-      >
-        <RouterLink v-for="page in MorePages" :to="page.path">
-          <HStack class="moreDesktopNavItem">
-            <Icon :icon="page.icon" />
-            <h3>{{ page.title }}</h3>
-          </HStack>
-        </RouterLink>
-      </VStack>
     </VStack>
 
     <VStack class="accountSection">
@@ -170,19 +142,6 @@
   .pages
     position: relative
     width: 100%
-
-    .morePages
-      position: absolute
-      bottom: -8rem
-      background: themes.$foregroundOpaque
-      border-radius: 1.5rem
-      width: 100%
-      padding: 0.75rem
-      z-index: 1000
-
-      svg
-        width: 1.5rem
-        height: 1.5rem
 
   .accountSection
     gap: 1rem

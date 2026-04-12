@@ -53,4 +53,19 @@ export const MorePages: BygPage[] = [
     icon: 'solar:verified-check-line-duotone',
     color: '#aa89e9',
   },
+  {
+    title: 'Settings',
+    description: 'Account settings.',
+    path: '/settings',
+    icon: 'solar:settings-minimalistic-line-duotone',
+    color: '#3e3255',
+  },
 ]
+
+export const MorePage: BygPage = {
+  title: 'More',
+  description: 'All Byg apps.',
+  path: '/apps',
+  icon: 'solar:menu-dots-line-duotone',
+  color: '#9373e1',
+}

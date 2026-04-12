@@ -99,11 +99,13 @@
       </label>
 
       <button type="submit" class="prominent" :disabled="isSubmitting">
+        <Icon icon="solar:check-circle-line-duotone" />
         {{ isSubmitting ? 'Verifying...' : 'Verify Email' }}
       </button>
     </form>
 
     <button @click="resend" class="transparent" :disabled="isResending">
+      <Icon icon="solar:letter-unread-line-duotone" />
       {{ isResending ? 'Sending...' : 'Resend Code' }}
     </button>
 

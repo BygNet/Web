@@ -115,7 +115,7 @@
     width: 100%
     padding: 0
     margin: 0 auto
-    gap: 1rem
+    gap: 0.5rem
     overflow-y: scroll
     scrollbar-width: none
 

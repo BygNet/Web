@@ -38,6 +38,9 @@
       width: fit-content
       min-width: 18rem
       max-width: 50rem
-      max-height: calc(100vh - var(--padding)*2 - var(--margin)*2 - var(--tabBarHeight))
+      margin-top: env(safe-area-inset-top)
+      max-height: calc(100vh - var(--padding)*2 - env(safe-area-inset-top) - env(safe-area-inset-bottom))
       margin-bottom: var(--tabBarHeight)
+      border-radius: 1.5rem
+      overflow: scroll
 </style>
