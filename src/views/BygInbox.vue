@@ -23,9 +23,9 @@
   import type { BygNotification } from '@/types/notifications'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
-  title.value = 'Notifications'
+  title.value = 'Inbox'
   setHeadMeta({
-    page: 'Notifications',
+    page: 'Inbox',
     subtitle: 'See recent follows, comments, and chats.',
   })
 
@@ -58,7 +58,7 @@
     try {
       notifications.value = await fetchNotifications(options)
     } catch {
-      error.value = 'Failed to load notifications.'
+      error.value = 'Failed to load inbox.'
     } finally {
       loading.value = false
     }
@@ -115,21 +115,23 @@
 <template>
   <ContentArea class="notificationsPage">
     <HStack class="fullWidth controls">
-      <HStack class="controlButtons">
-        <button
-          v-if="canEnablePush && !pushEnabled"
-          @click="enablePushAlerts"
-          :disabled="enablingPush"
-          class="prominent"
-        >
-          <Icon icon="solar:bell-bing-line-duotone" />
-          {{ enablingPush ? 'Enabling...' : 'Enable Push Alerts' }}
-        </button>
+      <HStack class="controlButtons fullWidth autoSpace">
+        <HStack>
+          <button
+            v-if="canEnablePush && !pushEnabled"
+            @click="enablePushAlerts"
+            :disabled="enablingPush"
+            class="prominent"
+          >
+            <Icon icon="solar:bell-bing-line-duotone" />
+            {{ enablingPush ? 'Enabling...' : 'Enable Push Alerts' }}
+          </button>
 
-        <button @click="loadNotifications({ force: true })">
-          <Icon icon="solar:refresh-line-duotone" />
-          Refresh
-        </button>
+          <button @click="loadNotifications({ force: true })">
+            <Icon icon="solar:refresh-line-duotone" />
+            Refresh
+          </button>
+        </HStack>
 
         <button
           @click="markAllRead"

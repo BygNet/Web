@@ -40,6 +40,13 @@ export const MorePages: BygPage[] = [
     color: '#a77c20',
   },
   {
+    title: 'Inbox',
+    description: 'Your Byg alerts.',
+    path: '/inbox',
+    icon: 'solar:inbox-line-line-duotone',
+    color: '#e0803c',
+  },
+  {
     title: 'Link',
     description: 'Link collections.',
     path: '/link',
@@ -60,12 +67,19 @@ export const MorePages: BygPage[] = [
     icon: 'solar:settings-minimalistic-line-duotone',
     color: '#3e3255',
   },
+  {
+    title: 'Credits',
+    description: 'Credits for Byg.',
+    path: '/credits',
+    icon: 'solar:hand-heart-line-duotone',
+    color: '#bfb26f',
+  },
 ]
 
-export const MorePage: BygPage = {
-  title: 'More',
-  description: 'All Byg apps.',
-  path: '/apps',
-  icon: 'solar:menu-dots-line-duotone',
+export const ExplorePage: BygPage = {
+  title: 'Explore',
+  description: 'All Byg apps and more.',
+  path: '/explore',
+  icon: 'solar:compass-line-duotone',
   color: '#9373e1',
 }

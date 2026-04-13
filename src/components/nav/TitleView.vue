@@ -30,16 +30,16 @@
       <button
         class="alertsButton"
         :class="{
-          selected: router.currentRoute.value.path === '/notifications',
+          prominent: router.currentRoute.value.path === '/inbox',
         }"
-        @click="router.push({ name: 'notifications' })"
+        @click="router.push({ name: 'inbox' })"
         aria-label="Open alerts"
       >
         <Icon
           :icon="
-            router.currentRoute.value.path === '/notifications'
-              ? 'solar:bell-bing-bold-duotone'
-              : 'solar:bell-line-duotone'
+            router.currentRoute.value.path === '/inbox'
+              ? 'solar:inbox-line-bold-duotone'
+              : 'solar:inbox-line-line-duotone'
           "
         />
       </button>
@@ -114,9 +114,6 @@
 
   button.alertsButton
     padding: 0.75rem
-
-    &.selected
-      background: themes.$foregroundColor
 
     svg
       width: 1.5rem !important

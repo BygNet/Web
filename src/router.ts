@@ -2,12 +2,13 @@ import { createRouter, createWebHistory, type Router } from 'vue-router'
 
 import { ensureHydratedSession } from '@/auth/hydrate'
 import AfterLogin from '@/views/AfterLogin.vue'
-import BygApps from '@/views/BygApps.vue'
 import BygAppsEmbed from '@/views/BygAppsEmbed.vue'
 import BygChatEmbed from '@/views/BygChatEmbed.vue'
+import BygCredits from '@/views/BygCredits.vue'
+import BygExplore from '@/views/BygExplore.vue'
+import BygInbox from '@/views/BygInbox.vue'
 import BygLink from '@/views/BygLink.vue'
 import BygMessages from '@/views/BygMessages.vue'
-import BygNotifications from '@/views/BygNotifications.vue'
 import BygPicture from '@/views/BygPicture.vue'
 import BygPro from '@/views/BygPro.vue'
 import BygProfile from '@/views/BygProfile.vue'
@@ -45,9 +46,9 @@ const router: Router = createRouter({
     { name: 'picture', path: '/picture', component: BygPicture },
     { name: 'link', path: '/link', component: BygLink },
     {
-      name: 'notifications',
-      path: '/notifications',
-      component: BygNotifications,
+      name: 'inbox',
+      path: '/inbox',
+      component: BygInbox,
       meta: { requiresAuth: true },
     },
     {
@@ -85,10 +86,11 @@ const router: Router = createRouter({
     },
     { name: 'login', path: '/login', component: LoginPage },
     { name: 'signup', path: '/signup', component: SignupPage },
-    { name: 'apps', path: '/apps', component: BygApps },
+    { name: 'explore', path: '/explore', component: BygExplore },
     { name: 'after-login', path: '/after-login', component: AfterLogin },
     { name: 'pro', path: '/pro', component: BygPro },
     { name: 'verification', path: '/verification', component: BygVerification },
+    { name: 'credits', path: '/credits', component: BygCredits },
     {
       name: 'email-verification',
       path: '/email-verification',

@@ -4,7 +4,7 @@
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { BygPages, MorePage } from '@/data/pages.ts'
+  import { BygPages, ExplorePage } from '@/data/pages.ts'
   import { showingCreateModal } from '@/data/visibility.ts'
   import router from '@/router.ts'
   import { toggleCreateModal } from '@/utils/createModalManager.ts'
@@ -22,7 +22,7 @@
     </button>
 
     <HStack class="mobileNavItems">
-      <RouterLink v-for="page in [...BygPages, MorePage]" :to="page.path">
+      <RouterLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
         <VStack
           class="mobileNavItem"
           :class="{ selected: router.currentRoute.value.path === page.path }"

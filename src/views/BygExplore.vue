@@ -4,17 +4,16 @@
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
 
-  title.value = 'Apps'
+  title.value = 'Explore'
   setHeadMeta({
-    page: 'Apps',
-    subtitle: 'Browse apps by Byg.',
+    page: 'Explore',
+    subtitle: 'Browse apps and more by Byg.',
   })
 </script>
 
 <template>
-  <ContentArea class="bygApps">
+  <ContentArea class="bygExplore">
     <section>
-      <h3>From Byg</h3>
       <AppsGrid />
     </section>
   </ContentArea>
@@ -24,6 +23,7 @@
   section
     width: 100%
     margin-bottom: 1rem
+    margin-top: 0.5rem
 
     h3
       margin-bottom: 0.75rem

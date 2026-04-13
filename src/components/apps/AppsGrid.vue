@@ -39,9 +39,9 @@
       :to="app.path"
     >
       <div class="appItem fullWidth">
-        <div class="appIcon">
+        <div class="appIcon" :style="{ '--tint': app.color }">
           <Icon :icon="app.icon" />
-          <div class="appIconBackground" :style="{ '--tint': app.color }" />
+          <div class="appIconBackground" />
         </div>
 
         <p>{{ app.title }}</p>
@@ -69,6 +69,16 @@
       .appItem
         gap: 0.5rem
 
+        .appIcon
+          padding: 0.75rem
+
+          svg
+            width: 2.25rem
+            height: 2.25rem
+
+          .appIconBackground
+            border-radius: 1.25rem
+
     .appItem
       *
         white-space: nowrap
@@ -78,6 +88,7 @@
       .appIcon
         position: relative
         padding: 0.5rem
+        filter: drop-shadow(0 0 3rem var(--tint))
 
         svg
           width: 2rem

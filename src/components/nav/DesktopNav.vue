@@ -4,7 +4,7 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
-  import { BygPages, MorePage } from '@/data/pages.ts'
+  import { BygPages, ExplorePage } from '@/data/pages.ts'
   import router from '@/router.ts'
   import { openCreateModal } from '@/utils/createModalManager.ts'
 
@@ -32,7 +32,7 @@
     </VStack>
 
     <VStack class="pages">
-      <RouterLink v-for="page in [...BygPages, MorePage]" :to="page.path">
+      <RouterLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
         <HStack
           class="desktopNavItem"
           :class="{ selected: router.currentRoute.value.path === page.path }"

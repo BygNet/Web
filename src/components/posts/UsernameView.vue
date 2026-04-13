@@ -108,7 +108,7 @@
     <button
       class="followButton"
       @click="viewProfile"
-      v-if="!displayMode && !hideFollowButton"
+      v-if="!displayMode && !hideFollowButton && !minimal"
     >
       <Icon icon="solar:user-check-line-duotone" />
       {{ following ? 'Following' : 'Follow' }}
