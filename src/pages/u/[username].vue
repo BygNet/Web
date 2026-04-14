@@ -9,7 +9,7 @@
   import { fetchProfileByUsername } from '@/data/profiles'
   import { showBackButton, title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
-  import { useRoute } from '#app'
+  import { createError, useRoute } from '#app'
 
   const route = useRoute()
   const usernameParam = route.params.username as string
