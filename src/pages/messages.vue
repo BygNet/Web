@@ -3,17 +3,18 @@
   import {
     computed,
     nextTick,
-
-  definePageMeta({
-    middleware: 'auth',
-  })
     onMounted,
     onUnmounted,
     type Ref,
     ref,
     watch,
   } from 'vue'
+
   import { useRoute } from '#app'
+
+  definePageMeta({
+    middleware: 'auth',
+  })
 
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
