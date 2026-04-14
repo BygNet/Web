@@ -99,9 +99,7 @@ watch(
   />
   <main class="blurrable" :class="{ blurred: blurContent }">
     <TitleView v-if="showingNavigation" />
-    <ClientOnly>
-      <NuxtPage :key="activeAccountKey" />
-    </ClientOnly>
+    <NuxtPage :key="activeAccountKey" />
     <MobileNav v-if="showingNavigation" />
   </main>
 </template>

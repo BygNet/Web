@@ -1,6 +1,7 @@
 export default defineNuxtConfig({
   ssr: true,
   future: { compatibilityVersion: 4 },
+  srcDir: 'src',
 
   modules: [ '@nuxtjs/i18n' ],
 
@@ -42,7 +43,7 @@ export default defineNuxtConfig({
     },
   },
 
-  css: [ '~/src/styles/global.sass' ],
+  css: [ '~/styles/global.sass' ],
 
   vite: {
     define: {
