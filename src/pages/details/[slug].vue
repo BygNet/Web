@@ -15,7 +15,17 @@
   import { useRoute } from '#app'
 
   const route = useRoute()
-  const id = Number(route.params.slug)
+  const slug = route.params.slug
+  const id = Number(slug)
+
+  // Validate ID early
+  if (!slug || Number.isNaN(id)) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Post not found',
+    })
+  }
+
   const post: Ref<BygPost | undefined> = ref()
 
   title.value = 'Loading...'

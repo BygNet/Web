@@ -12,7 +12,16 @@
   import { useRoute } from '#app'
 
   const route = useRoute()
-  const username = computed(() => route.params.username as string)
+  const usernameParam = route.params.username as string
+
+  if (!usernameParam) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'User not found',
+    })
+  }
+
+  const username = computed(() => usernameParam)
 
   const profile: Ref<BygProfile | null> = ref(null)
   const isLoading: Ref<boolean> = ref(true)

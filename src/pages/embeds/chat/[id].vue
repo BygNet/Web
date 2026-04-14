@@ -13,6 +13,14 @@
   import { useRoute } from '#app'
 
   const route = useRoute()
+  const id = route.params.id as string
+
+  if (!id) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'User not found',
+    })
+  }
 
   setHeadMeta({
     page: 'Chat Embed',
@@ -23,7 +31,7 @@
   const isLoading: Ref<boolean> = ref(true)
   const error: Ref<string | null> = ref(null)
   const isFollowing: Ref<boolean> = ref(false)
-  const username = computed(() => route.params.id as string)
+  const username = computed(() => id)
 
   async function loadProfile() {
     isLoading.value = true
