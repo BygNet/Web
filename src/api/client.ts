@@ -1,7 +1,9 @@
 import { auth, clearActiveSession } from '@/auth/session'
+import { useEnv } from '@/utils/env'
 import { clearUserCaches } from '@/data/caches'
 
 export async function api(path: string, options: RequestInit = {}) {
+  const { apiBase } = useEnv()
   const headers = new Headers(options.headers)
 
   if (auth.token) {
@@ -10,7 +12,7 @@ export async function api(path: string, options: RequestInit = {}) {
 
   headers.set('Content-Type', 'application/json')
 
-  const res = await fetch(import.meta.env.VITE_API_BASE + path, {
+  const res = await fetch(apiBase + path, {
     ...options,
     headers,
   })

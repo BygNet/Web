@@ -1,9 +1,17 @@
 import { type Ref, ref } from 'vue'
 
-const html: HTMLElement = document.querySelector('html')!
-const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+let html: HTMLElement | null = null
+let systemThemeQuery: MediaQueryList | null = null
+
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  html = document.querySelector('html')
+  systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+}
+
 export const currentThemeKey: Ref<string> = ref('')
-export const systemPrefersDark: Ref<boolean> = ref(systemThemeQuery.matches)
+export const systemPrefersDark: Ref<boolean> = ref(
+  systemThemeQuery?.matches ?? false
+)
 
 export interface BygTheme {
   title: string
@@ -86,9 +94,11 @@ export const BygThemes: BygTheme[] = [
   },
 ]
 
-systemThemeQuery.addEventListener('change', event => {
-  systemPrefersDark.value = event.matches
-})
+if (systemThemeQuery) {
+  systemThemeQuery.addEventListener('change', event => {
+    systemPrefersDark.value = event.matches
+  })
+}
 
 export function getThemeByKey(key: string): BygTheme | undefined {
   return BygThemes.find(theme => theme.key === key)
@@ -103,6 +113,7 @@ export function isThemeDark(key: string = currentThemeKey.value): boolean {
 }
 
 export function loadTheme(): void {
+  if (typeof window === 'undefined' || !window.localStorage) return
   const savedTheme: string | null = localStorage.getItem('bygTheme')
   let toSet: string
 
@@ -112,18 +123,23 @@ export function loadTheme(): void {
     toSet = 'auto'
   }
 
-  html.classList.add(toSet)
+  if (html) {
+    html.classList.add(toSet)
+  }
   currentThemeKey.value = toSet
 }
 
 export function setTheme(theme: BygTheme): void {
+  if (typeof window === 'undefined' || !window.localStorage) return
   const savedTheme: string | null = localStorage.getItem('bygTheme')
 
-  if (savedTheme != null) {
+  if (savedTheme != null && html) {
     html.classList.remove(savedTheme)
   }
 
   localStorage.setItem('bygTheme', theme.key)
-  html.classList.add(theme.key)
+  if (html) {
+    html.classList.add(theme.key)
+  }
   currentThemeKey.value = theme.key
 }

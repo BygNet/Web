@@ -56,6 +56,7 @@ function normalizeAccount(raw: unknown): AuthAccount | null {
 }
 
 function readStoredAccounts(): AuthAccount[] {
+  if (typeof window === 'undefined' || !window.localStorage) return []
   try {
     const raw = localStorage.getItem(ACCOUNTS_STORAGE_KEY)
     if (!raw) return []
@@ -70,6 +71,7 @@ function readStoredAccounts(): AuthAccount[] {
 }
 
 function readStoredActiveAccountId(): number | null {
+  if (typeof window === 'undefined' || !window.localStorage) return null
   const raw = localStorage.getItem(ACTIVE_ACCOUNT_STORAGE_KEY)
   if (!raw) return null
   const parsed = Number(raw)
@@ -78,6 +80,7 @@ function readStoredActiveAccountId(): number | null {
 }
 
 function persistAccounts(accounts: AuthAccount[]): void {
+  if (typeof window === 'undefined' || !window.localStorage) return
   try {
     localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts))
   } catch {
@@ -86,6 +89,7 @@ function persistAccounts(accounts: AuthAccount[]): void {
 }
 
 function persistActiveAccountId(accountId: number | null): void {
+  if (typeof window === 'undefined' || !window.localStorage) return
   if (accountId === null) {
     localStorage.removeItem(ACTIVE_ACCOUNT_STORAGE_KEY)
     return
@@ -111,6 +115,7 @@ export const auth = reactive<{
 })
 
 export function clearLegacyToken(): void {
+  if (typeof window === 'undefined' || !window.localStorage) return
   localStorage.removeItem(LEGACY_TOKEN_STORAGE_KEY)
 }
 
@@ -138,6 +143,7 @@ function resolveInitialSession(): void {
     return
   }
 
+  if (typeof window === 'undefined' || !window.localStorage) return
   const legacyToken = localStorage.getItem(LEGACY_TOKEN_STORAGE_KEY)
   if (legacyToken) {
     auth.token = legacyToken

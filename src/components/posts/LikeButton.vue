@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { onMounted, type Ref, ref } from 'vue'
+  import { computed, onMounted, type Ref, ref } from 'vue'
   import { useRouter } from 'vue-router'
 
   import { auth } from '@/auth/session'
+  import { useEnv } from '@/utils/env'
   import { formatNumber, formatStat } from '@/utils/formatters.ts'
 
   const props = defineProps<{
@@ -14,8 +15,9 @@
   }>()
 
   const router = useRouter()
+  const { apiBase } = useEnv()
 
-  const fetchUrl: string = `${import.meta.env.VITE_API_BASE}${props.apiPath}/${props.id}`
+  const fetchUrl = computed(() => `${apiBase}${props.apiPath}/${props.id}`)
 
   const likeCount: Ref<number> = ref(0)
   const liking: Ref<boolean> = ref(false)

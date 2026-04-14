@@ -1,5 +1,6 @@
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'
+import { useEnv } from '@/utils/env'
 import type {
   BygMessage,
   BygMessageConversation,
@@ -184,14 +185,15 @@ function clearDeviceMessageCache(userId?: number): void {
 }
 
 function buildMessagesSocketUrl(): string {
-  const apiBase = String(import.meta.env.VITE_API_BASE).replace(/\/+$/, '')
+  const { apiBase } = useEnv()
+  const base = String(apiBase).replace(/\/+$/, '')
 
-  if (apiBase.startsWith('https://')) {
-    return `${apiBase.replace('https://', 'wss://')}/messages/live`
+  if (base.startsWith('https://')) {
+    return `${base.replace('https://', 'wss://')}/messages/live`
   }
 
-  if (apiBase.startsWith('http://')) {
-    return `${apiBase.replace('http://', 'ws://')}/messages/live`
+  if (base.startsWith('http://')) {
+    return `${base.replace('http://', 'ws://')}/messages/live`
   }
 
   return `${apiBase}/messages/live`
