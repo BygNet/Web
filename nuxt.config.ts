@@ -27,6 +27,8 @@ export default defineNuxtConfig({
     skipSettingLocaleOnNavigate: false,
     useSetI18nLanguageCookie: true,
     alwaysRedirect: false,
+    genRouteLocalePrefixes: false,
+    parseLocalePerRoute: true,
   },
 
   app: {

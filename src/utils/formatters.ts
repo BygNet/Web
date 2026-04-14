@@ -16,7 +16,8 @@ export function formatStat(value: number): string {
 }
 
 export function formatNumber(value: number): string {
-  return value.toLocaleString(document.querySelector('html')?.lang)
+  const lang = document.querySelector('html')?.lang || 'en'
+  return value.toLocaleString(lang)
 }
 
 export function formatDate(input: string): string {
