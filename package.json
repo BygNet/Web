@@ -10,7 +10,7 @@
     "format": "prettier --write --experimental-cli --ignore-path .prettierignore .",
     "type-check": "nuxi typecheck",
     "build": "nuxt build",
-    "preview": "nuxt preview"
+    "preview": "nuxt preview --port 5173"
   },
   "dependencies": {
     "@eslint/compat": "^2.0.1",

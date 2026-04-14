@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import '@/utils/arrayEnhance.ts'
-
 import type { BygAd } from '@bygnet/types'
 import { computed, onMounted, type Ref, ref, watch } from 'vue'
 
