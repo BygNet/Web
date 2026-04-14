@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ProgressiveBlur } from 'vue-progressive-blur'
-  import { useRoute } from '#app'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages, ExplorePage } from '@/data/pages.ts'
   import { showingCreateModal } from '@/data/visibility.ts'
   import { toggleCreateModal } from '@/utils/createModalManager.ts'
+  import { useRoute } from '#app'
 
   const route = useRoute()
 </script>

@@ -2,7 +2,6 @@
   import type { BygImage } from '@bygnet/types'
   import { useHead } from '@unhead/vue'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
-  import { useRoute } from 'vue-router'
 
   import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -14,6 +13,7 @@
   import { showBackButton, title } from '@/data/title'
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
+  import { useRoute } from '#app'
 
   const route = useRoute()
   const id = Number(route.params.slug)

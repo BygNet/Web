@@ -1,6 +1,6 @@
 import { auth, clearActiveSession } from '@/auth/session'
-import { useEnv } from '@/utils/env'
 import { clearUserCaches } from '@/data/caches'
+import { useEnv } from '@/utils/env'
 
 export async function api(path: string, options: RequestInit = {}) {
   const { apiBase } = useEnv()

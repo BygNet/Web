@@ -2,7 +2,6 @@
   import type { BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { logout } from '@/auth/logout'
   import { auth } from '@/auth/session'
@@ -19,10 +18,10 @@
     clearDocumentProfileTheme,
   } from '@/utils/profileTheme.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { navigateTo } from '#app'
 
   title.value = 'My Profile'
   setHeadMeta({ page: 'Profile', subtitle: 'Your Byg profile.' })
-  const router = useRouter()
   const isLoggedIn = computed(() => !!auth.user)
   const hasAccounts = computed(() => auth.accounts.length > 0)
   const showingAppearances: Ref<boolean> = ref(false)
@@ -37,19 +36,19 @@
 
   async function doLogout() {
     await logout()
-    await router.push({ name: 'social' })
+    await navigateTo({ name: 'social' })
   }
 
   function goLogin() {
-    router.push({ name: 'login' })
+    navigateTo({ name: 'login' })
   }
 
   function goSignup() {
-    router.push({ name: 'signup' })
+    navigateTo({ name: 'signup' })
   }
 
   function goSettings() {
-    router.push({ name: 'settings' })
+    navigateTo({ name: 'settings' })
   }
 
   function previewAndSetTheme(theme: (typeof BygThemes)[number]) {

@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
@@ -13,6 +12,7 @@
   import { showingNavigation } from '@/data/visibility.ts'
   import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { navigateTo,useRoute } from '#app'
 
   interface SearchCategoryOption {
     id: BygSearchCategory
@@ -78,7 +78,6 @@
   })
 
   const route = useRoute()
-  const router = useRouter()
 
   const query: Ref<string> = ref('')
   const selectedCategory: Ref<BygSearchCategory> = ref('web')
@@ -181,22 +180,24 @@
     nextPage: number
   ): Promise<void> {
     if (!nextQuery.trim()) {
-      await router.replace({
+      await navigateTo({
         name: 'search-results',
         query: {
           category: nextCategory === 'web' ? undefined : nextCategory,
         },
+        replace: true,
       })
       return
     }
 
-    await router.replace({
+    await navigateTo({
       name: 'search-results',
       query: {
         q: nextQuery.trim(),
         category: nextCategory === 'web' ? undefined : nextCategory,
         page: nextPage > 1 ? String(nextPage) : undefined,
       },
+      replace: true,
     })
   }
 

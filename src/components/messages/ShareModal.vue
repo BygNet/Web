@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, type Ref, ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
@@ -15,8 +14,7 @@
     notifyShareCompleted,
   } from '@/data/share'
   import type { BygMessageShareTarget } from '@/types/messages'
-
-  const router = useRouter()
+  import { navigateTo } from '#app'
 
   const loadingTargets: Ref<boolean> = ref(false)
   const sendingUserId: Ref<number | null> = ref(null)
@@ -106,7 +104,7 @@
 
   async function openLogin(): Promise<void> {
     closeShareModal()
-    await router.push({ name: 'login' })
+    await navigateTo({ name: 'login' })
   }
 
   onMounted(() => {

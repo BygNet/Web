@@ -1,16 +1,15 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { signup } from '@/auth/signup'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title.ts'
+  import { navigateTo } from '#app'
 
   title.value = 'Signup'
-  const router = useRouter()
   const email = ref('')
   const username = ref('')
   const password = ref('')
@@ -23,7 +22,7 @@
 
     try {
       await signup(email.value, username.value, password.value)
-      await router.push({ name: 'after-login' })
+      await navigateTo({ name: 'after-login' })
     } catch {
       error.value = 'Signup failed'
     } finally {

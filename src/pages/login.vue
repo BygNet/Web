@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { login } from '@/auth/login'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -9,9 +8,9 @@
   import VStack from '@/components/layout/VStack.vue'
   import { taskList } from '@/data/tasks.ts'
   import { title } from '@/data/title.ts'
+  import { navigateTo } from '#app'
 
   title.value = 'Login'
-  const router = useRouter()
   const email = ref('')
   const password = ref('')
   const twoFactorCode = ref('')
@@ -37,7 +36,7 @@
         return
       }
 
-      await router.push({ name: 'after-login' })
+      await navigateTo('/')
     } catch {
       error.value = requiresTwoFactor.value
         ? 'Invalid authenticator code'

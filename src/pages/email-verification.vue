@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
+
+  import { navigateTo } from '#app'
 
   definePageMeta({
     middleware: 'auth',
@@ -19,7 +20,6 @@
     subtitle: 'Confirm your account email with the code we sent you.',
   })
 
-  const router = useRouter()
   const code = ref('')
   const isSubmitting = ref(false)
   const isResending = ref(false)
@@ -53,7 +53,7 @@
 
       message.value = 'Your email is verified now.'
       setTimeout(() => {
-        router.push({ name: 'settings' })
+        navigateTo({ name: 'settings' })
       }, 900)
     } finally {
       isSubmitting.value = false

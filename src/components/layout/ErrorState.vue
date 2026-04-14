@@ -1,21 +1,21 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { useRoute, useRouter } from 'vue-router'
 
   import VStack from '@/components/layout/VStack.vue'
+  import { navigateTo,useRoute } from '#app'
 
   defineProps<{
     message: string
   }>()
 
-  const router = useRouter()
   const route = useRoute()
 
   function reload(): void {
-    router.replace({
+    navigateTo({
       name: route.name!,
       params: route.params,
       query: { ...route.query, _r: Date.now() },
+      replace: true,
     })
   }
 </script>

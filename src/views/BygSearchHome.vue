@@ -1,14 +1,13 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { showingNavigation } from '@/data/visibility.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { navigateTo } from '#app'
 
-  const router = useRouter()
   const query = ref('')
 
   setHeadMeta({
@@ -19,7 +18,7 @@
   async function submitSearch() {
     if (!query.value.trim()) return
 
-    await router.push({
+    await navigateTo({
       name: 'search-results',
       query: { q: query.value },
     })

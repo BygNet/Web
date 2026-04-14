@@ -2,7 +2,6 @@
   import type { BygPost } from '@bygnet/types'
   import { useHead } from '@unhead/vue'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
-  import { useRoute } from 'vue-router'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import Divider from '@/components/layout/Divider.vue'
@@ -13,6 +12,7 @@
   import { showBackButton, title } from '@/data/title.ts'
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
+  import { useRoute } from '#app'
 
   const route = useRoute()
   const id = Number(route.params.slug)

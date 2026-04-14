@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { computed, ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { logout } from '@/auth/logout'
   import { auth, removeAccount, setActiveAccount } from '@/auth/session'
@@ -13,7 +12,6 @@
     variant?: 'sidebar' | 'profile'
   }>()
 
-  const router = useRouter()
   const showingAccounts = ref(false)
 
   const accounts = computed(() => {
@@ -48,11 +46,11 @@
   }
 
   async function addAccount(): Promise<void> {
-    await router.push({ name: 'login' })
+    await navigateTo('/login')
   }
 
   async function addSignup(): Promise<void> {
-    await router.push({ name: 'signup' })
+    await navigateTo('/signup')
   }
 
   async function logoutActive(): Promise<void> {

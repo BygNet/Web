@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, type Ref, ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { auth } from '@/auth/session'
   import { useEnv } from '@/utils/env'
   import { formatNumber, formatStat } from '@/utils/formatters.ts'
+  import { navigateTo } from '#app'
 
   const props = defineProps<{
     likes: number
@@ -14,7 +14,6 @@
     compact?: boolean
   }>()
 
-  const router = useRouter()
   const { apiBase } = useEnv()
 
   const fetchUrl = computed(() => `${apiBase}${props.apiPath}/${props.id}`)
@@ -28,7 +27,7 @@
 
   async function like(): Promise<void> {
     if (!auth.user) {
-      await router.push({ name: 'login' })
+      await navigateTo({ name: 'login' })
       return
     }
 

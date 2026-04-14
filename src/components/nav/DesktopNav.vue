@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { useRoute } from '#app'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
   import { BygPages, ExplorePage } from '@/data/pages.ts'
   import { openCreateModal } from '@/utils/createModalManager.ts'
+  import { useRoute } from '#app'
 
   const AppVersion = __AppVersion
   const route = useRoute()

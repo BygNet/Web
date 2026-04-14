@@ -21,7 +21,6 @@ import {
 } from '@/data/pushAlerts.ts'
 import { showingShareModal } from '@/data/share'
 import { loadTheme } from '@/data/themes.ts'
-import { useEnv } from '@/utils/env'
 import {
   blurContent,
   showingCookieBanner,
@@ -30,6 +29,7 @@ import {
   showingReportPopup,
 } from '@/data/visibility.ts'
 import { consoleWarn } from '@/utils/consoleWarn.ts'
+import { useEnv } from '@/utils/env'
 import { getFlag } from '@/utils/setUserFlag.ts'
 import CreateView from '@/views/CreateView.vue'
 import ReportView from '@/views/ReportView.vue'

@@ -1,6 +1,5 @@
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'
-import { useEnv } from '@/utils/env'
 import type {
   BygMessage,
   BygMessageConversation,
@@ -10,6 +9,7 @@ import type {
   BygMessageShareTarget,
   BygMessageThread,
 } from '@/types/messages'
+import { useEnv } from '@/utils/env'
 
 const THREAD_CACHE_TTL_MS = 20 * 60 * 1000
 const CONVERSATION_CACHE_TTL_MS = 12 * 60 * 60 * 1000

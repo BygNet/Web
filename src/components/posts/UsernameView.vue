@@ -2,12 +2,12 @@
   import type { BygProfile, BygVerification } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { type Ref, ref, watch } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import HStack from '@/components/layout/HStack.vue'
   import { fetchProfileByUsername } from '@/data/profiles'
   import { StaffUsers } from '@/data/users.ts'
   import { getVerificationColor } from '@/utils/verificationData.ts'
+  import { navigateTo } from '#app'
 
   const props = defineProps<{
     name: string
@@ -20,7 +20,6 @@
     hideFollowButton?: boolean
   }>()
 
-  const router = useRouter()
   const isStaff: Ref<boolean> = ref(false)
   const verification: Ref<BygVerification | null> = ref(null)
   const subscriptionState: Ref<string | null> = ref(null)
@@ -56,7 +55,7 @@
   )
 
   function viewProfile() {
-    router.push({ name: 'userProfile', params: { username: props.name } })
+    navigateTo({ name: 'userProfile', params: { username: props.name } })
   }
 </script>
 

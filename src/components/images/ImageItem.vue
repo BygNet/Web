@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import { useRouter } from 'vue-router'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
@@ -10,17 +9,16 @@
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { formatDate } from '@/utils/formatters.ts'
+  import { navigateTo } from '#app'
 
   const props = defineProps<{
     image: BygImage
     detailMode?: boolean
   }>()
 
-  const router = useRouter()
-
   function openDetails() {
     if (props.detailMode) return
-    router.push(`/image/${props.image.id}`)
+    navigateTo(`/image/${props.image.id}`)
   }
 </script>
 

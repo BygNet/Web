@@ -2,7 +2,7 @@ export default defineNuxtConfig({
   ssr: true,
   future: { compatibilityVersion: 4 },
 
-  modules: ['@nuxtjs/i18n'],
+  modules: [ '@nuxtjs/i18n' ],
 
   runtimeConfig: {
     public: {
@@ -42,7 +42,7 @@ export default defineNuxtConfig({
     },
   },
 
-  css: ['~/src/styles/global.sass'],
+  css: [ '~/src/styles/global.sass' ],
 
   vite: {
     define: {

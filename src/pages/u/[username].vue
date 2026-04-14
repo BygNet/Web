@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
   import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
-  import { useRoute } from 'vue-router'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
@@ -10,6 +9,7 @@
   import { fetchProfileByUsername } from '@/data/profiles'
   import { showBackButton, title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { useRoute } from '#app'
 
   const route = useRoute()
   const username = computed(() => route.params.username as string)

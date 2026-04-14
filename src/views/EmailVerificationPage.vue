@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import { api } from '@/api/client'
   import { auth, updateActiveUser } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import { title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { navigateTo } from '#app'
 
   title.value = 'Verify Email'
   setHeadMeta({
@@ -15,7 +15,6 @@
     subtitle: 'Confirm your account email with the code we sent you.',
   })
 
-  const router = useRouter()
   const code = ref('')
   const isSubmitting = ref(false)
   const isResending = ref(false)
@@ -49,7 +48,7 @@
 
       message.value = 'Your email is verified now.'
       setTimeout(() => {
-        router.push({ name: 'settings' })
+        navigateTo({ name: 'settings' })
       }, 900)
     } finally {
       isSubmitting.value = false

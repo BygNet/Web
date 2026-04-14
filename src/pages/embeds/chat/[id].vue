@@ -2,7 +2,6 @@
   import type { BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { computed, type Ref, ref } from 'vue'
-  import { useRoute } from 'vue-router'
 
   import EmbedShell from '@/components/embeds/EmbedShell.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
@@ -11,6 +10,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import { fetchProfileByUsername } from '@/data/profiles.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { useRoute } from '#app'
 
   const route = useRoute()
 

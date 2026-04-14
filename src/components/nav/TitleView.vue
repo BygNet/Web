@@ -1,20 +1,24 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ProgressiveBlur } from 'vue-progressive-blur'
-  import { useRouter } from 'vue-router'
 
   import HStack from '@/components/layout/HStack.vue'
   import { taskList } from '@/data/tasks.ts'
   import { showBackButton, title } from '@/data/title.ts'
+  import { useRoute } from '#app'
 
-  const router = useRouter()
+  const route = useRoute()
+
+  function goBack() {
+    window.history.back()
+  }
 </script>
 
 <template>
   <header class="titleView">
     <HStack class="titleViewContent autoSpace">
       <HStack class="titleMain">
-        <button @click="router.back()" v-if="showBackButton" class="backButton">
+        <button @click="goBack()" v-if="showBackButton" class="backButton">
           <Icon icon="solar:arrow-left-line-duotone" />
         </button>
         <h2>{{ title }}</h2>
@@ -30,14 +34,14 @@
       <button
         class="alertsButton"
         :class="{
-          prominent: router.currentRoute.value.path === '/inbox',
+          prominent: route.path === '/inbox',
         }"
-        @click="router.push({ name: 'inbox' })"
+        @click="navigateTo('/inbox')"
         aria-label="Open alerts"
       >
         <Icon
           :icon="
-            router.currentRoute.value.path === '/inbox'
+            route.path === '/inbox'
               ? 'solar:inbox-line-bold-duotone'
               : 'solar:inbox-line-line-duotone'
           "

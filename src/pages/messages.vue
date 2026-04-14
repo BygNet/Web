@@ -13,7 +13,7 @@
     ref,
     watch,
   } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRoute } from '#app'
 
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -48,7 +48,6 @@
     subtitle: 'Chat with your friends and family on Byg.',
   })
 
-  const router = useRouter()
   const route = useRoute()
 
   const loadingThreads: Ref<boolean> = ref(true)
@@ -605,9 +604,9 @@
       }
 
       if (isMobileViewport.value) {
-        await router.push(nextLocation)
+        await navigateTo(nextLocation)
       } else {
-        await router.replace(nextLocation)
+        await navigateTo(nextLocation)
       }
     }
 
@@ -621,7 +620,7 @@
 
     stopTypingSignal()
 
-    await router.push({ name: 'messages' })
+    await navigateTo('/messages')
   }
 
   function pickThreadFromConversation(

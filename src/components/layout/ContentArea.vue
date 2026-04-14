@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
-  import { useRoute } from 'vue-router'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { showingNavigation } from '@/data/visibility.ts'
+  import { useRoute } from '#app'
 
   const attrs = useAttrs()
   const route = useRoute()
