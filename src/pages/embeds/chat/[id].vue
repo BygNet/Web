@@ -10,17 +10,10 @@
   import VStack from '@/components/layout/VStack.vue'
   import { fetchProfileByUsername } from '@/data/profiles.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
-  import { createError, useRoute } from '#app'
+  import { useRoute } from '#app'
 
   const route = useRoute()
-  const id = route.params.id as string
-
-  if (!id) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'User not found',
-    })
-  }
+  const id = (route.params.id as string) || null
 
   setHeadMeta({
     page: 'Chat Embed',
@@ -28,12 +21,18 @@
   })
 
   const profile: Ref<BygProfile | null> = ref(null)
-  const isLoading: Ref<boolean> = ref(true)
   const error: Ref<string | null> = ref(null)
+  const isLoading: Ref<boolean> = ref(true)
   const isFollowing: Ref<boolean> = ref(false)
   const username = computed(() => id)
 
   async function loadProfile() {
+    if (!username.value) {
+      error.value = 'Invalid username'
+      isLoading.value = false
+      return
+    }
+
     isLoading.value = true
     error.value = null
 
@@ -52,7 +51,9 @@
     }
   }
 
-  loadProfile()
+  if (id) {
+    loadProfile()
+  }
 </script>
 
 <template>

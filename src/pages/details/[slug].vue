@@ -16,17 +16,10 @@
 
   const route = useRoute()
   const slug = route.params.slug
-  const id = Number(slug)
-
-  // Validate ID early
-  if (!slug || Number.isNaN(id)) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Post not found',
-    })
-  }
+  const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
 
   const post: Ref<BygPost | undefined> = ref()
+  const error: Ref<string | null> = ref(null)
 
   title.value = 'Loading...'
   showBackButton.value = true
@@ -49,6 +42,11 @@
   })
 
   onMounted(async () => {
+    if (!id) {
+      error.value = 'Invalid post ID'
+      return
+    }
+
     const data = await fetch(
       `${useEnv().apiBase}/post-details/${id}`
     )
@@ -64,7 +62,10 @@
 
 <template>
   <ContentArea class="postDetails">
-    <SkeletonPost v-if="post == undefined" class="fullWidth" />
+    <div v-if="error" class="error-state">
+      <p>{{ error }}</p>
+    </div>
+    <SkeletonPost v-else-if="post == undefined" class="fullWidth" />
     <PostItem v-else :post="post" detail-mode class="postDetail" />
 
     <Divider />

@@ -9,17 +9,10 @@
   import { fetchProfileByUsername } from '@/data/profiles'
   import { showBackButton, title } from '@/data/title.ts'
   import setHeadMeta from '@/utils/setHeadMeta.ts'
-  import { createError, useRoute } from '#app'
+  import { useRoute } from '#app'
 
   const route = useRoute()
-  const usernameParam = route.params.username as string
-
-  if (!usernameParam) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'User not found',
-    })
-  }
+  const usernameParam = (route.params.username as string) || null
 
   const username = computed(() => usernameParam)
 
@@ -35,6 +28,12 @@
   setHeadMeta({ page: title.value, subtitle: pageSubtitle.value })
 
   async function loadProfile() {
+    if (!username.value) {
+      error.value = 'Invalid username'
+      isLoading.value = false
+      return
+    }
+
     isLoading.value = true
     error.value = null
 

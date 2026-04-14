@@ -17,17 +17,10 @@
 
   const route = useRoute()
   const slug = route.params.slug
-  const id = Number(slug)
-
-  // Validate ID early
-  if (!slug || Number.isNaN(id)) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Image not found',
-    })
-  }
+  const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
 
   const image: Ref<BygImage | undefined> = ref()
+  const error: Ref<string | null> = ref(null)
 
   title.value = 'Loading...'
   showBackButton.value = true
@@ -51,6 +44,11 @@
   })
 
   onMounted(async () => {
+    if (!id) {
+      error.value = 'Invalid image ID'
+      return
+    }
+
     const res = await fetch(
       `${useEnv().apiBase}/image-details/${id}`
     )
@@ -66,7 +64,10 @@
 
 <template>
   <ContentArea class="imageDetails">
-    <VStack v-if="image == undefined" class="fullWidth">
+    <div v-if="error" class="error-state">
+      <p>{{ error }}</p>
+    </div>
+    <VStack v-else-if="image == undefined" class="fullWidth">
       <div class="fullWidth skeleton" style="height: 50vh" />
       <SkeletonUser />
       <SkeletonText :lines="1" />
