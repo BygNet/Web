@@ -13,7 +13,7 @@
   import { showBackButton, title } from '@/data/title'
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
-  import { createError, useRoute } from '#app'
+  import { useRoute } from '#app'
 
   const route = useRoute()
   const slug = route.params.slug
