@@ -53,7 +53,9 @@
     </VStack>
 
     <VStack class="accountSection">
-      <AccountSwitcher class="accountWidget" />
+      <ClientOnly>
+        <AccountSwitcher class="accountWidget" />
+      </ClientOnly>
 
       <HStack class="footer fullWidth autoSpace">
         <a href="https://git.new/bygpl" target="_blank">

@@ -77,18 +77,20 @@ watch(
 </script>
 
 <template>
-  <CreateView v-if="showingCreateModal" />
-  <ReportView v-if="showingReportPopup" />
-  <ShareModal v-if="showingShareModal" />
-  <Byg2Modal v-if="showingByg2Alpha" @close="showingByg2Alpha = false" />
-  <CookieBanner
-    v-if="showingCookieBanner"
-    @close="showingCookieBanner = false"
-  />
-  <NotificationsModal
-    v-if="showingNotificationsModal && !showingByg2Alpha"
-    @close="showingNotificationsModal = false"
-  />
+  <ClientOnly>
+    <CreateView v-if="showingCreateModal" />
+    <ReportView v-if="showingReportPopup" />
+    <ShareModal v-if="showingShareModal" />
+    <Byg2Modal v-if="showingByg2Alpha" @close="showingByg2Alpha = false" />
+    <CookieBanner
+      v-if="showingCookieBanner"
+      @close="showingCookieBanner = false"
+    />
+    <NotificationsModal
+      v-if="showingNotificationsModal && !showingByg2Alpha"
+      @close="showingNotificationsModal = false"
+    />
+  </ClientOnly>
 
   <DesktopNav
     class="blurrable"
@@ -97,7 +99,9 @@ watch(
   />
   <main class="blurrable" :class="{ blurred: blurContent }">
     <TitleView v-if="showingNavigation" />
-    <NuxtPage :key="activeAccountKey" />
+    <ClientOnly>
+      <NuxtPage :key="activeAccountKey" />
+    </ClientOnly>
     <MobileNav v-if="showingNavigation" />
   </main>
 </template>

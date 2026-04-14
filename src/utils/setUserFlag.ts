@@ -4,10 +4,10 @@ function storage(): Pick<Storage, 'getItem' | 'setItem'> {
   if (typeof window !== 'undefined') {
     return localStorage
   } else {
-    // Shims for server
+    // Shims for server - return null like real localStorage for non-existent keys
     return {
       getItem: (key: string): string | null => {
-        return 'true'
+        return null
       },
       setItem: (key: string, value: string): void => {},
     }
