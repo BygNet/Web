@@ -1,13 +1,15 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ProgressiveBlur } from 'vue-progressive-blur'
+  import { useRoute } from '#app'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages, ExplorePage } from '@/data/pages.ts'
   import { showingCreateModal } from '@/data/visibility.ts'
-  import router from '@/router.ts'
   import { toggleCreateModal } from '@/utils/createModalManager.ts'
+
+  const route = useRoute()
 </script>
 
 <template>
@@ -25,11 +27,11 @@
       <RouterLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
         <VStack
           class="mobileNavItem"
-          :class="{ selected: router.currentRoute.value.path === page.path }"
+          :class="{ selected: route.path === page.path }"
         >
           <Icon
             :icon="
-              router.currentRoute.value.path === page.path
+              route.path === page.path
                 ? page.icon.replace('line-duotone', 'bold-duotone')
                 : page.icon
             "

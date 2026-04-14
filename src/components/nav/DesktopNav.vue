@@ -1,14 +1,15 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import { useRoute } from '#app'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
   import { BygPages, ExplorePage } from '@/data/pages.ts'
-  import router from '@/router.ts'
   import { openCreateModal } from '@/utils/createModalManager.ts'
 
   const AppVersion = __AppVersion
+  const route = useRoute()
 </script>
 
 <template>
@@ -35,11 +36,11 @@
       <RouterLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
         <HStack
           class="desktopNavItem"
-          :class="{ selected: router.currentRoute.value.path === page.path }"
+          :class="{ selected: route.path === page.path }"
         >
           <Icon
             :icon="
-              router.currentRoute.value.path === page.path
+              route.path === page.path
                 ? page.icon.replace('line-duotone', 'bold-duotone')
                 : page.icon
             "

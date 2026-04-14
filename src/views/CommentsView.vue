@@ -13,8 +13,7 @@
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { fetchUserSuggestions } from '@/data/mentions'
   import { taskList } from '@/data/tasks.ts'
-  import router from '@/router.ts'
-  import type { BygUserSuggestion } from '@/types/mentions'
+    import type { BygUserSuggestion } from '@/types/mentions'
   import { formatDate } from '@/utils/formatters.ts'
   import {
     applyMention,
@@ -114,7 +113,7 @@
 
   async function postComment(): Promise<void> {
     if (!auth.user) {
-      await router.push({ name: 'login' })
+      await navigateTo({ name: 'login' })
       return
     }
 

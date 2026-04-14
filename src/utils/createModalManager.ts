@@ -1,10 +1,9 @@
 import { auth } from '@/auth/session.ts'
 import { showingCreateModal } from '@/data/visibility.ts'
-import router from '@/router.ts'
 
-export function openCreateModal(): void {
+export async function openCreateModal(): Promise<void> {
   if (!auth.user) {
-    router.push({ name: 'login' })
+    await navigateTo('/login')
   } else {
     showingCreateModal.value = true
   }

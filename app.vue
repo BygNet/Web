@@ -34,10 +34,6 @@ import { getFlag } from '@/utils/setUserFlag.ts'
 import CreateView from '@/views/CreateView.vue'
 import ReportView from '@/views/ReportView.vue'
 
-definePageMeta({
-  layout: false,
-})
-
 const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
 const pushPermission: Ref<NotificationPermission | 'unsupported'> =
   ref('unsupported')

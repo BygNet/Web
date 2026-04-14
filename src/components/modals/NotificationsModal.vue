@@ -4,8 +4,7 @@
   import Modal from '@/components/layout/Modal.vue'
   import ModalActions from '@/components/layout/ModalActions.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import router from '@/router.ts'
-
+  
   const emit = defineEmits([ 'close' ])
 
   function close(): void {
@@ -13,7 +12,7 @@
   }
 
   function openNotifications(): void {
-    router.push('/notifications')
+    navigateTo('/notifications')
     close()
   }
 </script>

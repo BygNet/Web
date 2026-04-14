@@ -7,8 +7,7 @@
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { showingNavigation } from '@/data/visibility.ts'
-  import router from '@/router.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+    import setHeadMeta from '@/utils/setHeadMeta.ts'
 
   interface FavoriteItem {
     id: string
@@ -148,7 +147,7 @@
   async function submitSearch() {
     if (!query.value.trim()) return
 
-    await router.push({
+    await navigateTo({
       name: 'search-results',
       query: { q: query.value.trim() },
     })
