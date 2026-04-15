@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import { useHead } from '#imports'
-  import { onMounted, onUnmounted, type Ref, ref } from 'vue'
+  import { useHead, useFetch } from '#imports'
+  import { onUnmounted, watch } from 'vue'
 
   import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -19,12 +19,34 @@
   const slug = route.params.slug
   const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
 
-  const image: Ref<BygImage | undefined> = ref()
-  const error: Ref<string | null> = ref(null)
+  const apiBase = useEnv().apiBase
 
+  // Fetch data during SSR and hydration
+  const { data: image } = await useFetch(
+    id ? `${apiBase}/image-details/${id}` : null,
+    {
+      immediate: true,
+      server: true,
+      retry: false,
+      timeout: 5000,
+    }
+  ).catch(() => ({ data: null }))
+
+  // Set page title and back button
   title.value = 'Loading...'
   showBackButton.value = true
 
+  // Update title when image loads
+  watch(
+    () => image.value,
+    (newImage) => {
+      if (newImage) {
+        title.value = `${(newImage as BygImage).author}'s Image`
+      }
+    }
+  )
+
+  // Set meta tags for SEO
   useHead(() => {
     if (!image.value) {
       return {
@@ -32,29 +54,16 @@
       }
     }
 
+    const img = image.value as BygImage
     return {
-      title: `Image: "${image.value.title}"`,
+      title: `Image: "${img.title}"`,
       meta: [
         {
           name: 'description',
-          content: `View ${image.value.author}'s image on Byg.`,
+          content: `View ${img.author}'s image on Byg.`,
         },
       ],
     }
-  })
-
-  onMounted(async () => {
-    if (!id) {
-      error.value = 'Invalid image ID'
-      return
-    }
-
-    const res = await fetch(
-      `${useEnv().apiBase}/image-details/${id}`
-    )
-
-    image.value = (await res.json()) as BygImage
-    title.value = `${image.value.author}'s Image`
   })
 
   onUnmounted(() => {

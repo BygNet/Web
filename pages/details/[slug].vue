@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
   import { useHead } from '#imports'
-  import { onMounted, onUnmounted, type Ref, ref } from 'vue'
+  import { onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import Divider from '@/components/layout/Divider.vue'
@@ -12,7 +12,7 @@
   import { showBackButton, title } from '@/data/title'
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
-  import { createError, useRoute } from '#app'
+  import { useRoute } from '#app'
 
   const route = useRoute()
   const slug = route.params.slug
@@ -21,12 +21,20 @@
   const post: Ref<BygPost | undefined> = ref()
   const error: Ref<string | null> = ref(null)
 
-  title.value = 'Loading...'
+  title.value = 'Byg Post'
   showBackButton.value = true
+
+  // Set meta tags for SEO - use default values for SSR
   useHead(() => {
     if (!post.value) {
       return {
-        title: 'Loading Byg post...',
+        title: 'Byg Post',
+        meta: [
+          {
+            name: 'description',
+            content: 'View posts on Byg social network.',
+          },
+        ],
       }
     }
 
@@ -47,12 +55,16 @@
       return
     }
 
-    const data = await fetch(
-      `${useEnv().apiBase}/post-details/${id}`
-    )
-    post.value = (await data.json()) as BygPost
-
-    title.value = `${post.value.author}'s Post`
+    try {
+      const data = await fetch(
+        `${useEnv().apiBase}/post-details/${id}`
+      )
+      post.value = (await data.json()) as BygPost
+      title.value = `${post.value.author}'s Post`
+    } catch (err) {
+      error.value = 'Failed to load post'
+      console.error(err)
+    }
   })
 
   onUnmounted(() => {
