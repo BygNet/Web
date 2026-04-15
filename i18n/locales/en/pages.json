@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "social": {
+      "title": "Social",
+      "description": "Browse posts on Byg Social."
+    },
+    "picture": {
+      "title": "Picture",
+      "description": "Browse images on Byg Picture."
+    },
+    "messages": {
+      "title": "Chat",
+      "description": "Direct messages."
+    },
+    "mySpace": {
+      "title": "Profile",
+      "description": "Online profile."
+    },
+    "search": {
+      "title": "Search",
+      "description": "Private web search."
+    },
+    "inbox": {
+      "title": "Inbox",
+      "description": "Your Byg alerts."
+    },
+    "link": {
+      "title": "Link",
+      "description": "Link collections."
+    },
+    "verification": {
+      "title": "Verification",
+      "description": "Get your verified checkmark!"
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Account settings."
+    },
+    "credits": {
+      "title": "Credits",
+      "description": "Credits for Byg."
+    },
+    "explore": {
+      "title": "Explore",
+      "description": "All Byg apps and more."
+    },
+    "login": {
+      "title": "Login",
+      "description": "Access your Byg account."
+    },
+    "signup": {
+      "title": "Sign Up",
+      "description": "Create a new Byg account."
+    },
+    "terms": {
+      "title": "Terms",
+      "description": "Read the Byg terms."
+    },
+    "pro": {
+      "title": "Pro",
+      "description": "Upgrade to Byg Pro."
+    },
+    "tab": {
+      "title": "Tab",
+      "description": "Customize your Byg new tab."
+    },
+    "emailVerification": {
+      "title": "Email Verification",
+      "description": "Verify your email address."
+    }
+  }
+}

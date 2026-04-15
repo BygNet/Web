@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "social": {
+      "title": "动态",
+      "description": "浏览 Byg Social 上的帖子。"
+    },
+    "picture": {
+      "title": "图片",
+      "description": "浏览 Byg Picture 上的图片。"
+    },
+    "messages": {
+      "title": "聊天",
+      "description": "私信消息。"
+    },
+    "mySpace": {
+      "title": "个人资料",
+      "description": "在线个人资料。"
+    },
+    "search": {
+      "title": "搜索",
+      "description": "私密网页搜索。"
+    },
+    "inbox": {
+      "title": "收件箱",
+      "description": "你的 Byg 提醒。"
+    },
+    "link": {
+      "title": "链接",
+      "description": "链接合集。"
+    },
+    "verification": {
+      "title": "认证",
+      "description": "获取你的认证标识！"
+    },
+    "settings": {
+      "title": "设置",
+      "description": "账户设置。"
+    },
+    "credits": {
+      "title": "致谢",
+      "description": "Byg 致谢。"
+    },
+    "explore": {
+      "title": "探索",
+      "description": "所有 Byg 应用及更多。"
+    },
+    "login": {
+      "title": "登录",
+      "description": "访问你的 Byg 账户。"
+    },
+    "signup": {
+      "title": "注册",
+      "description": "创建新的 Byg 账户。"
+    },
+    "terms": {
+      "title": "条款",
+      "description": "阅读 Byg 条款。"
+    },
+    "pro": {
+      "title": "专业版",
+      "description": "升级到 Byg 专业版。"
+    },
+    "tab": {
+      "title": "新标签页",
+      "description": "自定义你的 Byg 新标签页。"
+    },
+    "emailVerification": {
+      "title": "邮箱验证",
+      "description": "验证你的邮箱地址。"
+    }
+  }
+}

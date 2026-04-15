@@ -8,6 +8,8 @@
   import VStack from '@/components/layout/VStack.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
 
+  const localePath = useLocalePath()
+
   const props = defineProps<{
     variant?: 'sidebar' | 'profile'
   }>()
@@ -46,11 +48,11 @@
   }
 
   async function addAccount(): Promise<void> {
-    await navigateTo('/login')
+    await navigateTo(localePath('/login'))
   }
 
   async function addSignup(): Promise<void> {
-    await navigateTo('/signup')
+    await navigateTo(localePath('/signup'))
   }
 
   async function logoutActive(): Promise<void> {

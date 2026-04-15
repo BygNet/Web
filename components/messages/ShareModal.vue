@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, type Ref, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
@@ -15,6 +16,9 @@
   } from '@/data/share'
   import type { BygMessageShareTarget } from '@/types/messages'
   import { navigateTo } from '#app'
+
+  const localePath = useLocalePath()
+  const { t } = useI18n()
 
   const loadingTargets: Ref<boolean> = ref(false)
   const sendingUserId: Ref<number | null> = ref(null)
@@ -49,7 +53,7 @@
         `${shareItem.value.shareApiPath}/${shareItem.value.id}`
       )
       if (!response.ok) {
-        statusMessage.value = 'Failed to create share link.'
+        statusMessage.value = t('ui.share.statusFailedShareLink')
         return
       }
 
@@ -61,13 +65,13 @@
         })
       } else {
         await navigator.clipboard.writeText(shareUrl)
-        statusMessage.value = 'Link copied to clipboard.'
+        statusMessage.value = t('ui.share.statusLinkCopied')
       }
 
       notifyShareCompleted()
       closeShareModal()
     } catch {
-      statusMessage.value = 'Unable to open share sheet.'
+      statusMessage.value = t('ui.share.statusUnableShareSheet')
     }
   }
 
@@ -94,7 +98,9 @@
     sendingUserId.value = null
 
     if (!sentMessage) {
-      statusMessage.value = `Failed to send to @${target.username}.`
+    statusMessage.value = t('ui.share.statusFailedSendToUser', {
+      username: `@${target.username}`,
+    })
       return
     }
 
@@ -104,7 +110,7 @@
 
   async function openLogin(): Promise<void> {
     closeShareModal()
-    await navigateTo({ name: 'login' })
+    await navigateTo(localePath('login'))
   }
 
   onMounted(() => {
@@ -116,7 +122,7 @@
   <Modal>
     <VStack class="shareModal">
       <HStack class="fullWidth autoSpace">
-        <h2>Share</h2>
+        <h2>{{ t('ui.share.title') }}</h2>
         <button @click="closeShareModal()">
           <Icon icon="mingcute:close-fill" />
         </button>
@@ -124,7 +130,7 @@
 
       <VStack v-if="shareItem" class="shareItemPreview">
         <h3>{{ shareItem.title }}</h3>
-        <p class="light">by {{ shareItem.author }}</p>
+        <p class="light">{{ t('ui.share.by') }} {{ shareItem.author }}</p>
 
         <img
           v-if="shareItem.type === 'image' && shareItem.imageUrl"
@@ -138,29 +144,31 @@
 
       <button class="fullWidth" @click="shareUsingSystemSheet">
         <Icon icon="solar:share-line-duotone" />
-        Share to Other Apps
+        {{ t('ui.share.shareToOtherApps') }}
       </button>
 
       <VStack class="targetsSection fullWidth">
         <HStack class="fullWidth autoSpace">
-          <h3>Send in Chat</h3>
+          <h3>{{ t('ui.share.sendInChat') }}</h3>
           <button @click="loadShareTargets">
             <Icon icon="solar:refresh-line-duotone" />
           </button>
         </HStack>
 
         <VStack v-if="!auth.user" class="fullWidth emptyTargets">
-          <p class="light">Log in to send this directly to people.</p>
+          <p class="light">{{ t('ui.share.loginPrompt') }}</p>
           <button class="prominent" @click="openLogin">
             <Icon icon="solar:login-2-line-duotone" />
-            Log in
+            {{ t('ui.share.loginButton') }}
           </button>
         </VStack>
 
-        <p v-else-if="loadingTargets" class="light">Loading contacts...</p>
+        <p v-else-if="loadingTargets" class="light">
+          {{ t('ui.share.loadingContacts') }}
+        </p>
 
         <p v-else-if="targets.length < 1" class="light">
-          No recent contacts or followed users yet.
+          {{ t('ui.share.noContacts') }}
         </p>
 
         <template v-else>
@@ -176,7 +184,7 @@
                 <img
                   v-if="target.avatarUrl"
                   :src="target.avatarUrl"
-                  :alt="`${target.username}'s avatar`"
+                  :alt="t('ui.share.avatarAlt', { username: target.username })"
                 />
                 <Icon
                   v-else
@@ -188,9 +196,9 @@
                   <p>@{{ target.username }}</p>
                   <p class="light">
                     {{
-                      target.source === 'recent'
-                        ? 'Recently messaged'
-                        : 'You follow them'
+                    target.source === 'recent'
+                        ? t('ui.share.recentlyMessaged')
+                        : t('ui.share.following')
                     }}
                   </p>
                 </VStack>

@@ -11,6 +11,8 @@
   import { formatDate } from '@/utils/formatters'
   import { navigateTo } from '#app'
 
+  const localePath = useLocalePath()
+
   const props = defineProps<{
     image: BygImage
     detailMode?: boolean
@@ -18,7 +20,7 @@
 
   function openDetails() {
     if (props.detailMode) return
-    navigateTo(`/image/${props.image.id}`)
+    navigateTo(localePath(`/image/${props.image.id}`))
   }
 </script>
 

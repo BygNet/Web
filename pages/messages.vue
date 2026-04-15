@@ -8,6 +8,7 @@
     type Ref,
     ref,
     watch,
+    watchEffect,
   } from 'vue'
 
   import { useRoute } from '#app'
@@ -32,6 +33,7 @@
     sendMessage,
     sendTypingEvent,
   } from '@/data/messages'
+  import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
   import { showingNavigation } from '@/data/visibility'
   import type { BygUserSuggestion } from '@/types/mentions'
@@ -41,13 +43,19 @@
     BygMessageLiveServerEvent,
     BygMessageThread,
   } from '@/types/messages'
-  import setHeadMeta from '@/utils/setHeadMeta'
+  import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import SafeLink from "~/components/base/SafeLink.vue";
+  import { useI18n } from 'vue-i18n'
 
-  title.value = 'Chat'
-  setHeadMeta({
-    page: 'Chat',
-    subtitle: 'Chat with your friends and family on Byg.',
+  const { t } = useI18n()
+  const pageMeta = PageMetaByPath['/messages']
+
+  watchEffect(() => {
+    title.value = t(pageMeta.titleKey)
+  })
+  setHeadMetaKeys({
+    pageKey: pageMeta.titleKey,
+    subtitleKey: pageMeta.descriptionKey,
   })
 
   const route = useRoute()
@@ -182,16 +190,16 @@
   }
 
   function previewFromMessage(message?: BygMessage): string {
-    if (!message) return 'No chats yet.'
+    if (!message) return t('ui.chat.previewNoChats')
 
     const content = message.content.trim()
     if (content) {
       return content.length <= 80 ? content : `${content.slice(0, 80)}…`
     }
 
-    if (message.sharedPost) return 'Shared a post'
-    if (message.sharedImage) return 'Shared an image'
-    return 'Sent a chat'
+    if (message.sharedPost) return t('ui.chat.previewSharedPost')
+    if (message.sharedImage) return t('ui.chat.previewSharedImage')
+    return t('ui.chat.previewSentChat')
   }
 
   function upsertThreadFromMessage(message: BygMessage): void {
@@ -490,7 +498,7 @@
         }
       }
     } catch {
-      error.value = 'Failed to load chat threads.'
+      error.value = t('ui.chat.errorLoadThreads')
     } finally {
       loadingThreads.value = false
     }
@@ -573,7 +581,7 @@
         }
       }
     } catch {
-      error.value = 'Failed to load conversation.'
+      error.value = t('ui.chat.errorLoadConversation')
     } finally {
       loadingConversation.value = false
     }
@@ -668,7 +676,7 @@
       username: pickedSuggestion.username,
       avatarUrl: pickedSuggestion.avatarUrl,
       subscriptionState: pickedSuggestion.subscriptionState,
-      lastMessagePreview: 'No chats yet.',
+      lastMessagePreview: t('ui.chat.previewNoChats'),
       lastMessageDate: new Date().toISOString(),
     }
     upsertThread(optimisticThread)
@@ -836,7 +844,7 @@
     const thread = selectedThread.value
     const recipientId = normalizeUserId(thread.userId)
     if (recipientId === null) {
-      error.value = 'Invalid chat recipient.'
+      error.value = t('ui.chat.errorInvalidRecipient')
       return
     }
 
@@ -874,7 +882,7 @@
         removeMessageById(optimisticMessage.id)
       }
       composerText.value = content
-      error.value = 'Failed to send message.'
+      error.value = t('ui.chat.errorSendMessage')
       return
     }
 
@@ -1026,11 +1034,11 @@
           <SafeLink to="/">
             <button class="backButton transparent">
               <Icon icon="solar:alt-arrow-left-line-duotone" />
-              Back
+              {{ t('common.back') }}
             </button>
           </SafeLink>
 
-          <h3>Byg Chat</h3>
+          <h3>{{ t('ui.chat.title') }}</h3>
 
           <button
             class="refreshThreadsButton"
@@ -1038,7 +1046,7 @@
             @click="loadThreads({ force: true })"
           >
             <Icon icon="solar:refresh-line-duotone" />
-            Reload
+            {{ t('common.refresh') }}
           </button>
         </header>
 
@@ -1046,7 +1054,7 @@
           <input
             v-model="starterQuery"
             class="starterInput"
-            placeholder="Start chat with @username"
+            :placeholder="t('ui.chat.startChatPlaceholder')"
             @input="updateStarterSuggestions"
             @focus="updateStarterSuggestions"
           />
@@ -1060,10 +1068,10 @@
 
         <div class="threadsContent">
           <p v-if="loadingThreads" class="light threadState">
-            Loading chats...
+            {{ t('ui.chat.loadingChats') }}
           </p>
           <p v-else-if="threads.length < 1" class="light threadState">
-            No messages yet. Start a conversation above.
+            {{ t('ui.chat.noMessagesYet') }}
           </p>
 
           <div class="threadList" v-else>
@@ -1092,7 +1100,7 @@
 
             <div class="conversationTitle">
               <h3 v-if="selectedThread">@{{ selectedThread.username }}</h3>
-              <h3 v-else>Select a chat</h3>
+              <h3 v-else>{{ t('ui.chat.selectChat') }}</h3>
 
               <HStack class="connectionState">
                 <Icon
@@ -1102,7 +1110,13 @@
                       : 'solar:cloud-cross-line-duotone'
                   "
                 />
-                <p class="light">{{ connectedLive ? 'Live' : 'Offline' }}</p>
+                <p class="light">
+                  {{
+                    connectedLive
+                      ? t('ui.chat.statusLive')
+                      : t('ui.chat.statusOffline')
+                  }}
+                </p>
               </HStack>
             </div>
           </HStack>
@@ -1115,12 +1129,12 @@
           v-else-if="!selectedThread && !loadingConversation"
         >
           <Icon icon="solar:chat-round-line-line-duotone" />
-          <h3>Choose a chat to start messaging.</h3>
+          <h3>{{ t('ui.chat.emptyState') }}</h3>
         </div>
 
         <div class="conversationBody" v-else>
           <p v-if="loadingConversation" class="light loadingConversationText">
-            Loading conversation...
+            {{ t('ui.chat.loadingConversation') }}
           </p>
 
           <div ref="conversationScroller" class="messageList">
@@ -1148,14 +1162,14 @@
               v-if="selectedThread && typingByUserId[selectedThread.userId]"
             >
               <Icon icon="svg-spinners:3-dots-move" />
-              <p>Typing...</p>
+              <p>{{ t('ui.chat.typing') }}</p>
             </HStack>
 
             <HStack class="input">
               <textarea
                 v-model="composerText"
                 class="composerInput"
-                placeholder="Type a message..."
+                :placeholder="t('ui.chat.typeMessagePlaceholder')"
                 :disabled="!selectedThread || sendingMessage"
                 @input="onComposerInput"
                 @blur="stopTypingSignal"
@@ -1170,7 +1184,7 @@
                 @click="sendCurrentMessage"
               >
                 <Icon icon="solar:plain-line-duotone" />
-                Send
+                {{ t('ui.chat.send') }}
               </button>
             </HStack>
           </VStack>

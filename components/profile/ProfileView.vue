@@ -34,7 +34,6 @@
 
   const emit = defineEmits<{
     follow: []
-    editProfile: []
   }>()
 
   const isLoading: Ref<boolean> = ref(false)
@@ -154,14 +153,15 @@
           <ReportButton />
         </HStack>
 
-        <button
-          v-if="isOwnProfile && showActions"
-          class="editButton"
-          @click="emit('editProfile')"
-        >
-          <Icon icon="solar:pen-2-line-duotone" />
-          Edit Profile
-        </button>
+        <SafeLink to="/settings">
+          <button
+            v-if="isOwnProfile && showActions"
+            class="editButton"
+          >
+            <Icon icon="solar:pen-2-line-duotone" />
+            Edit Profile
+          </button>
+        </SafeLink>
 
         <!-- Bio & Sub -->
         <p class="light">Byg {{ capitalize(user.subscriptionState) }}</p>

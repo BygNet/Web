@@ -9,9 +9,11 @@
   import { useRoute } from '#app'
   import SafeLink from "~/components/base/SafeLink.vue";
   import {isActive} from "@/utils/isActive";
+  import { useI18n } from 'vue-i18n'
 
   const AppVersion = __AppVersion
   const route = useRoute()
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -20,7 +22,7 @@
       <SafeLink to="/">
         <HStack class="bygLogo">
           <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />
-          <h1>Byg</h1>
+          <h1>{{ t('common.brand') }}</h1>
         </HStack>
       </SafeLink>
 
@@ -30,7 +32,7 @@
         @click="openCreateModal()"
       >
         <Icon icon="solar:pen-new-square-line-duotone" />
-        Create...
+        {{ t('common.createEllipsis') }}
       </button>
     </VStack>
 
@@ -48,7 +50,7 @@
             "
           />
           <h3>
-            {{ page.title }}
+            {{ t(page.titleKey) }}
           </h3>
         </HStack>
       </SafeLink>
@@ -63,7 +65,7 @@
         <a href="https://git.new/bygpl" target="_blank">
           <HStack>
             <Icon icon="solar:code-line-duotone" />
-            GitHub
+            {{ t('common.github') }}
           </HStack>
         </a>
 

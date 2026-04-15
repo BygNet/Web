@@ -1,0 +1,11 @@
+{
+  "messages": {
+  "welcomeTitle": "Добро пожаловать на Byg",
+  "welcomeDescription": "Поделитесь и откройте для себя удивительный контент",
+  "startExploring": "Начать обзор",
+  "loginRequired": "Требуется вход",
+  "loginRequiredDescription": "Вам необходимо войти, чтобы получить доступ к этой странице",
+  "pageNotFound": "Страница не найдена",
+  "pageNotFoundDescription": "Страница, которую вы ищете, не существует"
+  }
+}

@@ -7,6 +7,8 @@
   import { formatNumber, formatStat } from '@/utils/formatters'
   import { navigateTo } from '#app'
 
+  const localePath = useLocalePath()
+
   const props = defineProps<{
     likes: number
     id: number
@@ -27,7 +29,7 @@
 
   async function like(): Promise<void> {
     if (!auth.user) {
-      await navigateTo({ name: 'login' })
+      await navigateTo(localePath('login'))
       return
     }
 
@@ -35,7 +37,7 @@
 
     liking.value = true
     try {
-      const res = await fetch(fetchUrl, { method: 'POST' })
+      const res = await fetch(fetchUrl.value, { method: 'POST' })
       if (!res.ok) throw new Error('Like failed')
 
       likeCount.value++

@@ -1,0 +1,72 @@
+{
+  "pages": {
+    "social": {
+      "title": "Социальное",
+      "description": "Просматривайте посты в Byg Social."
+    },
+    "picture": {
+      "title": "Изображения",
+      "description": "Просматривайте изображения в Byg Picture."
+    },
+    "messages": {
+      "title": "Сообщения",
+      "description": "Личные сообщения."
+    },
+    "mySpace": {
+      "title": "Профиль",
+      "description": "Онлайн-профиль."
+    },
+    "search": {
+      "title": "Поиск",
+      "description": "Приватный веб-поиск."
+    },
+    "inbox": {
+      "title": "Входящие",
+      "description": "Ваши уведомления Byg."
+    },
+    "link": {
+      "title": "Ссылки",
+      "description": "Коллекции ссылок."
+    },
+    "verification": {
+      "title": "Верификация",
+      "description": "Получите значок подтверждения!"
+    },
+    "settings": {
+      "title": "Настройки",
+      "description": "Настройки аккаунта."
+    },
+    "credits": {
+      "title": "Благодарности",
+      "description": "Благодарности Byg."
+    },
+    "explore": {
+      "title": "Обзор",
+      "description": "Все приложения Byg и многое другое."
+    },
+    "login": {
+      "title": "Вход",
+      "description": "Войдите в аккаунт Byg."
+    },
+    "signup": {
+      "title": "Регистрация",
+      "description": "Создайте новый аккаунт Byg."
+    },
+    "terms": {
+      "title": "Условия",
+      "description": "Ознакомьтесь с условиями Byg."
+    },
+    "pro": {
+      "title": "Pro",
+      "description": "Обновитесь до Byg Pro."
+    },
+    "tab": {
+      "title": "Вкладка",
+      "description": "Настройте новую вкладку Byg."
+    },
+    "emailVerification": {
+      "title": "Подтверждение email",
+      "description": "Подтвердите адрес email."
+    }
+  }
+}

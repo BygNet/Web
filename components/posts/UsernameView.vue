@@ -10,6 +10,7 @@
   import { navigateTo } from '#app'
   import SafeLink from "~/components/base/SafeLink.vue";
 
+  const localePath = useLocalePath()
   const props = defineProps<{
     name: string
     author?: boolean
@@ -56,7 +57,10 @@
   )
 
   function viewProfile() {
-    navigateTo({ name: 'userProfile', params: { username: props.name } })
+    navigateTo(localePath({
+      name: 'userProfile',
+      params: { username: props.name }
+    }))
   }
 </script>
 

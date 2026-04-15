@@ -1,0 +1,16 @@
+{
+  "nav": {
+  "social": "社交",
+  "explore": "探索",
+  "search": "搜索",
+  "inbox": "收件箱",
+  "messages": "消息",
+  "profile": "我的资料",
+  "settings": "设置",
+  "pro": "Pro",
+  "credits": "积分",
+  "terms": "条款",
+  "browseMenu": "浏览",
+  "accountMenu": "账户"
+  }
+}

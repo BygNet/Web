@@ -1,13 +1,21 @@
 <script setup lang="ts">
   import AppsGrid from '@/components/apps/AppsGrid.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
+  import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
-  import setHeadMeta from '@/utils/setHeadMeta'
+  import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+  import { watchEffect } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
-  title.value = 'Explore'
-  setHeadMeta({
-    page: 'Explore',
-    subtitle: 'Browse apps and more by Byg.',
+  const { t } = useI18n()
+  const pageMeta = PageMetaByPath['/explore']
+
+  watchEffect(() => {
+    title.value = t(pageMeta.titleKey)
+  })
+  setHeadMetaKeys({
+    pageKey: pageMeta.titleKey,
+    subtitleKey: pageMeta.descriptionKey,
   })
 </script>
 

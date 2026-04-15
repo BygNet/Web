@@ -1,7 +1,14 @@
 <script setup lang="ts">
   import type { BygAuthUser, BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import { computed, onMounted, onUnmounted, type Ref, ref } from 'vue'
+  import {
+    computed,
+    onMounted,
+    onUnmounted,
+    type Ref,
+    ref,
+    watchEffect,
+  } from 'vue'
 
   definePageMeta({
     middleware: 'auth',
@@ -20,10 +27,11 @@
     isThemeDark,
     systemPrefersDark,
   } from '@/data/themes'
+  import { PageMetaByPath } from '@/data/pages'
   import { showBackButton, title } from '@/data/title'
   import { capitalize } from '@/utils/formatters'
   import { buildProfileThemeVars } from '@/utils/profileTheme'
-  import setHeadMeta from '@/utils/setHeadMeta'
+  import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import { useI18n } from 'vue-i18n'
 
   type SettingSection = 'profile' | 'subscription' | 'security' | 'interface'
@@ -34,10 +42,16 @@
     otpauthUrl: string
   }
 
-  title.value = 'Settings'
-  setHeadMeta({ page: 'Settings', subtitle: 'Manage your account settings.' })
+  const { locale, locales, setLocale, t } = useI18n()
+  const pageMeta = PageMetaByPath['/settings']
 
-  const { locale, locales, setLocale } = useI18n()
+  watchEffect(() => {
+    title.value = t(pageMeta.titleKey)
+  })
+  setHeadMetaKeys({
+    pageKey: pageMeta.titleKey,
+    subtitleKey: pageMeta.descriptionKey,
+  })
 
   const activeSection: Ref<SettingSection> = ref('profile')
   const profile: Ref<BygProfile | null> = ref(null)
@@ -135,15 +149,15 @@
       })
 
       if (res.ok) {
-        saveMessage.value = 'Profile saved successfully!'
+        saveMessage.value = t('ui.settings.saveSuccess')
         setTimeout(() => {
           saveMessage.value = null
         }, 3000)
         await loadProfile({ force: true })
       } else if (res.status === 403) {
-        saveMessage.value = 'Profile colors are only available for paid plans'
+        saveMessage.value = t('ui.settings.savePremiumLocked')
       } else {
-        saveMessage.value = 'Failed to save profile'
+        saveMessage.value = t('ui.settings.saveFailed')
       }
     } finally {
       taskList.value.remove('saving')
@@ -161,11 +175,11 @@
       })
 
       if (!res.ok) {
-        securityError.value = 'Could not resend the verification email'
+        securityError.value = t('ui.settings.securityErrorEmailResend')
         return
       }
 
-      securityMessage.value = 'Verification email sent.'
+      securityMessage.value = t('ui.settings.securityMessageEmailSent')
     } finally {
       isResendingEmail.value = false
     }
@@ -184,7 +198,7 @@
       })
 
       if (!res.ok) {
-        securityError.value = 'That email verification code is not valid'
+        securityError.value = t('ui.settings.securityErrorInvalidCode')
         return
       }
 
@@ -196,7 +210,7 @@
       }
 
       emailCode.value = ''
-      securityMessage.value = 'Your email is verified.'
+      securityMessage.value = t('ui.settings.securityMessageEmailVerified')
     } finally {
       isVerifyingEmail.value = false
     }
@@ -210,7 +224,7 @@
       const res = await api('/auth/2fa/setup')
 
       if (!res.ok) {
-        securityError.value = 'Could not create a 2FA setup key'
+        securityError.value = t('ui.settings.securityErrorSetup2fa')
         return
       }
 
@@ -237,14 +251,14 @@
       })
 
       if (!res.ok) {
-        securityError.value = 'That authenticator code was not accepted'
+        securityError.value = t('ui.settings.securityErrorEnable2fa')
         return
       }
 
       applyAuthUser(await res.json())
       twoFactorSetup.value = null
       twoFactorCode.value = ''
-      securityMessage.value = 'Authenticator app 2FA is enabled.'
+      securityMessage.value = t('ui.settings.securityMessage2faEnabled')
     } finally {
       isSavingTwoFactor.value = false
     }
@@ -260,14 +274,14 @@
       })
 
       if (!res.ok) {
-        securityError.value = 'Could not disable authenticator app 2FA'
+        securityError.value = t('ui.settings.securityErrorDisable2fa')
         return
       }
 
       applyAuthUser(await res.json())
       twoFactorSetup.value = null
       twoFactorCode.value = ''
-      securityMessage.value = 'Authenticator app 2FA is disabled.'
+      securityMessage.value = t('ui.settings.securityMessage2faDisabled')
     } finally {
       isSavingTwoFactor.value = false
     }
@@ -293,7 +307,7 @@
           class="menuItem"
         >
           <Icon icon="solar:user-circle-line-duotone" />
-          Profile
+          {{ t('ui.settings.sidebarProfile') }}
         </button>
 
         <button
@@ -302,7 +316,7 @@
           class="menuItem"
         >
           <Icon icon="solar:shield-keyhole-line-duotone" />
-          Security
+          {{ t('ui.settings.sidebarSecurity') }}
         </button>
 
         <button
@@ -311,7 +325,7 @@
           class="menuItem"
         >
           <Icon icon="solar:crown-star-line-duotone" />
-          Subscription
+          {{ t('ui.settings.sidebarSubscription') }}
         </button>
 
         <button
@@ -320,32 +334,34 @@
           class="menuItem"
         >
           <Icon icon="solar:settings-line-duotone" />
-          Interface
+          {{ t('ui.settings.sidebarInterface') }}
         </button>
       </VStack>
 
       <VStack class="content">
         <VStack v-show="activeSection === 'profile'" class="section">
-          <h2>Edit Profile</h2>
+          <h2>{{ t('ui.settings.editProfile') }}</h2>
 
-          <div v-if="isLoading" class="loading">Loading...</div>
+          <div v-if="isLoading" class="loading">
+            {{ t('ui.settings.loading') }}
+          </div>
 
           <VStack v-else class="formContainer">
             <VStack class="formGroup">
-              <label>Bio</label>
+              <label>{{ t('ui.settings.bioLabel') }}</label>
               <textarea
                 v-model="bio"
-                placeholder="Tell us about yourself..."
+                :placeholder="t('ui.settings.bioPlaceholder')"
                 rows="3"
               />
             </VStack>
 
             <VStack class="formGroup">
-              <label>Avatar URL</label>
+              <label>{{ t('ui.settings.avatarUrlLabel') }}</label>
               <input
                 v-model="avatarUrl"
                 type="url"
-                placeholder="https://example.com/avatar.jpg"
+                :placeholder="t('ui.settings.avatarUrlPlaceholder')"
               />
               <div v-if="avatarUrl" class="preview">
                 <img :src="avatarUrl" :alt="auth.user?.username" />
@@ -353,11 +369,11 @@
             </VStack>
 
             <VStack class="formGroup">
-              <label>Banner URL</label>
+              <label>{{ t('ui.settings.bannerUrlLabel') }}</label>
               <input
                 v-model="bannerUrl"
                 type="url"
-                placeholder="https://example.com/banner.jpg"
+                :placeholder="t('ui.settings.bannerUrlPlaceholder')"
               />
               <div v-if="bannerUrl" class="preview">
                 <img :src="bannerUrl" :alt="auth.user?.username" />
@@ -365,7 +381,7 @@
             </VStack>
 
             <VStack v-if="canEditProfileColor" class="formGroup">
-              <label>Profile Accent</label>
+              <label>{{ t('ui.settings.profileAccentLabel') }}</label>
               <HStack class="colorRow">
                 <input
                   v-model="colorPickerValue"
@@ -378,22 +394,24 @@
                   placeholder="#e875b6"
                   maxlength="7"
                 />
-                <button @click="color = ''" type="button">Reset</button>
+                <button @click="color = ''" type="button">
+                  {{ t('ui.settings.reset') }}
+                </button>
               </HStack>
               <p class="light">
-                This accent recolors your profile page for visitors.
+                {{ t('ui.settings.profileAccentHelp') }}
               </p>
             </VStack>
 
             <VStack v-else class="formGroup">
-              <label>Profile Accent</label>
+              <label>{{ t('ui.settings.profileAccentLabel') }}</label>
               <p class="light">
-                Upgrade your subscription to unlock a custom profile color.
+                {{ t('ui.settings.profileAccentLocked') }}
               </p>
             </VStack>
 
             <VStack v-if="previewUser" class="formGroup previewGroup">
-              <label>Preview</label>
+              <label>{{ t('ui.settings.preview') }}</label>
               <div
                 class="profileThemePreview"
                 :class="{ themedProfile: !!color }"
@@ -420,35 +438,43 @@
               class="saveButton"
             >
               <Icon icon="solar:diskette-line-duotone" />
-              {{ isSaving ? 'Saving...' : 'Save Changes' }}
+              {{
+                isSaving
+                  ? t('ui.settings.saving')
+                  : t('ui.settings.saveChanges')
+              }}
             </button>
           </VStack>
         </VStack>
 
         <VStack v-show="activeSection === 'security'" class="section">
-          <h2>Security</h2>
+          <h2>{{ t('ui.settings.securityTitle') }}</h2>
 
           <VStack class="securityCard">
             <HStack class="securityHeader">
               <Icon icon="solar:letter-line-duotone" />
               <VStack class="noSpace">
-                <h3>Email Verification</h3>
+                <h3>{{ t('ui.settings.emailVerification') }}</h3>
                 <p class="light">
-                  {{ isEmailVerified ? 'Verified' : 'Verification pending' }}
+                  {{
+                    isEmailVerified
+                      ? t('ui.settings.emailVerified')
+                      : t('ui.settings.emailPending')
+                  }}
                 </p>
               </VStack>
             </HStack>
 
             <template v-if="!isEmailVerified">
               <label>
-                Verification Code
+                {{ t('ui.settings.verificationCode') }}
                 <input
                   v-model="emailCode"
                   type="text"
                   inputmode="numeric"
                   autocomplete="one-time-code"
                   maxlength="6"
-                  placeholder="123456"
+                  :placeholder="t('ui.settings.verificationPlaceholder')"
                 />
               </label>
 
@@ -458,14 +484,22 @@
                   @click="verifyEmail"
                   :disabled="isVerifyingEmail"
                 >
-                  {{ isVerifyingEmail ? 'Verifying...' : 'Verify Email' }}
+                  {{
+                    isVerifyingEmail
+                      ? t('ui.settings.verifying')
+                      : t('ui.settings.verifyEmail')
+                  }}
                 </button>
 
                 <button
                   @click="resendVerificationEmail"
                   :disabled="isResendingEmail"
                 >
-                  {{ isResendingEmail ? 'Sending...' : 'Resend Code' }}
+                  {{
+                    isResendingEmail
+                      ? t('ui.settings.sending')
+                      : t('ui.settings.resendCode')
+                  }}
                 </button>
               </HStack>
             </template>
@@ -475,23 +509,28 @@
             <HStack class="securityHeader">
               <Icon icon="solar:shield-keyhole-line-duotone" />
               <VStack class="noSpace">
-                <h3>Authenticator App</h3>
+                <h3>{{ t('ui.settings.authenticatorApp') }}</h3>
                 <p class="light">
                   {{
-                    auth.user?.twoFactorEnabled ? 'Enabled' : 'Not enabled yet'
+                    auth.user?.twoFactorEnabled
+                      ? t('ui.settings.authenticatorEnabled')
+                      : t('ui.settings.authenticatorDisabled')
                   }}
                 </p>
               </VStack>
             </HStack>
 
             <p class="description">
-              Protect your login with a 6-digit TOTP code from an authenticator
-              app.
+              {{ t('ui.settings.authenticatorDescription') }}
             </p>
 
             <template v-if="auth.user?.twoFactorEnabled">
               <button @click="disableTwoFactor" :disabled="isSavingTwoFactor">
-                {{ isSavingTwoFactor ? 'Disabling...' : 'Disable 2FA' }}
+                {{
+                  isSavingTwoFactor
+                    ? t('ui.settings.disabling')
+                    : t('ui.settings.disable2fa')
+                }}
               </button>
             </template>
 
@@ -503,33 +542,33 @@
                 <Icon icon="solar:key-minimalistic-line-duotone" />
                 {{
                   isLoadingTwoFactorSetup
-                    ? 'Generating Key...'
+                    ? t('ui.settings.generatingKey')
                     : twoFactorSetup
-                      ? 'Regenerate Setup Key'
-                      : 'Generate Setup Key'
+                      ? t('ui.settings.regenerateSetupKey')
+                      : t('ui.settings.generateSetupKey')
                 }}
               </button>
 
               <VStack v-if="twoFactorSetup" class="setupBox">
                 <label>
-                  Manual Entry Key
+                  {{ t('ui.settings.manualEntryKey') }}
                   <input :value="twoFactorSetup.manualEntryKey" readonly />
                 </label>
 
                 <label>
-                  Authenticator Code
+                  {{ t('ui.settings.authenticatorCode') }}
                   <input
                     v-model="twoFactorCode"
                     type="text"
                     inputmode="numeric"
                     autocomplete="one-time-code"
                     maxlength="6"
-                    placeholder="123456"
+                    :placeholder="t('ui.settings.verificationPlaceholder')"
                   />
                 </label>
 
                 <a :href="twoFactorSetup.otpauthUrl" class="prominentLink">
-                  Open In Authenticator App
+                  {{ t('ui.settings.openAuthenticatorApp') }}
                 </a>
 
                 <button
@@ -538,7 +577,11 @@
                   :disabled="isSavingTwoFactor"
                 >
                   <Icon icon="solar:lock-keyhole-line-duotone" />
-                  {{ isSavingTwoFactor ? 'Enabling...' : 'Enable 2FA' }}
+                  {{
+                    isSavingTwoFactor
+                      ? t('ui.settings.enabling2fa')
+                      : t('ui.settings.enable2fa')
+                  }}
                 </button>
               </VStack>
             </template>
@@ -553,7 +596,7 @@
         </VStack>
 
         <VStack v-show="activeSection === 'subscription'" class="section">
-          <h2>Subscription</h2>
+          <h2>{{ t('ui.settings.subscriptionTitle') }}</h2>
 
           <VStack v-if="profile" class="subscriptionInfo">
             <VStack class="subscriptionCard">
@@ -564,7 +607,7 @@
                 />
 
                 <VStack class="noSpace">
-                  <h3>Current Plan</h3>
+                  <h3>{{ t('ui.settings.currentPlan') }}</h3>
                   <p class="light">
                     {{
                       capitalize(profile.user.subscriptionState).replace(
@@ -577,27 +620,26 @@
               </HStack>
 
               <p class="description">
-                Upgrade to unlock more premium features and support the Byg
-                platform.
+                {{ t('ui.settings.upgradeDescription') }}
               </p>
 
               <button disabled class="upgradeButton">
                 <Icon icon="solar:crown-star-line-duotone" />
-                Upgrade (Coming Soon)
+                {{ t('ui.settings.upgradeComingSoon') }}
               </button>
             </VStack>
           </VStack>
         </VStack>
 
         <VStack v-show="activeSection === 'interface'" class="section">
-          <h2>Interface</h2>
+          <h2>{{ t('ui.settings.interfaceTitle') }}</h2>
 
           <VStack class="interfaceCard">
             <HStack class="interfaceHeader">
               <Icon icon="solar:global-line-duotone" />
               <VStack class="noSpace">
-                <h3>Language</h3>
-                <p class="light">Choose your preferred language</p>
+                <h3>{{ t('ui.settings.languageTitle') }}</h3>
+                <p class="light">{{ t('ui.settings.languageDescription') }}</p>
               </VStack>
             </HStack>
 

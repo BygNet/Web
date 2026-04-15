@@ -3,7 +3,6 @@
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
 
-  import { logout } from '@/auth/logout'
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
@@ -20,6 +19,8 @@
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo } from '#app'
 
+  const localePath = useLocalePath()
+
   title.value = 'My Profile'
   setHeadMeta({ page: 'Profile', subtitle: 'Your Byg profile.' })
   const isLoggedIn = computed(() => !!auth.user)
@@ -34,21 +35,16 @@
     profile.value = await fetchCurrentUserProfile(options)
   }
 
-  async function doLogout() {
-    await logout()
-    await navigateTo({ name: 'social' })
-  }
-
   function goLogin() {
-    navigateTo({ name: 'login' })
+    navigateTo(localePath('login'))
   }
 
   function goSignup() {
-    navigateTo({ name: 'signup' })
+    navigateTo(localePath('signup'))
   }
 
   function goSettings() {
-    navigateTo('/settings')
+    navigateTo(localePath('/settings'))
   }
 
   function previewAndSetTheme(theme: (typeof BygThemes)[number]) {

@@ -10,8 +10,10 @@
   import { useRoute } from '#app'
   import SafeLink from "@/components/base/SafeLink.vue";
   import {isActive} from "@/utils/isActive";
+  import { useI18n } from 'vue-i18n'
 
   const route = useRoute()
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -22,7 +24,7 @@
       :class="{ open: showingCreateModal }"
     >
       <Icon icon="mingcute:add-fill" />
-      Create...
+      {{ t('common.createEllipsis') }}
     </button>
 
     <HStack class="mobileNavItems">
@@ -38,7 +40,7 @@
                 : page.icon
             "
           />
-          <p>{{ page.title }}</p>
+          <p>{{ t(page.titleKey) }}</p>
         </VStack>
       </SafeLink>
     </HStack>

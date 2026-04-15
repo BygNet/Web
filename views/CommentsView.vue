@@ -31,6 +31,7 @@
   let mentionRequestId = 0
 
   const config = useRuntimeConfig()
+  const localePath = useLocalePath()
 
   const props = defineProps<{
     id: number
@@ -115,7 +116,7 @@
 
   async function postComment(): Promise<void> {
     if (!auth.user) {
-      await navigateTo({ name: 'login' })
+      await navigateTo(localePath('login'))
       return
     }
 

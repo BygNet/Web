@@ -1,4 +1,6 @@
 import { useHead } from '#imports'
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 import type {
   ResolvableArray,
   ResolvableLink,
@@ -46,5 +48,44 @@ export default function setHeadMeta(config: {
     title: title,
     meta: meta,
     link: link,
+  })
+}
+
+export function setHeadMetaKeys(config: {
+  pageKey: string
+  subtitleKey: string
+  groupKey?: string
+  image?: string
+  icon?: string
+}): void {
+  const { t } = useI18n()
+  const page = computed(() => t(config.pageKey))
+  const subtitle = computed(() => t(config.subtitleKey))
+  const group = computed(() =>
+    config.groupKey ? t(config.groupKey) : undefined
+  )
+
+  useHead({
+    title: computed(() => (group.value ? `${group.value} ${page.value}` : `Byg ${page.value}`)),
+    meta: computed(() => {
+      const meta = [
+        { property: 'og:title', content: group.value ? `${group.value} ${page.value}` : `Byg ${page.value}` },
+        { property: 'og:description', content: subtitle.value },
+        { name: 'description', content: subtitle.value },
+        { name: 'mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        {
+          name: 'apple-mobile-web-app-status-bar-style',
+          content: 'black-translucent',
+        },
+      ]
+      if (config.image) {
+        meta.push({ property: 'og:image', content: config.image })
+      }
+      return meta
+    }),
+    link: computed(() =>
+      config.icon ? [{ rel: 'icon', href: config.icon }] : []
+    ),
   })
 }

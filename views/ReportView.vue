@@ -1,9 +1,11 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { onMounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import HStack from '@/components/layout/HStack.vue'
   import { showingReportPopup } from '@/data/visibility'
+  const { t } = useI18n()
 
   onMounted(() => {
     // @ts-ignore
@@ -17,7 +19,7 @@
 <template>
   <div class="reportView">
     <HStack class="fullWidth autoSpace">
-      <h2>Report an Issue</h2>
+    <h2>{{ t('ui.report.title') }}</h2>
       <button @click="showingReportPopup = false">
         <Icon icon="mingcute:close-fill" />
       </button>
@@ -28,7 +30,7 @@
       loading="lazy"
       width="100%"
       height="450"
-      title="Byg Platform Trust and Safety"
+      :title="t('ui.report.iframeTitle')"
     />
   </div>
 </template>

@@ -10,6 +10,8 @@
   import { navigateTo } from '#app'
   import SafeLink from "~/components/base/SafeLink.vue";
 
+  const localePath = useLocalePath()
+
   title.value = 'Signup'
   const email = ref('')
   const username = ref('')
@@ -23,7 +25,7 @@
 
     try {
       await signup(email.value, username.value, password.value)
-      await navigateTo('/')
+      await navigateTo(localePath('/'))
     } catch {
       error.value = 'Signup failed'
     } finally {

@@ -1,16 +1,19 @@
 <script setup lang="ts">
-  import type { BygPage } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import type { BygPageMeta } from '@/data/pages'
   import { BygPages, MorePages } from '@/data/pages'
   import SafeLink from "~/components/base/SafeLink.vue";
+  import { useI18n } from 'vue-i18n'
 
   defineProps<{
     embed?: boolean
-    apps?: BygPage[]
+    apps?: BygPageMeta[]
   }>()
+
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -28,8 +31,8 @@
         </div>
 
         <VStack class="noSpace appInfo">
-          <h3>{{ app.title }}</h3>
-          <p class="light">{{ app.description }}</p>
+          <h3>{{ t(app.titleKey) }}</h3>
+          <p class="light">{{ t(app.descriptionKey) }}</p>
         </VStack>
       </HStack>
     </a>
@@ -45,7 +48,7 @@
           <div class="appIconBackground" />
         </div>
 
-        <p>{{ app.title }}</p>
+        <p>{{ t(app.titleKey) }}</p>
       </div>
     </SafeLink>
   </div>

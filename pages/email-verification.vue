@@ -4,15 +4,17 @@
 
   import { navigateTo } from '#app'
 
-  definePageMeta({
-    middleware: 'auth',
-  })
-
   import { api } from '@/api/client'
   import { auth, updateActiveUser } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
+
+  const localePath = useLocalePath()
+
+  definePageMeta({
+    middleware: 'auth',
+  })
 
   title.value = 'Verify Email'
   setHeadMeta({
@@ -53,7 +55,7 @@
 
       message.value = 'Your email is verified now.'
       setTimeout(() => {
-        navigateTo({ name: 'settings' })
+        navigateTo(localePath('settings'))
       }, 900)
     } finally {
       isSubmitting.value = false

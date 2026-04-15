@@ -1,0 +1,11 @@
+{
+  "messages": {
+    "welcomeTitle": "Welcome to Byg",
+    "welcomeDescription": "Share and discover amazing content",
+    "startExploring": "Start Exploring",
+    "loginRequired": "Login required",
+    "loginRequiredDescription": "You need to be logged in to access this page",
+    "pageNotFound": "Page Not Found",
+    "pageNotFoundDescription": "The page you're looking for doesn't exist"
+  }
+}

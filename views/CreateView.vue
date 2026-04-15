@@ -4,6 +4,7 @@
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { computed, nextTick, type Ref, ref, watchEffect } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
@@ -24,6 +25,7 @@
   } from '@/utils/mentions'
 
   const config = useRuntimeConfig()
+  const { t } = useI18n()
 
   const pickedType: Ref<CreateType | undefined> = ref(undefined)
   const showingPreview: Ref<boolean> = ref(false)
@@ -107,7 +109,7 @@
 
   async function submitPost() {
     if (!auth.token) {
-      error.value = 'Not logged in'
+      error.value = t('ui.create.errorNotLoggedIn')
       return
     }
 
@@ -131,7 +133,7 @@
     taskList.value.remove('posting')
 
     if (!res.ok) {
-      error.value = 'Failed to create post'
+      error.value = t('ui.create.errorCreatePost')
       return
     }
 
@@ -145,7 +147,7 @@
 
   async function submitImage() {
     if (!auth.token) {
-      error.value = 'Not logged in'
+      error.value = t('ui.create.errorNotLoggedIn')
       return
     }
 
@@ -169,7 +171,7 @@
     loading.value = false
 
     if (!res.ok) {
-      error.value = 'Failed to upload image'
+      error.value = t('ui.create.errorUploadImage')
       return
     }
 
@@ -186,7 +188,7 @@
     <div class="createView" :class="{ composer: pickedType != undefined }">
       <VStack v-if="pickedType == undefined">
         <HStack class="autoSpace fullWidth">
-          <h2>Create...</h2>
+          <h2>{{ t('ui.create.title') }}</h2>
 
           <button @click="showingCreateModal = false">
             <Icon icon="mingcute:close-fill" />
@@ -196,32 +198,36 @@
         <HStack class="typePicker">
           <VStack class="type" @click="pickedType = 'post'">
             <Icon icon="solar:pen-line-duotone" />
-            Write Post
+            {{ t('ui.create.typePost') }}
           </VStack>
 
           <VStack class="type" @click="pickedType = 'image'">
             <Icon icon="solar:gallery-send-line-duotone" />
-            Add Image
+            {{ t('ui.create.typeImage') }}
           </VStack>
         </HStack>
       </VStack>
 
       <VStack v-else-if="pickedType == 'post'" class="form">
         <HStack class="autoSpace fullWidth">
-          <h2>New Post</h2>
+          <h2>{{ t('ui.create.newPost') }}</h2>
           <button @click="pickedType = undefined">
             <Icon icon="mingcute:arrow-left-fill" />
           </button>
         </HStack>
 
-        <input v-model="postTitle" type="text" placeholder="Post title..." />
+        <input
+          v-model="postTitle"
+          type="text"
+          :placeholder="t('ui.create.postTitlePlaceholder')"
+        />
 
         <div class="mentionComposer">
           <textarea
             ref="postTextarea"
             v-model="postText"
             :maxlength="charLimit"
-            placeholder="Write something..."
+            :placeholder="t('ui.create.postBodyPlaceholder')"
             @input="onPostTextareaInteraction"
             @keyup="onPostTextareaInteraction"
             @click="onPostTextareaInteraction"
@@ -245,36 +251,40 @@
             @click="submitPost"
           >
             <Icon icon="solar:upload-minimalistic-bold-duotone" />
-            Post
+            {{ t('ui.create.postButton') }}
           </button>
 
-          <button class="transparent" @click="showingPreview = true">
-            Preview
-          </button>
+        <button class="transparent" @click="showingPreview = true">
+          {{ t('ui.create.previewButton') }}
+        </button>
         </HStack>
       </VStack>
 
       <VStack v-else-if="pickedType == 'image'" class="form">
         <HStack class="autoSpace fullWidth">
-          <h2>Upload Image</h2>
+        <h2>{{ t('ui.create.uploadImage') }}</h2>
           <button @click="pickedType = undefined">
             <Icon icon="mingcute:arrow-left-fill" />
           </button>
         </HStack>
 
-        <input v-model="imageTitle" type="text" placeholder="Image title..." />
+        <input
+          v-model="imageTitle"
+          type="text"
+          :placeholder="t('ui.create.imageTitlePlaceholder')"
+        />
 
         <input
           v-model="imageUrl"
           type="url"
-          placeholder="https://example.com/image.png"
+          :placeholder="t('ui.create.imageUrlPlaceholder')"
         />
 
         <img
           class="previewImage"
           v-if="imageUrl"
           :src="imageUrl"
-          alt="Preview"
+          :alt="t('ui.create.previewTitle')"
         />
 
         <div v-if="error" class="error">{{ error }}</div>
@@ -285,7 +295,7 @@
           @click="submitImage"
         >
           <Icon icon="solar:gallery-send-line-duotone" />
-          Upload
+          {{ t('ui.create.uploadButton') }}
         </button>
       </VStack>
     </div>
@@ -294,7 +304,7 @@
   <Modal v-else>
     <div class="createPreview">
       <HStack class="fullWidth autoSpace">
-        <h2>Preview</h2>
+      <h2>{{ t('ui.create.previewTitle') }}</h2>
         <button @click="showingPreview = false">
           <Icon icon="mingcute:arrow-left-fill" />
         </button>
@@ -303,7 +313,7 @@
       <VStack class="postPreview">
         <h3>{{ postTitle }}</h3>
         <HStack class="autoSpace fullWidth light">
-          <UsernameView :name="auth.user?.username ?? 'unknown'" />
+          <UsernameView :name="auth.user?.username ?? t('ui.create.unknownUser')" />
           <p>{{ formatDate(new Date().toISOString()) }}</p>
         </HStack>
 

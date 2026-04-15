@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import { onMounted, type Ref, ref } from 'vue'
+  import { onMounted, type Ref, ref, watchEffect } from 'vue'
 
   import { api } from '@/api/client'
   import ImageItem from '@/components/images/ImageItem.vue'
@@ -10,13 +10,20 @@
   import { IMAGE_CACHE_TTL, imageCache, imageCacheTime } from '@/data/caches'
   import { imageReloader } from '@/data/events'
   import { taskList } from '@/data/tasks'
+  import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
-  import setHeadMeta from '@/utils/setHeadMeta'
+  import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+  import { useI18n } from 'vue-i18n'
 
-  title.value = 'Picture'
-  setHeadMeta({
-    page: 'Picture',
-    subtitle: 'Browse images on Byg Picture.',
+  const { t } = useI18n()
+  const pageMeta = PageMetaByPath['/picture']
+
+  watchEffect(() => {
+    title.value = t(pageMeta.titleKey)
+  })
+  setHeadMetaKeys({
+    pageKey: pageMeta.titleKey,
+    subtitleKey: pageMeta.descriptionKey,
   })
 
   const images: Ref<BygImage[]> = ref([])
@@ -45,7 +52,7 @@
       imageCacheTime.value = Date.now()
     } catch {
       taskList.value.remove('loading images')
-      error.value = `Failed to load images`
+      error.value = t('common.errorLoadImages')
     } finally {
       taskList.value.remove('loading images')
       loading.value = false
@@ -74,7 +81,7 @@
         })
       })
     } catch {
-      error.value = 'Failed to reload images'
+      error.value = t('common.errorReloadImages')
     } finally {
       loading.value = false
     }

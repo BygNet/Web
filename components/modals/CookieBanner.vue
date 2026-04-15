@@ -2,8 +2,10 @@
   import HStack from '@/components/layout/HStack.vue'
   import { setFlag } from '@/utils/setUserFlag'
   import SafeLink from "~/components/base/SafeLink.vue";
+  import { useI18n } from 'vue-i18n'
 
   const emit = defineEmits([ 'close' ])
+  const { t } = useI18n()
 
   function close() {
     setFlag('showCookieBanner', false)
@@ -13,18 +15,24 @@
 
 <template>
   <div class="cookieBanner">
-    <h2>We wanted to give you cookies, but...</h2>
+    <h2>{{ t('ui.cookie.title') }}</h2>
 
-    <p>We had some cookies in the jar for you, but ashie ate them all.</p>
-    <p>There's still one left, but that's just there to keep you logged in.</p>
+    <p>{{ t('ui.cookie.line1') }}</p>
+    <p>{{ t('ui.cookie.line2') }}</p>
     <p>
-      Wanna try out private search too? Check out
-      <SafeLink to="/search" class="prominentLink">Byg Search</SafeLink>.
+      {{ t('ui.cookie.searchPrompt') }}
+      <SafeLink to="/search" class="prominentLink">
+        {{ t('ui.cookie.searchLink') }}
+      </SafeLink>.
     </p>
 
     <HStack class="fullWidth autoSpace actions">
-      <button class="transparent" @click="close()">Damn</button>
-      <button class="prominent" @click="close()">Aww, okay</button>
+      <button class="transparent" @click="close()">
+        {{ t('ui.cookie.dismissSecondary') }}
+      </button>
+      <button class="prominent" @click="close()">
+        {{ t('ui.cookie.dismissPrimary') }}
+      </button>
     </HStack>
   </div>
 </template>

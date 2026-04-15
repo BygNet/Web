@@ -5,6 +5,7 @@ interface Props {
   to: string
   external?: boolean
   newTab?: boolean
+  custom?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -12,26 +13,20 @@ const props = withDefaults(defineProps<Props>(), {
   newTab: false,
 })
 
-const { locale } = useI18n()
+const localePath = useLocalePath()
 
 const href = computed(() => {
-  if (props.external) {
-    return props.to
-  }
-
-  // For internal links, prepend locale if not default
-  if (locale.value !== 'en') {
-    return `/${locale.value}${props.to}`
-  }
-  return props.to
+  if (props.external) return props.to
+  return localePath(props.to)
 })
 
 const isExternal = computed(() => props.external || props.to.startsWith('http'))
 </script>
 
 <template>
+  <!-- NORMAL LINK (auto navigation) -->
   <NuxtLink
-    v-if="!isExternal"
+    v-if="!isExternal && !custom"
     :to="href"
     :target="newTab ? '_blank' : null"
     :rel="newTab ? 'noopener noreferrer' : undefined"
@@ -39,6 +34,17 @@ const isExternal = computed(() => props.external || props.to.startsWith('http'))
     <slot />
   </NuxtLink>
 
+  <!-- CUSTOM MODE (manual navigation) -->
+  <NuxtLink
+    v-else-if="!isExternal && custom"
+    :to="href"
+    custom
+    v-slot="slotProps"
+  >
+    <slot v-bind="slotProps" />
+  </NuxtLink>
+
+  <!-- EXTERNAL -->
   <a
     v-else
     :href="href"

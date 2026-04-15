@@ -7,6 +7,7 @@
     onUnmounted,
     type Ref,
     ref,
+    watchEffect,
   } from 'vue'
 
   import { auth } from '@/auth/session'
@@ -25,11 +26,13 @@
   import { reloader } from '@/data/events'
   import { fetchCurrentUserProfile } from '@/data/profiles'
   import { taskList } from '@/data/tasks'
+  import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
   import { useEnv } from '@/utils/env'
-  import setHeadMeta from '@/utils/setHeadMeta'
+  import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import AdView from '@/views/AdView.vue'
   import SafeLink from "~/components/base/SafeLink.vue";
+  import { useI18n } from 'vue-i18n'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
@@ -46,10 +49,15 @@
 
   let interval: number | undefined
 
-  title.value = 'Social'
-  setHeadMeta({
-    page: 'Social',
-    subtitle: 'Browse posts on Byg Social.',
+  const { t } = useI18n()
+  const pageMeta = PageMetaByPath['/']
+
+  watchEffect(() => {
+    title.value = t(pageMeta.titleKey)
+  })
+  setHeadMetaKeys({
+    pageKey: pageMeta.titleKey,
+    subtitleKey: pageMeta.descriptionKey,
   })
 
   const loadPosts = async () => {
@@ -75,7 +83,7 @@
       hasNewPosts.value = false
     } catch (err) {
       taskList.value.remove('loading posts')
-      error.value = 'Failed to load posts.'
+      error.value = t('common.errorLoadPosts')
     } finally {
       taskList.value.remove('loading posts')
       isLoaded.value = true

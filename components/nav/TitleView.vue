@@ -6,8 +6,10 @@
   import { taskList } from '@/data/tasks'
   import { showBackButton, title } from '@/data/title'
   import { useRoute } from '#app'
+  import { useI18n } from 'vue-i18n'
 
   const route = useRoute()
+  const { t } = useI18n()
 
   function goBack() {
     window.history.back()
@@ -37,7 +39,7 @@
           prominent: route.path === '/inbox',
         }"
         @click="navigateTo('/inbox')"
-        aria-label="Open alerts"
+        :aria-label="t('ui.nav.openAlerts')"
       >
         <Icon
           :icon="

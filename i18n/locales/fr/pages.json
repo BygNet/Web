@@ -1,0 +1,73 @@
+{
+  "pages": {
+
+    "social": {
+      "title": "Social",
+      "description": "Parcourez les publications sur Byg Social."
+    },
+    "picture": {
+      "title": "Images",
+      "description": "Parcourez les images sur Byg Picture."
+    },
+    "messages": {
+      "title": "Messages",
+      "description": "Messages directs."
+    },
+    "mySpace": {
+      "title": "Profil",
+      "description": "Profil en ligne."
+    },
+    "search": {
+      "title": "Recherche",
+      "description": "Recherche web privée."
+    },
+    "inbox": {
+      "title": "Notifs",
+      "description": "Vos alertes Byg."
+    },
+    "link": {
+      "title": "Liens",
+      "description": "Collections de liens."
+    },
+    "verification": {
+      "title": "Vérification",
+      "description": "Obtenez votre badge vérifié !"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "description": "Paramètres du compte."
+    },
+    "credits": {
+      "title": "Crédits",
+      "description": "Crédits pour Byg."
+    },
+    "explore": {
+      "title": "Explorer",
+      "description": "Toutes les apps Byg et plus."
+    },
+    "login": {
+      "title": "Connexion",
+      "description": "Accédez à votre compte Byg."
+    },
+    "signup": {
+      "title": "Inscription",
+      "description": "Créer un nouveau compte Byg."
+    },
+    "terms": {
+      "title": "Conditions",
+      "description": "Lire les conditions Byg."
+    },
+    "pro": {
+      "title": "Pro",
+      "description": "Passez à Byg Pro."
+    },
+    "tab": {
+      "title": "Onglet",
+      "description": "Personnalisez votre nouvel onglet Byg."
+    },
+    "emailVerification": {
+      "title": "Vérification de l'e-mail",
+      "description": "Vérifiez votre adresse e-mail."
+    }
+  }
+}

@@ -1,6 +1,13 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-  import { computed, onMounted, onUnmounted, type Ref, ref } from 'vue'
+import { Icon } from '@iconify/vue'
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  type Ref,
+  ref,
+  watchEffect,
+} from 'vue'
 
   definePageMeta({
     middleware: 'auth',
@@ -23,15 +30,22 @@
     getPushPermissionState,
     syncPushSubscription,
   } from '@/data/pushAlerts'
-  import { title } from '@/data/title'
-  import type { BygNotification } from '@/types/notifications'
-  import setHeadMeta from '@/utils/setHeadMeta'
+import { PageMetaByPath } from '@/data/pages'
+import { title } from '@/data/title'
+import type { BygNotification } from '@/types/notifications'
+import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+import { useI18n } from 'vue-i18n'
 
-  title.value = 'Inbox'
-  setHeadMeta({
-    page: 'Inbox',
-    subtitle: 'See recent follows, comments, and chats.',
-  })
+const { t } = useI18n()
+const pageMeta = PageMetaByPath['/inbox']
+
+watchEffect(() => {
+  title.value = t(pageMeta.titleKey)
+})
+setHeadMetaKeys({
+  pageKey: pageMeta.titleKey,
+  subtitleKey: pageMeta.descriptionKey,
+})
 
   const notifications: Ref<BygNotification[]> = ref([])
   const loading: Ref<boolean> = ref(true)
@@ -86,12 +100,12 @@
         requestPermission: true,
       })
       pushPermission.value = getPushPermissionState()
-      pushMessage.value = didEnable
-        ? 'Push alerts enabled.'
-        : 'Push alerts were not enabled.'
+    pushMessage.value = didEnable
+      ? t('common.pushEnabled')
+      : t('common.pushNotEnabled')
     } catch {
       pushPermission.value = getPushPermissionState()
-      pushMessage.value = 'Failed to enable push alerts.'
+    pushMessage.value = t('common.pushEnableFailed')
     } finally {
       enablingPush.value = false
     }
@@ -128,12 +142,16 @@
             class="prominent"
           >
             <Icon icon="solar:bell-bing-line-duotone" />
-            {{ enablingPush ? 'Enabling...' : 'Enable Push Alerts' }}
+            {{
+              enablingPush
+                ? t('common.enabling')
+                : t('common.enablePushAlerts')
+            }}
           </button>
 
           <button @click="loadNotifications({ force: true })">
             <Icon icon="solar:refresh-line-duotone" />
-            Refresh
+            {{ t('common.refresh') }}
           </button>
         </HStack>
 
@@ -143,18 +161,18 @@
           class="prominent"
         >
           <Icon icon="solar:check-read-line-duotone" />
-          Mark all read ({{ unreadCount }})
+          {{ t('common.markAllRead') }} ({{ unreadCount }})
         </button>
       </HStack>
     </HStack>
     <p v-if="pushMessage" class="light pushMessage">{{ pushMessage }}</p>
 
-    <EmptyState v-if="loading" message="Loading notifications." />
+    <EmptyState v-if="loading" :message="t('common.loadingNotifications')" />
     <ErrorState v-else-if="error" :message="error" />
 
     <EmptyState
       v-else-if="notifications.length < 1"
-      message="No notifications yet."
+      :message="t('common.noNotificationsYet')"
     />
 
     <VStack v-else class="notificationsList">
