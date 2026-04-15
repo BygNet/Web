@@ -1,7 +1,8 @@
+import {fileURLToPath} from "node:url";
+
 export default defineNuxtConfig({
   ssr: true,
   future: { compatibilityVersion: 4 },
-  srcDir: 'src',
 
   modules: [ '@nuxtjs/i18n' ],
 
@@ -10,6 +11,10 @@ export default defineNuxtConfig({
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://api.byg.a35.dev',
       adsBase: process.env.NUXT_PUBLIC_ADS_BASE || 'https://ads.byg.a35.dev',
     },
+  },
+
+  alias: {
+    '@': fileURLToPath(new URL('./', import.meta.url)),
   },
 
   i18n: {
@@ -25,10 +30,6 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     vueI18n: './i18n.config.ts',
     skipSettingLocaleOnNavigate: false,
-    useSetI18nLanguageCookie: true,
-    alwaysRedirect: false,
-    genRouteLocalePrefixes: false,
-    parseLocalePerRoute: true,
   },
 
   app: {
@@ -45,24 +46,23 @@ export default defineNuxtConfig({
     },
   },
 
-  css: [ '~/styles/global.sass' ],
+  css: [ '@/styles/global.sass' ],
 
   vite: {
     define: {
       __AppVersion: JSON.stringify('2.0.0-alpha14'),
     },
-    resolve: {
-      alias: {
-        '@': new URL('./src', import.meta.url).pathname,
-      },
-    },
-    css: {
-      preprocessorOptions: {
-        sass: {
-          api: 'modern-compiler',
-        },
-      },
-    },
+    optimizeDeps: {
+      include: [
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+        'vue-progressive-blur',
+        '@iconify/vue',
+        'dompurify',
+        'marked',
+        'mitt',
+      ]
+    }
   },
 
   nitro: {

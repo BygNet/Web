@@ -30,6 +30,7 @@ import { consoleWarn } from '@/utils/consoleWarn'
 import { useEnv } from '@/utils/env'
 import { getFlag } from '@/utils/setUserFlag'
 import CreateView from '@/views/CreateView.vue'
+import { Icon } from '@iconify/vue'
 import ReportView from '@/views/ReportView.vue'
 
 const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
@@ -43,8 +44,11 @@ const canEnablePush = computed(() => {
   )
 })
 const pushEnabled = computed(() => pushPermission.value === 'granted')
+const loadingApp: Ref<boolean> = ref(true)
 
 onMounted(async () => {
+  loadingApp.value = false
+
   consoleWarn()
   loadTheme()
   pushPermission.value = getPushPermissionState()
@@ -75,6 +79,11 @@ watch(
 </script>
 
 <template>
+  <div class="loadingView" v-if="loadingApp">
+    <Icon icon="svg-spinners:90-ring-with-bg" />
+    <h1>Byg is Loading...</h1>
+  </div>
+
   <ClientOnly>
     <CreateView v-if="showingCreateModal" />
     <ReportView v-if="showingReportPopup" />
@@ -104,6 +113,21 @@ watch(
 
 <style scoped lang="sass">
   @use "@/styles/variables"
+  @use "@/styles/themes"
+
+  .loadingView
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    justify-content: center
+    background: themes.$backgroundColor
+    z-index: 1000
+
+    svg
+      width: 4rem
+      height: 4rem
 
   main
     display: flex
