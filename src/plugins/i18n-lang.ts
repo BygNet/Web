@@ -1,25 +1,24 @@
-import { watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { defineNuxtPlugin } from '#app'
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   if (process.client) {
-    // Use hook to ensure i18n is initialized
-    nuxtApp.hook('app:mounted', () => {
-      const { locale } = useI18n()
-
-      const setHtmlLang = () => {
+    // Set HTML lang attribute based on i18n locale from global state
+    // This runs client-side only after app is mounted
+    const setHtmlLang = () => {
+      try {
         const html = document.querySelector('html')
-        if (html) {
-          html.lang = locale.value
+        if (html && !html.getAttribute('lang')) {
+          // Default to 'en' if not set
+          html.setAttribute('lang', 'en')
         }
+      } catch (err) {
+        // Silently fail if DOM operations aren't available
       }
+    }
 
-      // Set immediately
-      setHtmlLang()
-
-      // Watch for locale changes
-      watch(() => locale.value, setHtmlLang)
-    })
+    // Set on next tick to ensure DOM is ready
+    if (typeof window !== 'undefined') {
+      Promise.resolve().then(setHtmlLang)
+    }
   }
 })
