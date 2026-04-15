@@ -23,6 +23,8 @@
     type MentionContext,
   } from '@/utils/mentions'
 
+  const config = useRuntimeConfig()
+
   const pickedType: Ref<CreateType | undefined> = ref(undefined)
   const showingPreview: Ref<boolean> = ref(false)
 
@@ -113,7 +115,7 @@
     loading.value = true
     error.value = null
 
-    const res = await fetch(`${import.meta.env.VITE_API_BASE}/create-post`, {
+    const res = await fetch(`${config.public.apiBase}/create-post`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -151,7 +153,7 @@
     loading.value = true
     error.value = null
 
-    const res = await fetch(`${import.meta.env.VITE_API_BASE}/upload-image`, {
+    const res = await fetch(`${config.public.apiBase}/upload-image`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

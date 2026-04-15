@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import { useHead } from '#imports'
+  import { useHead, useRuntimeConfig } from '#imports'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
 
   import ImageItem from '@/components/images/ImageItem.vue'
@@ -17,6 +17,7 @@
   const route = useRoute()
   const id = Number(route.params.slug)
   const image: Ref<BygImage | undefined> = ref()
+  const config = useRuntimeConfig()
 
   title.value = 'Loading...'
   showBackButton.value = true
@@ -41,7 +42,7 @@
 
   onMounted(async () => {
     const res = await fetch(
-      `${import.meta.env.VITE_API_BASE}/image-details/${id}`
+      `${config.public.apiBase}/image-details/${id}`
     )
 
     image.value = (await res.json()) as BygImage

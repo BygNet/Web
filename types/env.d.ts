@@ -1,7 +1,7 @@
 interface ImportMetaEnv {
   readonly BASE_URL: string
-  readonly VITE_API_BASE: string
-  readonly VITE_ADS_BASE: string
+  readonly NUXT_PUBLIC_API_BASE: string
+  readonly NUXT_PUBLIC_ADS_BASE: string
 }
 
 interface ImportMeta {

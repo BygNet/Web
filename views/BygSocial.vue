@@ -29,6 +29,8 @@
   import setHeadMeta from '@/utils/setHeadMeta'
   import AdView from '@/views/AdView.vue'
 
+  const config = useRuntimeConfig()
+
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)
   const error: Ref<string | null> = ref(null)
@@ -63,7 +65,7 @@
       }
 
       taskList.value.push('loading posts')
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
+      const res = await fetch(`${config.public.apiBase}/latest-posts`)
       if (!res.ok) throw new Error('Failed to load posts')
 
       const data = (await res.json()) as BygPost[]
@@ -121,7 +123,7 @@
     if (!posts.value.length) return
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/latest-posts`)
+      const res = await fetch(`${config.public.apiBase}/latest-posts`)
       if (!res.ok) return
 
       const latest = (await res.json()) as BygPost[]

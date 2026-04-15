@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import { useHead } from '#imports'
+  import { useHead, useRuntimeConfig } from '#imports'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -16,6 +16,7 @@
   const route = useRoute()
   const id = Number(route.params.slug)
   const post: Ref<BygPost | undefined> = ref()
+  const config = useRuntimeConfig()
 
   title.value = 'Loading...'
   showBackButton.value = true
@@ -39,7 +40,7 @@
 
   onMounted(async () => {
     const data = await fetch(
-      `${import.meta.env.VITE_API_BASE}/post-details/${id}`
+      `${config.public.apiBase}/post-details/${id}`
     )
     post.value = (await data.json()) as BygPost
 

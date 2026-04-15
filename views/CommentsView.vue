@@ -30,6 +30,8 @@
   const showingMentionSuggestions: Ref<boolean> = ref(false)
   let mentionRequestId = 0
 
+  const config = useRuntimeConfig()
+
   const props = defineProps<{
     id: number
     author: string
@@ -40,7 +42,7 @@
 
   const fetchComments = async () => {
     const res = await fetch(
-      `${import.meta.env.VITE_API_BASE}${props.getUrl}/${props.id}`
+      `${config.public.apiBase}${props.getUrl}/${props.id}`
     )
     if (!res.ok) {
       console.error('Failed to fetch comments')
