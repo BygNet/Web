@@ -26,8 +26,8 @@
     sendMessage,
     sendTypingEvent,
   } from '@/data/messages'
-  import { title } from '@/data/title.ts'
-  import { showingNavigation } from '@/data/visibility.ts'
+  import { title } from '@/data/title'
+  import { showingNavigation } from '@/data/visibility'
   import type { BygUserSuggestion } from '@/types/mentions'
   import type {
     BygMessage,

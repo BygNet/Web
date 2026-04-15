@@ -4,8 +4,8 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showingNavigation } from '@/data/visibility.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { showingNavigation } from '@/data/visibility'
+  import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo } from '#app'
 
   const query = ref('')

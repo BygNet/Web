@@ -1,5 +1,5 @@
-import { auth } from '@/auth/session.ts'
-import { showingCreateModal } from '@/data/visibility.ts'
+import { auth } from '@/auth/session'
+import { showingCreateModal } from '@/data/visibility'
 
 export async function openCreateModal(): Promise<void> {
   if (!auth.user) {

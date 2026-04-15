@@ -5,8 +5,8 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { title } from '@/data/title.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { title } from '@/data/title'
+  import setHeadMeta from '@/utils/setHeadMeta'
 
   title.value = 'Credits'
 

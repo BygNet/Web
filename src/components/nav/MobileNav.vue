@@ -4,9 +4,9 @@
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { BygPages, ExplorePage } from '@/data/pages.ts'
-  import { showingCreateModal } from '@/data/visibility.ts'
-  import { toggleCreateModal } from '@/utils/createModalManager.ts'
+  import { BygPages, ExplorePage } from '@/data/pages'
+  import { showingCreateModal } from '@/data/visibility'
+  import { toggleCreateModal } from '@/utils/createModalManager'
   import { useRoute } from '#app'
 
   const route = useRoute()

@@ -14,16 +14,16 @@
   import VStack from '@/components/layout/VStack.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
   import { fetchCurrentUserProfile } from '@/data/profiles'
-  import { taskList } from '@/data/tasks.ts'
+  import { taskList } from '@/data/tasks'
   import {
     currentThemeKey,
     isThemeDark,
     systemPrefersDark,
-  } from '@/data/themes.ts'
-  import { showBackButton, title } from '@/data/title.ts'
-  import { capitalize } from '@/utils/formatters.ts'
-  import { buildProfileThemeVars } from '@/utils/profileTheme.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  } from '@/data/themes'
+  import { showBackButton, title } from '@/data/title'
+  import { capitalize } from '@/utils/formatters'
+  import { buildProfileThemeVars } from '@/utils/profileTheme'
+  import setHeadMeta from '@/utils/setHeadMeta'
 
   type SettingSection = 'profile' | 'subscription' | 'security'
 

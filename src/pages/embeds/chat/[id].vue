@@ -8,8 +8,8 @@
   import ErrorState from '@/components/layout/ErrorState.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { fetchProfileByUsername } from '@/data/profiles.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { fetchProfileByUsername } from '@/data/profiles'
+  import setHeadMeta from '@/utils/setHeadMeta'
   import { useRoute } from '#app'
 
   const route = useRoute()

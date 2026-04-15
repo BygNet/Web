@@ -22,12 +22,12 @@
     postCache,
     postCacheTime,
   } from '@/data/caches'
-  import { reloader } from '@/data/events.ts'
+  import { reloader } from '@/data/events'
   import { fetchCurrentUserProfile } from '@/data/profiles'
-  import { taskList } from '@/data/tasks.ts'
-  import { title } from '@/data/title.ts'
+  import { taskList } from '@/data/tasks'
+  import { title } from '@/data/title'
   import { useEnv } from '@/utils/env'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import setHeadMeta from '@/utils/setHeadMeta'
   import AdView from '@/views/AdView.vue'
 
   const posts: Ref<BygPost[]> = ref([])

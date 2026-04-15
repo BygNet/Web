@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import { useHead } from '@unhead/vue'
+  import { useHead } from '#imports'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
 
   import ImageItem from '@/components/images/ImageItem.vue'

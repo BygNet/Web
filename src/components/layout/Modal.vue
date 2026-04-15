@@ -2,7 +2,7 @@
   import { onMounted, onUnmounted } from 'vue'
 
   import FullscreenCover from '@/components/layout/FullscreenCover.vue'
-  import { blurContent } from '@/data/visibility.ts'
+  import { blurContent } from '@/data/visibility'
 
   const props = defineProps<{
     independent?: boolean

@@ -7,8 +7,8 @@
   import ErrorState from '@/components/layout/ErrorState.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
   import { fetchProfileByUsername } from '@/data/profiles'
-  import { showBackButton, title } from '@/data/title.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { showBackButton, title } from '@/data/title'
+  import setHeadMeta from '@/utils/setHeadMeta'
   import { useRoute } from '#app'
 
   const route = useRoute()

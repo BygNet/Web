@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import { useHead } from '@unhead/vue'
+  import { useHead } from '#imports'
   import { onMounted, onUnmounted, type Ref, ref } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -9,7 +9,7 @@
   import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
   import VStack from '@/components/layout/VStack.vue'
   import PostItem from '@/components/posts/PostItem.vue'
-  import { showBackButton, title } from '@/data/title.ts'
+  import { showBackButton, title } from '@/data/title'
   import CommentsView from '@/views/CommentsView.vue'
   import { useRoute } from '#app'
 

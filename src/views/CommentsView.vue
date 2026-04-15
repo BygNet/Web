@@ -6,15 +6,15 @@
   import { nextTick, onMounted, type Ref, ref } from 'vue'
 
   import { api } from '@/api/client'
-  import { auth } from '@/auth/session.ts'
+  import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { fetchUserSuggestions } from '@/data/mentions'
-  import { taskList } from '@/data/tasks.ts'
+  import { taskList } from '@/data/tasks'
     import type { BygUserSuggestion } from '@/types/mentions'
-  import { formatDate } from '@/utils/formatters.ts'
+  import { formatDate } from '@/utils/formatters'
   import {
     applyMention,
     getMentionContext,

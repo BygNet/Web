@@ -8,10 +8,10 @@
   import ErrorState from '@/components/layout/ErrorState.vue'
   import SkeletonImage from '@/components/layout/skeletons/SkeletonImage.vue'
   import { IMAGE_CACHE_TTL, imageCache, imageCacheTime } from '@/data/caches'
-  import { imageReloader } from '@/data/events.ts'
-  import { taskList } from '@/data/tasks.ts'
+  import { imageReloader } from '@/data/events'
+  import { taskList } from '@/data/tasks'
   import { title } from '@/data/title'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import setHeadMeta from '@/utils/setHeadMeta'
 
   title.value = 'Picture'
   setHeadMeta({

@@ -3,7 +3,7 @@
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
-  import { title } from '@/data/title.ts'
+  import { title } from '@/data/title'
 
   title.value = 'Welcome!'
 </script>

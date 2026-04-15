@@ -3,8 +3,8 @@
   import { ProgressiveBlur } from 'vue-progressive-blur'
 
   import HStack from '@/components/layout/HStack.vue'
-  import { taskList } from '@/data/tasks.ts'
-  import { showBackButton, title } from '@/data/title.ts'
+  import { taskList } from '@/data/tasks'
+  import { showBackButton, title } from '@/data/title'
   import { useRoute } from '#app'
 
   const route = useRoute()

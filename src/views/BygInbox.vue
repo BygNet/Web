@@ -19,9 +19,9 @@
     getPushPermissionState,
     syncPushSubscription,
   } from '@/data/pushAlerts'
-  import { title } from '@/data/title.ts'
+  import { title } from '@/data/title'
   import type { BygNotification } from '@/types/notifications'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import setHeadMeta from '@/utils/setHeadMeta'
 
   title.value = 'Inbox'
   setHeadMeta({

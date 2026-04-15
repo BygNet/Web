@@ -8,10 +8,10 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { fetchBygSearch } from '@/data/search'
-  import { title } from '@/data/title.ts'
-  import { showingNavigation } from '@/data/visibility.ts'
+  import { title } from '@/data/title'
+  import { showingNavigation } from '@/data/visibility'
   import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo,useRoute } from '#app'
 
   interface SearchCategoryOption {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import AppsGrid from '@/components/apps/AppsGrid.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
-  import { title } from '@/data/title.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { title } from '@/data/title'
+  import setHeadMeta from '@/utils/setHeadMeta'
 
   title.value = 'Explore'
   setHeadMeta({

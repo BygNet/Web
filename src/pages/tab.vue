@@ -6,8 +6,8 @@
   import HStack from '@/components/layout/HStack.vue'
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showingNavigation } from '@/data/visibility.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { showingNavigation } from '@/data/visibility'
+  import setHeadMeta from '@/utils/setHeadMeta'
 
   interface FavoriteItem {
     id: string

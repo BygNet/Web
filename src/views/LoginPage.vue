@@ -6,8 +6,8 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { taskList } from '@/data/tasks.ts'
-  import { title } from '@/data/title.ts'
+  import { taskList } from '@/data/tasks'
+  import { title } from '@/data/title'
   import { navigateTo } from '#app'
 
   title.value = 'Login'

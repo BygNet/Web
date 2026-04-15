@@ -5,8 +5,8 @@
   import { api } from '@/api/client'
   import { auth, updateActiveUser } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
-  import { title } from '@/data/title.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { title } from '@/data/title'
+  import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo } from '#app'
 
   title.value = 'Verify Email'

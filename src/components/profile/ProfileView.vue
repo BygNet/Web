@@ -8,12 +8,12 @@
   import VStack from '@/components/layout/VStack.vue'
   import ReportButton from '@/components/posts/ReportButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
-  import { currentThemeKey, systemPrefersDark } from '@/data/themes.ts'
-  import { capitalize } from '@/utils/formatters.ts'
+  import { currentThemeKey, systemPrefersDark } from '@/data/themes'
+  import { capitalize } from '@/utils/formatters'
   import {
     applyProfileThemeToDocument,
     clearDocumentProfileTheme,
-  } from '@/utils/profileTheme.ts'
+  } from '@/utils/profileTheme'
 
   const props = withDefaults(
     defineProps<{

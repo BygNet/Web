@@ -4,7 +4,7 @@
 
   import { openShareModal } from '@/data/share'
   import type { BygShareableContent } from '@/types/messages'
-  import { formatNumber, formatStat } from '@/utils/formatters.ts'
+  import { formatNumber, formatStat } from '@/utils/formatters'
 
   const props = defineProps<{
     shares: number

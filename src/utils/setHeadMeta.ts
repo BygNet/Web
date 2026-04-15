@@ -1,4 +1,4 @@
-import { useHead } from '@unhead/vue'
+import { useHead } from '#imports'
 import type {
   ResolvableArray,
   ResolvableLink,

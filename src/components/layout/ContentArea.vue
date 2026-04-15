@@ -5,7 +5,7 @@
   import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showingNavigation } from '@/data/visibility.ts'
+  import { showingNavigation } from '@/data/visibility'
   import { useRoute } from '#app'
 
   const attrs = useAttrs()

@@ -5,8 +5,8 @@
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showBackButton, title } from '@/data/title.ts'
-  import setHeadMeta from '@/utils/setHeadMeta.ts'
+  import { showBackButton, title } from '@/data/title'
+  import setHeadMeta from '@/utils/setHeadMeta'
 
   setHeadMeta({
     page: 'Terms',

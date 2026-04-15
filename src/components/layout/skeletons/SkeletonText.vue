@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import VStack from '@/components/layout/VStack.vue'
-  import { generateLines } from '@/utils/skeletons.ts'
+  import { generateLines } from '@/utils/skeletons'
 
   const props = defineProps<{
     lines: number

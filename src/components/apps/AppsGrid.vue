@@ -4,7 +4,7 @@
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { BygPages, MorePages } from '@/data/pages.ts'
+  import { BygPages, MorePages } from '@/data/pages'
 
   defineProps<{
     embed?: boolean

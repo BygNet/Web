@@ -5,18 +5,18 @@
   import { marked } from 'marked'
   import { computed, nextTick, type Ref, ref, watchEffect } from 'vue'
 
-  import { auth } from '@/auth/session.ts'
+  import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
   import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
-  import { imageReloader, reloader } from '@/data/events.ts'
+  import { imageReloader, reloader } from '@/data/events'
   import { fetchUserSuggestions } from '@/data/mentions'
-  import { taskList } from '@/data/tasks.ts'
-  import { showingCreateModal } from '@/data/visibility.ts'
+  import { taskList } from '@/data/tasks'
+  import { showingCreateModal } from '@/data/visibility'
   import type { BygUserSuggestion } from '@/types/mentions'
-  import { formatDate } from '@/utils/formatters.ts'
+  import { formatDate } from '@/utils/formatters'
   import {
     applyMention,
     getMentionContext,

@@ -3,7 +3,7 @@ import type { BygAd } from '@bygnet/types'
 import { computed, onMounted, type Ref, ref, watch } from 'vue'
 
 import { resetActiveAccountState } from '@/auth/accountState'
-import { auth } from '@/auth/session.ts'
+import { auth } from '@/auth/session'
 import ShareModal from '@/components/messages/ShareModal.vue'
 import Byg2Modal from '@/components/modals/Byg2Modal.vue'
 import CookieBanner from '@/components/modals/CookieBanner.vue'
@@ -11,24 +11,24 @@ import NotificationsModal from '@/components/modals/NotificationsModal.vue'
 import DesktopNav from '@/components/nav/DesktopNav.vue'
 import MobileNav from '@/components/nav/MobileNav.vue'
 import TitleView from '@/components/nav/TitleView.vue'
-import { adCache } from '@/data/caches.ts'
+import { adCache } from '@/data/caches'
 import { loadNotificationReadState } from '@/data/notifications'
 import {
   getPushPermissionState,
   syncPushSubscription,
-} from '@/data/pushAlerts.ts'
+} from '@/data/pushAlerts'
 import { showingShareModal } from '@/data/share'
-import { loadTheme } from '@/data/themes.ts'
+import { loadTheme } from '@/data/themes'
 import {
   blurContent,
   showingCookieBanner,
   showingCreateModal,
   showingNavigation,
   showingReportPopup,
-} from '@/data/visibility.ts'
-import { consoleWarn } from '@/utils/consoleWarn.ts'
+} from '@/data/visibility'
+import { consoleWarn } from '@/utils/consoleWarn'
 import { useEnv } from '@/utils/env'
-import { getFlag } from '@/utils/setUserFlag.ts'
+import { getFlag } from '@/utils/setUserFlag'
 import CreateView from '@/views/CreateView.vue'
 import ReportView from '@/views/ReportView.vue'
 

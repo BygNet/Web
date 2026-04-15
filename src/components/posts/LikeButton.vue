@@ -4,7 +4,7 @@
 
   import { auth } from '@/auth/session'
   import { useEnv } from '@/utils/env'
-  import { formatNumber, formatStat } from '@/utils/formatters.ts'
+  import { formatNumber, formatStat } from '@/utils/formatters'
   import { navigateTo } from '#app'
 
   const props = defineProps<{

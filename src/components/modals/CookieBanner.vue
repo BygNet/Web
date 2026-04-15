@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import HStack from '@/components/layout/HStack.vue'
-  import { setFlag } from '@/utils/setUserFlag.ts'
+  import { setFlag } from '@/utils/setUserFlag'
 
   const emit = defineEmits([ 'close' ])
 

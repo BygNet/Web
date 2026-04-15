@@ -3,7 +3,7 @@
   import { onMounted } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
-  import { showingReportPopup } from '@/data/visibility.ts'
+  import { showingReportPopup } from '@/data/visibility'
 
   onMounted(() => {
     // @ts-ignore
