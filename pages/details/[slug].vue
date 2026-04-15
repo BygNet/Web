@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import { useHead } from '#imports'
-  import { onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
+  import { useHead, useAsyncData } from '#imports'
+  import { onUnmounted, type Ref, ref } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import Divider from '@/components/layout/Divider.vue'
@@ -18,52 +18,53 @@
   const slug = route.params.slug
   const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
 
-  const post: Ref<BygPost | undefined> = ref()
   const error: Ref<string | null> = ref(null)
 
   title.value = 'Byg Post'
   showBackButton.value = true
 
-  // Set meta tags for SEO - use default values for SSR
+  // Fetch post data - track for meta tags
+  let postMetaData: BygPost | null = null
+  const { data: post } = await useAsyncData(
+    `post-${id}`,
+    async () => {
+      if (!id) return null
+      try {
+        const response = await fetch(`${useEnv().apiBase}/post-details/${id}`)
+        if (!response.ok) throw new Error(`API error: ${response.status}`)
+        const json = await response.json() as BygPost
+        postMetaData = json
+        return json
+      } catch (err) {
+        console.error('Failed to fetch post:', err)
+        return null
+      }
+    },
+    { server: true }
+  )
+
+  // Set meta tags for SEO with fetched post data
   useHead(() => {
-    if (!post.value) {
+    if (postMetaData) {
       return {
-        title: 'Byg Post',
+        title: `Post: "${postMetaData.title}"`,
         meta: [
           {
             name: 'description',
-            content: 'View posts on Byg social network.',
+            content: `View ${postMetaData.author}'s post on Byg.`,
           },
         ],
       }
     }
 
     return {
-      title: `Post: "${post.value.title}"`,
+      title: 'Byg Post',
       meta: [
         {
           name: 'description',
-          content: `View ${post.value.author}'s post on Byg.`,
+          content: 'View posts on Byg social network.',
         },
       ],
-    }
-  })
-
-  onMounted(async () => {
-    if (!id) {
-      error.value = 'Invalid post ID'
-      return
-    }
-
-    try {
-      const data = await fetch(
-        `${useEnv().apiBase}/post-details/${id}`
-      )
-      post.value = (await data.json()) as BygPost
-      title.value = `${post.value.author}'s Post`
-    } catch (err) {
-      error.value = 'Failed to load post'
-      console.error(err)
     }
   })
 
@@ -78,7 +79,9 @@
       <p>{{ error }}</p>
     </div>
     <SkeletonPost v-else-if="post == undefined" class="fullWidth" />
-    <PostItem v-else :post="post" detail-mode class="postDetail" />
+    <ClientOnly v-else>
+      <PostItem :post="post" detail-mode class="postDetail" />
+    </ClientOnly>
 
     <Divider />
 
@@ -87,14 +90,15 @@
       <SkeletonComment v-for="i in 5" :key="i" />
     </VStack>
 
-    <CommentsView
-      v-else
-      :id="post.id"
-      :author="post.author"
-      getUrl="/post-comments"
-      postUrl="/comment-post"
-      :count="post.commentCount"
-    />
+    <ClientOnly v-else>
+      <CommentsView
+        :id="post.id"
+        :author="post.author"
+        getUrl="/post-comments"
+        postUrl="/comment-post"
+        :count="post.commentCount"
+      />
+    </ClientOnly>
   </ContentArea>
 </template>
 

@@ -30,7 +30,6 @@ import { consoleWarn } from '@/utils/consoleWarn'
 import { useEnv } from '@/utils/env'
 import { getFlag } from '@/utils/setUserFlag'
 import CreateView from '@/views/CreateView.vue'
-import { Icon } from '@iconify/vue'
 import ReportView from '@/views/ReportView.vue'
 
 const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import { useHead, useFetch } from '#imports'
-  import { onUnmounted, watch } from 'vue'
+  import { useHead, useAsyncData } from '#imports'
+  import { onUnmounted, ref, type Ref } from 'vue'
 
   import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -19,48 +19,51 @@
   const slug = route.params.slug
   const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
 
-  const apiBase = useEnv().apiBase
+  const error: Ref<string | null> = ref(null)
 
-  // Fetch data during SSR and hydration
-  const { data: image } = await useFetch(
-    id ? `${apiBase}/image-details/${id}` : null,
-    {
-      immediate: true,
-      server: true,
-      retry: false,
-      timeout: 5000,
-    }
-  ).catch(() => ({ data: null }))
-
-  // Set page title and back button
-  title.value = 'Loading...'
+  title.value = 'Byg Image'
   showBackButton.value = true
 
-  // Update title when image loads
-  watch(
-    () => image.value,
-    (newImage) => {
-      if (newImage) {
-        title.value = `${(newImage as BygImage).author}'s Image`
+  // Fetch image data - track for meta tags
+  let imageMetaData: BygImage | null = null
+  const { data: image } = await useAsyncData(
+    `image-${id}`,
+    async () => {
+      if (!id) return null
+      try {
+        const response = await fetch(`${useEnv().apiBase}/image-details/${id}`)
+        if (!response.ok) throw new Error(`API error: ${response.status}`)
+        const json = await response.json() as BygImage
+        imageMetaData = json
+        return json
+      } catch (err) {
+        console.error('Failed to fetch image:', err)
+        return null
       }
-    }
+    },
+    { server: true }
   )
 
-  // Set meta tags for SEO
+  // Set meta tags for SEO with fetched image data
   useHead(() => {
-    if (!image.value) {
+    if (imageMetaData) {
       return {
-        title: 'Loading Byg image...',
+        title: `Image: "${imageMetaData.title}"`,
+        meta: [
+          {
+            name: 'description',
+            content: `View ${imageMetaData.author}'s image on Byg.`,
+          },
+        ],
       }
     }
 
-    const img = image.value as BygImage
     return {
-      title: `Image: "${img.title}"`,
+      title: 'Byg Image',
       meta: [
         {
           name: 'description',
-          content: `View ${img.author}'s image on Byg.`,
+          content: 'View images on Byg social network.',
         },
       ],
     }
@@ -82,7 +85,9 @@
       <SkeletonText :lines="1" />
     </VStack>
 
-    <ImageItem v-else :image="image" detail-mode class="imageDetail" />
+    <ClientOnly v-else>
+      <ImageItem :image="image" detail-mode class="imageDetail" />
+    </ClientOnly>
 
     <Divider />
 
@@ -91,14 +96,15 @@
       <SkeletonComment v-for="i in 5" :key="i" />
     </VStack>
 
-    <CommentsView
-      v-else
-      :id="image.id"
-      :author="image.author"
-      get-url="/image-comments"
-      post-url="/comment-image"
-      :count="image.commentCount"
-    />
+    <ClientOnly v-else>
+      <CommentsView
+        :id="image.id"
+        :author="image.author"
+        get-url="/image-comments"
+        post-url="/comment-image"
+        :count="image.commentCount"
+      />
+    </ClientOnly>
   </ContentArea>
 </template>
 
