@@ -48,7 +48,7 @@
   }
 
   function goSettings() {
-    navigateTo({ name: 'settings' })
+    navigateTo('/settings')
   }
 
   function previewAndSetTheme(theme: (typeof BygThemes)[number]) {
