@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import HStack from '@/components/layout/HStack.vue'
   import { setFlag } from '@/utils/setUserFlag'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   const emit = defineEmits([ 'close' ])
 
@@ -18,7 +19,7 @@
     <p>There's still one left, but that's just there to keep you logged in.</p>
     <p>
       Wanna try out private search too? Check out
-      <RouterLink to="/search" class="prominentLink">Byg Search</RouterLink>.
+      <SafeLink to="/search" class="prominentLink">Byg Search</SafeLink>.
     </p>
 
     <HStack class="fullWidth autoSpace actions">

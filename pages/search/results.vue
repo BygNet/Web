@@ -13,6 +13,7 @@
   import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo,useRoute } from '#app'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   interface SearchCategoryOption {
     id: BygSearchCategory
@@ -244,9 +245,9 @@
 
 <template>
   <ContentArea class="bygSearchResults" left-align>
-    <RouterLink to="/search">
+    <SafeLink to="/search">
       <h1>Byg Search</h1>
-    </RouterLink>
+    </SafeLink>
 
     <VStack class="searchHeaderCard">
       <form class="searchForm" @submit.prevent="submitSearch">

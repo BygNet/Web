@@ -7,6 +7,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import { showingNavigation } from '@/data/visibility'
   import { useRoute } from '#app'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   const attrs = useAttrs()
   const route = useRoute()
@@ -64,9 +65,9 @@
         </VStack>
 
         <HStack class="bannerActions">
-          <RouterLink to="/email-verification">
+          <SafeLink to="/email-verification">
             <button class="prominent">Verify Email</button>
-          </RouterLink>
+          </SafeLink>
 
           <button @click="resendVerificationEmail" :disabled="isResending">
             {{ isResending ? 'Sending...' : 'Resend Code' }}
@@ -78,9 +79,9 @@
 
       <p class="light termsLink" v-if="!hideTermsLink">
         To use this platform, you agree to the
-        <RouterLink to="/terms" class="prominentLink"
-          >Terms of Service</RouterLink
-        >.
+        <SafeLink to="/terms" class="prominentLink">
+          Terms of Service
+        </SafeLink>.
       </p>
     </div>
   </div>

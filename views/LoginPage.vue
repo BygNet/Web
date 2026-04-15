@@ -9,6 +9,7 @@
   import { taskList } from '@/data/tasks'
   import { title } from '@/data/title'
   import { navigateTo } from '#app'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   title.value = 'Login'
   const email = ref('')
@@ -109,7 +110,7 @@
 
     <h3 class="centerText">
       Don't have an account?
-      <RouterLink class="prominentLink" to="/signup">Create one</RouterLink>
+      <SafeLink class="prominentLink" to="/signup">Create one</SafeLink>
     </h3>
   </ContentArea>
 </template>

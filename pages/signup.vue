@@ -8,6 +8,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title'
   import { navigateTo } from '#app'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   title.value = 'Signup'
   const email = ref('')
@@ -86,7 +87,7 @@
 
     <h3 class="centerText">
       Already have an account?
-      <RouterLink class="prominentLink" to="/login">Log In</RouterLink>
+      <SafeLink class="prominentLink" to="/login">Log In</SafeLink>
     </h3>
   </ContentArea>
 </template>

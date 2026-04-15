@@ -7,6 +7,8 @@
   import { BygPages, ExplorePage } from '@/data/pages'
   import { openCreateModal } from '@/utils/createModalManager'
   import { useRoute } from '#app'
+  import SafeLink from "~/components/base/SafeLink.vue";
+  import {isActive} from "@/utils/isActive";
 
   const AppVersion = __AppVersion
   const route = useRoute()
@@ -15,12 +17,12 @@
 <template>
   <nav class="desktopNav">
     <VStack class="header">
-      <RouterLink to="/">
+      <SafeLink to="/">
         <HStack class="bygLogo">
           <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />
           <h1>Byg</h1>
         </HStack>
-      </RouterLink>
+      </SafeLink>
 
       <button
         id="createButton"
@@ -33,14 +35,14 @@
     </VStack>
 
     <VStack class="pages">
-      <RouterLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
+      <SafeLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
         <HStack
           class="desktopNavItem"
-          :class="{ selected: route.path === page.path }"
+          :class="{ selected: isActive(route.path, page.path) }"
         >
           <Icon
             :icon="
-              route.path === page.path
+              isActive(route.path, page.path)
                 ? page.icon.replace('line-duotone', 'bold-duotone')
                 : page.icon
             "
@@ -49,7 +51,7 @@
             {{ page.title }}
           </h3>
         </HStack>
-      </RouterLink>
+      </SafeLink>
     </VStack>
 
     <VStack class="accountSection">

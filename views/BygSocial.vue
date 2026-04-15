@@ -28,6 +28,7 @@
   import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
   import AdView from '@/views/AdView.vue'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   const config = useRuntimeConfig()
 
@@ -169,14 +170,14 @@
         :key="post.id"
         class="postContainer"
       >
-        <RouterLink
+        <SafeLink
           class="postLink"
           :to="`/details/${post.id}`"
           custom
           v-slot="{ navigate }"
         >
           <PostItem :post="post" @navigate="navigate" />
-        </RouterLink>
+        </SafeLink>
 
         <AdView
           v-if="shouldRenderAd(index)"

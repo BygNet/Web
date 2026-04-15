@@ -37,6 +37,7 @@
   } from '@/types/messages'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo,useRoute } from '#app'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   title.value = 'Chat'
   setHeadMeta({
@@ -1020,12 +1021,12 @@
         :class="{ only: !shouldShowConversationPane }"
       >
         <header class="threadsHeader">
-          <RouterLink to="/">
+          <SafeLink to="/">
             <button class="backButton transparent">
               <Icon icon="solar:alt-arrow-left-line-duotone" />
               Back
             </button>
-          </RouterLink>
+          </SafeLink>
 
           <h3>Byg Chat</h3>
 

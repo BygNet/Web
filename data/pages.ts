@@ -25,7 +25,7 @@ export const BygPages: BygPage[] = [
   {
     title: 'Profile',
     description: 'Online profile.',
-    path: '/me',
+    path: '/my-space',
     icon: 'solar:user-line-duotone',
     color: '#3a986d',
   },

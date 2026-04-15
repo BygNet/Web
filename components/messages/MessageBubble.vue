@@ -6,6 +6,7 @@
 
   import type { BygMessage } from '@/types/messages'
   import { formatDate } from '@/utils/formatters'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
   type MessageDeliveryState = 'sending' | 'sent'
@@ -81,7 +82,7 @@
           `group-${props.groupPosition}`,
         ]"
       >
-        <RouterLink
+        <SafeLink
           v-if="message.sharedPost"
           class="sharedEmbed postEmbed"
           :to="`/details/${message.sharedPost.id}`"
@@ -89,9 +90,9 @@
           <h4>{{ message.sharedPost.title }}</h4>
           <p class="light">Post by {{ message.sharedPost.author }}</p>
           <p class="embedPreview">{{ message.sharedPost.content }}</p>
-        </RouterLink>
+        </SafeLink>
 
-        <RouterLink
+        <SafeLink
           v-if="message.sharedImage"
           class="sharedEmbed imageEmbed"
           :to="`/image/${message.sharedImage.id}`"
@@ -104,7 +105,7 @@
             <h4>{{ message.sharedImage.title }}</h4>
             <p class="light">{{ message.sharedImage.author }}</p>
           </div>
-        </RouterLink>
+        </SafeLink>
 
         <div
           v-if="message.content.trim()"

@@ -4,6 +4,7 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import { title } from '@/data/title'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   title.value = 'Welcome!'
 </script>
@@ -22,19 +23,19 @@
       <p>Customize your profile, or start immediately.</p>
 
       <HStack>
-        <RouterLink to="/">
+        <SafeLink to="/">
           <button>
             <Icon icon="solar:rocket-line-duotone" />
             Get Started
           </button>
-        </RouterLink>
+        </SafeLink>
 
-        <RouterLink to="/me">
+        <SafeLink to="/pages/my-space">
           <button class="prominent">
             <Icon icon="solar:settings-line-duotone" />
             Customize Profile
           </button>
-        </RouterLink>
+        </SafeLink>
       </HStack>
     </section>
   </ContentArea>

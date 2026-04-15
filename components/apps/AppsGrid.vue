@@ -5,6 +5,7 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages, MorePages } from '@/data/pages'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   defineProps<{
     embed?: boolean
@@ -33,7 +34,7 @@
       </HStack>
     </a>
 
-    <RouterLink
+    <SafeLink
       v-else
       v-for="app in [...BygPages, ...MorePages]"
       :to="app.path"
@@ -46,7 +47,7 @@
 
         <p>{{ app.title }}</p>
       </div>
-    </RouterLink>
+    </SafeLink>
   </div>
 </template>
 

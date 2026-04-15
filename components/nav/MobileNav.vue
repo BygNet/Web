@@ -8,6 +8,8 @@
   import { showingCreateModal } from '@/data/visibility'
   import { toggleCreateModal } from '@/utils/createModalManager'
   import { useRoute } from '#app'
+  import SafeLink from "@/components/base/SafeLink.vue";
+  import {isActive} from "@/utils/isActive";
 
   const route = useRoute()
 </script>
@@ -24,21 +26,21 @@
     </button>
 
     <HStack class="mobileNavItems">
-      <RouterLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
+      <SafeLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
         <VStack
           class="mobileNavItem"
-          :class="{ selected: route.path === page.path }"
+          :class="{ selected: isActive(route.path, page.path) }"
         >
           <Icon
             :icon="
-              route.path === page.path
+              isActive(route.path, page.path)
                 ? page.icon.replace('line-duotone', 'bold-duotone')
                 : page.icon
             "
           />
           <p>{{ page.title }}</p>
         </VStack>
-      </RouterLink>
+      </SafeLink>
     </HStack>
 
     <ProgressiveBlur :blur="24" :border-radius="0" class="navBlur" />

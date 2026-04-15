@@ -24,8 +24,9 @@
   import { capitalize } from '@/utils/formatters'
   import { buildProfileThemeVars } from '@/utils/profileTheme'
   import setHeadMeta from '@/utils/setHeadMeta'
+  import { useI18n } from 'vue-i18n'
 
-  type SettingSection = 'profile' | 'subscription' | 'security'
+  type SettingSection = 'profile' | 'subscription' | 'security' | 'interface'
 
   interface TwoFactorSetup {
     secret: string
@@ -35,6 +36,8 @@
 
   title.value = 'Settings'
   setHeadMeta({ page: 'Settings', subtitle: 'Manage your account settings.' })
+
+  const { locale, locales, setLocale } = useI18n()
 
   const activeSection: Ref<SettingSection> = ref('profile')
   const profile: Ref<BygProfile | null> = ref(null)
@@ -310,6 +313,15 @@
           <Icon icon="solar:crown-star-line-duotone" />
           Subscription
         </button>
+
+        <button
+          @click="activeSection = 'interface'"
+          :class="{ prominent: activeSection === 'interface' }"
+          class="menuItem"
+        >
+          <Icon icon="solar:settings-line-duotone" />
+          Interface
+        </button>
       </VStack>
 
       <VStack class="content">
@@ -576,6 +588,32 @@
             </VStack>
           </VStack>
         </VStack>
+
+        <VStack v-show="activeSection === 'interface'" class="section">
+          <h2>Interface</h2>
+
+          <VStack class="interfaceCard">
+            <HStack class="interfaceHeader">
+              <Icon icon="solar:global-line-duotone" />
+              <VStack class="noSpace">
+                <h3>Language</h3>
+                <p class="light">Choose your preferred language</p>
+              </VStack>
+            </HStack>
+
+            <VStack class="languageGrid">
+              <button
+                v-for="lang in locales"
+                :key="lang.code"
+                @click="setLocale(lang.code)"
+                :class="{ prominent: locale === lang.code }"
+                class="languageButton"
+              >
+                {{ lang.name }}
+              </button>
+            </VStack>
+          </VStack>
+        </VStack>
       </VStack>
     </HStack>
   </ContentArea>
@@ -650,6 +688,11 @@
     border-radius: 1rem
     background: color-mix(in srgb, var(--foreground) 3%, var(--background))
 
+  .securityCard, .subscriptionCard, .interfaceCard
+    gap: 1rem
+    border-radius: 1rem
+    background: color-mix(in srgb, var(--foreground) 3%, var(--background))
+
   .securityHeader, .subscriptionHeader
     align-items: center
     gap: 1rem
@@ -661,6 +704,20 @@
     .subscriptionIcon
       width: 4rem
       height: 4rem
+
+  .interfaceHeader
+    align-items: center
+    gap: 1rem
+
+    svg
+      width: 2.25rem
+      height: 2.25rem
+
+  .languageGrid
+    width: 100%
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr))
+    gap: 0.75rem
 
   .setupBox
     width: 100%

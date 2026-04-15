@@ -7,6 +7,7 @@
   import UsernameView from '@/components/posts/UsernameView.vue'
   import type { BygNotification } from '@/types/notifications'
   import { formatDate } from '@/utils/formatters'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   const props = defineProps<{
     notification: BygNotification
@@ -33,7 +34,7 @@
 </script>
 
 <template>
-  <RouterLink :to="notification.path" class="notificationLink">
+  <SafeLink :to="notification.path" class="notificationLink">
     <HStack class="notificationItem" :class="{ unread: unread }">
       <Icon class="notificationIcon" :icon="notificationIcon" />
 
@@ -50,7 +51,7 @@
         <p>{{ notification.text }}</p>
       </VStack>
     </HStack>
-  </RouterLink>
+  </SafeLink>
 </template>
 
 <style scoped lang="sass">

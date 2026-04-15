@@ -8,6 +8,7 @@
   import { StaffUsers } from '@/data/users'
   import { getVerificationColor } from '@/utils/verificationData'
   import { navigateTo } from '#app'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   const props = defineProps<{
     name: string
@@ -75,7 +76,7 @@
     </Component>
 
     <!-- Authenticity badges -->
-    <RouterLink to="/verification">
+    <SafeLink to="/verification">
       <Icon
         v-if="verification"
         class="verificationBadge"
@@ -83,7 +84,7 @@
         icon="solar:verified-check-bold"
         :style="{ color: getVerificationColor(verification) }"
       />
-    </RouterLink>
+    </SafeLink>
 
     <HStack class="badges" v-if="!minimal">
       <HStack class="badge staff" v-if="isStaff">

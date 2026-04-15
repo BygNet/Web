@@ -14,6 +14,7 @@
     applyProfileThemeToDocument,
     clearDocumentProfileTheme,
   } from '@/utils/profileTheme'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
   const props = withDefaults(
     defineProps<{
@@ -142,12 +143,12 @@
               {{ isFollowing ? 'Following' : 'Follow' }}
             </button>
 
-            <RouterLink :to="'/messages?with=' + user.username">
+            <SafeLink :to="'/messages?with=' + user.username">
               <button>
                 <Icon icon="solar:chat-round-like-line-duotone" />
                 Chat
               </button>
-            </RouterLink>
+            </SafeLink>
           </HStack>
 
           <ReportButton />

@@ -33,7 +33,7 @@ const isExternal = computed(() => props.external || props.to.startsWith('http'))
   <NuxtLink
     v-if="!isExternal"
     :to="href"
-    :target="newTab ? '_blank' : undefined"
+    :target="newTab ? '_blank' : null"
     :rel="newTab ? 'noopener noreferrer' : undefined"
   >
     <slot />
