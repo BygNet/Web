@@ -89,33 +89,35 @@
 </script>
 
 <template>
-  <div class="loadingView" v-if="loadingApp">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-    >
-      <path
-        fill="currentColor"
-        d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-        opacity="0.25"
-      />
-      <path
-        fill="currentColor"
-        d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+  <Transition name="loading">
+    <div class="loadingView" v-if="loadingApp">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
       >
-        <animateTransform
-          attributeName="transform"
-          dur="0.75s"
-          repeatCount="indefinite"
-          type="rotate"
-          values="0 12 12;360 12 12"
+        <path
+          fill="currentColor"
+          d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+          opacity="0.25"
         />
-      </path>
-    </svg>
-    <h1>{{ t('ui.app.loading') }}</h1>
-  </div>
+        <path
+          fill="currentColor"
+          d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+        >
+          <animateTransform
+            attributeName="transform"
+            dur="0.75s"
+            repeatCount="indefinite"
+            type="rotate"
+            values="0 12 12;360 12 12"
+          />
+        </path>
+      </svg>
+      <h1>{{ t('ui.app.loading') }}</h1>
+    </div>
+  </Transition>
 
   <ClientOnly>
     <CreateView v-if="showingCreateModal" />
@@ -132,16 +134,20 @@
     />
   </ClientOnly>
 
-  <DesktopNav
-    class="blurrable"
-    v-if="showingNavigation"
-    :class="{ blurred: blurContent }"
-  />
-  <main class="blurrable" :class="{ blurred: blurContent }">
-    <TitleView v-if="showingNavigation" />
-    <NuxtPage :key="activeAccountKey" />
-    <MobileNav v-if="showingNavigation" />
-  </main>
+  <Transition name="app" appear>
+    <div v-if="!loadingApp" class="appShell">
+      <DesktopNav
+        class="blurrable"
+        v-if="showingNavigation"
+        :class="{ blurred: blurContent }"
+      />
+      <main class="blurrable" :class="{ blurred: blurContent }">
+        <TitleView v-if="showingNavigation" />
+        <NuxtPage :key="activeAccountKey" />
+        <MobileNav v-if="showingNavigation" />
+      </main>
+    </div>
+  </Transition>
 </template>
 
 <style scoped lang="sass">
@@ -156,12 +162,38 @@
     bottom: 0
     justify-content: center
     background: themes.$backgroundColor
-    z-index: 1000
+    color: themes.$textColor
+    z-index: 10000
     border-radius: 0
 
     svg
       width: 4rem
       height: 4rem
+
+  .appShell
+    display: flex
+    flex-direction: row
+    width: 100vw
+    height: 100dvh
+
+  .loading-enter-active,
+  .loading-leave-active
+    transition: opacity 0.35s ease
+
+  .loading-enter-from,
+  .loading-leave-to
+    opacity: 0
+
+  .app-enter-active
+    transition: opacity 0.4s ease, transform 0.4s ease
+
+  .app-enter-from
+    opacity: 0
+    transform: scale(1.2)
+
+  .app-enter-to
+    opacity: 1
+    transform: scale(1)
 
   main
     display: flex
@@ -183,6 +215,8 @@
       filter: blur(0.5rem)
 
   @media (max-width: variables.$mobileWidth)
+    .appShell
+      flex-direction: column
     main
       width: 100%
 </style>
