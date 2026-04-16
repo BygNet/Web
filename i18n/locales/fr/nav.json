@@ -1,16 +1,16 @@
 {
   "nav": {
-    "social": "Réseau social",
-    "explore": "Explorer",
-    "search": "Rechercher",
-    "inbox": "Boîte de réception",
-    "messages": "Messagerie",
-    "profile": "Mon profil",
-    "settings": "Paramètres",
-    "pro": "Pro",
-    "credits": "Crédits",
-    "terms": "Conditions",
-    "browseMenu": "Parcourir",
-    "accountMenu": "Compte"
+  "social": "Posts",
+  "explore": "Explorer",
+  "search": "Recherche",
+  "inbox": "Alertes",
+  "messages": "Chats",
+  "profile": "Profil",
+  "settings": "Réglages",
+  "pro": "Pro",
+  "credits": "Crédits",
+  "terms": "Termes",
+  "browseMenu": "Menu",
+  "accountMenu": "Compte"
   }
 }

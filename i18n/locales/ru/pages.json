@@ -1,15 +1,15 @@
 {
   "pages": {
     "social": {
-      "title": "Социальное",
+      "title": "Посты",
       "description": "Просматривайте посты в Byg Social."
     },
     "picture": {
-      "title": "Изображения",
+      "title": "Фото",
       "description": "Просматривайте изображения в Byg Picture."
     },
     "messages": {
-      "title": "Сообщения",
+      "title": "Чаты",
       "description": "Личные сообщения."
     },
     "mySpace": {
@@ -29,7 +29,7 @@
       "description": "Коллекции ссылок."
     },
     "verification": {
-      "title": "Верификация",
+      "title": "Проверка",
       "description": "Получите значок подтверждения!"
     },
     "settings": {
@@ -37,7 +37,7 @@
       "description": "Настройки аккаунта."
     },
     "credits": {
-      "title": "Благодарности",
+      "title": "Кредиты",
       "description": "Благодарности Byg."
     },
     "explore": {
@@ -49,7 +49,7 @@
       "description": "Войдите в аккаунт Byg."
     },
     "signup": {
-      "title": "Регистрация",
+      "title": "Создать",
       "description": "Создайте новый аккаунт Byg."
     },
     "terms": {
@@ -65,7 +65,7 @@
       "description": "Настройте новую вкладку Byg."
     },
     "emailVerification": {
-      "title": "Подтверждение email",
+      "title": "Почта",
       "description": "Подтвердите адрес email."
     }
   }

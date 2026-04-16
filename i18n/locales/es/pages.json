@@ -1,15 +1,15 @@
 {
   "pages": {
     "social": {
-      "title": "Red social",
+      "title": "Posts",
       "description": "Explora publicaciones en Byg Social."
     },
     "picture": {
-      "title": "Imágenes",
+      "title": "Fotos",
       "description": "Explora imágenes en Byg Picture."
     },
     "messages": {
-      "title": "Mensajes",
+      "title": "Chats",
       "description": "Mensajes directos."
     },
     "mySpace": {
@@ -21,19 +21,19 @@
       "description": "Búsqueda web privada."
     },
     "inbox": {
-      "title": "Bandeja de entrada",
+      "title": "Alertas",
       "description": "Tus alertas de Byg."
     },
     "link": {
-      "title": "Enlaces",
+      "title": "Links",
       "description": "Colecciones de enlaces."
     },
     "verification": {
-      "title": "Verificación",
+      "title": "Verif",
       "description": "¡Obtén tu marca de verificación!"
     },
     "settings": {
-      "title": "Configuración",
+      "title": "Ajustes",
       "description": "Configuración de la cuenta."
     },
     "credits": {
@@ -45,11 +45,11 @@
       "description": "Todas las apps de Byg y más."
     },
     "login": {
-      "title": "Iniciar sesión",
+      "title": "Entrar",
       "description": "Accede a tu cuenta de Byg."
     },
     "signup": {
-      "title": "Registrarse",
+      "title": "Registro",
       "description": "Crea una cuenta nueva de Byg."
     },
     "terms": {
@@ -61,11 +61,11 @@
       "description": "Actualiza a Byg Pro."
     },
     "tab": {
-      "title": "Pestaña",
+      "title": "Tab",
       "description": "Personaliza tu nueva pestaña de Byg."
     },
     "emailVerification": {
-      "title": "Verificación de correo",
+      "title": "Correo",
       "description": "Verifica tu dirección de correo."
     }
   }

@@ -1,16 +1,16 @@
 {
   "nav": {
-    "social": "Red social",
+    "social": "Posts",
     "explore": "Explorar",
     "search": "Buscar",
-    "inbox": "Bandeja de entrada",
-    "messages": "Mensajes",
-    "profile": "Mi perfil",
-    "settings": "Configuración",
+    "inbox": "Alertas",
+    "messages": "Chats",
+    "profile": "Perfil",
+    "settings": "Ajustes",
     "pro": "Pro",
     "credits": "Créditos",
     "terms": "Términos",
-    "browseMenu": "Explorar",
+    "browseMenu": "Menú",
     "accountMenu": "Cuenta"
   }
 }

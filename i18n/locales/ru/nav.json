@@ -1,16 +1,16 @@
 {
   "nav": {
-    "social": "Социальное",
+    "social": "Посты",
     "explore": "Обзор",
     "search": "Поиск",
     "inbox": "Входящие",
-    "messages": "Сообщения",
-    "profile": "Мой профиль",
+    "messages": "Чаты",
+    "profile": "Профиль",
     "settings": "Настройки",
     "pro": "Pro",
     "credits": "Кредиты",
     "terms": "Условия",
-    "browseMenu": "Обзор",
-    "accountMenu": "Учетная запись"
+    "browseMenu": "Меню",
+    "accountMenu": "Аккаунт"
   }
 }

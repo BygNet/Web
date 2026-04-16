@@ -1,15 +1,15 @@
 {
   "pages": {
     "social": {
-      "title": "Réseau social",
+      "title": "Posts",
       "description": "Parcourez les publications sur Byg Social."
     },
     "picture": {
-      "title": "Images",
+      "title": "Photos",
       "description": "Parcourez les images sur Byg Picture."
     },
     "messages": {
-      "title": "Messagerie",
+      "title": "Chats",
       "description": "Messages directs."
     },
     "mySpace": {
@@ -21,7 +21,7 @@
       "description": "Recherche web privée."
     },
     "inbox": {
-      "title": "Notifs",
+      "title": "Alertes",
       "description": "Vos alertes Byg."
     },
     "link": {
@@ -29,11 +29,11 @@
       "description": "Collections de liens."
     },
     "verification": {
-      "title": "Vérification",
+      "title": "Vérif",
       "description": "Obtenez votre badge vérifié !"
     },
     "settings": {
-      "title": "Paramètres",
+      "title": "Réglages",
       "description": "Paramètres du compte."
     },
     "credits": {
@@ -49,11 +49,11 @@
       "description": "Accédez à votre compte Byg."
     },
     "signup": {
-      "title": "Inscription",
+      "title": "Inscrire",
       "description": "Créer un nouveau compte Byg."
     },
     "terms": {
-      "title": "Conditions",
+      "title": "Termes",
       "description": "Lire les conditions Byg."
     },
     "pro": {
@@ -65,7 +65,7 @@
       "description": "Personnalisez votre nouvel onglet Byg."
     },
     "emailVerification": {
-      "title": "Vérification de l'e-mail",
+      "title": "Email",
       "description": "Vérifiez votre adresse e-mail."
     }
   }
