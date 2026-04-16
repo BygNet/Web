@@ -26,7 +26,7 @@ self.addEventListener('push', event => {
 
   const title = payload.title ?? 'Byg alert'
   const body = payload.body ?? 'You have a new alert.'
-  const path = payload.path ?? '/notifications'
+  const path = payload.path ?? '/inbox'
   const tag = payload.tag ?? 'byg-alert'
 
   event.waitUntil(
@@ -44,7 +44,7 @@ self.addEventListener('notificationclick', event => {
   event.notification.close()
 
   const path =
-    (event.notification.data?.path as string | undefined) ?? '/notifications'
+    (event.notification.data?.path as string | undefined) ?? '/inbox'
 
   event.waitUntil(
     self.clients

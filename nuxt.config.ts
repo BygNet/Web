@@ -23,13 +23,13 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    strategy: 'prefix_except_default',
     baseUrl: process.env.NUXT_PUBLIC_BASE_URL || 'https://byg.gg',
-    defaultLocale: 'en',
+    strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
       alwaysRedirect: false,
+      redirectOn: 'no prefix',
       fallbackLocale: 'en',
     },
     langDir: 'locales/',
@@ -168,6 +168,15 @@ export default defineNuxtConfig({
     registerType: 'autoUpdate',
     includeAssets: [ 'favicon.ico', 'logos/BygLogo-Pwa.png', 'tos.md' ],
     manifest: false,
+    strategies: 'injectManifest',
+    srcDir: '.',
+    filename: 'sw.ts',
+    injectManifest: {
+      globPatterns: [
+        '**/*.{js,css,html,ico,png,svg,webmanifest,woff2,woff,ttf,jpg,jpeg,json}',
+      ],
+      maximumFileSizeToCacheInBytes: 7 * 1024 * 1024, // 7 MB
+    },
     workbox: {
       maximumFileSizeToCacheInBytes: 7 * 1024 * 1024, // 7 MB
       globPatterns: [
