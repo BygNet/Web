@@ -32,6 +32,7 @@
   import { getFlag } from '@/utils/setUserFlag'
   import CreateView from '@/views/CreateView.vue'
   import ReportView from '@/views/ReportView.vue'
+  import { useHead } from '#imports'
 
   const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
@@ -45,7 +46,15 @@
   })
   const pushEnabled = computed(() => pushPermission.value === 'granted')
   const loadingApp: Ref<boolean> = ref(true)
-  const { t } = useI18n()
+  const { locale, t } = useI18n()
+  const manifestHref = computed(() => {
+    const code = locale.value || 'en'
+    return `/manifest.${code}.webmanifest`
+  })
+
+  useHead(() => ({
+    link: [ { rel: 'manifest', href: manifestHref.value } ],
+  }))
 
   onMounted(async () => {
     loadingApp.value = false
@@ -148,6 +157,7 @@
     justify-content: center
     background: themes.$backgroundColor
     z-index: 1000
+    border-radius: 0
 
     svg
       width: 4rem

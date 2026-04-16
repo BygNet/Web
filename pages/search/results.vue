@@ -2,6 +2,7 @@
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
 
+  import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
@@ -13,7 +14,6 @@
   import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo, useRoute } from '#app'
-  import SafeLink from '@/components/base/SafeLink.vue'
 
   interface SearchCategoryOption {
     id: BygSearchCategory

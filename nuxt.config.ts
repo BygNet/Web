@@ -1,11 +1,12 @@
 import { fileURLToPath } from 'node:url'
+
 import pkg from './package.json'
 
 export default defineNuxtConfig({
   ssr: true,
   future: { compatibilityVersion: 4 },
 
-  modules: [ '@nuxtjs/i18n' ],
+  modules: [ '@nuxtjs/i18n', '@vite-pwa/nuxt' ],
 
   runtimeConfig: {
     public: {
@@ -112,6 +113,17 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Byg Platform' },
       ],
       link: [ { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' } ],
+    },
+  },
+
+  pwa: {
+    registerType: 'autoUpdate',
+    includeAssets: [ 'favicon.ico', 'logos/BygLogo-Pwa.png', 'tos.md' ],
+    manifest: false,
+    workbox: {
+      globPatterns: [
+        '**/*.{js,css,html,ico,png,svg,webmanifest,woff2,woff,ttf,jpg,jpeg,json}',
+      ],
     },
   },
 

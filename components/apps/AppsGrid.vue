@@ -2,11 +2,11 @@
   import { Icon } from '@iconify/vue'
   import { useI18n } from 'vue-i18n'
 
+  import SafeLink from '@/components/base/SafeLink.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import type { BygPageMeta } from '@/data/pages'
   import { BygPages, MorePages } from '@/data/pages'
-  import SafeLink from '@/components/base/SafeLink.vue'
 
   defineProps<{
     embed?: boolean

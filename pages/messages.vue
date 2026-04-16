@@ -20,6 +20,7 @@
   import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
+  import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import HStack from '@/components/layout/HStack.vue'
@@ -46,7 +47,6 @@
     BygMessageThread,
   } from '@/types/messages'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
-  import SafeLink from '@/components/base/SafeLink.vue'
 
   const { t } = useI18n()
   const localePath = useLocalePath()

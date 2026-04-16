@@ -1,0 +1,19 @@
+{
+  "name": "Byg",
+  "short_name": "Byg",
+  "description": "Платформа Byg",
+  "lang": "ru",
+  "start_url": "/ru/",
+  "scope": "/ru/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#dd289e",
+  "icons": [
+    {
+      "src": "/logos/BygLogo-Pwa.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

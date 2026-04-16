@@ -12,6 +12,7 @@
   import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
+  import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
@@ -32,7 +33,6 @@
   import { useEnv } from '@/utils/env'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import AdView from '@/views/AdView.vue'
-  import SafeLink from '@/components/base/SafeLink.vue'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)

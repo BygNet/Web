@@ -4,13 +4,13 @@
   import { useI18n } from 'vue-i18n'
 
   import { login } from '@/auth/login'
+  import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { taskList } from '@/data/tasks'
   import { title } from '@/data/title'
   import { navigateTo } from '#app'
-  import SafeLink from '@/components/base/SafeLink.vue'
 
   const localePath = useLocalePath()
   const { t } = useI18n()

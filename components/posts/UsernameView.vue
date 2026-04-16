@@ -6,13 +6,13 @@
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
+  import SafeLink from '@/components/base/SafeLink.vue'
   import HStack from '@/components/layout/HStack.vue'
   import { getCachedProfile, setCachedProfile } from '@/data/caches'
   import { fetchProfileByUsername } from '@/data/profiles'
   import { StaffUsers } from '@/data/users'
   import { getVerificationColor } from '@/utils/verificationData'
   import { navigateTo } from '#app'
-  import SafeLink from '@/components/base/SafeLink.vue'
 
   const localePath = useLocalePath()
   const { t } = useI18n()

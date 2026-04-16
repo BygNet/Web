@@ -6,8 +6,8 @@
   import HStack from '@/components/layout/HStack.vue'
   import { taskList } from '@/data/tasks'
   import { showBackButton, title } from '@/data/title'
-  import { useRoute } from '#app'
   import { isActive } from '@/utils/isActive'
+  import { useRoute } from '#app'
 
   const localePath = useLocalePath()
   const route = useRoute()

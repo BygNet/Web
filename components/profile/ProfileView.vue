@@ -6,6 +6,7 @@
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
+  import SafeLink from '@/components/base/SafeLink.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import ReportButton from '@/components/posts/ReportButton.vue'
@@ -17,7 +18,6 @@
     clearDocumentProfileTheme,
   } from '@/utils/profileTheme'
   import { navigateTo } from '#app'
-  import SafeLink from '@/components/base/SafeLink.vue'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
