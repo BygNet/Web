@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
   import { onUnmounted, type Ref,ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -16,12 +17,13 @@
   import { useAsyncData,useHead } from '#imports'
 
   const route = useRoute()
+  const { t } = useI18n()
   const slug = route.params.slug
   const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
 
   const error: Ref<string | null> = ref(null)
 
-  title.value = 'Byg Image'
+  title.value = t('ui.details.imageTitle')
   showBackButton.value = true
 
   // Fetch image data - track for meta tags
@@ -48,22 +50,24 @@
   useHead(() => {
     if (imageMetaData) {
       return {
-        title: `Image: "${imageMetaData.title}"`,
+        title: t('ui.details.imageMetaTitle', { title: imageMetaData.title }),
         meta: [
           {
             name: 'description',
-            content: `View ${imageMetaData.author}'s image on Byg.`,
+            content: t('ui.details.imageMetaDescription', {
+              author: imageMetaData.author,
+            }),
           },
         ],
       }
     }
 
     return {
-      title: 'Byg Image',
+      title: t('ui.details.imageMetaFallbackTitle'),
       meta: [
         {
           name: 'description',
-          content: 'View images on Byg social network.',
+          content: t('ui.details.imageMetaFallbackDescription'),
         },
       ],
     }
@@ -92,7 +96,7 @@
     <Divider />
 
     <VStack v-if="image == undefined" class="fullWidth">
-      <h2>Comments</h2>
+      <h2>{{ t('common.comments') }}</h2>
       <SkeletonComment v-for="i in 5" :key="i" />
     </VStack>
 

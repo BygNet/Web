@@ -2,6 +2,7 @@
   import type { BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -20,9 +21,13 @@
   import { navigateTo } from '#app'
 
   const localePath = useLocalePath()
+  const { t } = useI18n()
 
-  title.value = 'My Profile'
-  setHeadMeta({ page: 'Profile', subtitle: 'Your Byg profile.' })
+  title.value = t('nav.profile')
+  setHeadMeta({
+    page: t('nav.profile'),
+    subtitle: t('ui.profilePage.subtitle'),
+  })
   const isLoggedIn = computed(() => !!auth.user)
   const hasAccounts = computed(() => auth.accounts.length > 0)
   const showingAppearances: Ref<boolean> = ref(false)
@@ -91,29 +96,29 @@
 <template>
   <ContentArea class="bygProfile">
     <HStack class="quickSettings autoSpace">
-      <h3>Options</h3>
+      <h3>{{ t('ui.profilePage.options') }}</h3>
 
       <HStack>
         <button disabled>
           <Icon icon="solar:stars-line-duotone" />
-          Byg Pro
+          {{ t('ui.profilePage.pro') }}
         </button>
 
         <button @click="showingAppearances = true">
           <Icon icon="solar:pallete-2-line-duotone" />
-          Appearance
+          {{ t('ui.profilePage.appearance') }}
         </button>
 
         <button @click="goSettings">
           <Icon icon="solar:settings-minimalistic-line-duotone" />
-          Settings
+          {{ t('ui.profilePage.settings') }}
         </button>
       </HStack>
     </HStack>
 
     <VStack v-if="showingAppearances" class="appearanceSidebar">
       <HStack class="autoSpace">
-        <h2>Themes</h2>
+        <h2>{{ t('ui.profilePage.themes') }}</h2>
         <button @click="showingAppearances = false">
           <Icon icon="mingcute:close-fill" />
         </button>
@@ -141,17 +146,17 @@
 
     <!-- Logged out -->
     <VStack v-if="!isLoggedIn" class="guest">
-      <h2>Welcome to Byg!</h2>
-      <p>You are not logged in.</p>
+      <h2>{{ t('ui.profilePage.guestTitle') }}</h2>
+      <p>{{ t('ui.profilePage.guestMessage') }}</p>
 
       <HStack class="accountActions">
         <button @click="goLogin">
           <Icon icon="solar:login-2-line-duotone" />
-          Log in
+          {{ t('common.login') }}
         </button>
         <button @click="goSignup">
           <Icon icon="solar:user-plus-line-duotone" />
-          Sign up
+          {{ t('common.signup') }}
         </button>
       </HStack>
     </VStack>

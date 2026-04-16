@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
   import { onUnmounted, type Ref, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import Divider from '@/components/layout/Divider.vue'
@@ -15,12 +16,13 @@
   import { useAsyncData,useHead } from '#imports'
 
   const route = useRoute()
+  const { t } = useI18n()
   const slug = route.params.slug
   const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
 
   const error: Ref<string | null> = ref(null)
 
-  title.value = 'Byg Post'
+  title.value = t('ui.details.postTitle')
   showBackButton.value = true
 
   // Fetch post data - track for meta tags
@@ -47,22 +49,24 @@
   useHead(() => {
     if (postMetaData) {
       return {
-        title: `Post: "${postMetaData.title}"`,
+        title: t('ui.details.postMetaTitle', { title: postMetaData.title }),
         meta: [
           {
             name: 'description',
-            content: `View ${postMetaData.author}'s post on Byg.`,
+            content: t('ui.details.postMetaDescription', {
+              author: postMetaData.author,
+            }),
           },
         ],
       }
     }
 
     return {
-      title: 'Byg Post',
+      title: t('ui.details.postMetaFallbackTitle'),
       meta: [
         {
           name: 'description',
-          content: 'View posts on Byg social network.',
+          content: t('ui.details.postMetaFallbackDescription'),
         },
       ],
     }
@@ -86,7 +90,7 @@
     <Divider />
 
     <VStack v-if="post == undefined" class="fullWidth">
-      <h2>Comments</h2>
+      <h2>{{ t('common.comments') }}</h2>
       <SkeletonComment v-for="i in 5" :key="i" />
     </VStack>
 

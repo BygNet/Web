@@ -2,7 +2,7 @@
   "pages": {
 
     "social": {
-      "title": "Social",
+      "title": "Réseau social",
       "description": "Parcourez les publications sur Byg Social."
     },
     "picture": {
@@ -10,7 +10,7 @@
       "description": "Parcourez les images sur Byg Picture."
     },
     "messages": {
-      "title": "Messages",
+      "title": "Messagerie",
       "description": "Messages directs."
     },
     "mySpace": {

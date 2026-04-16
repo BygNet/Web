@@ -5,7 +5,8 @@
   import Modal from '@/components/layout/Modal.vue'
   import ModalActions from '@/components/layout/ModalActions.vue'
   import VStack from '@/components/layout/VStack.vue'
-  
+
+  const localePath = useLocalePath()
   const emit = defineEmits([ 'close' ])
   const { t } = useI18n()
 
@@ -14,7 +15,7 @@
   }
 
   function openNotifications(): void {
-    navigateTo('/notifications')
+    navigateTo(localePath('/inbox'))
     close()
   }
 </script>

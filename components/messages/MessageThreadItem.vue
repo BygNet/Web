@@ -15,13 +15,11 @@
     select: []
   }>()
 
-  const formattedDate = new Date(
-    props.thread.lastMessageDate
-  ).toLocaleDateString('en-GB', {
+  const formattedDate = new Intl.DateTimeFormat(undefined, {
     day: '2-digit',
     month: '2-digit',
     year: '2-digit',
-  })
+  }).format(new Date(props.thread.lastMessageDate))
 </script>
 
 <template>

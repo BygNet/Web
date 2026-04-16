@@ -150,6 +150,85 @@
     "languageTitle": "Language",
     "languageDescription": "Choose your preferred language"
   },
+  "details": {
+    "postTitle": "Post",
+    "imageTitle": "Image",
+    "postMetaTitle": "Post: \"{title}\"",
+    "imageMetaTitle": "Image: \"{title}\"",
+    "postMetaDescription": "View {author}'s post on Byg.",
+    "imageMetaDescription": "View {author}'s image on Byg.",
+    "postMetaFallbackTitle": "Post",
+    "imageMetaFallbackTitle": "Image",
+    "postMetaFallbackDescription": "View posts on Byg social network.",
+    "imageMetaFallbackDescription": "View images on Byg social network."
+  },
+  "emailVerificationBanner": {
+    "title": "Email verification pending",
+    "description": "Verify {email} to secure your account.",
+    "resendSuccess": "Verification email sent.",
+    "resendFailure": "Could not resend verification email.",
+    "wrongEmailPrefix": "Wrong email? Contact us at ",
+    "wrongEmailSuffix": ".",
+    "verifyButton": "Verify Email",
+    "resendButton": "Resend Code",
+    "sending": "Sending..."
+  },
+  "terms": {
+    "noticePrefix": "To use this platform, you agree to the ",
+    "noticeLink": "Terms of Service",
+    "noticeSuffix": "."
+  },
+  "emailVerificationPage": {
+    "title": "Verify Email",
+    "subtitle": "Confirm your account email with the code we sent you.",
+    "heading": "Verify Your Email",
+    "instructions": "Enter the 6-digit code sent to {email}.",
+    "verificationCodeLabel": "Verification Code",
+    "verifying": "Verifying...",
+    "verifyButton": "Verify Email",
+    "sending": "Sending...",
+    "resendButton": "Resend Code",
+    "invalidCode": "That verification code was not accepted",
+    "verifiedSuccess": "Your email is verified now.",
+    "resendSuccess": "A fresh verification email is on the way.",
+    "resendFailure": "Could not resend the verification email.",
+    "fallbackInbox": "your inbox"
+  },
+  "afterLogin": {
+    "title": "Welcome!",
+    "heading": "Welcome to Byg!",
+    "description": "Browse posts, send messages, and search the web freely with Byg.",
+    "ctaTitle": "Let's go!",
+    "ctaDescription": "Customize your profile, or start immediately.",
+    "getStarted": "Get Started",
+    "customizeProfile": "Customize Profile"
+  },
+  "comments": {
+    "titleWithCount": "Comments: {count}",
+    "writePlaceholder": "Write a comment...",
+    "postButton": "Post",
+    "emptyState": "No comments yet."
+  },
+  "accountSwitcher": {
+    "emptyState": "No accounts connected yet.",
+    "addAccount": "Add"
+  },
+  "profilePage": {
+    "subtitle": "Your Byg profile.",
+    "options": "Options",
+    "pro": "Byg Pro",
+    "appearance": "Appearance",
+    "settings": "Settings",
+    "themes": "Themes",
+    "guestTitle": "Welcome to Byg!",
+    "guestMessage": "You are not logged in."
+  },
+  "profile": {
+    "follow": "Follow",
+    "following": "Following",
+    "chat": "Chat",
+    "joinedLabel": "Joined {date}"
+  },
   "nav": {
     "openAlerts": "Open alerts"
   }

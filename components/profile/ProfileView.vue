@@ -2,6 +2,7 @@
   import type { BygUser } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
@@ -19,6 +20,7 @@
   import SafeLink from "~/components/base/SafeLink.vue";
 
   const localePath = useLocalePath()
+  const { t } = useI18n()
   const props = withDefaults(
     defineProps<{
       user: BygUser
@@ -47,10 +49,10 @@
   })
 
   const joinDate = computed(() => {
-    return new Date(props.user.createdAt).toLocaleDateString('en-US', {
+    return new Intl.DateTimeFormat(undefined, {
       year: 'numeric',
       month: 'long',
-    })
+    }).format(new Date(props.user.createdAt))
   })
 
   async function handleFollow() {
@@ -134,7 +136,9 @@
               :subscription-state="user.subscriptionState"
               display-mode
             />
-            <p class="light">Joined {{ joinDate }}</p>
+            <p class="light">
+              {{ t('ui.profile.joinedLabel', { date: joinDate }) }}
+            </p>
           </VStack>
         </HStack>
 
@@ -155,13 +159,17 @@
                     : 'solar:user-plus-line-duotone'
                 "
               />
-              {{ isFollowing ? 'Following' : 'Follow' }}
+              {{
+                isFollowing
+                  ? t('ui.profile.following')
+                  : t('ui.profile.follow')
+              }}
             </button>
 
             <SafeLink :to="'/messages?with=' + user.username">
               <button>
                 <Icon icon="solar:chat-round-like-line-duotone" />
-                Chat
+                {{ t('ui.profile.chat') }}
               </button>
             </SafeLink>
           </HStack>

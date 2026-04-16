@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { signup } from '@/auth/signup'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -11,8 +12,9 @@
   import SafeLink from "~/components/base/SafeLink.vue";
 
   const localePath = useLocalePath()
+  const { t } = useI18n()
 
-  title.value = 'Signup'
+  title.value = t('auth.signup')
   const email = ref('')
   const username = ref('')
   const password = ref('')
@@ -27,7 +29,7 @@
       await signup(email.value, username.value, password.value)
       await navigateTo(localePath('/'))
     } catch {
-      error.value = 'Signup failed'
+      error.value = t('auth.signupPage.signupFailed')
     } finally {
       loading.value = false
     }
@@ -39,12 +41,12 @@
     <HStack class="loginItems">
       <form @submit.prevent="submit" class="loginForm">
         <label>
-          Email
+          {{ t('auth.email') }}
           <input v-model="email" type="email" autocomplete="email" required />
         </label>
 
         <label>
-          Username
+          {{ t('auth.username') }}
           <input
             v-model="username"
             type="text"
@@ -54,7 +56,7 @@
         </label>
 
         <label>
-          Password
+          {{ t('auth.password') }}
           <input
             v-model="password"
             type="password"
@@ -65,7 +67,11 @@
 
         <button type="submit" :disabled="loading">
           <Icon icon="solar:user-plus-line-duotone" />
-          {{ loading ? 'Creating Account…' : 'Sign Up' }}
+          {{
+            loading
+              ? t('auth.signupPage.creatingAccount')
+              : t('auth.signup')
+          }}
         </button>
 
         <p v-if="error" class="error">
@@ -74,22 +80,24 @@
       </form>
 
       <VStack class="accountSide">
-        <h2>Your Byg account.</h2>
-        <p>With your account, you can:</p>
+        <h2>{{ t('auth.signupPage.sideTitle') }}</h2>
+        <p>{{ t('auth.signupPage.sideMessage') }}</p>
 
         <ul>
-          <li>Post content</li>
-          <li>Upload images</li>
-          <li>Create link lists</li>
+          <li>{{ t('auth.signupPage.sideItemPost') }}</li>
+          <li>{{ t('auth.signupPage.sideItemUpload') }}</li>
+          <li>{{ t('auth.signupPage.sideItemLinks') }}</li>
         </ul>
 
-        <p>and much more!</p>
+        <p>{{ t('auth.signupPage.sideMore') }}</p>
       </VStack>
     </HStack>
 
     <h3 class="centerText">
-      Already have an account?
-      <SafeLink class="prominentLink" to="/login">Log In</SafeLink>
+      {{ t('auth.alreadyHaveAccount') }}
+      <SafeLink class="prominentLink" to="/login">
+        {{ t('auth.login') }}
+      </SafeLink>
     </h3>
   </ContentArea>
 </template>

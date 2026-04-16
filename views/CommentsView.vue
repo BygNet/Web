@@ -4,6 +4,7 @@
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { nextTick, onMounted, type Ref, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
@@ -32,6 +33,7 @@
 
   const config = useRuntimeConfig()
   const localePath = useLocalePath()
+  const { t } = useI18n()
 
   const props = defineProps<{
     id: number
@@ -152,7 +154,7 @@
 
 <template>
   <VStack class="commentsView">
-    <h2>Comments: {{ comments.length }}</h2>
+    <h2>{{ t('ui.comments.titleWithCount', { count: comments.length }) }}</h2>
 
     <HStack id="writeComment">
       <VStack class="commentInput">
@@ -160,7 +162,7 @@
           ref="commentTextarea"
           name="writeComment"
           v-model="writtenComment"
-          placeholder="Write a comment..."
+        :placeholder="t('ui.comments.writePlaceholder')"
           @input="onCommentTextareaInteraction"
           @keyup="onCommentTextareaInteraction"
           @click="onCommentTextareaInteraction"
@@ -175,7 +177,7 @@
 
       <button @click="postComment" :disabled="sendingComment">
         <Icon icon="solar:plain-line-duotone" />
-        Post
+        {{ t('ui.comments.postButton') }}
       </button>
     </HStack>
 
@@ -193,7 +195,7 @@
       </div>
     </VStack>
 
-    <h3 v-else>No comments yet.</h3>
+    <h3 v-else>{{ t('ui.comments.emptyState') }}</h3>
   </VStack>
 </template>
 

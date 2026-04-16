@@ -2,6 +2,7 @@
   import type { BygProfile, BygVerification } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { computed, type Ref, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
@@ -14,6 +15,7 @@
   import SafeLink from "~/components/base/SafeLink.vue";
 
   const localePath = useLocalePath()
+  const { t } = useI18n()
   const props = defineProps<{
     name: string
     author?: boolean
@@ -201,7 +203,7 @@
             : 'solar:user-plus-line-duotone'
         "
       />
-      {{ isFollowing ? 'Following' : 'Follow' }}
+      {{ isFollowing ? t('ui.profile.following') : t('ui.profile.follow') }}
     </button>
   </HStack>
 </template>

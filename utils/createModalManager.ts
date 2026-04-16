@@ -2,8 +2,10 @@ import { auth } from '@/auth/session'
 import { showingCreateModal } from '@/data/visibility'
 
 export async function openCreateModal(): Promise<void> {
+  const localePath = useLocalePath()
+
   if (!auth.user) {
-    await navigateTo('/login')
+    await navigateTo(localePath('/login'))
   } else {
     showingCreateModal.value = true
   }

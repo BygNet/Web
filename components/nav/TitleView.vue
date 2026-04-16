@@ -7,7 +7,9 @@
   import { taskList } from '@/data/tasks'
   import { showBackButton, title } from '@/data/title'
   import { useRoute } from '#app'
+  import {isActive} from "~/utils/isActive";
 
+  const localePath = useLocalePath()
   const route = useRoute()
   const { t } = useI18n()
 
@@ -36,14 +38,14 @@
       <button
         class="alertsButton"
         :class="{
-          prominent: route.path === '/inbox',
+          prominent: isActive(route.path, '/inbox'),
         }"
-        @click="navigateTo('/inbox')"
+        @click="navigateTo(localePath('/inbox'))"
         :aria-label="t('ui.nav.openAlerts')"
       >
         <Icon
           :icon="
-            route.path === '/inbox'
+           isActive(route.path, '/inbox')
               ? 'solar:inbox-line-bold-duotone'
               : 'solar:inbox-line-line-duotone'
           "

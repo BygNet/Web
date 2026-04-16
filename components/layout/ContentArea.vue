@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { api } from '@/api/client'
   import { auth } from '@/auth/session'
@@ -11,6 +12,7 @@
 
   const attrs = useAttrs()
   const route = useRoute()
+  const { t } = useI18n()
   const resendMessage = ref<string | null>(null)
   const isResending = ref(false)
 
@@ -39,8 +41,8 @@
       })
 
       resendMessage.value = res.ok
-        ? 'Verification email sent.'
-        : 'Could not resend verification email.'
+        ? t('ui.emailVerificationBanner.resendSuccess')
+        : t('ui.emailVerificationBanner.resendFailure')
     } finally {
       isResending.value = false
     }
@@ -55,22 +57,32 @@
         class="emailVerificationBanner autoSpace"
       >
         <VStack class="bannerCopy">
-          <strong>Email verification pending</strong>
+          <strong>{{ t('ui.emailVerificationBanner.title') }}</strong>
           <!-- prettier-ignore -->
-          <p>Verify <span>{{ auth.user?.email }}</span> to secure your account.</p>
+          <p>{{ t('ui.emailVerificationBanner.description', { email: auth.user?.email ?? '' }) }}</p>
           <!-- prettier-ignore -->
           <p v-if="resendMessage" class="light">{{ resendMessage }}</p>
           <!-- prettier-ignore -->
-          <p class="light">Wrong email? Contact us at <a href="mailto:hi@byg.gg" class="prominentLink">hi@byg.gg</a>.</p>
+          <p class="light">
+            {{ t('ui.emailVerificationBanner.wrongEmailPrefix') }}
+            <a href="mailto:hi@byg.gg" class="prominentLink">hi@byg.gg</a>
+            {{ t('ui.emailVerificationBanner.wrongEmailSuffix') }}
+          </p>
         </VStack>
 
         <HStack class="bannerActions">
           <SafeLink to="/email-verification">
-            <button class="prominent">Verify Email</button>
+            <button class="prominent">
+              {{ t('ui.emailVerificationBanner.verifyButton') }}
+            </button>
           </SafeLink>
 
           <button @click="resendVerificationEmail" :disabled="isResending">
-            {{ isResending ? 'Sending...' : 'Resend Code' }}
+            {{
+              isResending
+                ? t('ui.emailVerificationBanner.sending')
+                : t('ui.emailVerificationBanner.resendButton')
+            }}
           </button>
         </HStack>
       </HStack>
@@ -78,10 +90,11 @@
       <slot />
 
       <p class="light termsLink" v-if="!hideTermsLink">
-        To use this platform, you agree to the
+        {{ t('ui.terms.noticePrefix') }}
         <SafeLink to="/terms" class="prominentLink">
-          Terms of Service
-        </SafeLink>.
+          {{ t('ui.terms.noticeLink') }}
+        </SafeLink>
+        {{ t('ui.terms.noticeSuffix') }}
       </p>
     </div>
   </div>

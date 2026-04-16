@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { api } from '@/api/client'
   import { auth, updateActiveUser } from '@/auth/session'
@@ -10,15 +11,16 @@
   import { navigateTo } from '#app'
 
   const localePath = useLocalePath()
+  const { t } = useI18n()
 
   definePageMeta({
     middleware: 'auth',
   })
 
-  title.value = 'Verify Email'
+  title.value = t('ui.emailVerificationPage.title')
   setHeadMeta({
-    page: 'Verify Email',
-    subtitle: 'Confirm your account email with the code we sent you.',
+    page: t('ui.emailVerificationPage.title'),
+    subtitle: t('ui.emailVerificationPage.subtitle'),
   })
 
   const code = ref('')
@@ -41,7 +43,7 @@
       })
 
       if (!res.ok) {
-        error.value = 'That verification code was not accepted'
+        error.value = t('ui.emailVerificationPage.invalidCode')
         return
       }
 
@@ -52,7 +54,7 @@
         })
       }
 
-      message.value = 'Your email is verified now.'
+      message.value = t('ui.emailVerificationPage.verifiedSuccess')
       setTimeout(() => {
         navigateTo(localePath('settings'))
       }, 900)
@@ -72,8 +74,8 @@
       })
 
       message.value = res.ok
-        ? 'A fresh verification email is on the way.'
-        : 'Could not resend the verification email.'
+        ? t('ui.emailVerificationPage.resendSuccess')
+        : t('ui.emailVerificationPage.resendFailure')
     } finally {
       isResending.value = false
     }
@@ -83,16 +85,18 @@
 <template>
   <ContentArea class="emailVerificationPage">
     <Icon class="emailIcon" icon="solar:letter-line-duotone" />
-    <h1>Verify Your Email</h1>
+    <h1>{{ t('ui.emailVerificationPage.heading') }}</h1>
     <p>
-      Enter the 6-digit code sent to
-      <strong>{{ auth.user?.email ?? 'your inbox' }}</strong
-      >.
+      {{
+        t('ui.emailVerificationPage.instructions', {
+          email: auth.user?.email ?? t('ui.emailVerificationPage.fallbackInbox'),
+        })
+      }}
     </p>
 
     <form @submit.prevent="submit" class="verifyForm">
       <label>
-        Verification Code
+        {{ t('ui.emailVerificationPage.verificationCodeLabel') }}
         <input
           v-model="code"
           type="text"
@@ -105,13 +109,21 @@
 
       <button type="submit" class="prominent" :disabled="isSubmitting">
         <Icon icon="solar:check-circle-line-duotone" />
-        {{ isSubmitting ? 'Verifying...' : 'Verify Email' }}
+        {{
+          isSubmitting
+            ? t('ui.emailVerificationPage.verifying')
+            : t('ui.emailVerificationPage.verifyButton')
+        }}
       </button>
     </form>
 
     <button @click="resend" class="transparent" :disabled="isResending">
       <Icon icon="solar:letter-unread-line-duotone" />
-      {{ isResending ? 'Sending...' : 'Resend Code' }}
+      {{
+        isResending
+          ? t('ui.emailVerificationPage.sending')
+          : t('ui.emailVerificationPage.resendButton')
+      }}
     </button>
 
     <p v-if="message" class="success">{{ message }}</p>

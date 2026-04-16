@@ -2,17 +2,19 @@
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { onMounted, onUnmounted, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { showBackButton, title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
 
+  const { t } = useI18n()
   setHeadMeta({
-    page: 'Terms',
-    subtitle: 'Byg Terms of Service.',
+    page: t('pages.terms.title'),
+    subtitle: t('pages.terms.description'),
   })
-  title.value = 'Terms'
+  title.value = t('pages.terms.title')
   showBackButton.value = true
   const tosHtml = ref('')
 

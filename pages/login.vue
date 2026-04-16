@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { login } from '@/auth/login'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -11,7 +12,10 @@
   import { navigateTo } from '#app'
   import SafeLink from "~/components/base/SafeLink.vue";
 
-  title.value = 'Login'
+  const localePath = useLocalePath()
+  const { t } = useI18n()
+
+  title.value = t('auth.login')
   const email = ref('')
   const password = ref('')
   const twoFactorCode = ref('')
@@ -33,15 +37,15 @@
 
       if (result === 'two-factor-required') {
         requiresTwoFactor.value = true
-        error.value = 'Enter your authenticator app code to continue'
+        error.value = t('auth.loginPage.twoFactorPrompt')
         return
       }
 
-      await navigateTo('/')
+      await navigateTo(localePath('/'))
     } catch {
       error.value = requiresTwoFactor.value
-        ? 'Invalid authenticator code'
-        : 'Invalid email or password'
+        ? t('auth.loginPage.invalidTwoFactor')
+        : t('auth.invalidCredentials')
     } finally {
       loading.value = false
       taskList.value.remove('login')
@@ -55,12 +59,12 @@
       <form @submit.prevent="submit" class="loginForm">
         <VStack class="loginFormItems">
           <label>
-            Email
+            {{ t('auth.email') }}
             <input v-model="email" type="email" autocomplete="email" required />
           </label>
 
           <label>
-            Password
+            {{ t('auth.password') }}
             <input
               v-model="password"
               type="password"
@@ -70,7 +74,7 @@
           </label>
 
           <label v-if="requiresTwoFactor">
-            Authenticator Code
+            {{ t('auth.loginPage.twoFactorCode') }}
             <input
               v-model="twoFactorCode"
               type="text"
@@ -85,7 +89,11 @@
         <VStack class="loginFormItems">
           <button type="submit" :disabled="loading">
             <Icon icon="solar:login-2-line-duotone" />
-            {{ loading ? 'Logging In…' : 'Log In' }}
+            {{
+              loading
+                ? t('auth.loginPage.loggingIn')
+                : t('auth.login')
+            }}
           </button>
 
           <p v-if="error" class="error">
@@ -95,22 +103,26 @@
       </form>
 
       <VStack class="accountSide">
-        <h2>Return to Byg.</h2>
-        <p>We're happy to see you again!</p>
+        <h2>{{ t('auth.loginPage.sideTitle') }}</h2>
+        <p>{{ t('auth.loginPage.sideMessage') }}</p>
         <ul>
           <li>
-            Facing issues?
-            <a href="mailto:ash@a35.dev" class="prominentLink">Email us</a>.
+            {{ t('auth.loginPage.supportPrefix') }}
+            <a href="mailto:ash@a35.dev" class="prominentLink">
+              {{ t('auth.loginPage.supportLink') }}
+            </a>.
           </li>
         </ul>
 
-        <p>Thank you!</p>
+        <p>{{ t('auth.loginPage.thanks') }}</p>
       </VStack>
     </HStack>
 
     <h3 class="centerText">
-      Don't have an account?
-      <SafeLink class="prominentLink" to="/signup">Create one</SafeLink>
+      {{ t('auth.dontHaveAccount') }}
+      <SafeLink class="prominentLink" to="/signup">
+        {{ t('auth.loginPage.createAccountLink') }}
+      </SafeLink>
     </h3>
   </ContentArea>
 </template>

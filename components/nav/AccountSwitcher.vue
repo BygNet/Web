@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
   import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { logout } from '@/auth/logout'
   import { auth, removeAccount, setActiveAccount } from '@/auth/session'
@@ -9,6 +10,7 @@
   import UsernameView from '@/components/posts/UsernameView.vue'
 
   const localePath = useLocalePath()
+  const { t } = useI18n()
 
   const props = defineProps<{
     variant?: 'sidebar' | 'profile'
@@ -88,15 +90,15 @@
     </button>
 
     <VStack v-else class="emptyAccountState">
-      <p class="light">No accounts connected yet.</p>
+      <p class="light">{{ t('ui.accountSwitcher.emptyState') }}</p>
       <HStack class="emptyActions autoSpace fullWidth">
         <button @click="addAccount">
           <Icon icon="solar:login-2-line-duotone" />
-          Log in
+          {{ t('common.login') }}
         </button>
         <button class="prominent" @click="addSignup">
           <Icon icon="solar:user-plus-line-duotone" />
-          Sign up
+          {{ t('common.signup') }}
         </button>
       </HStack>
     </VStack>
@@ -143,7 +145,7 @@
       <HStack class="accountActions fullWidth autoSpace">
         <button class="addAccount prominent" @click="addAccount">
           <Icon icon="solar:user-plus-rounded-line-duotone" />
-          Add
+          {{ t('ui.accountSwitcher.addAccount') }}
         </button>
         <button
           v-if="activeAccount"
@@ -151,7 +153,7 @@
           @click="logoutActive"
         >
           <Icon icon="solar:logout-2-line-duotone" />
-          Log Out
+          {{ t('common.logout') }}
         </button>
       </HStack>
     </VStack>

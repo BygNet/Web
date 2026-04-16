@@ -49,7 +49,8 @@
   import SafeLink from "~/components/base/SafeLink.vue";
 
   const { t } = useI18n()
-  const pageMeta = PageMetaByPath['/messages']
+  const localePath = useLocalePath()
+  const pageMeta = PageMetaByPath['/messages']!
 
   watchEffect(() => {
     title.value = t(pageMeta.titleKey)
@@ -631,7 +632,7 @@
 
     stopTypingSignal()
 
-    await navigateTo('/messages')
+    await navigateTo(localePath('/messages'))
   }
 
   function pickThreadFromConversation(
