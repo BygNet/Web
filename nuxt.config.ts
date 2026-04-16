@@ -110,12 +110,19 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         {
           name: 'viewport',
-          content: 'width=device-width, initial-scale=1, maximum-scale=1',
+          content:
+            'width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover',
         },
         { name: 'theme-color', content: '#dd289e' },
-        { name: 'description', content: 'Share posts, send messages, and search the web with Byg.' },
+        {
+          name: 'description',
+          content: 'Share posts, send messages, and search the web with Byg.',
+        },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
-        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        {
+          name: 'apple-mobile-web-app-status-bar-style',
+          content: 'black-translucent',
+        },
         { name: 'mobile-web-app-capable', content: 'yes' },
         { property: 'og:image', content: '/logos/BygPreview.jpg' },
         { property: 'og:url', content: 'https://byg.a35.dev/' },
@@ -131,7 +138,11 @@ export default defineNuxtConfig({
         { rel: 'dns-prefetch', href: '//cdn.jsdelivr.net' },
         { rel: 'dns-prefetch', href: '//emojis.byg.a35.dev' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossorigin: '',
+        },
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap',
@@ -141,7 +152,10 @@ export default defineNuxtConfig({
           rel: 'stylesheet',
           href: 'https://cdn.jsdelivr.net/npm/ab-tests@1.1.2/assets/fonts/satoshi/satoshi.css',
         },
-        { rel: 'stylesheet', href: 'https://emojis.byg.a35.dev/FluentEmojiColor.css' },
+        {
+          rel: 'stylesheet',
+          href: 'https://emojis.byg.a35.dev/FluentEmojiColor.css',
+        },
       ],
       script: [ { src: 'https://tally.so/widgets/embed.js' } ],
     },
