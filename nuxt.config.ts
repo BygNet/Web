@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url'
+import pkg from './package.json'
 
 export default defineNuxtConfig({
   ssr: true,
@@ -118,7 +119,7 @@ export default defineNuxtConfig({
 
   vite: {
     define: {
-      __AppVersion: JSON.stringify('2.0.0-alpha14'),
+      __AppVersion: JSON.stringify(pkg.version),
     },
     optimizeDeps: {
       include: [
