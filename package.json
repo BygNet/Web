@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.0.0-alpha14",
+  "version": "2.1.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -10,7 +10,8 @@
     "format": "prettier --write --experimental-cli --ignore-path .prettierignore .",
     "type-check": "nuxi typecheck",
     "build": "nuxt build",
-    "preview": "nuxt preview --port 5173"
+    "preview": "nuxt preview --port 5173",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@eslint/compat": "^2.0.1",
@@ -35,7 +36,6 @@
     "@tsconfig/node24": "^24.0.3",
     "@types/node": "^25.5.0",
     "@typescript-eslint/eslint-plugin": "^8.58.2",
-    "@vitejs/plugin-vue": "^6.0.3",
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.39.2",
     "eslint-plugin-import": "^2.32.0",
@@ -45,9 +45,7 @@
     "prettier": "^3.8.1",
     "sass-embedded": "^1.97.2",
     "typescript": "~5.9.3",
-    "vite": "7",
     "vite-plugin-pwa": "^1.2.0",
-    "vite-plugin-vue-devtools": "^8.1.0",
-    "vue-tsc": "^3.2.6"
+    "vite-plugin-vue-devtools": "^8.1.0"
   }
 }
