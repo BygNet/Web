@@ -121,6 +121,7 @@ export default defineNuxtConfig({
     includeAssets: [ 'favicon.ico', 'logos/BygLogo-Pwa.png', 'tos.md' ],
     manifest: false,
     workbox: {
+      maximumFileSizeToCacheInBytes: 7 * 1024 * 1024, // 7 MB
       globPatterns: [
         '**/*.{js,css,html,ico,png,svg,webmanifest,woff2,woff,ttf,jpg,jpeg,json}',
       ],
