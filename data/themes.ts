@@ -55,7 +55,7 @@ export const BygThemes: BygTheme[] = [
     description: 'Old Byg dark mode theme.',
     key: 'leg-dark',
     colorPreview: '#001823',
-    isDark: false,
+    isDark: true,
   },
   {
     title: 'a35hie Light',
