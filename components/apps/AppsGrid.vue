@@ -6,7 +6,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import type { BygPageMeta } from '@/data/pages'
   import { BygPages, MorePages } from '@/data/pages'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   defineProps<{
     embed?: boolean
@@ -37,11 +37,7 @@
       </HStack>
     </a>
 
-    <SafeLink
-      v-else
-      v-for="app in [...BygPages, ...MorePages]"
-      :to="app.path"
-    >
+    <SafeLink v-else v-for="app in [...BygPages, ...MorePages]" :to="app.path">
       <div class="appItem fullWidth">
         <div class="appIcon" :style="{ '--tint': app.color }">
           <Icon :icon="app.icon" />

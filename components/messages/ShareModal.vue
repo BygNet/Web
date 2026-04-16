@@ -98,9 +98,9 @@
     sendingUserId.value = null
 
     if (!sentMessage) {
-    statusMessage.value = t('ui.share.statusFailedSendToUser', {
-      username: `@${target.username}`,
-    })
+      statusMessage.value = t('ui.share.statusFailedSendToUser', {
+        username: `@${target.username}`,
+      })
       return
     }
 
@@ -196,7 +196,7 @@
                   <p>@{{ target.username }}</p>
                   <p class="light">
                     {{
-                    target.source === 'recent'
+                      target.source === 'recent'
                         ? t('ui.share.recentlyMessaged')
                         : t('ui.share.following')
                     }}

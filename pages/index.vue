@@ -32,7 +32,7 @@
   import { useEnv } from '@/utils/env'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import AdView from '@/views/AdView.vue'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)

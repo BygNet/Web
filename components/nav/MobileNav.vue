@@ -3,13 +3,13 @@
   import { useI18n } from 'vue-i18n'
   import { ProgressiveBlur } from 'vue-progressive-blur'
 
-  import SafeLink from "@/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages, ExplorePage } from '@/data/pages'
   import { showingCreateModal } from '@/data/visibility'
   import { toggleCreateModal } from '@/utils/createModalManager'
-  import {isActive} from "@/utils/isActive";
+  import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
 
   const route = useRoute()

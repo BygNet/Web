@@ -89,7 +89,8 @@
     <p>
       {{
         t('ui.emailVerificationPage.instructions', {
-          email: auth.user?.email ?? t('ui.emailVerificationPage.fallbackInbox'),
+          email:
+            auth.user?.email ?? t('ui.emailVerificationPage.fallbackInbox'),
         })
       }}
     </p>

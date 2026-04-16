@@ -2,7 +2,7 @@
  * Server API route for dynamic meta tags on image details page
  * Replaces the old Cloudflare Function for SSR
  */
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async event => {
   const id = getRouterParam(event, 'id')
 
   if (!id || isNaN(Number(id))) {

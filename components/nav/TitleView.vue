@@ -7,7 +7,7 @@
   import { taskList } from '@/data/tasks'
   import { showBackButton, title } from '@/data/title'
   import { useRoute } from '#app'
-  import {isActive} from "~/utils/isActive";
+  import { isActive } from '@/utils/isActive'
 
   const localePath = useLocalePath()
   const route = useRoute()
@@ -45,7 +45,7 @@
       >
         <Icon
           :icon="
-           isActive(route.path, '/inbox')
+            isActive(route.path, '/inbox')
               ? 'solar:inbox-line-bold-duotone'
               : 'solar:inbox-line-line-duotone'
           "

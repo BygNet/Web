@@ -86,7 +86,7 @@
       "previewSharedImage": "Compartió una imagen",
       "previewSentChat": "Envió un chat"
     },
-  "settings": {
+    "settings": {
       "sidebarProfile": "Perfil",
       "sidebarSecurity": "Seguridad",
       "sidebarSubscription": "Suscripción",
@@ -147,90 +147,90 @@
       "upgradeDescription": "Actualiza para desbloquear más funciones premium y apoyar la plataforma Byg.",
       "upgradeComingSoon": "Actualizar (Próximamente)",
       "interfaceTitle": "Interfaz",
-    "languageTitle": "Idioma",
-    "languageDescription": "Elige tu idioma preferido"
-  },
-  "details": {
-    "postTitle": "Publicación",
-    "imageTitle": "Imagen",
-    "postMetaTitle": "Publicación: \"{title}\"",
-    "imageMetaTitle": "Imagen: \"{title}\"",
-    "postMetaDescription": "Ver la publicación de {author} en Byg.",
-    "imageMetaDescription": "Ver la imagen de {author} en Byg.",
-    "postMetaFallbackTitle": "Publicación",
-    "imageMetaFallbackTitle": "Imagen",
-    "postMetaFallbackDescription": "Ver publicaciones en la red social Byg.",
-    "imageMetaFallbackDescription": "Ver imágenes en la red social Byg."
-  },
-  "emailVerificationBanner": {
-    "title": "Verificación de correo pendiente",
-    "description": "Verifica {email} para asegurar tu cuenta.",
-    "resendSuccess": "Correo de verificación enviado.",
-    "resendFailure": "No se pudo reenviar el correo de verificación.",
-    "wrongEmailPrefix": "¿Correo incorrecto? Contáctanos en ",
-    "wrongEmailSuffix": ".",
-    "verifyButton": "Verificar correo",
-    "resendButton": "Reenviar código",
-    "sending": "Enviando..."
-  },
-  "terms": {
-    "noticePrefix": "Al usar esta plataforma, aceptas los ",
-    "noticeLink": "Términos del servicio",
-    "noticeSuffix": "."
-  },
-  "emailVerificationPage": {
-    "title": "Verificar correo",
-    "subtitle": "Confirma el correo de tu cuenta con el código que te enviamos.",
-    "heading": "Verifica tu correo",
-    "instructions": "Introduce el código de 6 dígitos enviado a {email}.",
-    "verificationCodeLabel": "Código de verificación",
-    "verifying": "Verificando...",
-    "verifyButton": "Verificar correo",
-    "sending": "Enviando...",
-    "resendButton": "Reenviar código",
-    "invalidCode": "Ese código de verificación no fue aceptado",
-    "verifiedSuccess": "Tu correo ya está verificado.",
-    "resendSuccess": "Un nuevo correo de verificación está en camino.",
-    "resendFailure": "No se pudo reenviar el correo de verificación.",
-    "fallbackInbox": "tu bandeja de entrada"
-  },
-  "afterLogin": {
-    "title": "¡Bienvenido!",
-    "heading": "¡Bienvenido a Byg!",
-    "description": "Explora publicaciones, envía mensajes y busca en la web libremente con Byg.",
-    "ctaTitle": "¡Vamos!",
-    "ctaDescription": "Personaliza tu perfil o empieza de inmediato.",
-    "getStarted": "Empezar",
-    "customizeProfile": "Personalizar perfil"
-  },
-  "comments": {
-    "titleWithCount": "Comentarios: {count}",
-    "writePlaceholder": "Escribe un comentario...",
-    "postButton": "Publicar",
-    "emptyState": "Aún no hay comentarios."
-  },
-  "accountSwitcher": {
-    "emptyState": "Aún no hay cuentas conectadas.",
-    "addAccount": "Agregar"
-  },
-  "profilePage": {
-    "subtitle": "Tu perfil de Byg.",
-    "options": "Opciones",
-    "pro": "Byg Pro",
-    "appearance": "Apariencia",
-    "settings": "Configuración",
-    "themes": "Temas",
-    "guestTitle": "¡Bienvenido a Byg!",
-    "guestMessage": "No has iniciado sesión."
-  },
-  "profile": {
-    "follow": "Seguir",
-    "following": "Siguiendo",
-    "chat": "Chat",
-    "joinedLabel": "Se unió en {date}"
-  },
-  "nav": {
-    "openAlerts": "Abrir alertas"
-  }
+      "languageTitle": "Idioma",
+      "languageDescription": "Elige tu idioma preferido"
+    },
+    "details": {
+      "postTitle": "Publicación",
+      "imageTitle": "Imagen",
+      "postMetaTitle": "Publicación: \"{title}\"",
+      "imageMetaTitle": "Imagen: \"{title}\"",
+      "postMetaDescription": "Ver la publicación de {author} en Byg.",
+      "imageMetaDescription": "Ver la imagen de {author} en Byg.",
+      "postMetaFallbackTitle": "Publicación",
+      "imageMetaFallbackTitle": "Imagen",
+      "postMetaFallbackDescription": "Ver publicaciones en la red social Byg.",
+      "imageMetaFallbackDescription": "Ver imágenes en la red social Byg."
+    },
+    "emailVerificationBanner": {
+      "title": "Verificación de correo pendiente",
+      "description": "Verifica {email} para asegurar tu cuenta.",
+      "resendSuccess": "Correo de verificación enviado.",
+      "resendFailure": "No se pudo reenviar el correo de verificación.",
+      "wrongEmailPrefix": "¿Correo incorrecto? Contáctanos en ",
+      "wrongEmailSuffix": ".",
+      "verifyButton": "Verificar correo",
+      "resendButton": "Reenviar código",
+      "sending": "Enviando..."
+    },
+    "terms": {
+      "noticePrefix": "Al usar esta plataforma, aceptas los ",
+      "noticeLink": "Términos del servicio",
+      "noticeSuffix": "."
+    },
+    "emailVerificationPage": {
+      "title": "Verificar correo",
+      "subtitle": "Confirma el correo de tu cuenta con el código que te enviamos.",
+      "heading": "Verifica tu correo",
+      "instructions": "Introduce el código de 6 dígitos enviado a {email}.",
+      "verificationCodeLabel": "Código de verificación",
+      "verifying": "Verificando...",
+      "verifyButton": "Verificar correo",
+      "sending": "Enviando...",
+      "resendButton": "Reenviar código",
+      "invalidCode": "Ese código de verificación no fue aceptado",
+      "verifiedSuccess": "Tu correo ya está verificado.",
+      "resendSuccess": "Un nuevo correo de verificación está en camino.",
+      "resendFailure": "No se pudo reenviar el correo de verificación.",
+      "fallbackInbox": "tu bandeja de entrada"
+    },
+    "afterLogin": {
+      "title": "¡Bienvenido!",
+      "heading": "¡Bienvenido a Byg!",
+      "description": "Explora publicaciones, envía mensajes y busca en la web libremente con Byg.",
+      "ctaTitle": "¡Vamos!",
+      "ctaDescription": "Personaliza tu perfil o empieza de inmediato.",
+      "getStarted": "Empezar",
+      "customizeProfile": "Personalizar perfil"
+    },
+    "comments": {
+      "titleWithCount": "Comentarios: {count}",
+      "writePlaceholder": "Escribe un comentario...",
+      "postButton": "Publicar",
+      "emptyState": "Aún no hay comentarios."
+    },
+    "accountSwitcher": {
+      "emptyState": "Aún no hay cuentas conectadas.",
+      "addAccount": "Agregar"
+    },
+    "profilePage": {
+      "subtitle": "Tu perfil de Byg.",
+      "options": "Opciones",
+      "pro": "Byg Pro",
+      "appearance": "Apariencia",
+      "settings": "Configuración",
+      "themes": "Temas",
+      "guestTitle": "¡Bienvenido a Byg!",
+      "guestMessage": "No has iniciado sesión."
+    },
+    "profile": {
+      "follow": "Seguir",
+      "following": "Siguiendo",
+      "chat": "Chat",
+      "joinedLabel": "Se unió en {date}"
+    },
+    "nav": {
+      "openAlerts": "Abrir alertas"
+    }
   }
 }

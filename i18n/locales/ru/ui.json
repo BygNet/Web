@@ -86,7 +86,7 @@
       "previewSharedImage": "Поделился изображением",
       "previewSentChat": "Отправил чат"
     },
-  "settings": {
+    "settings": {
       "sidebarProfile": "Профиль",
       "sidebarSecurity": "Безопасность",
       "sidebarSubscription": "Подписка",
@@ -147,90 +147,90 @@
       "upgradeDescription": "Обновитесь, чтобы открыть больше премиум-функций и поддержать платформу Byg.",
       "upgradeComingSoon": "Обновление (скоро)",
       "interfaceTitle": "Интерфейс",
-    "languageTitle": "Язык",
-    "languageDescription": "Выберите предпочитаемый язык"
-  },
-  "details": {
-    "postTitle": "Пост",
-    "imageTitle": "Изображение",
-    "postMetaTitle": "Пост: \"{title}\"",
-    "imageMetaTitle": "Изображение: \"{title}\"",
-    "postMetaDescription": "Посмотреть пост {author} на Byg.",
-    "imageMetaDescription": "Посмотреть изображение {author} на Byg.",
-    "postMetaFallbackTitle": "Пост",
-    "imageMetaFallbackTitle": "Изображение",
-    "postMetaFallbackDescription": "Смотреть посты в социальной сети Byg.",
-    "imageMetaFallbackDescription": "Смотреть изображения в социальной сети Byg."
-  },
-  "emailVerificationBanner": {
-    "title": "Ожидается подтверждение email",
-    "description": "Подтвердите {email}, чтобы защитить аккаунт.",
-    "resendSuccess": "Письмо с подтверждением отправлено.",
-    "resendFailure": "Не удалось повторно отправить письмо подтверждения.",
-    "wrongEmailPrefix": "Неверный email? Свяжитесь с нами по адресу ",
-    "wrongEmailSuffix": ".",
-    "verifyButton": "Подтвердить email",
-    "resendButton": "Отправить код снова",
-    "sending": "Отправка..."
-  },
-  "terms": {
-    "noticePrefix": "Используя эту платформу, вы соглашаетесь с ",
-    "noticeLink": "Условиями обслуживания",
-    "noticeSuffix": "."
-  },
-  "emailVerificationPage": {
-    "title": "Подтвердить email",
-    "subtitle": "Подтвердите email аккаунта кодом, который мы отправили.",
-    "heading": "Подтвердите email",
-    "instructions": "Введите 6-значный код, отправленный на {email}.",
-    "verificationCodeLabel": "Код подтверждения",
-    "verifying": "Проверка...",
-    "verifyButton": "Подтвердить email",
-    "sending": "Отправка...",
-    "resendButton": "Отправить код снова",
-    "invalidCode": "Этот код подтверждения не был принят",
-    "verifiedSuccess": "Ваш email теперь подтверждён.",
-    "resendSuccess": "Новое письмо с подтверждением уже в пути.",
-    "resendFailure": "Не удалось повторно отправить письмо подтверждения.",
-    "fallbackInbox": "ваш почтовый ящик"
-  },
-  "afterLogin": {
-    "title": "Добро пожаловать!",
-    "heading": "Добро пожаловать в Byg!",
-    "description": "Просматривайте посты, отправляйте сообщения и свободно ищите в вебе с Byg.",
-    "ctaTitle": "Поехали!",
-    "ctaDescription": "Настройте профиль или начните сразу.",
-    "getStarted": "Начать",
-    "customizeProfile": "Настроить профиль"
-  },
-  "comments": {
-    "titleWithCount": "Комментарии: {count}",
-    "writePlaceholder": "Напишите комментарий...",
-    "postButton": "Опубликовать",
-    "emptyState": "Комментариев пока нет."
-  },
-  "accountSwitcher": {
-    "emptyState": "Пока нет подключенных аккаунтов.",
-    "addAccount": "Добавить"
-  },
-  "profilePage": {
-    "subtitle": "Ваш профиль Byg.",
-    "options": "Параметры",
-    "pro": "Byg Pro",
-    "appearance": "Внешний вид",
-    "settings": "Настройки",
-    "themes": "Темы",
-    "guestTitle": "Добро пожаловать в Byg!",
-    "guestMessage": "Вы не вошли в систему."
-  },
-  "profile": {
-    "follow": "Подписаться",
-    "following": "Вы подписаны",
-    "chat": "Чат",
-    "joinedLabel": "Присоединился в {date}"
-  },
-  "nav": {
-    "openAlerts": "Открыть уведомления"
-  }
+      "languageTitle": "Язык",
+      "languageDescription": "Выберите предпочитаемый язык"
+    },
+    "details": {
+      "postTitle": "Пост",
+      "imageTitle": "Изображение",
+      "postMetaTitle": "Пост: \"{title}\"",
+      "imageMetaTitle": "Изображение: \"{title}\"",
+      "postMetaDescription": "Посмотреть пост {author} на Byg.",
+      "imageMetaDescription": "Посмотреть изображение {author} на Byg.",
+      "postMetaFallbackTitle": "Пост",
+      "imageMetaFallbackTitle": "Изображение",
+      "postMetaFallbackDescription": "Смотреть посты в социальной сети Byg.",
+      "imageMetaFallbackDescription": "Смотреть изображения в социальной сети Byg."
+    },
+    "emailVerificationBanner": {
+      "title": "Ожидается подтверждение email",
+      "description": "Подтвердите {email}, чтобы защитить аккаунт.",
+      "resendSuccess": "Письмо с подтверждением отправлено.",
+      "resendFailure": "Не удалось повторно отправить письмо подтверждения.",
+      "wrongEmailPrefix": "Неверный email? Свяжитесь с нами по адресу ",
+      "wrongEmailSuffix": ".",
+      "verifyButton": "Подтвердить email",
+      "resendButton": "Отправить код снова",
+      "sending": "Отправка..."
+    },
+    "terms": {
+      "noticePrefix": "Используя эту платформу, вы соглашаетесь с ",
+      "noticeLink": "Условиями обслуживания",
+      "noticeSuffix": "."
+    },
+    "emailVerificationPage": {
+      "title": "Подтвердить email",
+      "subtitle": "Подтвердите email аккаунта кодом, который мы отправили.",
+      "heading": "Подтвердите email",
+      "instructions": "Введите 6-значный код, отправленный на {email}.",
+      "verificationCodeLabel": "Код подтверждения",
+      "verifying": "Проверка...",
+      "verifyButton": "Подтвердить email",
+      "sending": "Отправка...",
+      "resendButton": "Отправить код снова",
+      "invalidCode": "Этот код подтверждения не был принят",
+      "verifiedSuccess": "Ваш email теперь подтверждён.",
+      "resendSuccess": "Новое письмо с подтверждением уже в пути.",
+      "resendFailure": "Не удалось повторно отправить письмо подтверждения.",
+      "fallbackInbox": "ваш почтовый ящик"
+    },
+    "afterLogin": {
+      "title": "Добро пожаловать!",
+      "heading": "Добро пожаловать в Byg!",
+      "description": "Просматривайте посты, отправляйте сообщения и свободно ищите в вебе с Byg.",
+      "ctaTitle": "Поехали!",
+      "ctaDescription": "Настройте профиль или начните сразу.",
+      "getStarted": "Начать",
+      "customizeProfile": "Настроить профиль"
+    },
+    "comments": {
+      "titleWithCount": "Комментарии: {count}",
+      "writePlaceholder": "Напишите комментарий...",
+      "postButton": "Опубликовать",
+      "emptyState": "Комментариев пока нет."
+    },
+    "accountSwitcher": {
+      "emptyState": "Пока нет подключенных аккаунтов.",
+      "addAccount": "Добавить"
+    },
+    "profilePage": {
+      "subtitle": "Ваш профиль Byg.",
+      "options": "Параметры",
+      "pro": "Byg Pro",
+      "appearance": "Внешний вид",
+      "settings": "Настройки",
+      "themes": "Темы",
+      "guestTitle": "Добро пожаловать в Byg!",
+      "guestMessage": "Вы не вошли в систему."
+    },
+    "profile": {
+      "follow": "Подписаться",
+      "following": "Вы подписаны",
+      "chat": "Чат",
+      "joinedLabel": "Присоединился в {date}"
+    },
+    "nav": {
+      "openAlerts": "Открыть уведомления"
+    }
   }
 }

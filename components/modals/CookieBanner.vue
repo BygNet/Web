@@ -3,7 +3,7 @@
 
   import HStack from '@/components/layout/HStack.vue'
   import { setFlag } from '@/utils/setUserFlag'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const emit = defineEmits([ 'close' ])
   const { t } = useI18n()
@@ -23,8 +23,8 @@
     <p>
       {{ t('ui.cookie.searchPrompt') }}
       <SafeLink to="/search" class="prominentLink">
-        {{ t('ui.cookie.searchLink') }}
-      </SafeLink>.
+        {{ t('ui.cookie.searchLink') }} </SafeLink
+      >.
     </p>
 
     <HStack class="fullWidth autoSpace actions">

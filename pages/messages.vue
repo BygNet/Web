@@ -46,7 +46,7 @@
     BygMessageThread,
   } from '@/types/messages'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const { t } = useI18n()
   const localePath = useLocalePath()

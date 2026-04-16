@@ -9,7 +9,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title'
   import { navigateTo } from '#app'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
@@ -68,9 +68,7 @@
         <button type="submit" :disabled="loading">
           <Icon icon="solar:user-plus-line-duotone" />
           {{
-            loading
-              ? t('auth.signupPage.creatingAccount')
-              : t('auth.signup')
+            loading ? t('auth.signupPage.creatingAccount') : t('auth.signup')
           }}
         </button>
 

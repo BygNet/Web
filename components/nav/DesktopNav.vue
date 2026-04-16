@@ -7,9 +7,9 @@
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
   import { BygPages, ExplorePage } from '@/data/pages'
   import { openCreateModal } from '@/utils/createModalManager'
-  import {isActive} from "@/utils/isActive";
+  import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const AppVersion = __AppVersion
   const route = useRoute()

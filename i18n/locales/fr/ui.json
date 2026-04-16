@@ -86,7 +86,7 @@
       "previewSharedImage": "A partagé une image",
       "previewSentChat": "A envoyé un chat"
     },
-  "settings": {
+    "settings": {
       "sidebarProfile": "Profil",
       "sidebarSecurity": "Sécurité",
       "sidebarSubscription": "Abonnement",
@@ -147,90 +147,90 @@
       "upgradeDescription": "Passez à la version supérieure pour débloquer plus de fonctionnalités premium et soutenir la plateforme Byg.",
       "upgradeComingSoon": "Mettre à niveau (bientôt)",
       "interfaceTitle": "Interface",
-    "languageTitle": "Langue",
-    "languageDescription": "Choisissez votre langue préférée"
-  },
-  "details": {
-    "postTitle": "Publication",
-    "imageTitle": "Image",
-    "postMetaTitle": "Publication : \"{title}\"",
-    "imageMetaTitle": "Image : \"{title}\"",
-    "postMetaDescription": "Voir la publication de {author} sur Byg.",
-    "imageMetaDescription": "Voir l'image de {author} sur Byg.",
-    "postMetaFallbackTitle": "Publication",
-    "imageMetaFallbackTitle": "Image",
-    "postMetaFallbackDescription": "Voir les publications sur le réseau social Byg.",
-    "imageMetaFallbackDescription": "Voir les images sur le réseau social Byg."
-  },
-  "emailVerificationBanner": {
-    "title": "Vérification de l'e-mail en attente",
-    "description": "Vérifiez {email} pour sécuriser votre compte.",
-    "resendSuccess": "E-mail de vérification envoyé.",
-    "resendFailure": "Impossible de renvoyer l'e-mail de vérification.",
-    "wrongEmailPrefix": "Mauvais e-mail ? Contactez-nous à ",
-    "wrongEmailSuffix": ".",
-    "verifyButton": "Vérifier l'e-mail",
-    "resendButton": "Renvoyer le code",
-    "sending": "Envoi..."
-  },
-  "terms": {
-    "noticePrefix": "En utilisant cette plateforme, vous acceptez les ",
-    "noticeLink": "Conditions d'utilisation",
-    "noticeSuffix": "."
-  },
-  "emailVerificationPage": {
-    "title": "Vérifier l'e-mail",
-    "subtitle": "Confirmez l'e-mail de votre compte avec le code que nous vous avons envoyé.",
-    "heading": "Vérifiez votre e-mail",
-    "instructions": "Entrez le code à 6 chiffres envoyé à {email}.",
-    "verificationCodeLabel": "Code de vérification",
-    "verifying": "Vérification...",
-    "verifyButton": "Vérifier l'e-mail",
-    "sending": "Envoi...",
-    "resendButton": "Renvoyer le code",
-    "invalidCode": "Ce code de vérification n'a pas été accepté",
-    "verifiedSuccess": "Votre e-mail est maintenant vérifié.",
-    "resendSuccess": "Un nouvel e-mail de vérification est en route.",
-    "resendFailure": "Impossible de renvoyer l'e-mail de vérification.",
-    "fallbackInbox": "votre boîte de réception"
-  },
-  "afterLogin": {
-    "title": "Bienvenue !",
-    "heading": "Bienvenue sur Byg !",
-    "description": "Parcourez des publications, envoyez des messages et recherchez sur le web librement avec Byg.",
-    "ctaTitle": "C'est parti !",
-    "ctaDescription": "Personnalisez votre profil ou commencez immédiatement.",
-    "getStarted": "Commencer",
-    "customizeProfile": "Personnaliser le profil"
-  },
-  "comments": {
-    "titleWithCount": "Commentaires : {count}",
-    "writePlaceholder": "Écrire un commentaire...",
-    "postButton": "Publier",
-    "emptyState": "Pas encore de commentaires."
-  },
-  "accountSwitcher": {
-    "emptyState": "Aucun compte connecté pour le moment.",
-    "addAccount": "Ajouter"
-  },
-  "profilePage": {
-    "subtitle": "Votre profil Byg.",
-    "options": "Options",
-    "pro": "Byg Pro",
-    "appearance": "Apparence",
-    "settings": "Paramètres",
-    "themes": "Thèmes",
-    "guestTitle": "Bienvenue sur Byg !",
-    "guestMessage": "Vous n'êtes pas connecté."
-  },
-  "profile": {
-    "follow": "Suivre",
-    "following": "Abonné",
-    "chat": "Chat",
-    "joinedLabel": "Inscrit en {date}"
-  },
-  "nav": {
-    "openAlerts": "Ouvrir les alertes"
-  }
+      "languageTitle": "Langue",
+      "languageDescription": "Choisissez votre langue préférée"
+    },
+    "details": {
+      "postTitle": "Publication",
+      "imageTitle": "Image",
+      "postMetaTitle": "Publication : \"{title}\"",
+      "imageMetaTitle": "Image : \"{title}\"",
+      "postMetaDescription": "Voir la publication de {author} sur Byg.",
+      "imageMetaDescription": "Voir l'image de {author} sur Byg.",
+      "postMetaFallbackTitle": "Publication",
+      "imageMetaFallbackTitle": "Image",
+      "postMetaFallbackDescription": "Voir les publications sur le réseau social Byg.",
+      "imageMetaFallbackDescription": "Voir les images sur le réseau social Byg."
+    },
+    "emailVerificationBanner": {
+      "title": "Vérification de l'e-mail en attente",
+      "description": "Vérifiez {email} pour sécuriser votre compte.",
+      "resendSuccess": "E-mail de vérification envoyé.",
+      "resendFailure": "Impossible de renvoyer l'e-mail de vérification.",
+      "wrongEmailPrefix": "Mauvais e-mail ? Contactez-nous à ",
+      "wrongEmailSuffix": ".",
+      "verifyButton": "Vérifier l'e-mail",
+      "resendButton": "Renvoyer le code",
+      "sending": "Envoi..."
+    },
+    "terms": {
+      "noticePrefix": "En utilisant cette plateforme, vous acceptez les ",
+      "noticeLink": "Conditions d'utilisation",
+      "noticeSuffix": "."
+    },
+    "emailVerificationPage": {
+      "title": "Vérifier l'e-mail",
+      "subtitle": "Confirmez l'e-mail de votre compte avec le code que nous vous avons envoyé.",
+      "heading": "Vérifiez votre e-mail",
+      "instructions": "Entrez le code à 6 chiffres envoyé à {email}.",
+      "verificationCodeLabel": "Code de vérification",
+      "verifying": "Vérification...",
+      "verifyButton": "Vérifier l'e-mail",
+      "sending": "Envoi...",
+      "resendButton": "Renvoyer le code",
+      "invalidCode": "Ce code de vérification n'a pas été accepté",
+      "verifiedSuccess": "Votre e-mail est maintenant vérifié.",
+      "resendSuccess": "Un nouvel e-mail de vérification est en route.",
+      "resendFailure": "Impossible de renvoyer l'e-mail de vérification.",
+      "fallbackInbox": "votre boîte de réception"
+    },
+    "afterLogin": {
+      "title": "Bienvenue !",
+      "heading": "Bienvenue sur Byg !",
+      "description": "Parcourez des publications, envoyez des messages et recherchez sur le web librement avec Byg.",
+      "ctaTitle": "C'est parti !",
+      "ctaDescription": "Personnalisez votre profil ou commencez immédiatement.",
+      "getStarted": "Commencer",
+      "customizeProfile": "Personnaliser le profil"
+    },
+    "comments": {
+      "titleWithCount": "Commentaires : {count}",
+      "writePlaceholder": "Écrire un commentaire...",
+      "postButton": "Publier",
+      "emptyState": "Pas encore de commentaires."
+    },
+    "accountSwitcher": {
+      "emptyState": "Aucun compte connecté pour le moment.",
+      "addAccount": "Ajouter"
+    },
+    "profilePage": {
+      "subtitle": "Votre profil Byg.",
+      "options": "Options",
+      "pro": "Byg Pro",
+      "appearance": "Apparence",
+      "settings": "Paramètres",
+      "themes": "Thèmes",
+      "guestTitle": "Bienvenue sur Byg !",
+      "guestMessage": "Vous n'êtes pas connecté."
+    },
+    "profile": {
+      "follow": "Suivre",
+      "following": "Abonné",
+      "chat": "Chat",
+      "joinedLabel": "Inscrit en {date}"
+    },
+    "nav": {
+      "openAlerts": "Ouvrir les alertes"
+    }
   }
 }

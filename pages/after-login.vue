@@ -5,7 +5,7 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import { title } from '@/data/title'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const { t } = useI18n()
   title.value = t('ui.afterLogin.title')

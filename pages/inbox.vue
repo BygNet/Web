@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  type Ref,
-  ref,
-  watchEffect,
-} from 'vue'
+  import { Icon } from '@iconify/vue'
+  import {
+    computed,
+    onMounted,
+    onUnmounted,
+    type Ref,
+    ref,
+    watchEffect,
+  } from 'vue'
 
   definePageMeta({
     middleware: 'auth',
   })
 
-import { useI18n } from 'vue-i18n'
+  import { useI18n } from 'vue-i18n'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
@@ -28,25 +28,25 @@ import { useI18n } from 'vue-i18n'
     markNotificationsRead,
     unreadNotificationCount,
   } from '@/data/notifications'
-import { PageMetaByPath } from '@/data/pages'
+  import { PageMetaByPath } from '@/data/pages'
   import {
     getPushPermissionState,
     syncPushSubscription,
   } from '@/data/pushAlerts'
-import { title } from '@/data/title'
-import type { BygNotification } from '@/types/notifications'
-import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+  import { title } from '@/data/title'
+  import type { BygNotification } from '@/types/notifications'
+  import { setHeadMetaKeys } from '@/utils/setHeadMeta'
 
-const { t } = useI18n()
-const pageMeta = PageMetaByPath['/inbox']
+  const { t } = useI18n()
+  const pageMeta = PageMetaByPath['/inbox']
 
-watchEffect(() => {
-  title.value = t(pageMeta.titleKey)
-})
-setHeadMetaKeys({
-  pageKey: pageMeta.titleKey,
-  subtitleKey: pageMeta.descriptionKey,
-})
+  watchEffect(() => {
+    title.value = t(pageMeta.titleKey)
+  })
+  setHeadMetaKeys({
+    pageKey: pageMeta.titleKey,
+    subtitleKey: pageMeta.descriptionKey,
+  })
 
   const notifications: Ref<BygNotification[]> = ref([])
   const loading: Ref<boolean> = ref(true)
@@ -101,12 +101,12 @@ setHeadMetaKeys({
         requestPermission: true,
       })
       pushPermission.value = getPushPermissionState()
-    pushMessage.value = didEnable
-      ? t('common.pushEnabled')
-      : t('common.pushNotEnabled')
+      pushMessage.value = didEnable
+        ? t('common.pushEnabled')
+        : t('common.pushNotEnabled')
     } catch {
       pushPermission.value = getPushPermissionState()
-    pushMessage.value = t('common.pushEnableFailed')
+      pushMessage.value = t('common.pushEnableFailed')
     } finally {
       enablingPush.value = false
     }
@@ -144,9 +144,7 @@ setHeadMetaKeys({
           >
             <Icon icon="solar:bell-bing-line-duotone" />
             {{
-              enablingPush
-                ? t('common.enabling')
-                : t('common.enablePushAlerts')
+              enablingPush ? t('common.enabling') : t('common.enablePushAlerts')
             }}
           </button>
 

@@ -2,7 +2,7 @@
   import { Icon } from '@iconify/vue'
 
   import VStack from '@/components/layout/VStack.vue'
-  import { navigateTo,useRoute } from '#app'
+  import { navigateTo, useRoute } from '#app'
 
   defineProps<{
     message: string

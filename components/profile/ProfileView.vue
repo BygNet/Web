@@ -17,7 +17,7 @@
     clearDocumentProfileTheme,
   } from '@/utils/profileTheme'
   import { navigateTo } from '#app'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
@@ -160,9 +160,7 @@
                 "
               />
               {{
-                isFollowing
-                  ? t('ui.profile.following')
-                  : t('ui.profile.follow')
+                isFollowing ? t('ui.profile.following') : t('ui.profile.follow')
               }}
             </button>
 
@@ -178,10 +176,7 @@
         </HStack>
 
         <SafeLink to="/settings">
-          <button
-            v-if="isOwnProfileResolved && showActions"
-            class="editButton"
-          >
+          <button v-if="isOwnProfileResolved && showActions" class="editButton">
             <Icon icon="solar:pen-2-line-duotone" />
             Edit Profile
           </button>

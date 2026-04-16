@@ -1,11 +1,11 @@
 {
   "messages": {
-  "welcomeTitle": "Bienvenue sur Byg",
-  "welcomeDescription": "Partagez et découvrez du contenu incroyable",
-  "startExploring": "Commencer à explorer",
-  "loginRequired": "Connexion requise",
-  "loginRequiredDescription": "Vous devez être connecté pour accéder à cette page",
-  "pageNotFound": "Page non trouvée",
-  "pageNotFoundDescription": "La page que vous recherchez n'existe pas"
+    "welcomeTitle": "Bienvenue sur Byg",
+    "welcomeDescription": "Partagez et découvrez du contenu incroyable",
+    "startExploring": "Commencer à explorer",
+    "loginRequired": "Connexion requise",
+    "loginRequiredDescription": "Vous devez être connecté pour accéder à cette page",
+    "pageNotFound": "Page non trouvée",
+    "pageNotFoundDescription": "La page que vous recherchez n'existe pas"
   }
 }

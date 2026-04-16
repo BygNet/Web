@@ -6,7 +6,7 @@
 
   import type { BygMessage } from '@/types/messages'
   import { formatDate } from '@/utils/formatters'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
   type MessageDeliveryState = 'sending' | 'sent'

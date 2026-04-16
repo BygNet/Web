@@ -1,26 +1,28 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+  import { computed } from 'vue'
 
-interface Props {
-  to: string
-  external?: boolean
-  newTab?: boolean
-  custom?: boolean
-}
+  interface Props {
+    to: string
+    external?: boolean
+    newTab?: boolean
+    custom?: boolean
+  }
 
-const props = withDefaults(defineProps<Props>(), {
-  external: false,
-  newTab: false,
-})
+  const props = withDefaults(defineProps<Props>(), {
+    external: false,
+    newTab: false,
+  })
 
-const localePath = useLocalePath()
+  const localePath = useLocalePath()
 
-const href = computed(() => {
-  if (props.external) return props.to
-  return localePath(props.to)
-})
+  const href = computed(() => {
+    if (props.external) return props.to
+    return localePath(props.to)
+  })
 
-const isExternal = computed(() => props.external || props.to.startsWith('http'))
+  const isExternal = computed(
+    () => props.external || props.to.startsWith('http')
+  )
 </script>
 
 <template>

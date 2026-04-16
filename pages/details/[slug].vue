@@ -13,7 +13,7 @@
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
   import { useRoute } from '#app'
-  import { useAsyncData,useHead } from '#imports'
+  import { useAsyncData, useHead } from '#imports'
 
   const route = useRoute()
   const { t } = useI18n()
@@ -34,7 +34,7 @@
       try {
         const response = await fetch(`${useEnv().apiBase}/post-details/${id}`)
         if (!response.ok) throw new Error(`API error: ${response.status}`)
-        const json = await response.json() as BygPost
+        const json = (await response.json()) as BygPost
         postMetaData = json
         return json
       } catch (err) {

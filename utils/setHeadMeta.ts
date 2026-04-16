@@ -67,10 +67,17 @@ export function setHeadMetaKeys(config: {
   )
 
   useHead({
-    title: computed(() => (group.value ? `${group.value} ${page.value}` : `Byg ${page.value}`)),
+    title: computed(() =>
+      group.value ? `${group.value} ${page.value}` : `Byg ${page.value}`
+    ),
     meta: computed(() => {
       const meta = [
-        { property: 'og:title', content: group.value ? `${group.value} ${page.value}` : `Byg ${page.value}` },
+        {
+          property: 'og:title',
+          content: group.value
+            ? `${group.value} ${page.value}`
+            : `Byg ${page.value}`,
+        },
         { property: 'og:description', content: subtitle.value },
         { name: 'description', content: subtitle.value },
         { name: 'mobile-web-app-capable', content: 'yes' },

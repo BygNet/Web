@@ -7,7 +7,7 @@
   import UsernameView from '@/components/posts/UsernameView.vue'
   import type { BygNotification } from '@/types/notifications'
   import { formatDate } from '@/utils/formatters'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const props = defineProps<{
     notification: BygNotification

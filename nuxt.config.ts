@@ -1,4 +1,4 @@
-import {fileURLToPath} from "node:url";
+import { fileURLToPath } from 'node:url'
 
 export default defineNuxtConfig({
   ssr: true,
@@ -34,35 +34,70 @@ export default defineNuxtConfig({
         iso: 'en-US',
         name: 'English',
         dir: 'ltr',
-        files: [ 'en/auth.json', 'en/common.json', 'en/messages.json', 'en/nav.json', 'en/pages.json', 'en/ui.json' ],
+        files: [
+          'en/auth.json',
+          'en/common.json',
+          'en/messages.json',
+          'en/nav.json',
+          'en/pages.json',
+          'en/ui.json',
+        ],
       },
       {
         code: 'fr',
         iso: 'fr-FR',
         name: 'Français',
         dir: 'ltr',
-        files: [ 'fr/auth.json', 'fr/common.json', 'fr/messages.json', 'fr/nav.json', 'fr/pages.json', 'fr/ui.json' ],
+        files: [
+          'fr/auth.json',
+          'fr/common.json',
+          'fr/messages.json',
+          'fr/nav.json',
+          'fr/pages.json',
+          'fr/ui.json',
+        ],
       },
       {
         code: 'es',
         iso: 'es-ES',
         name: 'Español',
         dir: 'ltr',
-        files: [ 'es/auth.json', 'es/common.json', 'es/messages.json', 'es/nav.json', 'es/pages.json', 'es/ui.json' ],
+        files: [
+          'es/auth.json',
+          'es/common.json',
+          'es/messages.json',
+          'es/nav.json',
+          'es/pages.json',
+          'es/ui.json',
+        ],
       },
       {
         code: 'zh',
         iso: 'zh-CN',
         name: '中文',
         dir: 'ltr',
-        files: [ 'zh/auth.json', 'zh/common.json', 'zh/messages.json', 'zh/nav.json', 'zh/pages.json', 'zh/ui.json' ],
+        files: [
+          'zh/auth.json',
+          'zh/common.json',
+          'zh/messages.json',
+          'zh/nav.json',
+          'zh/pages.json',
+          'zh/ui.json',
+        ],
       },
       {
         code: 'ru',
         iso: 'ru-RU',
         name: 'Русский',
         dir: 'ltr',
-        files: [ 'ru/auth.json', 'ru/common.json', 'ru/messages.json', 'ru/nav.json', 'ru/pages.json', 'ru/ui.json' ],
+        files: [
+          'ru/auth.json',
+          'ru/common.json',
+          'ru/messages.json',
+          'ru/nav.json',
+          'ru/pages.json',
+          'ru/ui.json',
+        ],
       },
     ],
   },
@@ -75,9 +110,7 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#dd289e' },
         { name: 'description', content: 'Byg Platform' },
       ],
-      link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      ],
+      link: [ { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' } ],
     },
   },
 
@@ -96,8 +129,8 @@ export default defineNuxtConfig({
         'dompurify',
         'marked',
         'mitt',
-      ]
-    }
+      ],
+    },
   },
 
   nitro: {

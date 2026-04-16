@@ -14,7 +14,7 @@
   import UsernameView from '@/components/posts/UsernameView.vue'
   import { fetchUserSuggestions } from '@/data/mentions'
   import { taskList } from '@/data/tasks'
-    import type { BygUserSuggestion } from '@/types/mentions'
+  import type { BygUserSuggestion } from '@/types/mentions'
   import { formatDate } from '@/utils/formatters'
   import {
     applyMention,
@@ -162,7 +162,7 @@
           ref="commentTextarea"
           name="writeComment"
           v-model="writtenComment"
-        :placeholder="t('ui.comments.writePlaceholder')"
+          :placeholder="t('ui.comments.writePlaceholder')"
           @input="onCommentTextareaInteraction"
           @keyup="onCommentTextareaInteraction"
           @click="onCommentTextareaInteraction"

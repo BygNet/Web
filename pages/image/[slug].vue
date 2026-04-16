@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import { onUnmounted, type Ref,ref } from 'vue'
+  import { onUnmounted, type Ref, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import ImageItem from '@/components/images/ImageItem.vue'
@@ -14,7 +14,7 @@
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
   import { useRoute } from '#app'
-  import { useAsyncData,useHead } from '#imports'
+  import { useAsyncData, useHead } from '#imports'
 
   const route = useRoute()
   const { t } = useI18n()
@@ -35,7 +35,7 @@
       try {
         const response = await fetch(`${useEnv().apiBase}/image-details/${id}`)
         if (!response.ok) throw new Error(`API error: ${response.status}`)
-        const json = await response.json() as BygImage
+        const json = (await response.json()) as BygImage
         imageMetaData = json
         return json
       } catch (err) {

@@ -10,7 +10,7 @@
   import { taskList } from '@/data/tasks'
   import { title } from '@/data/title'
   import { navigateTo } from '#app'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
@@ -89,11 +89,7 @@
         <VStack class="loginFormItems">
           <button type="submit" :disabled="loading">
             <Icon icon="solar:login-2-line-duotone" />
-            {{
-              loading
-                ? t('auth.loginPage.loggingIn')
-                : t('auth.login')
-            }}
+            {{ loading ? t('auth.loginPage.loggingIn') : t('auth.login') }}
           </button>
 
           <p v-if="error" class="error">
@@ -109,8 +105,8 @@
           <li>
             {{ t('auth.loginPage.supportPrefix') }}
             <a href="mailto:ash@a35.dev" class="prominentLink">
-              {{ t('auth.loginPage.supportLink') }}
-            </a>.
+              {{ t('auth.loginPage.supportLink') }} </a
+            >.
           </li>
         </ul>
 

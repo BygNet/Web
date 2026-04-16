@@ -12,8 +12,8 @@
   import { showingNavigation } from '@/data/visibility'
   import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
   import setHeadMeta from '@/utils/setHeadMeta'
-  import { navigateTo,useRoute } from '#app'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import { navigateTo, useRoute } from '#app'
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   interface SearchCategoryOption {
     id: BygSearchCategory

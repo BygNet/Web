@@ -86,7 +86,7 @@
       "previewSharedImage": "分享了一张图片",
       "previewSentChat": "发送了一条聊天"
     },
-  "settings": {
+    "settings": {
       "sidebarProfile": "个人资料",
       "sidebarSecurity": "安全",
       "sidebarSubscription": "订阅",
@@ -147,90 +147,90 @@
       "upgradeDescription": "升级以解锁更多高级功能并支持 Byg 平台。",
       "upgradeComingSoon": "升级（即将推出）",
       "interfaceTitle": "界面",
-    "languageTitle": "语言",
-    "languageDescription": "选择你的首选语言"
-  },
-  "details": {
-    "postTitle": "帖子",
-    "imageTitle": "图片",
-    "postMetaTitle": "帖子：\"{title}\"",
-    "imageMetaTitle": "图片：\"{title}\"",
-    "postMetaDescription": "查看 {author} 在 Byg 上的帖子。",
-    "imageMetaDescription": "查看 {author} 在 Byg 上的图片。",
-    "postMetaFallbackTitle": "帖子",
-    "imageMetaFallbackTitle": "图片",
-    "postMetaFallbackDescription": "在 Byg 社交网络上查看帖子。",
-    "imageMetaFallbackDescription": "在 Byg 社交网络上查看图片。"
-  },
-  "emailVerificationBanner": {
-    "title": "邮箱验证待处理",
-    "description": "验证 {email} 以保护你的账户。",
-    "resendSuccess": "验证邮件已发送。",
-    "resendFailure": "无法重新发送验证邮件。",
-    "wrongEmailPrefix": "邮箱不对？请联系 ",
-    "wrongEmailSuffix": "。",
-    "verifyButton": "验证邮箱",
-    "resendButton": "重新发送验证码",
-    "sending": "发送中..."
-  },
-  "terms": {
-    "noticePrefix": "使用本平台即表示你同意 ",
-    "noticeLink": "服务条款",
-    "noticeSuffix": "。"
-  },
-  "emailVerificationPage": {
-    "title": "验证邮箱",
-    "subtitle": "使用我们发送的验证码确认你的账户邮箱。",
-    "heading": "验证你的邮箱",
-    "instructions": "请输入发送到 {email} 的 6 位验证码。",
-    "verificationCodeLabel": "验证码",
-    "verifying": "验证中...",
-    "verifyButton": "验证邮箱",
-    "sending": "发送中...",
-    "resendButton": "重新发送验证码",
-    "invalidCode": "该验证码未被接受",
-    "verifiedSuccess": "你的邮箱现已验证。",
-    "resendSuccess": "新的验证邮件已发送。",
-    "resendFailure": "无法重新发送验证邮件。",
-    "fallbackInbox": "你的收件箱"
-  },
-  "afterLogin": {
-    "title": "欢迎！",
-    "heading": "欢迎来到 Byg！",
-    "description": "使用 Byg 浏览帖子、发送消息并自由搜索网页。",
-    "ctaTitle": "出发！",
-    "ctaDescription": "自定义你的个人资料，或立即开始。",
-    "getStarted": "开始",
-    "customizeProfile": "自定义资料"
-  },
-  "comments": {
-    "titleWithCount": "评论：{count}",
-    "writePlaceholder": "写下评论...",
-    "postButton": "发布",
-    "emptyState": "暂无评论。"
-  },
-  "accountSwitcher": {
-    "emptyState": "尚未连接任何账户。",
-    "addAccount": "添加"
-  },
-  "profilePage": {
-    "subtitle": "你的 Byg 个人资料。",
-    "options": "选项",
-    "pro": "Byg Pro",
-    "appearance": "外观",
-    "settings": "设置",
-    "themes": "主题",
-    "guestTitle": "欢迎来到 Byg！",
-    "guestMessage": "你尚未登录。"
-  },
-  "profile": {
-    "follow": "关注",
-    "following": "已关注",
-    "chat": "聊天",
-    "joinedLabel": "加入于 {date}"
-  },
-  "nav": {
-    "openAlerts": "打开提醒"
-  }
+      "languageTitle": "语言",
+      "languageDescription": "选择你的首选语言"
+    },
+    "details": {
+      "postTitle": "帖子",
+      "imageTitle": "图片",
+      "postMetaTitle": "帖子：\"{title}\"",
+      "imageMetaTitle": "图片：\"{title}\"",
+      "postMetaDescription": "查看 {author} 在 Byg 上的帖子。",
+      "imageMetaDescription": "查看 {author} 在 Byg 上的图片。",
+      "postMetaFallbackTitle": "帖子",
+      "imageMetaFallbackTitle": "图片",
+      "postMetaFallbackDescription": "在 Byg 社交网络上查看帖子。",
+      "imageMetaFallbackDescription": "在 Byg 社交网络上查看图片。"
+    },
+    "emailVerificationBanner": {
+      "title": "邮箱验证待处理",
+      "description": "验证 {email} 以保护你的账户。",
+      "resendSuccess": "验证邮件已发送。",
+      "resendFailure": "无法重新发送验证邮件。",
+      "wrongEmailPrefix": "邮箱不对？请联系 ",
+      "wrongEmailSuffix": "。",
+      "verifyButton": "验证邮箱",
+      "resendButton": "重新发送验证码",
+      "sending": "发送中..."
+    },
+    "terms": {
+      "noticePrefix": "使用本平台即表示你同意 ",
+      "noticeLink": "服务条款",
+      "noticeSuffix": "。"
+    },
+    "emailVerificationPage": {
+      "title": "验证邮箱",
+      "subtitle": "使用我们发送的验证码确认你的账户邮箱。",
+      "heading": "验证你的邮箱",
+      "instructions": "请输入发送到 {email} 的 6 位验证码。",
+      "verificationCodeLabel": "验证码",
+      "verifying": "验证中...",
+      "verifyButton": "验证邮箱",
+      "sending": "发送中...",
+      "resendButton": "重新发送验证码",
+      "invalidCode": "该验证码未被接受",
+      "verifiedSuccess": "你的邮箱现已验证。",
+      "resendSuccess": "新的验证邮件已发送。",
+      "resendFailure": "无法重新发送验证邮件。",
+      "fallbackInbox": "你的收件箱"
+    },
+    "afterLogin": {
+      "title": "欢迎！",
+      "heading": "欢迎来到 Byg！",
+      "description": "使用 Byg 浏览帖子、发送消息并自由搜索网页。",
+      "ctaTitle": "出发！",
+      "ctaDescription": "自定义你的个人资料，或立即开始。",
+      "getStarted": "开始",
+      "customizeProfile": "自定义资料"
+    },
+    "comments": {
+      "titleWithCount": "评论：{count}",
+      "writePlaceholder": "写下评论...",
+      "postButton": "发布",
+      "emptyState": "暂无评论。"
+    },
+    "accountSwitcher": {
+      "emptyState": "尚未连接任何账户。",
+      "addAccount": "添加"
+    },
+    "profilePage": {
+      "subtitle": "你的 Byg 个人资料。",
+      "options": "选项",
+      "pro": "Byg Pro",
+      "appearance": "外观",
+      "settings": "设置",
+      "themes": "主题",
+      "guestTitle": "欢迎来到 Byg！",
+      "guestMessage": "你尚未登录。"
+    },
+    "profile": {
+      "follow": "关注",
+      "following": "已关注",
+      "chat": "聊天",
+      "joinedLabel": "加入于 {date}"
+    },
+    "nav": {
+      "openAlerts": "打开提醒"
+    }
   }
 }

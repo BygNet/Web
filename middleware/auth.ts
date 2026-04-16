@@ -1,5 +1,5 @@
 import { ensureHydratedSession } from '@/auth/hydrate'
-import { defineNuxtRouteMiddleware} from "#app";
+import { defineNuxtRouteMiddleware } from '#app'
 
 const localePath = useLocalePath()
 

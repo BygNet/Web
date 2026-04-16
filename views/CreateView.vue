@@ -254,15 +254,15 @@
             {{ t('ui.create.postButton') }}
           </button>
 
-        <button class="transparent" @click="showingPreview = true">
-          {{ t('ui.create.previewButton') }}
-        </button>
+          <button class="transparent" @click="showingPreview = true">
+            {{ t('ui.create.previewButton') }}
+          </button>
         </HStack>
       </VStack>
 
       <VStack v-else-if="pickedType == 'image'" class="form">
         <HStack class="autoSpace fullWidth">
-        <h2>{{ t('ui.create.uploadImage') }}</h2>
+          <h2>{{ t('ui.create.uploadImage') }}</h2>
           <button @click="pickedType = undefined">
             <Icon icon="mingcute:arrow-left-fill" />
           </button>
@@ -304,7 +304,7 @@
   <Modal v-else>
     <div class="createPreview">
       <HStack class="fullWidth autoSpace">
-      <h2>{{ t('ui.create.previewTitle') }}</h2>
+        <h2>{{ t('ui.create.previewTitle') }}</h2>
         <button @click="showingPreview = false">
           <Icon icon="mingcute:arrow-left-fill" />
         </button>
@@ -313,7 +313,9 @@
       <VStack class="postPreview">
         <h3>{{ postTitle }}</h3>
         <HStack class="autoSpace fullWidth light">
-          <UsernameView :name="auth.user?.username ?? t('ui.create.unknownUser')" />
+          <UsernameView
+            :name="auth.user?.username ?? t('ui.create.unknownUser')"
+          />
           <p>{{ formatDate(new Date().toISOString()) }}</p>
         </HStack>
 

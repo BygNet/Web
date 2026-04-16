@@ -19,7 +19,7 @@
 <template>
   <div class="reportView">
     <HStack class="fullWidth autoSpace">
-    <h2>{{ t('ui.report.title') }}</h2>
+      <h2>{{ t('ui.report.title') }}</h2>
       <button @click="showingReportPopup = false">
         <Icon icon="mingcute:close-fill" />
       </button>

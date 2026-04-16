@@ -12,7 +12,7 @@
   import { StaffUsers } from '@/data/users'
   import { getVerificationColor } from '@/utils/verificationData'
   import { navigateTo } from '#app'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '@/components/base/SafeLink.vue'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
@@ -42,7 +42,8 @@
     }
     if (!auth.user?.username) return false
     return (
-      auth.user.username.trim().toLowerCase() === props.name.trim().toLowerCase()
+      auth.user.username.trim().toLowerCase() ===
+      props.name.trim().toLowerCase()
     )
   })
 
@@ -132,7 +133,12 @@
   }
 
   watch(
-    () => [ props.name, props.avatarUrl, props.subscriptionState, props.following ],
+    () => [
+      props.name,
+      props.avatarUrl,
+      props.subscriptionState,
+      props.following,
+    ],
     () => {
       isStaff.value = StaffUsers.includes(props.name)
       hydrateProfileMeta()
