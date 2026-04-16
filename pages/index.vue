@@ -9,6 +9,7 @@
     ref,
     watchEffect,
   } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -24,15 +25,14 @@
     postCacheTime,
   } from '@/data/caches'
   import { reloader } from '@/data/events'
+  import { PageMetaByPath } from '@/data/pages'
   import { fetchCurrentUserProfile } from '@/data/profiles'
   import { taskList } from '@/data/tasks'
-  import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
   import { useEnv } from '@/utils/env'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import AdView from '@/views/AdView.vue'
   import SafeLink from "~/components/base/SafeLink.vue";
-  import { useI18n } from 'vue-i18n'
 
   const posts: Ref<BygPost[]> = ref([])
   const isLoaded: Ref<boolean> = ref(false)

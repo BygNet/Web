@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
   import { onMounted, type Ref, ref, watchEffect } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { api } from '@/api/client'
   import ImageItem from '@/components/images/ImageItem.vue'
@@ -9,11 +10,10 @@
   import SkeletonImage from '@/components/layout/skeletons/SkeletonImage.vue'
   import { IMAGE_CACHE_TTL, imageCache, imageCacheTime } from '@/data/caches'
   import { imageReloader } from '@/data/events'
-  import { taskList } from '@/data/tasks'
   import { PageMetaByPath } from '@/data/pages'
+  import { taskList } from '@/data/tasks'
   import { title } from '@/data/title'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
-  import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
   const pageMeta = PageMetaByPath['/picture']

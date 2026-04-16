@@ -1,11 +1,12 @@
-import { useHead } from '#imports'
-import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
 import type {
   ResolvableArray,
   ResolvableLink,
   ResolvableMeta,
 } from '@unhead/vue/types'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import { useHead } from '#imports'
 
 export default function setHeadMeta(config: {
   page: string
@@ -85,7 +86,7 @@ export function setHeadMetaKeys(config: {
       return meta
     }),
     link: computed(() =>
-      config.icon ? [{ rel: 'icon', href: config.icon }] : []
+      config.icon ? [ { rel: 'icon', href: config.icon } ] : []
     ),
   })
 }

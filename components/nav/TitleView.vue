@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import { useI18n } from 'vue-i18n'
   import { ProgressiveBlur } from 'vue-progressive-blur'
 
   import HStack from '@/components/layout/HStack.vue'
   import { taskList } from '@/data/tasks'
   import { showBackButton, title } from '@/data/title'
   import { useRoute } from '#app'
-  import { useI18n } from 'vue-i18n'
 
   const route = useRoute()
   const { t } = useI18n()

@@ -1,8 +1,9 @@
 <script setup lang="ts">
+  import { useI18n } from 'vue-i18n'
+
   import HStack from '@/components/layout/HStack.vue'
   import { setFlag } from '@/utils/setUserFlag'
   import SafeLink from "~/components/base/SafeLink.vue";
-  import { useI18n } from 'vue-i18n'
 
   const emit = defineEmits([ 'close' ])
   const { t } = useI18n()

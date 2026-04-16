@@ -17,6 +17,8 @@
     middleware: 'auth',
   })
 
+  import { useI18n } from 'vue-i18n'
+
   import { auth } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
@@ -45,7 +47,6 @@
   } from '@/types/messages'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import SafeLink from "~/components/base/SafeLink.vue";
-  import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
   const pageMeta = PageMetaByPath['/messages']

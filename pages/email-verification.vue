@@ -2,13 +2,12 @@
   import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
 
-  import { navigateTo } from '#app'
-
   import { api } from '@/api/client'
   import { auth, updateActiveUser } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
+  import { navigateTo } from '#app'
 
   const localePath = useLocalePath()
 

@@ -1,16 +1,16 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import { useI18n } from 'vue-i18n'
   import { ProgressiveBlur } from 'vue-progressive-blur'
 
+  import SafeLink from "@/components/base/SafeLink.vue";
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { BygPages, ExplorePage } from '@/data/pages'
   import { showingCreateModal } from '@/data/visibility'
   import { toggleCreateModal } from '@/utils/createModalManager'
-  import { useRoute } from '#app'
-  import SafeLink from "@/components/base/SafeLink.vue";
   import {isActive} from "@/utils/isActive";
-  import { useI18n } from 'vue-i18n'
+  import { useRoute } from '#app'
 
   const route = useRoute()
   const { t } = useI18n()

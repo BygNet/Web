@@ -1,9 +1,12 @@
 <script setup lang="ts">
   import type { BygProfile, BygVerification } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import { type Ref, ref, watch } from 'vue'
+  import { computed, type Ref, ref, watch } from 'vue'
 
+  import { api } from '@/api/client'
+  import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
+  import { getCachedProfile, setCachedProfile } from '@/data/caches'
   import { fetchProfileByUsername } from '@/data/profiles'
   import { StaffUsers } from '@/data/users'
   import { getVerificationColor } from '@/utils/verificationData'
@@ -26,29 +29,108 @@
   const verification: Ref<BygVerification | null> = ref(null)
   const subscriptionState: Ref<string | null> = ref(null)
   const avatarUrl: Ref<string | null> = ref(null)
+  const isFollowing: Ref<boolean> = ref(props.following ?? false)
+  const isLoading: Ref<boolean> = ref(false)
+  const userId: Ref<number | null> = ref(null)
   let activeRequestId = 0
+
+  const isOwnUser = computed(() => {
+    if (auth.user?.id && userId.value) {
+      return auth.user.id === userId.value
+    }
+    if (!auth.user?.username) return false
+    return (
+      auth.user.username.trim().toLowerCase() === props.name.trim().toLowerCase()
+    )
+  })
+
+  function applyCachedProfile(profile: {
+    user?: BygProfile['user']
+    isFollowing?: boolean
+  }): void {
+    subscriptionState.value = profile.user?.subscriptionState ?? null
+    verification.value = profile.user?.verification ?? null
+    avatarUrl.value = profile.user?.avatarUrl ?? null
+    userId.value = profile.user?.id ?? null
+    if (typeof profile.isFollowing === 'boolean') {
+      isFollowing.value = profile.isFollowing
+    }
+  }
 
   async function hydrateProfileMeta(): Promise<void> {
     const requestId = ++activeRequestId
     avatarUrl.value = props.avatarUrl ?? null
     subscriptionState.value = props.subscriptionState ?? null
+    isFollowing.value = props.following ?? false
+    userId.value = null
+
+    const cachedProfile = getCachedProfile(props.name)
+    if (cachedProfile) {
+      applyCachedProfile(cachedProfile)
+    }
 
     try {
       const profile = (await fetchProfileByUsername(
         props.name
       )) as BygProfile | null
       if (!profile || requestId !== activeRequestId) return
-
-      subscriptionState.value = profile.user?.subscriptionState ?? null
-      verification.value = profile.user?.verification ?? null
-      avatarUrl.value = profile.user?.avatarUrl ?? null
+      applyCachedProfile(profile)
     } catch (err) {
       console.error(`Failed to fetch subscription for ${props.name}:`, err)
     }
   }
 
+  async function ensureUserId(): Promise<void> {
+    if (userId.value) return
+    try {
+      const profile = (await fetchProfileByUsername(
+        props.name
+      )) as BygProfile | null
+      if (!profile) return
+      applyCachedProfile(profile)
+    } catch (err) {
+      console.error(`Failed to resolve profile for ${props.name}:`, err)
+    }
+  }
+
+  async function handleFollow() {
+    if (!auth.user) {
+      await navigateTo(localePath('login'))
+      return
+    }
+    if (isOwnUser.value) {
+      console.error(`Unable to follow ${props.name}: cannot follow yourself`)
+      return
+    }
+    await ensureUserId()
+    if (!userId.value) {
+      console.error(`Unable to follow ${props.name}: missing user id`)
+      return
+    }
+    isLoading.value = true
+    try {
+      const res = await api(`/follow-user/${userId.value}`, {
+        method: 'POST',
+      })
+      if (res.ok) {
+        isFollowing.value = !isFollowing.value
+        const cached = getCachedProfile(props.name)
+        if (cached) {
+          setCachedProfile(props.name, {
+            user: cached.user,
+            followerCount: cached.followerCount,
+            followingCount: cached.followingCount,
+            isFollowing: isFollowing.value,
+          })
+        }
+      }
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   watch(
-    () => [ props.name, props.avatarUrl, props.subscriptionState ],
+    () => [ props.name, props.avatarUrl, props.subscriptionState, props.following ],
     () => {
       isStaff.value = StaffUsers.includes(props.name)
       hydrateProfileMeta()
@@ -56,11 +138,8 @@
     { immediate: true }
   )
 
-  function viewProfile() {
-    navigateTo(localePath({
-      name: 'userProfile',
-      params: { username: props.name }
-    }))
+  function viewProfile(): void {
+    navigateTo(localePath(`/u/${props.name}`))
   }
 </script>
 
@@ -111,11 +190,18 @@
 
     <button
       class="followButton"
-      @click="viewProfile"
-      v-if="!displayMode && !hideFollowButton && !minimal"
+      @click="handleFollow"
+      :disabled="isLoading"
+      v-if="!displayMode && !hideFollowButton && !minimal && !isOwnUser"
     >
-      <Icon icon="solar:user-check-line-duotone" />
-      {{ following ? 'Following' : 'Follow' }}
+      <Icon
+        :icon="
+          isFollowing
+            ? 'solar:check-circle-line-duotone'
+            : 'solar:user-plus-line-duotone'
+        "
+      />
+      {{ isFollowing ? 'Following' : 'Follow' }}
     </button>
   </HStack>
 </template>

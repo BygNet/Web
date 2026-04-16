@@ -14,12 +14,15 @@
     middleware: 'auth',
   })
 
+  import { useI18n } from 'vue-i18n'
+
   import { api } from '@/api/client'
   import { auth, updateActiveUser } from '@/auth/session'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
+  import { PageMetaByPath } from '@/data/pages'
   import { fetchCurrentUserProfile } from '@/data/profiles'
   import { taskList } from '@/data/tasks'
   import {
@@ -27,12 +30,10 @@
     isThemeDark,
     systemPrefersDark,
   } from '@/data/themes'
-  import { PageMetaByPath } from '@/data/pages'
   import { showBackButton, title } from '@/data/title'
   import { capitalize } from '@/utils/formatters'
   import { buildProfileThemeVars } from '@/utils/profileTheme'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
-  import { useI18n } from 'vue-i18n'
 
   type SettingSection = 'profile' | 'subscription' | 'security' | 'interface'
 

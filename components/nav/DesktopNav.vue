@@ -1,15 +1,15 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import { useI18n } from 'vue-i18n'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
   import { BygPages, ExplorePage } from '@/data/pages'
   import { openCreateModal } from '@/utils/createModalManager'
+  import {isActive} from "@/utils/isActive";
   import { useRoute } from '#app'
   import SafeLink from "~/components/base/SafeLink.vue";
-  import {isActive} from "@/utils/isActive";
-  import { useI18n } from 'vue-i18n'
 
   const AppVersion = __AppVersion
   const route = useRoute()

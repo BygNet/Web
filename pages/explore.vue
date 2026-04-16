@@ -1,11 +1,12 @@
 <script setup lang="ts">
+  import { watchEffect } from 'vue'
+  import { useI18n } from 'vue-i18n'
+
   import AppsGrid from '@/components/apps/AppsGrid.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
-  import { watchEffect } from 'vue'
-  import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
   const pageMeta = PageMetaByPath['/explore']

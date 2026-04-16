@@ -57,7 +57,7 @@
     <h2 v-else>{{ post.title }}</h2>
 
     <VStack class="noSpace postMeta">
-      <UsernameView :name="post.author" />
+      <UsernameView @click.stop :name="post.author" />
       <p>{{ formatDate(post.createdDate) }}</p>
     </VStack>
 

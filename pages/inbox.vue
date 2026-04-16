@@ -13,6 +13,8 @@ import {
     middleware: 'auth',
   })
 
+import { useI18n } from 'vue-i18n'
+
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
@@ -26,15 +28,14 @@ import {
     markNotificationsRead,
     unreadNotificationCount,
   } from '@/data/notifications'
+import { PageMetaByPath } from '@/data/pages'
   import {
     getPushPermissionState,
     syncPushSubscription,
   } from '@/data/pushAlerts'
-import { PageMetaByPath } from '@/data/pages'
 import { title } from '@/data/title'
 import type { BygNotification } from '@/types/notifications'
 import { setHeadMetaKeys } from '@/utils/setHeadMeta'
-import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const pageMeta = PageMetaByPath['/inbox']

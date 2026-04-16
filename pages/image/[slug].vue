@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import { useHead, useAsyncData } from '#imports'
-  import { onUnmounted, ref, type Ref } from 'vue'
+  import { onUnmounted, type Ref,ref } from 'vue'
 
   import ImageItem from '@/components/images/ImageItem.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -14,6 +13,7 @@
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
   import { useRoute } from '#app'
+  import { useAsyncData,useHead } from '#imports'
 
   const route = useRoute()
   const slug = route.params.slug

@@ -4,6 +4,7 @@
   import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
 
   import { api } from '@/api/client'
+  import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import ReportButton from '@/components/posts/ReportButton.vue'
@@ -14,8 +15,10 @@
     applyProfileThemeToDocument,
     clearDocumentProfileTheme,
   } from '@/utils/profileTheme'
+  import { navigateTo } from '#app'
   import SafeLink from "~/components/base/SafeLink.vue";
 
+  const localePath = useLocalePath()
   const props = withDefaults(
     defineProps<{
       user: BygUser
@@ -37,6 +40,11 @@
   }>()
 
   const isLoading: Ref<boolean> = ref(false)
+  const isOwnProfileResolved = computed(() => {
+    if (props.isOwnProfile) return true
+    if (!auth.user) return false
+    return auth.user.id === props.user.id
+  })
 
   const joinDate = computed(() => {
     return new Date(props.user.createdAt).toLocaleDateString('en-US', {
@@ -46,6 +54,14 @@
   })
 
   async function handleFollow() {
+    if (!auth.user) {
+      await navigateTo(localePath('login'))
+      return
+    }
+    if (isOwnProfileResolved.value) {
+      console.error('Unable to follow: cannot follow your own profile')
+      return
+    }
     isLoading.value = true
     try {
       const res = await api(`/follow-user/${props.user.id}`, {
@@ -123,7 +139,7 @@
         </HStack>
 
         <HStack
-          v-if="!isOwnProfile && showActions"
+          v-if="!isOwnProfileResolved && showActions"
           class="actionButtons autoSpace"
         >
           <HStack>
@@ -155,7 +171,7 @@
 
         <SafeLink to="/settings">
           <button
-            v-if="isOwnProfile && showActions"
+            v-if="isOwnProfileResolved && showActions"
             class="editButton"
           >
             <Icon icon="solar:pen-2-line-duotone" />
