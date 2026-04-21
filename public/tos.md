@@ -1,5 +1,5 @@
 # Byg Platform Terms of Service
-Last updated: March 8th, 2026
+Last updated: April 21st, 2026
 
 Welcome to **Byg Platform**. If you are reading this, congratulations-you possess free will and literacy. By using Byg, you agree to these Terms of Service ("Terms"). If you do not agree, simply do not use Byg. Close the tab. Walk into the sunset. We respect that.
 
@@ -84,6 +84,9 @@ We care about your privacy, but it's important to note that:
 - Byg developers and management may have access to your data.
 - All data stored on Byg Cloud is ONLY data that you explicitly shared.
 - **Our infra providers do NOT have access to your data.**
+
+### Analytics
+We use PostHog to provide analytics about platform usage. Your IP address and other info may be processed by PostHog for this purpose.
 
 ## 10. Termination
 You may stop using Byg at any time.

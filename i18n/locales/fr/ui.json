@@ -27,8 +27,11 @@
       "iframeTitle": "Confiance et sécurité de la plateforme Byg"
     },
     "cookie": {
-      "title": "On voulait vous offrir des cookies, mais...",
-      "line1": "On avait des cookies dans le bocal pour vous, mais ashie les a tous mangés.",
+      "title": "Cookies et confidentialité",
+      "line1": "Nous utilisons des cookies et des données stockées sur votre appareil pour vous garder connecté et enregistrer certaines préférences.",
+      "termsPrefix": "La lecture des ",
+      "termsLink": "Conditions d'utilisation",
+      "termsSuffix": " est obligatoire.",
       "dismissSecondary": "Zut",
       "dismissPrimary": "Aww, d'accord"
     },

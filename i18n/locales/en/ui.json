@@ -27,8 +27,11 @@
       "iframeTitle": "Byg Platform Trust and Safety"
     },
     "cookie": {
-      "title": "We wanted to give you cookies, but...",
-      "line1": "We had some cookies in the jar for you, but ashie ate them all.",
+      "title": "Cookies and privacy",
+      "line1": "We use cookies and data stored on your device to keep you logged in and save some preferences.",
+      "termsPrefix": "Reading the ",
+      "termsLink": "Terms of Service",
+      "termsSuffix": " is required.",
       "dismissSecondary": "Damn",
       "dismissPrimary": "Aww, okay"
     },

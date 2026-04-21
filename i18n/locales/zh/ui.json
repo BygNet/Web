@@ -27,8 +27,11 @@
       "iframeTitle": "Byg 平台信任与安全"
     },
     "cookie": {
-      "title": "我们想给你饼干，但是...",
-      "line1": "我们为你准备了罐子里的饼干，但 ashie 全都吃光了。",
+      "title": "Cookies 与隐私",
+      "line1": "我们使用 cookies 和存储在你设备上的数据来保持登录并保存一些偏好设置。",
+      "termsPrefix": "阅读",
+      "termsLink": "服务条款",
+      "termsSuffix": "为必需。",
       "dismissSecondary": "哎呀",
       "dismissPrimary": "好吧"
     },

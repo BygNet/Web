@@ -43,8 +43,7 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close()
 
-  const path =
-    (event.notification.data?.path as string | undefined) ?? '/inbox'
+  const path = (event.notification.data?.path as string | undefined) ?? '/inbox'
 
   event.waitUntil(
     self.clients

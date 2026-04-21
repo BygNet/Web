@@ -34,9 +34,14 @@
   import { capitalize } from '@/utils/formatters'
   import { buildProfileThemeVars } from '@/utils/profileTheme'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
-  import SafeLink from "~/components/base/SafeLink.vue";
+  import SafeLink from '~/components/base/SafeLink.vue'
 
-  type SettingSection = 'profile' | 'subscription' | 'security' | 'interface' | 'advanced'
+  type SettingSection =
+    | 'profile'
+    | 'subscription'
+    | 'security'
+    | 'interface'
+    | 'advanced'
 
   interface TwoFactorSetup {
     secret: string
@@ -70,6 +75,7 @@
   const isSavingTwoFactor = ref(false)
   const twoFactorCode = ref('')
   const twoFactorSetup = ref<TwoFactorSetup | null>(null)
+  const shuttingDownMessage = ref<string | null>(null)
 
   const bio: Ref<string> = ref('')
   const avatarUrl: Ref<string> = ref('')
@@ -112,6 +118,14 @@
       color: color.value || null,
     }
   })
+
+  function shutDownByg(): void {
+    shuttingDownMessage.value = 'Shutting down...'
+    setTimeout(() => {
+      shuttingDownMessage.value =
+        'You really thought that would work? Silly goose.'
+    }, 2000)
+  }
 
   function applyAuthUser(user: BygAuthUser): void {
     updateActiveUser(user)
@@ -346,8 +360,8 @@
           :class="{ prominent: activeSection === 'advanced' }"
           class="menuItem"
         >
-          <Icon icon="solar:settings-line-duotone" />
-          {{ t('ui.settings.sidebarInterface') }}
+          <Icon icon="solar:code-bold-duotone" />
+          Advanced
         </button>
       </VStack>
 
@@ -671,21 +685,25 @@
         </VStack>
 
         <VStack v-show="activeSection === 'advanced'" class="section">
-          <h2>{{ t('ui.settings.advancedTitle') }}</h2>
-          <input name="go" v-model="goToUrl" placeholder="Go to...">
+          <h2>Advanced Settings</h2>
+          <p>Developer settings and tools.</p>
+
+          <input name="go" v-model="goToUrl" placeholder="Go to..." />
           <HStack>
             <NuxtLink :to="goToUrl">
-              <button>
-                Go (DIRECT)
-              </button>
+              <button>Go (DIRECT)</button>
             </NuxtLink>
 
             <SafeLink :to="goToUrl">
-              <button class="prominent">
-                Go (LOCALE)
-              </button>
+              <button class="prominent">Go (LOCALE)</button>
             </SafeLink>
           </HStack>
+
+          <h3>WARNING: Destructive Actions</h3>
+          <button style="color: red" @click="shutDownByg()">
+            Shut Down Byg
+          </button>
+          <p v-if="shuttingDownMessage">{{ shuttingDownMessage }}</p>
         </VStack>
       </VStack>
     </HStack>

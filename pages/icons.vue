@@ -1,9 +1,10 @@
 <script setup lang="ts">
+  import type { IconifyIcon } from '@iconify/types'
+  import { icons } from '@iconify-json/solar'
   import { type Ref, ref } from 'vue'
-  import ContentArea from "~/components/layout/ContentArea.vue";
-  import { icons } from "@iconify-json/solar";
-  import HStack from "~/components/layout/HStack.vue";
-  import type {IconifyIcon} from "@iconify/types";
+
+  import ContentArea from '~/components/layout/ContentArea.vue'
+  import HStack from '~/components/layout/HStack.vue'
 
   const selectedIcon: Ref<IconifyIcon | undefined> = ref(undefined)
   const selectedIconName: Ref<string | undefined> = ref(undefined)
@@ -17,13 +18,29 @@
 <template>
   <ContentArea class="bygIconViewer">
     <HStack v-if="selectedIcon" class="iconViewer">
-      <svg width="24" height="24" viewBox="0 0 24 24" class="iconPreview" v-html="selectedIcon.body" />
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        class="iconPreview"
+        v-html="selectedIcon.body"
+      />
       <p>{{ selectedIconName }}</p>
     </HStack>
 
     <HStack class="bygIconGrid">
-      <div v-for="(icon, key) in icons.icons" class="iconContainer" @click="selectIcon(icon, key as string)">
-        <svg width="24" height="24" viewBox="0 0 24 24" class="icon" v-html="icon.body" />
+      <div
+        v-for="(icon, key) in icons.icons"
+        class="iconContainer"
+        @click="selectIcon(icon, key as string)"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          class="icon"
+          v-html="icon.body"
+        />
       </div>
     </HStack>
   </ContentArea>
