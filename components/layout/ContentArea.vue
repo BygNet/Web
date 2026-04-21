@@ -105,6 +105,7 @@
     width: 100%
     margin: var(--padding) 0
     padding: 0 var(--padding)
+    position: relative
 
     &:not(.expanded)
       margin: 0 0 var(--padding)

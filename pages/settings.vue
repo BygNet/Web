@@ -34,8 +34,9 @@
   import { capitalize } from '@/utils/formatters'
   import { buildProfileThemeVars } from '@/utils/profileTheme'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+  import SafeLink from "~/components/base/SafeLink.vue";
 
-  type SettingSection = 'profile' | 'subscription' | 'security' | 'interface'
+  type SettingSection = 'profile' | 'subscription' | 'security' | 'interface' | 'advanced'
 
   interface TwoFactorSetup {
     secret: string
@@ -44,7 +45,7 @@
   }
 
   const { locale, locales, setLocale, t } = useI18n()
-  const pageMeta = PageMetaByPath['/settings']
+  const pageMeta = PageMetaByPath['/settings']!
 
   watchEffect(() => {
     title.value = t(pageMeta.titleKey)
@@ -74,6 +75,8 @@
   const avatarUrl: Ref<string> = ref('')
   const bannerUrl: Ref<string> = ref('')
   const color: Ref<string> = ref('')
+
+  const goToUrl: Ref<string> = ref('')
 
   const canEditProfileColor = computed(() => {
     const subscriptionState = profile.value?.user.subscriptionState
@@ -332,6 +335,15 @@
         <button
           @click="activeSection = 'interface'"
           :class="{ prominent: activeSection === 'interface' }"
+          class="menuItem"
+        >
+          <Icon icon="solar:settings-line-duotone" />
+          {{ t('ui.settings.sidebarInterface') }}
+        </button>
+
+        <button
+          @click="activeSection = 'advanced'"
+          :class="{ prominent: activeSection === 'advanced' }"
           class="menuItem"
         >
           <Icon icon="solar:settings-line-duotone" />
@@ -656,6 +668,24 @@
               </button>
             </VStack>
           </VStack>
+        </VStack>
+
+        <VStack v-show="activeSection === 'advanced'" class="section">
+          <h2>{{ t('ui.settings.advancedTitle') }}</h2>
+          <input name="go" v-model="goToUrl" placeholder="Go to...">
+          <HStack>
+            <NuxtLink :to="goToUrl">
+              <button>
+                Go (DIRECT)
+              </button>
+            </NuxtLink>
+
+            <SafeLink :to="goToUrl">
+              <button class="prominent">
+                Go (LOCALE)
+              </button>
+            </SafeLink>
+          </HStack>
         </VStack>
       </VStack>
     </HStack>

@@ -6,7 +6,6 @@
   import { resetActiveAccountState } from '@/auth/accountState'
   import { auth } from '@/auth/session'
   import ShareModal from '@/components/messages/ShareModal.vue'
-  import Byg2Modal from '@/components/modals/Byg2Modal.vue'
   import CookieBanner from '@/components/modals/CookieBanner.vue'
   import NotificationsModal from '@/components/modals/NotificationsModal.vue'
   import DesktopNav from '@/components/nav/DesktopNav.vue'
@@ -34,7 +33,6 @@
   import ReportView from '@/views/ReportView.vue'
   import { useHead } from '#imports'
 
-  const showingByg2Alpha: Ref<boolean> = ref(getFlag('showByg2Alpha', true))
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
     ref('unsupported')
   const showingNotificationsModal: Ref<boolean> = ref(false)
@@ -123,13 +121,12 @@
     <CreateView v-if="showingCreateModal" />
     <ReportView v-if="showingReportPopup" />
     <ShareModal v-if="showingShareModal" />
-    <Byg2Modal v-if="showingByg2Alpha" @close="showingByg2Alpha = false" />
     <CookieBanner
       v-if="showingCookieBanner"
       @close="showingCookieBanner = false"
     />
     <NotificationsModal
-      v-if="showingNotificationsModal && !showingByg2Alpha"
+      v-if="showingNotificationsModal"
       @close="showingNotificationsModal = false"
     />
   </ClientOnly>

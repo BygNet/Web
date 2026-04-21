@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
 
-  import SafeLink from '@/components/base/SafeLink.vue'
   import HStack from '@/components/layout/HStack.vue'
   import { setFlag } from '@/utils/setUserFlag'
 
@@ -17,15 +16,7 @@
 <template>
   <div class="cookieBanner">
     <h2>{{ t('ui.cookie.title') }}</h2>
-
     <p>{{ t('ui.cookie.line1') }}</p>
-    <p>{{ t('ui.cookie.line2') }}</p>
-    <p>
-      {{ t('ui.cookie.searchPrompt') }}
-      <SafeLink to="/search" class="prominentLink">
-        {{ t('ui.cookie.searchLink') }} </SafeLink
-      >.
-    </p>
 
     <HStack class="fullWidth autoSpace actions">
       <button class="transparent" @click="close()">

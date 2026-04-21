@@ -26,17 +26,9 @@
       "title": "报告问题",
       "iframeTitle": "Byg 平台信任与安全"
     },
-    "byg2": {
-      "title": "欢迎来到 Byg 2.0！",
-      "body1": "Byg 2.0 仍在开发中，但你可能会看到一些界面变化！",
-      "body2": "有反馈？通过 Byg Chat 联系我们。"
-    },
     "cookie": {
       "title": "我们想给你饼干，但是...",
       "line1": "我们为你准备了罐子里的饼干，但 ashie 全都吃光了。",
-      "line2": "还剩一个，但只是用来让你保持登录。",
-      "searchPrompt": "也想试试私密搜索？看看",
-      "searchLink": "Byg Search",
       "dismissSecondary": "哎呀",
       "dismissPrimary": "好吧"
     },

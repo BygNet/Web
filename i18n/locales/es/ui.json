@@ -26,17 +26,9 @@
       "title": "Reportar un problema",
       "iframeTitle": "Confianza y seguridad de la plataforma Byg"
     },
-    "byg2": {
-      "title": "¡Bienvenido a Byg 2.0!",
-      "body1": "Byg 2.0 aún está en progreso, pero probablemente verás algunos cambios en la interfaz.",
-      "body2": "¿Comentarios? Contáctanos por Byg Chat."
-    },
     "cookie": {
       "title": "Queríamos darte cookies, pero...",
       "line1": "Teníamos unas cookies en el frasco para ti, pero ashie se las comió todas.",
-      "line2": "Aún queda una, pero es solo para mantenerte conectado.",
-      "searchPrompt": "¿Quieres probar la búsqueda privada también? Mira",
-      "searchLink": "Byg Search",
       "dismissSecondary": "Vaya",
       "dismissPrimary": "Aww, ok"
     },
