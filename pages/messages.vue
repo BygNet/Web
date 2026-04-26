@@ -1040,8 +1040,6 @@
             </button>
           </SafeLink>
 
-          <h3>{{ t('ui.chat.title') }}</h3>
-
           <button
             class="refreshThreadsButton"
             :disabled="loadingThreads"
