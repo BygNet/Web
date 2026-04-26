@@ -100,6 +100,7 @@
   let starterSuggestionRequestId = 0
 
   const conversationScroller: Ref<HTMLDivElement | null> = ref(null)
+  const composerInput: Ref<HTMLTextAreaElement | null> = ref(null)
   const isMobileViewport: Ref<boolean> = ref(false)
   const liveSocket: Ref<WebSocket | null> = ref(null)
   let reconnectTimer: number | undefined
@@ -481,6 +482,22 @@
       conversationScroller.value.scrollHeight
   }
 
+  function resizeComposerInput(): void {
+    if (!composerInput.value) return
+
+    composerInput.value.style.height = 'auto'
+    const nextHeight = Math.min(
+      Math.max(composerInput.value.scrollHeight, 40),
+      160
+    )
+    composerInput.value.style.height = `${nextHeight}px`
+  }
+
+  function focusComposerInput(): void {
+    if (!selectedThread.value || !composerInput.value) return
+    composerInput.value.focus({ preventScroll: true })
+  }
+
   async function loadThreads(options: { force?: boolean } = {}): Promise<void> {
     loadingThreads.value = true
     let loadedInitialData = false
@@ -596,6 +613,7 @@
       syncQuery?: boolean
     } = {}
   ): Promise<void> {
+    const isSwitchingThread = selectedThread.value?.userId !== thread.userId
     if (
       selectedThread.value &&
       selectedThread.value.userId !== thread.userId &&
@@ -605,6 +623,10 @@
     }
 
     selectedThread.value = thread
+    if (isSwitchingThread) {
+      messages.value = []
+      resetOutgoingDeliveryState()
+    }
 
     if (options.syncQuery !== false) {
       const nextLocation = {
@@ -625,6 +647,8 @@
     await loadConversation(thread.username, {
       force: options.force,
     })
+    await nextTick()
+    focusComposerInput()
   }
 
   async function closeMobileConversation(): Promise<void> {
@@ -799,6 +823,8 @@
   }
 
   function onComposerInput(): void {
+    resizeComposerInput()
+
     if (!selectedThread.value) return
     if (!connectedLive.value) {
       sentTypingState = false
@@ -869,6 +895,7 @@
     }
 
     composerText.value = ''
+    resizeComposerInput()
     stopTypingSignal()
     await scrollConversationToBottom()
 
@@ -883,7 +910,12 @@
       if (optimisticMessage) {
         removeMessageById(optimisticMessage.id)
       }
-      composerText.value = content
+      composerText.value = composerText.value.trim()
+        ? `${content}\n${composerText.value}`
+        : content
+      resizeComposerInput()
+      await nextTick()
+      focusComposerInput()
       error.value = t('ui.chat.errorSendMessage')
       return
     }
@@ -896,6 +928,8 @@
     if (addedNewMessage) {
       await scrollConversationToBottom()
     }
+    await nextTick()
+    focusComposerInput()
   }
 
   async function hydrateInitialThread(): Promise<void> {
@@ -953,6 +987,7 @@
     await loadThreads()
     await hydrateInitialThread()
     connectLiveSocket()
+    resizeComposerInput()
   })
 
   onUnmounted(() => {
@@ -1020,6 +1055,13 @@
           syncQuery: false,
         })
       }
+    }
+  )
+
+  watch(
+    () => composerText.value,
+    () => {
+      resizeComposerInput()
     }
   )
 </script>
@@ -1165,12 +1207,13 @@
               <p>{{ t('ui.chat.typing') }}</p>
             </HStack>
 
-            <HStack class="input">
+            <HStack class="composerInputRow">
               <textarea
+                ref="composerInput"
                 v-model="composerText"
                 class="composerInput"
                 :placeholder="t('ui.chat.typeMessagePlaceholder')"
-                :disabled="!selectedThread || sendingMessage"
+                :disabled="!selectedThread"
                 @input="onComposerInput"
                 @blur="stopTypingSignal"
                 @keydown.enter.exact.prevent="sendCurrentMessage"
@@ -1181,6 +1224,7 @@
                 :disabled="
                   !selectedThread || sendingMessage || !composerText.trim()
                 "
+                @mousedown.prevent
                 @click="sendCurrentMessage"
               >
                 <Icon icon="solar:plain-line-duotone" />
@@ -1201,62 +1245,113 @@
   .messagesLayout
     width: 100%
     height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 3rem)
+    min-height: 0
     padding-top: env(safe-area-inset-top)
-    align-items: stretch
-    flex-wrap: nowrap
-    gap: 0.75rem
     padding-bottom: max(env(safe-area-inset-bottom), 0rem)
+    display: grid
+    grid-template-columns: minmax(18rem, 20rem) minmax(0, 1fr)
+    align-items: stretch
+    gap: 0.75rem
 
     .threadsPane
-      min-width: 18rem
+      width: 100%
+      height: 100%
+      min-width: 0
+      min-height: 0
+      padding: 0.2rem
       display: flex
       flex-direction: column
-      gap: 1rem
+      gap: 0.75rem
+      overflow: hidden
 
       &.only
         width: 100%
 
-      .starterInput
-        width: 100%
-        padding: 0.75rem
-        border-radius: 1rem
-
-      .threadList, .threadsHeader
-        width: 100%
-
-      .threadList
-        flex: 1 1 auto
-        min-height: 0
-        overflow: auto
-        display: flex
-        flex-direction: column
-        gap: 0.5rem
-
       .threadsHeader
+        width: 100%
         display: flex
         justify-content: space-between
+        flex-wrap: nowrap
+        align-items: center
+
+      .starterBox
+        width: 100%
+        position: relative
+
+        .starterInput
+          width: 100%
+          padding: 0.75rem
+          border-radius: 1rem
+
+        :deep(.mentionSuggestions)
+          top: calc(100% + 0.35rem)
+          left: 0
+          right: 0
+          width: 100%
+          max-width: none
 
       .threadsContent
+        width: 100%
         flex: 1 1 auto
         min-height: 0
         display: flex
         flex-direction: column
 
+        .threadState
+          margin: 0.2rem 0
+
+        .threadList
+          width: 100%
+          flex: 1 1 auto
+          min-height: 0
+          overflow: auto
+          display: flex
+          flex-direction: column
+          gap: 0.5rem
+          padding-right: 0.15rem
+
     .conversationPane
-      height: 100%
       width: 100%
+      height: 100%
+      padding: 0.2rem
       display: flex
       flex-direction: column
       min-height: 0
+      overflow: hidden
 
       .conversationHeader
+        width: 100%
+        flex-shrink: 0
         gap: 0.5rem
 
-        .conversationTitleWrap, .conversationTitle
+        .conversationTitleWrap
+          width: 100%
+          flex-wrap: nowrap
+          justify-content: space-between
           align-items: flex-start
+          gap: 0.6rem
+
+        .conversationTitle
+          width: 100%
+          min-width: 0
+          align-items: flex-start
+          gap: 0.25rem
+
+          h3
+            margin: 0
+            word-break: break-word
 
         .connectionState
+          align-items: center
           gap: 0.25rem
+
+      .conversationEmpty
+        width: 100%
+        min-height: 0
+        flex: 1 1 auto
+        justify-content: center
+        gap: 0.35rem
+        text-align: center
 
       .conversationBody
         display: flex
@@ -1266,12 +1361,18 @@
         width: 100%
         gap: 0.75rem
 
+        .loadingConversationText
+          margin: 0
+
         .messageList
           flex: 1 1 auto
           min-height: 0
           overflow: auto
           width: 100%
+          align-items: stretch
+          gap: 0.25rem
           border-radius: 0
+          padding-right: 0.2rem
           padding-bottom: 0.2rem
 
           .messageGapMarker
@@ -1282,22 +1383,38 @@
 
         .composer
           width: 100%
+          flex-shrink: 0
+          padding: 0.1rem
 
           .typingIndicator
-            gap: 0.25rem
-
-          .input
-            gap: 1rem
             width: 100%
+            gap: 0.25rem
+            align-items: center
 
-            textarea
-              height: 2rem
-              resize: vertical
+            p
+              margin: 0
+
+          .composerInputRow
+            gap: 0.5rem
+            width: 100%
+            flex-wrap: nowrap
+            align-items: flex-end
+
+            .composerInput
+              min-height: 2.5rem
+              max-height: 8rem
+              resize: none
+              overflow-y: auto
               border-radius: 1rem
               flex-grow: 1
 
+            .sendButton
+              flex: 0 0 auto
+              align-self: flex-end
+
   @media (max-width: variables.$mobileWidth)
     .messagesLayout
+      grid-template-columns: minmax(0, 1fr)
       height: calc(100dvh - 1rem)
       padding-bottom: calc(max(env(safe-area-inset-bottom), 0.75rem) + 0.15rem)
 </style>
