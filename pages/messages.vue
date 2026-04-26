@@ -9,6 +9,7 @@
     ref,
     watch,
     watchEffect,
+    type WatchStopHandle,
   } from 'vue'
 
   import { useRoute } from '#app'
@@ -111,13 +112,67 @@
   let nextOptimisticMessageId = -1
   let allowSocketReconnect = true
   let mainEl: HTMLElement | null = null
-  let savedOverflowY = ''
+  let stopNavigationEnforcement: WatchStopHandle | null = null
+  let mobileMediaQuery: MediaQueryList | null = null
+  const MAIN_SCROLL_LOCK_COUNT_ATTR = 'data-messages-scroll-lock-count'
+  const MAIN_SCROLL_LOCK_ORIGINAL_ATTR = 'data-messages-original-overflow-y'
 
-  const mobileMediaQuery = window.matchMedia('(max-width: 50rem)')
-  isMobileViewport.value = mobileMediaQuery.matches
+  if (import.meta.client) {
+    mobileMediaQuery = window.matchMedia('(max-width: 50rem)')
+    isMobileViewport.value = mobileMediaQuery.matches
+  }
 
   function onMobileMediaChange(event: MediaQueryListEvent): void {
     isMobileViewport.value = event.matches
+  }
+
+  function lockMainScroll(): void {
+    mainEl = document.querySelector('main')
+    if (!mainEl) return
+
+    const currentCountRaw = mainEl.getAttribute(MAIN_SCROLL_LOCK_COUNT_ATTR)
+    const currentCount = Number(currentCountRaw ?? '0')
+    const safeCurrentCount = Number.isFinite(currentCount)
+      ? Math.max(0, Math.trunc(currentCount))
+      : 0
+
+    if (safeCurrentCount === 0) {
+      mainEl.setAttribute(
+        MAIN_SCROLL_LOCK_ORIGINAL_ATTR,
+        mainEl.style.overflowY
+      )
+    }
+
+    mainEl.setAttribute(
+      MAIN_SCROLL_LOCK_COUNT_ATTR,
+      String(safeCurrentCount + 1)
+    )
+    mainEl.style.overflowY = 'hidden'
+  }
+
+  function unlockMainScroll(): void {
+    if (!mainEl) return
+
+    const currentCountRaw = mainEl.getAttribute(MAIN_SCROLL_LOCK_COUNT_ATTR)
+    const currentCount = Number(currentCountRaw ?? '0')
+    const safeCurrentCount = Number.isFinite(currentCount)
+      ? Math.max(0, Math.trunc(currentCount))
+      : 0
+
+    if (safeCurrentCount <= 1) {
+      const originalOverflow =
+        mainEl.getAttribute(MAIN_SCROLL_LOCK_ORIGINAL_ATTR) ?? ''
+      mainEl.style.overflowY = originalOverflow
+      mainEl.removeAttribute(MAIN_SCROLL_LOCK_COUNT_ATTR)
+      mainEl.removeAttribute(MAIN_SCROLL_LOCK_ORIGINAL_ATTR)
+    } else {
+      mainEl.setAttribute(
+        MAIN_SCROLL_LOCK_COUNT_ATTR,
+        String(safeCurrentCount - 1)
+      )
+    }
+
+    mainEl = null
   }
 
   const isMobileConversationView = computed(() => {
@@ -975,13 +1030,22 @@
 
   onMounted(async () => {
     showingNavigation.value = false
+    stopNavigationEnforcement = watch(
+      () => showingNavigation.value,
+      isVisible => {
+        if (isVisible) {
+          showingNavigation.value = false
+        }
+      },
+      { flush: 'sync' }
+    )
 
-    mainEl = document.querySelector('main')
-    if (mainEl) {
-      savedOverflowY = mainEl.style.overflowY
-      mainEl.style.overflowY = 'hidden'
+    lockMainScroll()
+
+    if (!mobileMediaQuery) {
+      mobileMediaQuery = window.matchMedia('(max-width: 50rem)')
+      isMobileViewport.value = mobileMediaQuery.matches
     }
-
     mobileMediaQuery.addEventListener('change', onMobileMediaChange)
 
     await loadThreads()
@@ -991,6 +1055,8 @@
   })
 
   onUnmounted(() => {
+    stopNavigationEnforcement?.()
+    stopNavigationEnforcement = null
     showingNavigation.value = true
     allowSocketReconnect = false
     stopTypingSignal()
@@ -1009,12 +1075,9 @@
     liveSocket.value?.close()
     liveSocket.value = null
 
-    mobileMediaQuery.removeEventListener('change', onMobileMediaChange)
+    mobileMediaQuery?.removeEventListener('change', onMobileMediaChange)
 
-    if (mainEl) {
-      mainEl.style.overflowY = savedOverflowY
-      mainEl = null
-    }
+    unlockMainScroll()
   })
 
   watch(
