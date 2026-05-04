@@ -17,7 +17,7 @@
 
   const href = computed(() => {
     if (props.external) return props.to
-    return localePath(props.to) + window.location.search
+    return localePath(props.to)
   })
 
   const isExternal = computed(

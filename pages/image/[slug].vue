@@ -10,6 +10,7 @@
   import SkeletonText from '@/components/layout/skeletons/SkeletonText.vue'
   import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import { getCachedImageDetail, setCachedImageDetail } from '@/data/caches'
   import { showBackButton, title } from '@/data/title'
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
@@ -32,10 +33,18 @@
     `image-${id}`,
     async () => {
       if (!id) return null
+
+      const cached = getCachedImageDetail(id)
+      if (cached) {
+        imageMetaData = cached
+        return cached
+      }
+
       try {
         const response = await fetch(`${useEnv().apiBase}/image-details/${id}`)
         if (!response.ok) throw new Error(`API error: ${response.status}`)
         const json = (await response.json()) as BygImage
+        setCachedImageDetail(id, json)
         imageMetaData = json
         return json
       } catch (err) {
@@ -43,7 +52,10 @@
         return null
       }
     },
-    { server: true }
+    {
+      server: import.meta.server,
+      lazy: import.meta.client,
+    }
   )
 
   // Set meta tags for SEO with fetched image data

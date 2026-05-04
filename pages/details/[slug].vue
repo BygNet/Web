@@ -9,6 +9,7 @@
   import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
   import VStack from '@/components/layout/VStack.vue'
   import PostItem from '@/components/posts/PostItem.vue'
+  import { getCachedPostDetail, setCachedPostDetail } from '@/data/caches'
   import { showBackButton, title } from '@/data/title'
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
@@ -31,10 +32,18 @@
     `post-${id}`,
     async () => {
       if (!id) return null
+
+      const cached = getCachedPostDetail(id)
+      if (cached) {
+        postMetaData = cached
+        return cached
+      }
+
       try {
         const response = await fetch(`${useEnv().apiBase}/post-details/${id}`)
         if (!response.ok) throw new Error(`API error: ${response.status}`)
         const json = (await response.json()) as BygPost
+        setCachedPostDetail(id, json)
         postMetaData = json
         return json
       } catch (err) {
@@ -42,7 +51,10 @@
         return null
       }
     },
-    { server: true }
+    {
+      server: import.meta.server,
+      lazy: import.meta.client,
+    }
   )
 
   // Set meta tags for SEO with fetched post data

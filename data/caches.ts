@@ -9,8 +9,48 @@ export const POST_CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 export const imageCache: Ref<BygImage[] | null> = ref(null)
 export const imageCacheTime: Ref<number> = ref(0)
 export const IMAGE_CACHE_TTL = 10 * 60 * 1000 // 10 minutes
+export const postDetailCache: Ref<Record<number, BygPost>> = ref({})
+export const postDetailCacheTime: Ref<Record<number, number>> = ref({})
+export const POST_DETAIL_CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+export const imageDetailCache: Ref<Record<number, BygImage>> = ref({})
+export const imageDetailCacheTime: Ref<Record<number, number>> = ref({})
+export const IMAGE_DETAIL_CACHE_TTL = 10 * 60 * 1000 // 10 minutes
 
 export const adCache: Ref<BygAd[]> = ref([])
+
+export function getCachedPostDetail(id: number): BygPost | null {
+  const cached = postDetailCache.value[id]
+  const cachedAt = postDetailCacheTime.value[id]
+  if (!cached || typeof cachedAt !== 'number') return null
+  if (Date.now() - cachedAt > POST_DETAIL_CACHE_TTL) {
+    delete postDetailCache.value[id]
+    delete postDetailCacheTime.value[id]
+    return null
+  }
+  return cached
+}
+
+export function setCachedPostDetail(id: number, post: BygPost): void {
+  postDetailCache.value[id] = post
+  postDetailCacheTime.value[id] = Date.now()
+}
+
+export function getCachedImageDetail(id: number): BygImage | null {
+  const cached = imageDetailCache.value[id]
+  const cachedAt = imageDetailCacheTime.value[id]
+  if (!cached || typeof cachedAt !== 'number') return null
+  if (Date.now() - cachedAt > IMAGE_DETAIL_CACHE_TTL) {
+    delete imageDetailCache.value[id]
+    delete imageDetailCacheTime.value[id]
+    return null
+  }
+  return cached
+}
+
+export function setCachedImageDetail(id: number, image: BygImage): void {
+  imageDetailCache.value[id] = image
+  imageDetailCacheTime.value[id] = Date.now()
+}
 
 // Profile Caches - Heavy caching for fast access
 interface ProfileCache {
