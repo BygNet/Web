@@ -9,6 +9,7 @@ export default defineNuxtPlugin(() => {
     runtimeConfig.public.posthogPublicKey as string,
     {
       api_host: runtimeConfig.public.posthogHost as string,
+      ui_host: 'https://us.posthog.com', // necessary because you're using a proxy, this way links will point back to PostHog properly
       defaults: runtimeConfig.public.posthogDefaults as ConfigDefaults,
       person_profiles: 'always',
       // @ts-ignore
