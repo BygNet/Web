@@ -11,12 +11,14 @@
   import ReportButton from '@/components/posts/ReportButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
-  import { formatDate } from '@/utils/formatters'
+
+  const { format } = useRelativeTime()
 
   const props = defineProps<{
     post: BygPost
     detailMode?: boolean
   }>()
+
   defineEmits([ 'navigate' ])
 
   const renderedContent = ref('')
@@ -53,13 +55,13 @@
     @click="$emit('navigate')"
     :class="{ detailMode: detailMode }"
   >
+    <HStack class="postMeta">
+      <UsernameView @click.stop :name="post.author" />
+      <p>{{ format(new Date(post.createdDate)) }}</p>
+    </HStack>
+
     <h4 v-if="!detailMode">{{ post.title }}</h4>
     <h2 v-else>{{ post.title }}</h2>
-
-    <VStack class="noSpace postMeta">
-      <UsernameView @click.stop :name="post.author" />
-      <p>{{ formatDate(post.createdDate) }}</p>
-    </VStack>
 
     <VStack class="bygPostContentWrapper">
       <p
@@ -121,15 +123,17 @@
 
   .bygPostItem
     align-items: flex-start
-    @include utils.maxPostPaddedWidth
+    width: 100%
+    border-radius: 0
 
     &:not(.detailMode)
-      @include utils.itemBackground
+      border-bottom: themes.$foregroundColor 0.1rem solid
       cursor: pointer
+      padding: 0.75rem 0
+      margin-bottom: 0.5rem
 
     .postMeta p
       opacity: 0.7
-      margin-bottom: 1rem
 
     .bygPostContentWrapper
       position: relative

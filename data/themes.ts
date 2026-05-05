@@ -72,13 +72,6 @@ export const BygThemes: BygTheme[] = [
     isDark: true,
   },
   {
-    title: 'Geist Dark',
-    description: 'The famous Vercel style - on Byg.',
-    key: 'geist',
-    colorPreview: 'black',
-    isDark: true,
-  },
-  {
     title: 'Neon Dark',
     description: 'Purple + Yellow VScode-inspired neon theme.',
     key: 'neon',

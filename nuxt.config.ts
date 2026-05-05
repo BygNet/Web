@@ -135,11 +135,10 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'icon', type: 'image/png', href: '/logos/BygLogo.png' },
-        { rel: 'dns-prefetch', href: '//fonts.googleapis.com' },
-        { rel: 'dns-prefetch', href: '//fonts.gstatic.com' },
-        { rel: 'dns-prefetch', href: '//geistfont.vercel.app' },
-        { rel: 'dns-prefetch', href: '//cdn.jsdelivr.net' },
-        { rel: 'dns-prefetch', href: '//emojis.byg.a35.dev' },
+        { rel: 'dns-prefetch', href: 'https://fonts.googleapis.com' },
+        { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' },
+        { rel: 'dns-prefetch', href: 'https://cdn.jsdelivr.net' },
+        { rel: 'dns-prefetch', href: 'https://emojis.byg.a35.dev' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         {
           rel: 'preconnect',
@@ -148,9 +147,8 @@ export default defineNuxtConfig({
         },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap',
+          href: 'https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap',
         },
-        { rel: 'stylesheet', href: 'https://geistfont.vercel.app/geist.css' },
         {
           rel: 'stylesheet',
           href: 'https://cdn.jsdelivr.net/npm/ab-tests@1.1.2/assets/fonts/satoshi/satoshi.css',

@@ -16,9 +16,13 @@
 
 <style scoped lang="sass">
   @use "@/styles/utils"
+  @use "@/styles/themes"
 
   .skeletonPost
-    @include utils.itemBackground
+    border-bottom: themes.$foregroundColor solid 0.1rem
+    border-radius: 0
+    padding: 0.75rem 0
+    margin-bottom: 0.5rem
 
     .title
       width: 40%

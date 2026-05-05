@@ -6,7 +6,7 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
-  import { BygPages, ExplorePage } from '@/data/pages'
+  import { BygPages, ExplorePage, MorePages } from '@/data/pages'
   import { openCreateModal } from '@/utils/createModalManager'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
@@ -34,26 +34,30 @@
         <Icon icon="solar:pen-new-square-line-duotone" />
         {{ t('common.createEllipsis') }}
       </button>
-    </VStack>
 
-    <VStack class="pages">
-      <SafeLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
-        <HStack
-          class="desktopNavItem"
-          :class="{ selected: isActive(route.path, page.path) }"
+      <VStack class="pages">
+        <SafeLink
+          v-for="page in [...BygPages, ...MorePages, ExplorePage]"
+          :to="page.path"
+          class="fullWidth"
         >
-          <Icon
-            :icon="
-              isActive(route.path, page.path)
-                ? page.icon.replace('line-duotone', 'bold-duotone')
-                : page.icon
-            "
-          />
-          <h3>
-            {{ t(page.titleKey) }}
-          </h3>
-        </HStack>
-      </SafeLink>
+          <HStack
+            class="desktopNavItem"
+            :class="{ selected: isActive(route.path, page.path) }"
+          >
+            <Icon
+              :icon="
+                isActive(route.path, page.path)
+                  ? page.icon.replace('line-duotone', 'bold-duotone')
+                  : page.icon
+              "
+            />
+            <h3>
+              {{ t(page.titleKey) }}
+            </h3>
+          </HStack>
+        </SafeLink>
+      </VStack>
     </VStack>
 
     <VStack class="accountSection">
@@ -80,9 +84,6 @@
   @use "@/styles/themes"
   @use "@/styles/utils"
 
-  @mixin outPad
-    margin: 0 -0.75rem
-
   .desktopNav
     display: none
     align-items: flex-start
@@ -91,7 +92,7 @@
     width: 20rem
     flex-grow: 1
     gap: 2rem
-    padding: var(--padding) calc(var(--padding) / 2) var(--padding) var(--padding)
+    padding: calc(var(--padding) / 2)
     height: 100vh
     overflow-y: scroll
     background: linear-gradient(to left, themes.$backgroundColor, themes.$foregroundColor)
@@ -106,10 +107,8 @@
         opacity: 1
 
     .header
+      width: 100%
       gap: 1rem
-
-      #createButton
-        @include outPad
 
     .bygLogo
       align-items: center
@@ -119,44 +118,40 @@
         height: 2.5rem
 
   .desktopNavItem
-    @include outPad
-
-    padding: 0.75rem
-    transition: 0.2s ease
+    padding: 0.35rem 0.5rem
     cursor: pointer
+    width: 100%
+
+    &, *
+      transition: 0.2s ease
 
     &:not(.selected, :hover)
       opacity: 0.9
 
     &:hover, &.selected
-      @include utils.itemBackground
-
-      --cornerRadius: 5rem
       background: themes.$foregroundColor
-      transform-origin: left
-      transform: scale(1.1)
 
-      h3
-        font-weight: 900
+      svg
+        scale: 1.2
+
+    &:hover
+      padding: 0.5rem 0.75rem
 
     &.selected
-      padding: 0.75rem 1rem
+      padding: 0.5rem 1rem
 
     svg
-      width: 2rem
-      height: 2rem
+      width: 1.25rem
+      height: 1.25rem
 
   .pages
     position: relative
     width: 100%
+    gap: 0.25rem
 
   .accountSection
     gap: 1rem
     width: 100%
-
-    .accountWidget
-      @include outPad
-      width: calc(100% + 1.5rem)
 
   @media (min-width: variables.$mobileWidth)
     .desktopNav

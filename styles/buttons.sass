@@ -16,6 +16,7 @@ button
   cursor: pointer
   transition: 0.2s ease-in-out
   backdrop-filter: blur(0.25rem) saturate(150%)
+  opacity: 0.9
 
   &.prominent
     background: themes.$accentColor
@@ -28,26 +29,8 @@ button
         width: 1.5rem !important
         height: 1.5rem !important
 
-  &:not(.transparent)::after
-    content: ""
-    position: absolute
-    top: 0
-    bottom: 0
-    right: 0
-    left: 0
-
-    border-radius: var(--buttonRadius)
-    border: 0.1rem solid themes.$shadowColor
-    box-shadow: 0 0.5rem 0.5rem themes.$shadowColor
-    transition: 0.2s ease-in-out
-    opacity: 0.1
-
-  &:hover::after
-    box-shadow: 0 0 0.75rem themes.$shadowColor
-    opacity: 0.3
-
-  &:active::after
-    box-shadow: 0 0 0.5rem themes.$shadowColor
+  &:hover
+    opacity: 1
 
   &:disabled
     opacity: 0.7
