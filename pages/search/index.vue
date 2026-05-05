@@ -7,6 +7,7 @@
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo } from '#app'
 
+  const localePath = useLocalePath()
   const query = ref('')
 
   setHeadMeta({
@@ -18,11 +19,7 @@
 
   async function submitSearch() {
     if (!query.value.trim()) return
-
-    await navigateTo({
-      name: 'search-results',
-      query: { q: query.value },
-    })
+    await navigateTo(localePath('/search/results?q=' + query.value.trim()))
   }
 </script>
 
