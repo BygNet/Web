@@ -1,15 +1,16 @@
 <script setup lang="ts">
   import HStack from '@/components/layout/HStack.vue'
-  import { showingNavigation } from '@/data/visibility'
 
   defineProps<{
     title: string
   }>()
 
-  showingNavigation.value = false
+  definePageMeta({ layout: 'plain' })
 
-  // use dark color theme
-  document.documentElement.classList.add('dark')
+  onMounted(() => {
+    // use dark color theme
+    document.documentElement.classList.add('dark')
+  })
 </script>
 
 <template>

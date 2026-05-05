@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import { onMounted, onUnmounted, ref } from 'vue'
+  import { ref } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showingNavigation } from '@/data/visibility'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo } from '#app'
 
@@ -15,6 +14,8 @@
     subtitle: 'Search the web privately.',
   })
 
+  definePageMeta({ layout: 'plain' })
+
   async function submitSearch() {
     if (!query.value.trim()) return
 
@@ -23,14 +24,6 @@
       query: { q: query.value },
     })
   }
-
-  onMounted(() => {
-    showingNavigation.value = false
-  })
-
-  onUnmounted(() => {
-    showingNavigation.value = true
-  })
 </script>
 
 <template>

@@ -24,7 +24,7 @@ export default defineNuxtConfig({
 
   i18n: {
     baseUrl: process.env.NUXT_PUBLIC_BASE_URL || 'https://byg.gg',
-    strategy: 'prefix_except_default',
+    strategy: 'prefix',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
@@ -210,5 +210,5 @@ export default defineNuxtConfig({
     },
   },
 
-  compatibilityDate: '2024-04-14',
+  compatibilityDate: '2026-05-15',
 })

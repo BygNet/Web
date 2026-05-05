@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -17,22 +17,22 @@
     "@eslint/compat": "^2.0.1",
     "@iconify-json/solar": "^1.2.5",
     "@iconify/vue": "^5.0.0",
-    "@nuxtjs/i18n": "^10.2.4",
+    "@nuxtjs/i18n": "^10.3.0",
     "@typescript-eslint/parser": "^8.53.0",
-    "@unhead/vue": "^2.1.12",
+    "@unhead/vue": "^3.1.0",
     "@vite-pwa/nuxt": "^1.1.1",
     "dompurify": "^3.3.3",
     "marked": "^17.0.4",
     "marked-shiki": "^1.2.1",
     "mitt": "^3.0.1",
-    "nuxt": "^4.4.2",
+    "nuxt": "^4.4.4",
     "pinia": "^3.0.4",
-    "posthog-js": "^1.369.0",
+    "posthog-js": "^1.372.8",
     "shiki": "^4.0.2",
-    "vue": "^3.5.30",
+    "vue": "^3.5.33",
     "vue-eslint-parser": "^10.2.0",
     "vue-progressive-blur": "^1.0.2",
-    "vue-router": "^5.0.3"
+    "vue-router": "^5.0.6"
   },
   "devDependencies": {
     "@bygnet/types": "^1.7.0",

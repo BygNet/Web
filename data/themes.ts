@@ -113,33 +113,32 @@ export function isThemeDark(key: string = currentThemeKey.value): boolean {
 }
 
 export function loadTheme(): void {
-  if (typeof window === 'undefined' || !window.localStorage) return
-  const savedTheme: string | null = localStorage.getItem('bygTheme')
-  let toSet: string
+  const cookie = useCookie<string>('bygTheme')
 
-  if (savedTheme != null) {
-    toSet = savedTheme
-  } else {
-    toSet = 'auto'
-  }
+  const savedTheme = cookie.value ?? 'auto'
 
   if (html) {
-    html.classList.add(toSet)
+    html.classList.add(savedTheme)
   }
-  currentThemeKey.value = toSet
+
+  currentThemeKey.value = savedTheme
 }
 
 export function setTheme(theme: BygTheme): void {
-  if (typeof window === 'undefined' || !window.localStorage) return
-  const savedTheme: string | null = localStorage.getItem('bygTheme')
+  if (typeof document === 'undefined') return
 
-  if (savedTheme != null && html) {
-    html.classList.remove(savedTheme)
+  // remove old class
+  if (html && currentThemeKey.value) {
+    html.classList.remove(currentThemeKey.value)
   }
 
-  localStorage.setItem('bygTheme', theme.key)
+  // set cookie (1 year)
+  document.cookie = `bygTheme=${theme.key}; path=/; max-age=31536000`
+
+  // apply instantly
   if (html) {
     html.classList.add(theme.key)
   }
+
   currentThemeKey.value = theme.key
 }

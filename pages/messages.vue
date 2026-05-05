@@ -15,6 +15,7 @@
   import { useRoute } from '#app'
 
   definePageMeta({
+    layout: 'plain',
     middleware: 'auth',
   })
 
@@ -39,7 +40,6 @@
   } from '@/data/messages'
   import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
-  import { showingNavigation } from '@/data/visibility'
   import type { BygUserSuggestion } from '@/types/mentions'
   import type {
     BygMessage,
@@ -684,18 +684,22 @@
     }
 
     if (options.syncQuery !== false) {
-      const nextLocation = {
-        name: 'messages',
-        query: {
-          ...route.query,
-          with: thread.username,
-        },
-      }
-
       if (isMobileViewport.value) {
-        await navigateTo(nextLocation)
+        await navigateTo({
+          path: '/messages',
+          query: {
+            ...route.query,
+            with: thread.username,
+          },
+        })
       } else {
-        await navigateTo(nextLocation)
+        await navigateTo({
+          path: '/messages',
+          query: {
+            ...route.query,
+            with: thread.username,
+          },
+        })
       }
     }
 
@@ -1029,17 +1033,6 @@
   }
 
   onMounted(async () => {
-    showingNavigation.value = false
-    stopNavigationEnforcement = watch(
-      () => showingNavigation.value,
-      isVisible => {
-        if (isVisible) {
-          showingNavigation.value = false
-        }
-      },
-      { flush: 'sync' }
-    )
-
     lockMainScroll()
 
     if (!mobileMediaQuery) {
@@ -1057,7 +1050,6 @@
   onUnmounted(() => {
     stopNavigationEnforcement?.()
     stopNavigationEnforcement = null
-    showingNavigation.value = true
     allowSocketReconnect = false
     stopTypingSignal()
     clearTypingIndicators()

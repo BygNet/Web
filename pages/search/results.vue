@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
-  import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
+  import { computed, type Ref, ref, watch } from 'vue'
 
   import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -10,7 +10,6 @@
   import VStack from '@/components/layout/VStack.vue'
   import { fetchBygSearch } from '@/data/search'
   import { title } from '@/data/title'
-  import { showingNavigation } from '@/data/visibility'
   import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo, useRoute } from '#app'
@@ -77,6 +76,7 @@
     page: 'Search',
     subtitle: 'Search the web, images, videos, music and more with Byg Search.',
   })
+  definePageMeta({ layout: 'plain' })
 
   const route = useRoute()
 
@@ -86,14 +86,6 @@
   const loading: Ref<boolean> = ref(false)
   const error: Ref<string | null> = ref(null)
   const searchResponse: Ref<BygSearchResponse | null> = ref(null)
-
-  onMounted(() => {
-    showingNavigation.value = false
-  })
-
-  onUnmounted(() => {
-    showingNavigation.value = true
-  })
 
   const selectedCategoryLabel = computed(() => {
     return (

@@ -7,7 +7,6 @@
   import SafeLink from '@/components/base/SafeLink.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showingNavigation } from '@/data/visibility'
   import { useRoute } from '#app'
 
   const attrs = useAttrs()
@@ -50,7 +49,7 @@
 </script>
 
 <template>
-  <div class="contentArea" :class="{ expanded: !showingNavigation }">
+  <div class="contentArea">
     <div class="contentContainer" v-bind="attrs" :class="{ leftAlign }">
       <HStack
         v-if="showEmailVerificationBanner"
@@ -106,10 +105,6 @@
     margin: var(--padding) 0
     padding: 0 var(--padding)
     position: relative
-
-    &:not(.expanded)
-      margin: 0 0 var(--padding)
-      max-width: 65rem
 
     .contentContainer
       width: 100%

@@ -237,9 +237,7 @@
         height: 2rem
         border-radius: 50%
         mask: linear-gradient(to bottom right, black, rgba(0,0,0,0.8), black)
-
-        &:not(.selected)
-          margin: 0.25rem
+        margin: 0.25rem
 
         &.selected
           border: 0.25rem solid themes.$accentColor

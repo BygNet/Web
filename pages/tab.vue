@@ -6,8 +6,9 @@
   import HStack from '@/components/layout/HStack.vue'
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showingNavigation } from '@/data/visibility'
   import setHeadMeta from '@/utils/setHeadMeta'
+
+  definePageMeta({ layout: 'plain' })
 
   interface FavoriteItem {
     id: string
@@ -120,8 +121,6 @@
   })
 
   onMounted(() => {
-    showingNavigation.value = false
-
     clockTimer = window.setInterval(() => {
       now.value = new Date()
     }, CLOCK_TICK_MS)
@@ -138,8 +137,6 @@
   })
 
   onUnmounted(() => {
-    showingNavigation.value = true
-
     if (clockTimer) window.clearInterval(clockTimer)
     if (wallpaperTimer) window.clearInterval(wallpaperTimer)
   })

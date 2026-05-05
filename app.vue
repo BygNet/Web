@@ -8,9 +8,6 @@
   import ShareModal from '@/components/messages/ShareModal.vue'
   import CookieBanner from '@/components/modals/CookieBanner.vue'
   import NotificationsModal from '@/components/modals/NotificationsModal.vue'
-  import DesktopNav from '@/components/nav/DesktopNav.vue'
-  import MobileNav from '@/components/nav/MobileNav.vue'
-  import TitleView from '@/components/nav/TitleView.vue'
   import { adCache } from '@/data/caches'
   import { loadNotificationReadState } from '@/data/notifications'
   import {
@@ -18,12 +15,9 @@
     syncPushSubscription,
   } from '@/data/pushAlerts'
   import { showingShareModal } from '@/data/share'
-  import { loadTheme } from '@/data/themes'
   import {
-    blurContent,
     showingCookieBanner,
     showingCreateModal,
-    showingNavigation,
     showingReportPopup,
   } from '@/data/visibility'
   import { consoleWarn } from '@/utils/consoleWarn'
@@ -43,22 +37,43 @@
     )
   })
   const pushEnabled = computed(() => pushPermission.value === 'granted')
-  const loadingApp: Ref<boolean> = ref(true)
-  const { locale, t } = useI18n()
+  const { locale } = useI18n()
   const manifestHref = computed(() => {
     const code = locale.value || 'en'
     return `/manifest.${code}.webmanifest`
+  })
+
+  const theme = useCookie<string>('bygTheme')
+  const themeClass = theme.value ?? 'auto'
+
+  useHead({
+    htmlAttrs: {
+      class: themeClass,
+    },
   })
 
   useHead(() => ({
     link: [ { rel: 'manifest', href: manifestHref.value } ],
   }))
 
-  onMounted(async () => {
-    loadingApp.value = false
+  useHead({
+    script: [
+      {
+        innerHTML: `
+        (function() {
+          const theme = document.cookie.match(/bygTheme=([^;]+)/)?.[1] || 'auto';
+          if (theme === 'auto') {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.classList.add(prefersDark ? 'dark' : 'light');
+          }
+        })();
+      `,
+      },
+    ],
+  })
 
+  onMounted(async () => {
     consoleWarn()
-    loadTheme()
     pushPermission.value = getPushPermissionState()
     showingCookieBanner.value = getFlag('showCookieBanner', true)
 
@@ -87,36 +102,6 @@
 </script>
 
 <template>
-  <Transition name="loading">
-    <div class="loadingView" v-if="loadingApp">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="currentColor"
-          d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
-          opacity="0.25"
-        />
-        <path
-          fill="currentColor"
-          d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
-        >
-          <animateTransform
-            attributeName="transform"
-            dur="0.75s"
-            repeatCount="indefinite"
-            type="rotate"
-            values="0 12 12;360 12 12"
-          />
-        </path>
-      </svg>
-      <h1>{{ t('ui.app.loading') }}</h1>
-    </div>
-  </Transition>
-
   <ClientOnly>
     <CreateView v-if="showingCreateModal" />
     <ReportView v-if="showingReportPopup" />
@@ -132,54 +117,24 @@
   </ClientOnly>
 
   <Transition name="app" appear>
-    <div v-if="!loadingApp" class="appShell">
-      <DesktopNav
-        class="blurrable"
-        v-if="showingNavigation"
-        :class="{ blurred: blurContent }"
-      />
-      <main class="blurrable" :class="{ blurred: blurContent }">
-        <TitleView v-if="showingNavigation" />
+    <div class="appShell">
+      <NuxtLayout>
         <NuxtPage :key="activeAccountKey" />
-        <MobileNav v-if="showingNavigation" />
-      </main>
+      </NuxtLayout>
     </div>
   </Transition>
 </template>
 
-<style scoped lang="sass">
+<!--Unscoped due to layouts-->
+<style lang="sass">
   @use "@/styles/variables"
   @use "@/styles/themes"
-
-  .loadingView
-    position: fixed
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    justify-content: center
-    background: themes.$backgroundColor
-    color: themes.$textColor
-    z-index: 10000
-    border-radius: 0
-
-    svg
-      width: 4rem
-      height: 4rem
 
   .appShell
     display: flex
     flex-direction: row
     width: 100vw
     height: 100dvh
-
-  .loading-enter-active,
-  .loading-leave-active
-    transition: opacity 0.35s ease
-
-  .loading-enter-from,
-  .loading-leave-to
-    opacity: 0
 
   .app-enter-active
     transition: opacity 0.4s ease, transform 0.4s ease
