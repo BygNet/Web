@@ -15,7 +15,7 @@
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
   import { useRoute } from '#app'
-  import { useHead,useLazyAsyncData } from '#imports'
+  import { useHead, useLazyAsyncData } from '#imports'
 
   const route = useRoute()
   const { t } = useI18n()

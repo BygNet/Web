@@ -15,6 +15,7 @@
   import { openCreateModal } from '@/utils/createModalManager'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
+  import BygLogo from '~/components/brand/BygLogo.vue'
 
   const AppVersion = __AppVersion
   const route = useRoute()
@@ -34,8 +35,9 @@
     <VStack class="header">
       <SafeLink to="/">
         <HStack class="bygLogo">
-          <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />
-          <h1>{{ t('common.brand') }}</h1>
+          <BygLogo class="bygLogoImage" />
+          <!--          <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />-->
+          <!--          <h1>{{ t('common.brand') }}</h1>-->
         </HStack>
       </SafeLink>
 
@@ -119,12 +121,12 @@
       gap: 1rem
 
     .bygLogo
-      padding: 0 0.25rem
-      align-items: center
+      padding: 0.35rem
 
       .bygLogoImage
-        width: 2.5rem
+        width: 4.5rem
         height: 2.5rem
+        mask-image: linear-gradient(to bottom, black, rgb(0 0 0 / 0.65))
 
   .desktopSpacer
     height: 1rem

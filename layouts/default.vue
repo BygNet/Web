@@ -2,13 +2,12 @@
   import DesktopNav from '~/components/nav/DesktopNav.vue'
   import MobileNav from '~/components/nav/MobileNav.vue'
   import TitleView from '~/components/nav/TitleView.vue'
-  import { blurContent } from '~/data/visibility'
 </script>
 
 <template>
-  <DesktopNav class="blurrable" :class="{ blurred: blurContent }" />
+  <DesktopNav />
 
-  <main class="blurrable defaultLayout" :class="{ blurred: blurContent }">
+  <main class="defaultLayout">
     <TitleView />
     <slot />
     <MobileNav />

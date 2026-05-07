@@ -160,12 +160,6 @@
     overflow-y: scroll
     scrollbar-width: none
 
-  .blurrable
-    transition: 0.1s ease
-
-    &.blurred
-      filter: blur(0.5rem)
-
   @media (max-width: variables.$mobileWidth)
     .appShell
       flex-direction: column

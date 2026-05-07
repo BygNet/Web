@@ -1,38 +1,28 @@
 <script setup lang="ts">
-  import { onMounted, onUnmounted } from 'vue'
-
   import FullscreenCover from '@/components/layout/FullscreenCover.vue'
-  import { blurContent } from '@/data/visibility'
-
-  const props = defineProps<{
-    independent?: boolean
+  defineProps<{
+    visible?: boolean
   }>()
-
-  onMounted(() => {
-    if (props.independent) return
-    blurContent.value = true
-  })
-  onUnmounted(() => {
-    blurContent.value = false
-  })
 </script>
 
 <template>
-  <FullscreenCover class="modalCover" :class="{ blurred: independent }">
-    <div class="modalContent">
-      <slot />
-    </div>
-  </FullscreenCover>
+  <Transition name="modal" appear>
+    <FullscreenCover v-if="visible !== false" class="modalCover">
+      <div class="modalContent">
+        <slot />
+      </div>
+    </FullscreenCover>
+  </Transition>
 </template>
 
-<style scoped lang="sass">
+<style lang="sass">
   .modalCover
     --margin: 1.5rem
     z-index: 500
     padding: var(--margin) 0
-
-    &.blurred
-      backdrop-filter: blur(0.5rem)
+    backdrop-filter: blur(0.5rem)
+    background: rgb(62 62 62 / 0.3)
+    overflow: visible
 
     .modalContent
       width: fit-content
@@ -43,4 +33,27 @@
       margin-bottom: var(--tabBarHeight)
       border-radius: 1.5rem
       overflow: scroll
+
+  .modal-enter-active,
+  .modal-leave-active
+    transition: opacity 0.25s ease
+
+    .modalContent
+      transition: transform 0.25s ease, opacity 0.25s ease
+
+  .modal-enter-from,
+  .modal-leave-to
+    opacity: 0
+
+    .modalContent
+      transform: translateY(2rem)
+      opacity: 0
+
+  .modal-enter-to,
+  .modal-leave-from
+    opacity: 1
+
+    .modalContent
+      transform: translateY(0)
+      opacity: 1
 </style>
