@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   interface Props {
     to: string
     external?: boolean
     newTab?: boolean
     custom?: boolean
+    disable?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -14,9 +15,17 @@
   })
 
   const localePath = useLocalePath()
+  const attrs = useAttrs()
 
   const href = computed(() => {
     if (props.external) return props.to
+
+    if (props.to.startsWith('#')) {
+      return {
+        hash: props.to,
+      }
+    }
+
     return localePath(props.to)
   })
 
@@ -26,9 +35,14 @@
 </script>
 
 <template>
+  <div v-if="disable" class="noLink" v-bind="attrs">
+    <slot />
+  </div>
+
   <!-- NORMAL LINK (auto navigation) -->
   <NuxtLink
-    v-if="!isExternal && !custom"
+    v-else-if="!isExternal && !custom"
+    v-bind="attrs"
     :to="href"
     :target="newTab ? '_blank' : null"
     :rel="newTab ? 'noopener noreferrer' : undefined"
@@ -39,6 +53,7 @@
   <!-- CUSTOM MODE (manual navigation) -->
   <NuxtLink
     v-else-if="!isExternal && custom"
+    v-bind="attrs"
     :to="href"
     custom
     v-slot="slotProps"
@@ -49,6 +64,7 @@
   <!-- EXTERNAL -->
   <a
     v-else
+    v-bind="attrs"
     :href="href"
     :target="newTab ? '_blank' : undefined"
     :rel="newTab ? 'noopener noreferrer' : undefined"

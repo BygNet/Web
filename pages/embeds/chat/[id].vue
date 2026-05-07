@@ -83,7 +83,7 @@
       <HStack class="fullWidth actions">
         <a :href="'/messages?with=' + profile.user.username" target="_top">
           <button class="prominent">
-            <Icon icon="solar:chat-round-like-line-duotone" />
+            <Icon icon="solar:plain-line-duotone" />
             Message
           </button>
         </a>

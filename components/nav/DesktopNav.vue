@@ -6,7 +6,12 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
-  import { BygPages, ExplorePage, MorePages } from '@/data/pages'
+  import {
+    type BygPageMeta,
+    CreatePage,
+    DesktopPages,
+    SpacerPage,
+  } from '@/data/pages'
   import { openCreateModal } from '@/utils/createModalManager'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
@@ -14,6 +19,14 @@
   const AppVersion = __AppVersion
   const route = useRoute()
   const { t } = useI18n()
+
+  function create(page: BygPageMeta): void {
+    if (page === CreatePage) {
+      openCreateModal()
+    } else {
+      return
+    }
+  }
 </script>
 
 <template>
@@ -26,23 +39,17 @@
         </HStack>
       </SafeLink>
 
-      <button
-        id="createButton"
-        class="prominent large"
-        @click="openCreateModal()"
-      >
-        <Icon icon="solar:pen-new-square-line-duotone" />
-        {{ t('common.createEllipsis') }}
-      </button>
-
       <VStack class="pages">
         <SafeLink
-          v-for="page in [...BygPages, ...MorePages, ExplorePage]"
+          v-for="page in DesktopPages"
           :to="page.path"
           class="fullWidth"
+          :disable="page === CreatePage"
+          @click="create(page)"
         >
           <HStack
             class="desktopNavItem"
+            v-if="page !== SpacerPage"
             :class="{ selected: isActive(route.path, page.path) }"
           >
             <Icon
@@ -56,6 +63,7 @@
               {{ t(page.titleKey) }}
             </h3>
           </HStack>
+          <div class="desktopSpacer" v-else />
         </SafeLink>
       </VStack>
     </VStack>
@@ -111,16 +119,23 @@
       gap: 1rem
 
     .bygLogo
+      padding: 0 0.25rem
       align-items: center
 
       .bygLogoImage
         width: 2.5rem
         height: 2.5rem
 
+  .desktopSpacer
+    height: 1rem
+    cursor: default
+
   .desktopNavItem
-    padding: 0.35rem 0.5rem
+    padding: 0.35rem 0.35rem
     cursor: pointer
     width: 100%
+    gap: 0.5rem
+    border-radius: 1.25rem
 
     &, *
       transition: 0.2s ease
@@ -135,19 +150,20 @@
         scale: 1.2
 
     &:hover
-      padding: 0.5rem 0.75rem
+      padding: 0.35rem 0.65rem
 
     &.selected
-      padding: 0.5rem 1rem
+      padding: 0.45rem 0.75rem
+      gap: 0.75rem
 
     svg
-      width: 1.25rem
-      height: 1.25rem
+      width: 1.65rem
+      height: 1.65rem
 
   .pages
     position: relative
     width: 100%
-    gap: 0.25rem
+    gap: 0.5rem
 
   .accountSection
     gap: 1rem

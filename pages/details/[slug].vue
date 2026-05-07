@@ -14,7 +14,7 @@
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
   import { useRoute } from '#app'
-  import { useAsyncData, useHead } from '#imports'
+  import { useHead,useLazyAsyncData } from '#imports'
 
   const route = useRoute()
   const { t } = useI18n()
@@ -28,7 +28,7 @@
 
   // Fetch post data - track for meta tags
   let postMetaData: BygPost | null = null
-  const { data: post } = await useAsyncData(
+  const { data: post } = await useLazyAsyncData(
     `post-${id}`,
     async () => {
       if (!id) return null

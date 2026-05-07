@@ -166,7 +166,7 @@
 
             <SafeLink :to="'/messages?with=' + user.username">
               <button>
-                <Icon icon="solar:chat-round-like-line-duotone" />
+                <Icon icon="solar:plain-line-duotone" />
                 {{ t('ui.profile.chat') }}
               </button>
             </SafeLink>
