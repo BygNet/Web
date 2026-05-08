@@ -1,9 +1,7 @@
 <script setup lang="ts">
   import type { CreateType } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import DOMPurify from 'dompurify'
-  import { marked } from 'marked'
-  import { computed, nextTick, type Ref, ref, watchEffect } from 'vue'
+  import { computed, nextTick, type Ref, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
@@ -42,13 +40,6 @@
 
   const charCount = computed(() => postText.value.length)
   const charLimit = 1000
-
-  const renderedMarkdown = ref('')
-
-  watchEffect(async () => {
-    const html = await marked.parse(postText.value || '')
-    renderedMarkdown.value = DOMPurify.sanitize(html)
-  })
 
   function clearPostMentionSuggestions(): void {
     showingPostMentionSuggestions.value = false
