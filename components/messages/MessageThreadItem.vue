@@ -37,6 +37,7 @@
             class="avatarFallback"
             icon="solar:user-circle-line-duotone"
           />
+
           <p class="username">{{ thread.username }}</p>
           <Icon
             v-if="thread.subscriptionState !== 'free'"
@@ -84,6 +85,13 @@
         flex-grow: 1
         flex-shrink: 1
         min-width: 0
+
+        .threadTitle
+          img, .avatarFallback
+            width: 2rem
+            height: 2rem
+            border-radius: 50%
+            object-fit: cover
 
         .preview
           width: 100%
