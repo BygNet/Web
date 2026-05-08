@@ -11,21 +11,21 @@
   import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { getCachedImageDetail, setCachedImageDetail } from '@/data/caches'
-  import { showBackButton, title } from '@/data/title'
+  import { title } from '@/data/title'
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
   import { useRoute } from '#app'
   import { useHead, useLazyAsyncData } from '#imports'
 
+  definePageMeta({ showBackButton: true })
+
   const route = useRoute()
   const { t } = useI18n()
   const slug = route.params.slug
   const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
-
   const error: Ref<string | null> = ref(null)
 
   title.value = t('ui.details.imageTitle')
-  showBackButton.value = true
 
   // Fetch image data - track for meta tags
   let imageMetaData: BygImage | null = null

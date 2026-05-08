@@ -14,10 +14,9 @@
     getPushPermissionState,
     syncPushSubscription,
   } from '@/data/pushAlerts'
-  import { showingShareModal } from '@/data/share'
   import {
     showingCookieBanner,
-    showingCreateModal,
+    showingNotificationsModal,
     showingReportPopup,
   } from '@/data/visibility'
   import { consoleWarn } from '@/utils/consoleWarn'
@@ -29,7 +28,6 @@
 
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
     ref('unsupported')
-  const showingNotificationsModal: Ref<boolean> = ref(false)
   const activeAccountKey = computed(() => auth.activeAccountId ?? 'guest')
   const canEnablePush = computed(() => {
     return (
@@ -103,17 +101,14 @@
 
 <template>
   <ClientOnly>
-    <CreateView v-if="showingCreateModal" />
+    <CreateView />
     <ReportView v-if="showingReportPopup" />
-    <ShareModal v-if="showingShareModal" />
+    <ShareModal />
     <CookieBanner
       v-if="showingCookieBanner"
       @close="showingCookieBanner = false"
     />
-    <NotificationsModal
-      v-if="showingNotificationsModal"
-      @close="showingNotificationsModal = false"
-    />
+    <NotificationsModal @close="showingNotificationsModal = false" />
   </ClientOnly>
 
   <Transition name="app" appear>

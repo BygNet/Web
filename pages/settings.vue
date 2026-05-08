@@ -1,17 +1,11 @@
 <script setup lang="ts">
   import type { BygAuthUser, BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
-  import {
-    computed,
-    onMounted,
-    onUnmounted,
-    type Ref,
-    ref,
-    watchEffect,
-  } from 'vue'
+  import { computed, onMounted, type Ref, ref, watchEffect } from 'vue'
 
   definePageMeta({
     middleware: 'auth',
+    showBackButton: true,
   })
 
   import { useI18n } from 'vue-i18n'
@@ -30,7 +24,7 @@
     isThemeDark,
     systemPrefersDark,
   } from '@/data/themes'
-  import { showBackButton, title } from '@/data/title'
+  import { title } from '@/data/title'
   import { capitalize } from '@/utils/formatters'
   import { buildProfileThemeVars } from '@/utils/profileTheme'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
@@ -55,6 +49,7 @@
   watchEffect(() => {
     title.value = t(pageMeta.titleKey)
   })
+
   setHeadMetaKeys({
     pageKey: pageMeta.titleKey,
     subtitleKey: pageMeta.descriptionKey,
@@ -307,11 +302,6 @@
 
   onMounted(() => {
     loadProfile()
-    showBackButton.value = true
-  })
-
-  onUnmounted(() => {
-    showBackButton.value = false
   })
 </script>
 

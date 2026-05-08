@@ -25,7 +25,7 @@
   const WALLPAPER_STORAGE_KEY = 'bygTabWallpaper'
   const CUSTOM_WALLPAPER_STORAGE_KEY = 'bygTabCustomWallpaper'
   const DEFAULT_FAVORITES: FavoriteItem[] = [
-    { id: createId(), title: 'Byg', url: 'https://byg.a35.dev/' },
+    { id: createId(), title: 'Byg', url: 'https://byg.gg/' },
     { id: createId(), title: 'Gmail', url: 'https://mail.google.com' },
     { id: createId(), title: 'YouTube', url: 'https://youtube.com' },
     { id: createId(), title: 'GitHub', url: 'https://github.com' },
@@ -33,17 +33,30 @@
   const WALLPAPER_ROTATION_MS = 1000 * 60 * 10
   const CLOCK_TICK_MS = 1000
 
+  const favoritesCookie = useCookie<FavoriteItem[]>(FAVORITES_STORAGE_KEY, {
+    default: () => DEFAULT_FAVORITES,
+  })
+  const wallpaperCookie = useCookie<string>(WALLPAPER_STORAGE_KEY, {
+    default: () => '',
+  })
+  const customWallpaperCookie = useCookie<string>(
+    CUSTOM_WALLPAPER_STORAGE_KEY,
+    {
+      default: () => '',
+    }
+  )
+
   const query = ref('')
   const now = ref(new Date())
-  const favorites = ref<FavoriteItem[]>(loadFavorites())
+  const favorites = ref<FavoriteItem[]>(favoritesCookie.value)
   const favoriteTitle = ref('')
   const favoriteUrl = ref('')
   const editingFavoriteId = ref<string | null>(null)
   const showingEditorModal = ref(false)
   const favoriteError = ref('')
-  const wallpaperUrl = ref(loadSavedWallpaper())
-  const customWallpaperUrl = ref(loadCustomWallpaper())
-  const wallpaperInput = ref(loadCustomWallpaper())
+  const wallpaperUrl = ref(wallpaperCookie.value)
+  const customWallpaperUrl = ref(customWallpaperCookie.value)
+  const wallpaperInput = ref(customWallpaperCookie.value)
   const wallpaperError = ref('')
   const wallpaperLoading = ref(false)
   const brokenFavicons = ref<Record<string, boolean>>({})
@@ -97,27 +110,17 @@
   watch(
     favorites,
     value => {
-      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(value))
+      favoritesCookie.value = value
     },
     { deep: true }
   )
 
   watch(wallpaperUrl, value => {
-    if (!value) {
-      localStorage.removeItem(WALLPAPER_STORAGE_KEY)
-      return
-    }
-
-    localStorage.setItem(WALLPAPER_STORAGE_KEY, value)
+    wallpaperCookie.value = value || ''
   })
 
   watch(customWallpaperUrl, value => {
-    if (!value) {
-      localStorage.removeItem(CUSTOM_WALLPAPER_STORAGE_KEY)
-      return
-    }
-
-    localStorage.setItem(CUSTOM_WALLPAPER_STORAGE_KEY, value)
+    customWallpaperCookie.value = value || ''
   })
 
   onMounted(() => {
@@ -283,49 +286,6 @@
     return normalizedUrl
   }
 
-  function loadFavorites(): FavoriteItem[] {
-    const raw = localStorage.getItem(FAVORITES_STORAGE_KEY)
-    if (!raw) return DEFAULT_FAVORITES
-
-    try {
-      const parsed = JSON.parse(raw)
-      if (!Array.isArray(parsed)) return DEFAULT_FAVORITES
-
-      const sanitized = parsed
-        .map(item => {
-          if (!item || typeof item !== 'object') return null
-
-          const title = typeof item.title === 'string' ? item.title.trim() : ''
-          const url =
-            typeof item.url === 'string' ? normalizeUrl(item.url) : null
-
-          if (!title || !url) return null
-
-          return {
-            id:
-              typeof item.id === 'string' && item.id.trim()
-                ? item.id
-                : createId(),
-            title,
-            url,
-          }
-        })
-        .filter((item): item is FavoriteItem => !!item)
-
-      return sanitized.length ? sanitized : DEFAULT_FAVORITES
-    } catch {
-      return DEFAULT_FAVORITES
-    }
-  }
-
-  function loadSavedWallpaper(): string {
-    return localStorage.getItem(WALLPAPER_STORAGE_KEY) ?? ''
-  }
-
-  function loadCustomWallpaper(): string {
-    return localStorage.getItem(CUSTOM_WALLPAPER_STORAGE_KEY) ?? ''
-  }
-
   function saveCustomWallpaper() {
     const normalizedUrl = normalizeImageUrl(wallpaperInput.value)
 
@@ -458,7 +418,7 @@
       </button>
     </div>
 
-    <Modal independent v-if="showingEditorModal" class="editorModal">
+    <Modal :visible="showingEditorModal" class="editorModal">
       <VStack class="editorModalContent">
         <HStack class="editorHeader autoSpace">
           <h2>Customize</h2>

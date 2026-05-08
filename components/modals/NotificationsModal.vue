@@ -5,6 +5,7 @@
   import Modal from '@/components/layout/Modal.vue'
   import ModalActions from '@/components/layout/ModalActions.vue'
   import VStack from '@/components/layout/VStack.vue'
+  import { showingNotificationsModal } from '~/data/visibility'
 
   const localePath = useLocalePath()
   const emit = defineEmits([ 'close' ])
@@ -21,7 +22,7 @@
 </script>
 
 <template>
-  <Modal>
+  <Modal :visible="showingNotificationsModal">
     <VStack class="notificationsModal">
       <h2>{{ t('ui.notificationsModal.title') }}</h2>
       <p>{{ t('ui.notificationsModal.line1') }}</p>

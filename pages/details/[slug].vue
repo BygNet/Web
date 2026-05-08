@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import { onUnmounted, type Ref, ref } from 'vue'
+  import { type Ref, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -10,21 +10,21 @@
   import VStack from '@/components/layout/VStack.vue'
   import PostItem from '@/components/posts/PostItem.vue'
   import { getCachedPostDetail, setCachedPostDetail } from '@/data/caches'
-  import { showBackButton, title } from '@/data/title'
+  import { title } from '@/data/title'
   import { useEnv } from '@/utils/env'
   import CommentsView from '@/views/CommentsView.vue'
   import { useRoute } from '#app'
   import { useHead, useLazyAsyncData } from '#imports'
 
+  definePageMeta({ showBackButton: true })
+
   const route = useRoute()
   const { t } = useI18n()
   const slug = route.params.slug
   const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
-
   const error: Ref<string | null> = ref(null)
 
   title.value = t('ui.details.postTitle')
-  showBackButton.value = true
 
   // Fetch post data - track for meta tags
   let postMetaData: BygPost | null = null
@@ -82,10 +82,6 @@
         },
       ],
     }
-  })
-
-  onUnmounted(() => {
-    showBackButton.value = false
   })
 </script>
 

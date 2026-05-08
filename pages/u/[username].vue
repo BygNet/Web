@@ -1,15 +1,17 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
-  import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
+  import { computed, type Ref, ref, watch } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
   import { fetchProfileByUsername } from '@/data/profiles'
-  import { showBackButton, title } from '@/data/title'
+  import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { useRoute } from '#app'
+
+  definePageMeta({ showBackButton: true })
 
   const route = useRoute()
   const usernameParam = (route.params.username as string) || null
@@ -24,7 +26,6 @@
 
   // Set initial head meta
   title.value = 'Profile'
-  showBackButton.value = true
   setHeadMeta({ page: title.value, subtitle: pageSubtitle.value })
 
   async function loadProfile() {
@@ -68,10 +69,6 @@
     },
     { immediate: true }
   )
-
-  onUnmounted(() => {
-    showBackButton.value = false
-  })
 </script>
 
 <template>

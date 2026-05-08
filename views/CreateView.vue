@@ -184,7 +184,7 @@
 </script>
 
 <template>
-  <Modal v-if="!showingPreview">
+  <Modal :visible="showingCreateModal && !showingPreview">
     <div class="createView" :class="{ composer: pickedType != undefined }">
       <VStack v-if="pickedType == undefined">
         <HStack class="autoSpace fullWidth">
@@ -301,7 +301,7 @@
     </div>
   </Modal>
 
-  <Modal v-else>
+  <Modal :visible="showingCreateModal && showingPreview">
     <div class="createPreview">
       <HStack class="fullWidth autoSpace">
         <h2>{{ t('ui.create.previewTitle') }}</h2>

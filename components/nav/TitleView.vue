@@ -5,16 +5,17 @@
 
   import HStack from '@/components/layout/HStack.vue'
   import { taskList } from '@/data/tasks'
-  import { showBackButton, title } from '@/data/title'
+  import { title } from '@/data/title'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
 
   const localePath = useLocalePath()
   const route = useRoute()
+  const router = useRouter()
   const { t } = useI18n()
 
   function goBack() {
-    window.history.back()
+    router.back()
   }
 </script>
 
@@ -22,9 +23,14 @@
   <header class="titleView">
     <HStack class="titleViewContent autoSpace">
       <HStack class="titleMain">
-        <button @click="goBack()" v-if="showBackButton" class="backButton">
+        <button
+          @click="goBack()"
+          v-if="$route.meta.showBackButton"
+          class="backButton"
+        >
           <Icon icon="solar:arrow-left-line-duotone" />
         </button>
+
         <h2>{{ title }}</h2>
 
         <div class="tasksIndicator" v-if="taskList.length > 0">

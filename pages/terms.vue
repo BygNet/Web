@@ -1,21 +1,25 @@
 <script setup lang="ts">
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
-  import { onMounted, onUnmounted, ref } from 'vue'
+  import { onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { showBackButton, title } from '@/data/title'
+  import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
 
   const { t } = useI18n()
+
   setHeadMeta({
     page: t('pages.terms.title'),
     subtitle: t('pages.terms.description'),
   })
+
+  definePageMeta({ showBackButton: true })
+
   title.value = t('pages.terms.title')
-  showBackButton.value = true
+
   const tosHtml = ref('')
 
   onMounted(async () => {
@@ -23,10 +27,6 @@
     const md = await res.text()
     const rendered = await marked.parse(md)
     tosHtml.value = DOMPurify.sanitize(rendered)
-  })
-
-  onUnmounted(() => {
-    showBackButton.value = false
   })
 </script>
 

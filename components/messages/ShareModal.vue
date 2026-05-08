@@ -13,6 +13,7 @@
     activeShareRequest,
     closeShareModal,
     notifyShareCompleted,
+    showingShareModal,
   } from '@/data/share'
   import type { BygMessageShareTarget } from '@/types/messages'
   import { navigateTo } from '#app'
@@ -119,7 +120,7 @@
 </script>
 
 <template>
-  <Modal>
+  <Modal :visible="showingShareModal">
     <VStack class="shareModal">
       <HStack class="fullWidth autoSpace">
         <h2>{{ t('ui.share.title') }}</h2>
