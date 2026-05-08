@@ -164,7 +164,9 @@
         </button>
       </HStack>
     </HStack>
-    <p v-if="pushMessage" class="light pushMessage">{{ pushMessage }}</p>
+    <p v-if="pushMessage" class="light pushMessage">
+      {{ pushMessage }}
+    </p>
 
     <EmptyState v-if="loading" :message="t('common.loadingNotifications')" />
     <ErrorState v-else-if="error" :message="error" />

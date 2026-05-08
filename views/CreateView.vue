@@ -11,24 +11,22 @@
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
   import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
-  import UsernameView from '@/components/posts/UsernameView.vue'
   import { imageReloader, reloader } from '@/data/events'
   import { fetchUserSuggestions } from '@/data/mentions'
   import { taskList } from '@/data/tasks'
   import { showingCreateModal } from '@/data/visibility'
   import type { BygUserSuggestion } from '@/types/mentions'
-  import { formatDate } from '@/utils/formatters'
   import {
     applyMention,
     getMentionContext,
     type MentionContext,
   } from '@/utils/mentions'
+  import MarkdownEditor from '~/components/content/MarkdownEditor.vue'
 
   const config = useRuntimeConfig()
   const { t } = useI18n()
 
   const pickedType: Ref<CreateType | undefined> = ref(undefined)
-  const showingPreview: Ref<boolean> = ref(false)
 
   const postText = ref('')
   const postTitle = ref('')
@@ -184,7 +182,7 @@
 </script>
 
 <template>
-  <Modal :visible="showingCreateModal && !showingPreview">
+  <Modal :visible="showingCreateModal">
     <div class="createView" :class="{ composer: pickedType != undefined }">
       <VStack v-if="pickedType == undefined">
         <HStack class="autoSpace fullWidth">
@@ -223,10 +221,8 @@
         />
 
         <div class="mentionComposer">
-          <textarea
-            ref="postTextarea"
+          <MarkdownEditor
             v-model="postText"
-            :maxlength="charLimit"
             :placeholder="t('ui.create.postBodyPlaceholder')"
             @input="onPostTextareaInteraction"
             @keyup="onPostTextareaInteraction"
@@ -242,22 +238,18 @@
 
         <div class="counter">{{ charCount }} / {{ charLimit }}</div>
 
-        <div v-if="error" class="error">{{ error }}</div>
+        <div v-if="error" class="error">
+          {{ error }}
+        </div>
 
-        <HStack class="fullWidth autoSpace">
-          <button
-            class="prominent"
-            :disabled="loading || charCount === 0"
-            @click="submitPost"
-          >
-            <Icon icon="solar:upload-minimalistic-bold-duotone" />
-            {{ t('ui.create.postButton') }}
-          </button>
-
-          <button class="transparent" @click="showingPreview = true">
-            {{ t('ui.create.previewButton') }}
-          </button>
-        </HStack>
+        <button
+          class="prominent fullWidth"
+          :disabled="loading || charCount === 0"
+          @click="submitPost"
+        >
+          <Icon icon="solar:upload-minimalistic-bold-duotone" />
+          {{ t('ui.create.postButton') }}
+        </button>
       </VStack>
 
       <VStack v-else-if="pickedType == 'image'" class="form">
@@ -287,7 +279,9 @@
           :alt="t('ui.create.previewTitle')"
         />
 
-        <div v-if="error" class="error">{{ error }}</div>
+        <div v-if="error" class="error">
+          {{ error }}
+        </div>
 
         <button
           class="prominent"
@@ -300,35 +294,12 @@
       </VStack>
     </div>
   </Modal>
-
-  <Modal :visible="showingCreateModal && showingPreview">
-    <div class="createPreview">
-      <HStack class="fullWidth autoSpace">
-        <h2>{{ t('ui.create.previewTitle') }}</h2>
-        <button @click="showingPreview = false">
-          <Icon icon="mingcute:arrow-left-fill" />
-        </button>
-      </HStack>
-
-      <VStack class="postPreview">
-        <h3>{{ postTitle }}</h3>
-        <HStack class="autoSpace fullWidth light">
-          <UsernameView
-            :name="auth.user?.username ?? t('ui.create.unknownUser')"
-          />
-          <p>{{ formatDate(new Date().toISOString()) }}</p>
-        </HStack>
-
-        <div class="markdownPreview" v-html="renderedMarkdown"></div>
-      </VStack>
-    </div>
-  </Modal>
 </template>
 
 <style scoped lang="sass">
   @use "@/styles/utils"
 
-  .createView, .createPreview
+  .createView
     @include utils.itemBackground
     border-radius: 2rem
     padding: 1rem
@@ -337,7 +308,7 @@
       min-width: 20rem
       max-width: 100%
 
-  .postPreview, .markdownPreview
+  .postPreview
     width: 100%
     align-items: flex-start
 

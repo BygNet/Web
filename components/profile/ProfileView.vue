@@ -184,7 +184,9 @@
 
         <!-- Bio & Sub -->
         <p class="light">Byg {{ capitalize(user.subscriptionState) }}</p>
-        <p v-if="user.bio" class="bio">{{ user.bio }}</p>
+        <p v-if="user.bio" class="bio">
+          {{ user.bio }}
+        </p>
 
         <!-- Stats -->
         <HStack class="stats">

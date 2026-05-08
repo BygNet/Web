@@ -450,7 +450,9 @@
             </button>
           </form>
 
-          <p v-if="favoriteError" class="favoriteError">{{ favoriteError }}</p>
+          <p v-if="favoriteError" class="favoriteError">
+            {{ favoriteError }}
+          </p>
 
           <button
             v-if="isEditingFavorite"

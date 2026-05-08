@@ -217,7 +217,9 @@
         </template>
       </VStack>
 
-      <p class="light" v-if="statusMessage">{{ statusMessage }}</p>
+      <p class="light" v-if="statusMessage">
+        {{ statusMessage }}
+      </p>
     </VStack>
   </Modal>
 </template>

@@ -127,8 +127,12 @@
       }}
     </button>
 
-    <p v-if="message" class="success">{{ message }}</p>
-    <p v-if="error" class="error">{{ error }}</p>
+    <p v-if="message" class="success">
+      {{ message }}
+    </p>
+    <p v-if="error" class="error">
+      {{ error }}
+    </p>
   </ContentArea>
 </template>
 
