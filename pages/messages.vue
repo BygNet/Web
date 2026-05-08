@@ -1335,8 +1335,6 @@
 
         .starterInput
           width: 100%
-          padding: 0.75rem
-          border-radius: 1rem
 
         :deep(.mentionSuggestions)
           top: calc(100% + 0.35rem)
@@ -1360,10 +1358,8 @@
           flex: 1 1 auto
           min-height: 0
           overflow: auto
-          display: flex
-          flex-direction: column
-          gap: 0.5rem
-          padding-right: 0.15rem
+          gap: 0
+          border-radius: 0
 
     .conversationPane
       width: 100%

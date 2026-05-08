@@ -23,11 +23,7 @@
 </script>
 
 <template>
-  <button
-    class="threadItem"
-    :class="{ prominent: selected }"
-    @click="emit('select')"
-  >
+  <HStack class="threadItem" :class="{ selected }" @click="emit('select')">
     <HStack class="threadRow">
       <VStack class="threadMain">
         <HStack class="threadTitle">
@@ -58,14 +54,24 @@
         {{ formattedDate }}
       </p>
     </HStack>
-  </button>
+  </HStack>
 </template>
 
 <style scoped lang="sass">
   @use "@/styles/themes"
+  @use "@/styles/utils"
 
-  button
+  .threadItem
+    border-radius: 0
+    padding: 0.75rem
     width: 100%
+
+    &:not(.selected)
+      @include utils.listItemBorder
+
+    &.selected
+      border-radius: 1rem
+      background: themes.$accentColor
 
     .threadRow
       width: 100%

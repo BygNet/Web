@@ -127,7 +127,8 @@
     border-radius: 0
 
     &:not(.detailMode)
-      border-bottom: themes.$foregroundColor 0.1rem solid
+      @include utils.listItemBorder
+
       cursor: pointer
       padding: 0.75rem 0
       margin-bottom: 0.5rem

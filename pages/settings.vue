@@ -42,6 +42,11 @@
     manualEntryKey: string
     otpauthUrl: string
   }
+  interface SettingsPage {
+    key: SettingSection
+    icon: string
+    titleKey: string
+  }
 
   const { locale, locales, setLocale, t } = useI18n()
   const pageMeta = PageMetaByPath['/settings']!
@@ -56,6 +61,33 @@
   })
 
   const activeSection: Ref<SettingSection> = ref('profile')
+  const settingsPages: SettingsPage[] = [
+    {
+      key: 'profile',
+      icon: 'solar:user-circle-line-duotone',
+      titleKey: 'ui.settings.sidebarProfile',
+    },
+    {
+      key: 'security',
+      icon: 'solar:shield-keyhole-line-duotone',
+      titleKey: 'ui.settings.sidebarSecurity',
+    },
+    {
+      key: 'subscription',
+      icon: 'solar:crown-star-line-duotone',
+      titleKey: 'ui.settings.sidebarSubscription',
+    },
+    {
+      key: 'interface',
+      icon: 'solar:settings-line-duotone',
+      titleKey: 'ui.settings.sidebarInterface',
+    },
+    {
+      key: 'advanced',
+      icon: 'solar:code-bold-duotone',
+      titleKey: 'Advanced',
+    },
+  ]
   const profile: Ref<BygProfile | null> = ref(null)
   const isLoading: Ref<boolean> = ref(true)
   const isSaving: Ref<boolean> = ref(false)
@@ -307,186 +339,234 @@
 
 <template>
   <ContentArea class="settingsPage">
-    <HStack class="mainContainer">
-      <VStack class="sidebar">
-        <button
-          @click="activeSection = 'profile'"
-          :class="{ prominent: activeSection === 'profile' }"
-          class="menuItem"
-        >
-          <Icon icon="solar:user-circle-line-duotone" />
-          {{ t('ui.settings.sidebarProfile') }}
-        </button>
+    <HStack class="settingsTabBar">
+      <button
+        v-for="page in settingsPages"
+        :key="page.key"
+        @click="activeSection = page.key"
+        :class="{ prominent: activeSection === page.key }"
+        class="menuItem"
+      >
+        <Icon :icon="page.icon" />
+        {{ t(page.titleKey) }}
+      </button>
+    </HStack>
 
-        <button
-          @click="activeSection = 'security'"
-          :class="{ prominent: activeSection === 'security' }"
-          class="menuItem"
-        >
-          <Icon icon="solar:shield-keyhole-line-duotone" />
-          {{ t('ui.settings.sidebarSecurity') }}
-        </button>
+    <VStack class="content">
+      <VStack v-show="activeSection === 'profile'" class="section">
+        <h2>{{ t('ui.settings.editProfile') }}</h2>
 
-        <button
-          @click="activeSection = 'subscription'"
-          :class="{ prominent: activeSection === 'subscription' }"
-          class="menuItem"
-        >
-          <Icon icon="solar:crown-star-line-duotone" />
-          {{ t('ui.settings.sidebarSubscription') }}
-        </button>
+        <div v-if="isLoading" class="loading">
+          {{ t('ui.settings.loading') }}
+        </div>
 
-        <button
-          @click="activeSection = 'interface'"
-          :class="{ prominent: activeSection === 'interface' }"
-          class="menuItem"
-        >
-          <Icon icon="solar:settings-line-duotone" />
-          {{ t('ui.settings.sidebarInterface') }}
-        </button>
+        <VStack v-else class="formContainer">
+          <VStack class="formGroup">
+            <label>{{ t('ui.settings.bioLabel') }}</label>
+            <textarea
+              v-model="bio"
+              :placeholder="t('ui.settings.bioPlaceholder')"
+              rows="3"
+            />
+          </VStack>
 
-        <button
-          @click="activeSection = 'advanced'"
-          :class="{ prominent: activeSection === 'advanced' }"
-          class="menuItem"
-        >
-          <Icon icon="solar:code-bold-duotone" />
-          Advanced
-        </button>
-      </VStack>
+          <VStack class="formGroup">
+            <label>{{ t('ui.settings.avatarUrlLabel') }}</label>
+            <input
+              v-model="avatarUrl"
+              type="url"
+              :placeholder="t('ui.settings.avatarUrlPlaceholder')"
+            />
+            <div v-if="avatarUrl" class="preview">
+              <img :src="avatarUrl" :alt="auth.user?.username" />
+            </div>
+          </VStack>
 
-      <VStack class="content">
-        <VStack v-show="activeSection === 'profile'" class="section">
-          <h2>{{ t('ui.settings.editProfile') }}</h2>
+          <VStack class="formGroup">
+            <label>{{ t('ui.settings.bannerUrlLabel') }}</label>
+            <input
+              v-model="bannerUrl"
+              type="url"
+              :placeholder="t('ui.settings.bannerUrlPlaceholder')"
+            />
+            <div v-if="bannerUrl" class="preview">
+              <img :src="bannerUrl" :alt="auth.user?.username" />
+            </div>
+          </VStack>
 
-          <div v-if="isLoading" class="loading">
-            {{ t('ui.settings.loading') }}
+          <VStack v-if="canEditProfileColor" class="formGroup">
+            <label>{{ t('ui.settings.profileAccentLabel') }}</label>
+            <HStack class="colorRow">
+              <input
+                v-model="colorPickerValue"
+                type="color"
+                class="colorInput"
+              />
+              <input
+                v-model="color"
+                type="text"
+                placeholder="#e875b6"
+                maxlength="7"
+              />
+              <button @click="color = ''" type="button">
+                {{ t('ui.settings.reset') }}
+              </button>
+            </HStack>
+            <p class="light">
+              {{ t('ui.settings.profileAccentHelp') }}
+            </p>
+          </VStack>
+
+          <VStack v-else class="formGroup">
+            <label>{{ t('ui.settings.profileAccentLabel') }}</label>
+            <p class="light">
+              {{ t('ui.settings.profileAccentLocked') }}
+            </p>
+          </VStack>
+
+          <VStack v-if="previewUser" class="formGroup previewGroup">
+            <label>{{ t('ui.settings.preview') }}</label>
+            <div
+              class="profileThemePreview"
+              :class="{ themedProfile: !!color }"
+              :style="previewThemeStyle ?? undefined"
+            >
+              <ProfileView
+                :user="previewUser"
+                :follower-count="profile?.followerCount"
+                :following-count="profile?.followingCount"
+                :is-own-profile="true"
+                :apply-theme-to-document="false"
+                :show-actions="false"
+              />
+            </div>
+          </VStack>
+
+          <div v-if="saveMessage" :class="['message', { success: true }]">
+            {{ saveMessage }}
           </div>
 
-          <VStack v-else class="formContainer">
-            <VStack class="formGroup">
-              <label>{{ t('ui.settings.bioLabel') }}</label>
-              <textarea
-                v-model="bio"
-                :placeholder="t('ui.settings.bioPlaceholder')"
-                rows="3"
-              />
-            </VStack>
+          <button @click="saveProfile" :disabled="isSaving" class="saveButton">
+            <Icon icon="solar:diskette-line-duotone" />
+            {{
+              isSaving ? t('ui.settings.saving') : t('ui.settings.saveChanges')
+            }}
+          </button>
+        </VStack>
+      </VStack>
 
-            <VStack class="formGroup">
-              <label>{{ t('ui.settings.avatarUrlLabel') }}</label>
-              <input
-                v-model="avatarUrl"
-                type="url"
-                :placeholder="t('ui.settings.avatarUrlPlaceholder')"
-              />
-              <div v-if="avatarUrl" class="preview">
-                <img :src="avatarUrl" :alt="auth.user?.username" />
-              </div>
-            </VStack>
+      <VStack v-show="activeSection === 'security'" class="section">
+        <h2>{{ t('ui.settings.securityTitle') }}</h2>
 
-            <VStack class="formGroup">
-              <label>{{ t('ui.settings.bannerUrlLabel') }}</label>
-              <input
-                v-model="bannerUrl"
-                type="url"
-                :placeholder="t('ui.settings.bannerUrlPlaceholder')"
-              />
-              <div v-if="bannerUrl" class="preview">
-                <img :src="bannerUrl" :alt="auth.user?.username" />
-              </div>
-            </VStack>
-
-            <VStack v-if="canEditProfileColor" class="formGroup">
-              <label>{{ t('ui.settings.profileAccentLabel') }}</label>
-              <HStack class="colorRow">
-                <input
-                  v-model="colorPickerValue"
-                  type="color"
-                  class="colorInput"
-                />
-                <input
-                  v-model="color"
-                  type="text"
-                  placeholder="#e875b6"
-                  maxlength="7"
-                />
-                <button @click="color = ''" type="button">
-                  {{ t('ui.settings.reset') }}
-                </button>
-              </HStack>
+        <VStack class="securityCard">
+          <HStack class="securityHeader">
+            <Icon icon="solar:letter-line-duotone" />
+            <VStack class="noSpace">
+              <h3>{{ t('ui.settings.emailVerification') }}</h3>
               <p class="light">
-                {{ t('ui.settings.profileAccentHelp') }}
+                {{
+                  isEmailVerified
+                    ? t('ui.settings.emailVerified')
+                    : t('ui.settings.emailPending')
+                }}
               </p>
             </VStack>
+          </HStack>
 
-            <VStack v-else class="formGroup">
-              <label>{{ t('ui.settings.profileAccentLabel') }}</label>
-              <p class="light">
-                {{ t('ui.settings.profileAccentLocked') }}
-              </p>
-            </VStack>
+          <template v-if="!isEmailVerified">
+            <label>
+              {{ t('ui.settings.verificationCode') }}
+              <input
+                v-model="emailCode"
+                type="text"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                maxlength="6"
+                :placeholder="t('ui.settings.verificationPlaceholder')"
+              />
+            </label>
 
-            <VStack v-if="previewUser" class="formGroup previewGroup">
-              <label>{{ t('ui.settings.preview') }}</label>
-              <div
-                class="profileThemePreview"
-                :class="{ themedProfile: !!color }"
-                :style="previewThemeStyle ?? undefined"
+            <HStack class="actionRow">
+              <button
+                class="prominent"
+                @click="verifyEmail"
+                :disabled="isVerifyingEmail"
               >
-                <ProfileView
-                  :user="previewUser"
-                  :follower-count="profile?.followerCount"
-                  :following-count="profile?.followingCount"
-                  :is-own-profile="true"
-                  :apply-theme-to-document="false"
-                  :show-actions="false"
-                />
-              </div>
-            </VStack>
+                {{
+                  isVerifyingEmail
+                    ? t('ui.settings.verifying')
+                    : t('ui.settings.verifyEmail')
+                }}
+              </button>
 
-            <div v-if="saveMessage" :class="['message', { success: true }]">
-              {{ saveMessage }}
-            </div>
-
-            <button
-              @click="saveProfile"
-              :disabled="isSaving"
-              class="saveButton"
-            >
-              <Icon icon="solar:diskette-line-duotone" />
-              {{
-                isSaving
-                  ? t('ui.settings.saving')
-                  : t('ui.settings.saveChanges')
-              }}
-            </button>
-          </VStack>
+              <button
+                @click="resendVerificationEmail"
+                :disabled="isResendingEmail"
+              >
+                {{
+                  isResendingEmail
+                    ? t('ui.settings.sending')
+                    : t('ui.settings.resendCode')
+                }}
+              </button>
+            </HStack>
+          </template>
         </VStack>
 
-        <VStack v-show="activeSection === 'security'" class="section">
-          <h2>{{ t('ui.settings.securityTitle') }}</h2>
+        <VStack class="securityCard">
+          <HStack class="securityHeader">
+            <Icon icon="solar:shield-keyhole-line-duotone" />
+            <VStack class="noSpace">
+              <h3>{{ t('ui.settings.authenticatorApp') }}</h3>
+              <p class="light">
+                {{
+                  auth.user?.twoFactorEnabled
+                    ? t('ui.settings.authenticatorEnabled')
+                    : t('ui.settings.authenticatorDisabled')
+                }}
+              </p>
+            </VStack>
+          </HStack>
 
-          <VStack class="securityCard">
-            <HStack class="securityHeader">
-              <Icon icon="solar:letter-line-duotone" />
-              <VStack class="noSpace">
-                <h3>{{ t('ui.settings.emailVerification') }}</h3>
-                <p class="light">
-                  {{
-                    isEmailVerified
-                      ? t('ui.settings.emailVerified')
-                      : t('ui.settings.emailPending')
-                  }}
-                </p>
-              </VStack>
-            </HStack>
+          <p class="description">
+            {{ t('ui.settings.authenticatorDescription') }}
+          </p>
 
-            <template v-if="!isEmailVerified">
+          <template v-if="auth.user?.twoFactorEnabled">
+            <button @click="disableTwoFactor" :disabled="isSavingTwoFactor">
+              {{
+                isSavingTwoFactor
+                  ? t('ui.settings.disabling')
+                  : t('ui.settings.disable2fa')
+              }}
+            </button>
+          </template>
+
+          <template v-else>
+            <button
+              @click="loadTwoFactorSetup"
+              :disabled="isLoadingTwoFactorSetup"
+            >
+              <Icon icon="solar:key-minimalistic-line-duotone" />
+              {{
+                isLoadingTwoFactorSetup
+                  ? t('ui.settings.generatingKey')
+                  : twoFactorSetup
+                    ? t('ui.settings.regenerateSetupKey')
+                    : t('ui.settings.generateSetupKey')
+              }}
+            </button>
+
+            <VStack v-if="twoFactorSetup" class="setupBox">
               <label>
-                {{ t('ui.settings.verificationCode') }}
+                {{ t('ui.settings.manualEntryKey') }}
+                <input :value="twoFactorSetup.manualEntryKey" readonly />
+              </label>
+
+              <label>
+                {{ t('ui.settings.authenticatorCode') }}
                 <input
-                  v-model="emailCode"
+                  v-model="twoFactorCode"
                   type="text"
                   inputmode="numeric"
                   autocomplete="one-time-code"
@@ -495,208 +575,116 @@
                 />
               </label>
 
-              <HStack class="actionRow">
-                <button
-                  class="prominent"
-                  @click="verifyEmail"
-                  :disabled="isVerifyingEmail"
-                >
-                  {{
-                    isVerifyingEmail
-                      ? t('ui.settings.verifying')
-                      : t('ui.settings.verifyEmail')
-                  }}
-                </button>
+              <a :href="twoFactorSetup.otpauthUrl" class="prominentLink">
+                {{ t('ui.settings.openAuthenticatorApp') }}
+              </a>
 
-                <button
-                  @click="resendVerificationEmail"
-                  :disabled="isResendingEmail"
-                >
-                  {{
-                    isResendingEmail
-                      ? t('ui.settings.sending')
-                      : t('ui.settings.resendCode')
-                  }}
-                </button>
-              </HStack>
-            </template>
-          </VStack>
+              <button
+                class="prominent"
+                @click="enableTwoFactor"
+                :disabled="isSavingTwoFactor"
+              >
+                <Icon icon="solar:lock-keyhole-line-duotone" />
+                {{
+                  isSavingTwoFactor
+                    ? t('ui.settings.enabling2fa')
+                    : t('ui.settings.enable2fa')
+                }}
+              </button>
+            </VStack>
+          </template>
+        </VStack>
 
-          <VStack class="securityCard">
-            <HStack class="securityHeader">
-              <Icon icon="solar:shield-keyhole-line-duotone" />
+        <p v-if="securityMessage" class="message success">
+          {{ securityMessage }}
+        </p>
+        <p v-if="securityError" class="message">
+          {{ securityError }}
+        </p>
+      </VStack>
+
+      <VStack v-show="activeSection === 'subscription'" class="section">
+        <h2>{{ t('ui.settings.subscriptionTitle') }}</h2>
+
+        <VStack v-if="profile" class="subscriptionInfo">
+          <VStack class="subscriptionCard">
+            <HStack class="subscriptionHeader">
+              <Icon
+                class="subscriptionIcon"
+                icon="solar:crown-star-line-duotone"
+              />
+
               <VStack class="noSpace">
-                <h3>{{ t('ui.settings.authenticatorApp') }}</h3>
+                <h3>{{ t('ui.settings.currentPlan') }}</h3>
                 <p class="light">
                   {{
-                    auth.user?.twoFactorEnabled
-                      ? t('ui.settings.authenticatorEnabled')
-                      : t('ui.settings.authenticatorDisabled')
+                    capitalize(profile.user.subscriptionState).replace(
+                      '_legacy',
+                      ''
+                    )
                   }}
                 </p>
               </VStack>
             </HStack>
 
             <p class="description">
-              {{ t('ui.settings.authenticatorDescription') }}
+              {{ t('ui.settings.upgradeDescription') }}
             </p>
 
-            <template v-if="auth.user?.twoFactorEnabled">
-              <button @click="disableTwoFactor" :disabled="isSavingTwoFactor">
-                {{
-                  isSavingTwoFactor
-                    ? t('ui.settings.disabling')
-                    : t('ui.settings.disable2fa')
-                }}
-              </button>
-            </template>
-
-            <template v-else>
-              <button
-                @click="loadTwoFactorSetup"
-                :disabled="isLoadingTwoFactorSetup"
-              >
-                <Icon icon="solar:key-minimalistic-line-duotone" />
-                {{
-                  isLoadingTwoFactorSetup
-                    ? t('ui.settings.generatingKey')
-                    : twoFactorSetup
-                      ? t('ui.settings.regenerateSetupKey')
-                      : t('ui.settings.generateSetupKey')
-                }}
-              </button>
-
-              <VStack v-if="twoFactorSetup" class="setupBox">
-                <label>
-                  {{ t('ui.settings.manualEntryKey') }}
-                  <input :value="twoFactorSetup.manualEntryKey" readonly />
-                </label>
-
-                <label>
-                  {{ t('ui.settings.authenticatorCode') }}
-                  <input
-                    v-model="twoFactorCode"
-                    type="text"
-                    inputmode="numeric"
-                    autocomplete="one-time-code"
-                    maxlength="6"
-                    :placeholder="t('ui.settings.verificationPlaceholder')"
-                  />
-                </label>
-
-                <a :href="twoFactorSetup.otpauthUrl" class="prominentLink">
-                  {{ t('ui.settings.openAuthenticatorApp') }}
-                </a>
-
-                <button
-                  class="prominent"
-                  @click="enableTwoFactor"
-                  :disabled="isSavingTwoFactor"
-                >
-                  <Icon icon="solar:lock-keyhole-line-duotone" />
-                  {{
-                    isSavingTwoFactor
-                      ? t('ui.settings.enabling2fa')
-                      : t('ui.settings.enable2fa')
-                  }}
-                </button>
-              </VStack>
-            </template>
+            <button disabled class="upgradeButton">
+              <Icon icon="solar:crown-star-line-duotone" />
+              {{ t('ui.settings.upgradeComingSoon') }}
+            </button>
           </VStack>
-
-          <p v-if="securityMessage" class="message success">
-            {{ securityMessage }}
-          </p>
-          <p v-if="securityError" class="message">
-            {{ securityError }}
-          </p>
-        </VStack>
-
-        <VStack v-show="activeSection === 'subscription'" class="section">
-          <h2>{{ t('ui.settings.subscriptionTitle') }}</h2>
-
-          <VStack v-if="profile" class="subscriptionInfo">
-            <VStack class="subscriptionCard">
-              <HStack class="subscriptionHeader">
-                <Icon
-                  class="subscriptionIcon"
-                  icon="solar:crown-star-line-duotone"
-                />
-
-                <VStack class="noSpace">
-                  <h3>{{ t('ui.settings.currentPlan') }}</h3>
-                  <p class="light">
-                    {{
-                      capitalize(profile.user.subscriptionState).replace(
-                        '_legacy',
-                        ''
-                      )
-                    }}
-                  </p>
-                </VStack>
-              </HStack>
-
-              <p class="description">
-                {{ t('ui.settings.upgradeDescription') }}
-              </p>
-
-              <button disabled class="upgradeButton">
-                <Icon icon="solar:crown-star-line-duotone" />
-                {{ t('ui.settings.upgradeComingSoon') }}
-              </button>
-            </VStack>
-          </VStack>
-        </VStack>
-
-        <VStack v-show="activeSection === 'interface'" class="section">
-          <h2>{{ t('ui.settings.interfaceTitle') }}</h2>
-
-          <VStack class="interfaceCard">
-            <HStack class="interfaceHeader">
-              <Icon icon="solar:global-line-duotone" />
-              <VStack class="noSpace">
-                <h3>{{ t('ui.settings.languageTitle') }}</h3>
-                <p class="light">{{ t('ui.settings.languageDescription') }}</p>
-              </VStack>
-            </HStack>
-
-            <VStack class="languageGrid">
-              <button
-                v-for="lang in locales"
-                :key="lang.code"
-                @click="setLocale(lang.code)"
-                :class="{ prominent: locale === lang.code }"
-                class="languageButton"
-              >
-                {{ lang.name }}
-              </button>
-            </VStack>
-          </VStack>
-        </VStack>
-
-        <VStack v-show="activeSection === 'advanced'" class="section">
-          <h2>Advanced Settings</h2>
-          <p>Developer settings and tools.</p>
-
-          <input name="go" v-model="goToUrl" placeholder="Go to..." />
-          <HStack>
-            <NuxtLink :to="goToUrl">
-              <button>Go (DIRECT)</button>
-            </NuxtLink>
-
-            <SafeLink :to="goToUrl">
-              <button class="prominent">Go (LOCALE)</button>
-            </SafeLink>
-          </HStack>
-
-          <h3>WARNING: Destructive Actions</h3>
-          <button style="color: red" @click="shutDownByg()">
-            Shut Down Byg
-          </button>
-          <p v-if="shuttingDownMessage">{{ shuttingDownMessage }}</p>
         </VStack>
       </VStack>
-    </HStack>
+
+      <VStack v-show="activeSection === 'interface'" class="section">
+        <h2>{{ t('ui.settings.interfaceTitle') }}</h2>
+
+        <VStack class="interfaceCard">
+          <HStack class="interfaceHeader">
+            <Icon icon="solar:global-line-duotone" />
+            <VStack class="noSpace">
+              <h3>{{ t('ui.settings.languageTitle') }}</h3>
+              <p class="light">{{ t('ui.settings.languageDescription') }}</p>
+            </VStack>
+          </HStack>
+
+          <VStack class="languageGrid">
+            <button
+              v-for="lang in locales"
+              :key="lang.code"
+              @click="setLocale(lang.code)"
+              :class="{ prominent: locale === lang.code }"
+              class="languageButton"
+            >
+              {{ lang.name }}
+            </button>
+          </VStack>
+        </VStack>
+      </VStack>
+
+      <VStack v-show="activeSection === 'advanced'" class="section">
+        <h2>Advanced Settings</h2>
+        <p>Developer settings and tools.</p>
+
+        <input name="go" v-model="goToUrl" placeholder="Go to..." />
+        <HStack>
+          <NuxtLink :to="goToUrl">
+            <button>Go (DIRECT)</button>
+          </NuxtLink>
+
+          <SafeLink :to="goToUrl">
+            <button class="prominent">Go (LOCALE)</button>
+          </SafeLink>
+        </HStack>
+
+        <h3>WARNING: Destructive Actions</h3>
+        <button style="color: red" @click="shutDownByg()">Shut Down Byg</button>
+        <p v-if="shuttingDownMessage">{{ shuttingDownMessage }}</p>
+      </VStack>
+    </VStack>
   </ContentArea>
 </template>
 
@@ -704,24 +692,20 @@
   @use "@/styles/utils"
   @use "@/styles/themes"
 
-  .mainContainer
+  .settingsTabBar
     width: 100%
-    gap: 0.5rem
-    align-items: flex-start
+    flex-wrap: nowrap
+    overflow: scroll
+    padding: 0.5rem 0.5rem 1.5rem
 
-  .sidebar
-    gap: 0.5rem
-    min-width: 14rem
-    flex-grow: 1
-
-    .menuItem
-      width: 100%
-      justify-content: flex-start
+    button
+      text-wrap: nowrap
 
   .content
     @include utils.itemBackground
     min-width: 15rem
     flex-grow: 2
+    width: 100%
 
   .section
     width: 100%
