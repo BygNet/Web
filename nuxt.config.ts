@@ -128,7 +128,7 @@ export default defineNuxtConfig({
         },
         { name: 'mobile-web-app-capable', content: 'yes' },
         { property: 'og:image', content: '/logos/Byg2-6Preview.jpg' },
-        { property: 'og:url', content: 'https://byg.a35.dev/' },
+        { property: 'og:url', content: 'https://byg.gg/' },
         { property: 'og:type', content: 'website' },
         { name: 'twitter:card', content: 'summary_large_image' },
       ],
@@ -147,11 +147,7 @@ export default defineNuxtConfig({
         },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://cdn.jsdelivr.net/npm/ab-tests@1.1.2/assets/fonts/satoshi/satoshi.css',
+          href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap',
         },
         {
           rel: 'stylesheet',
