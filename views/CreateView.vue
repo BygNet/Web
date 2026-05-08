@@ -182,9 +182,9 @@
 </script>
 
 <template>
-  <Modal :visible="showingCreateModal">
+  <Modal class="createViewModal" :visible="showingCreateModal">
     <div class="createView" :class="{ composer: pickedType != undefined }">
-      <VStack v-if="pickedType == undefined">
+      <VStack v-if="pickedType == undefined" class="fullWidth">
         <HStack class="autoSpace fullWidth">
           <h2>{{ t('ui.create.title') }}</h2>
 
@@ -297,10 +297,11 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+  @use "@/styles/themes"
+  @use "@/styles/variables"
 
   .createView
-    @include utils.itemBackground
+    background: themes.$foregroundColor
     border-radius: 2rem
     padding: 1rem
 
@@ -317,13 +318,15 @@
 
   .typePicker
     gap: 0.5rem
+    width: 100%
 
     .type
-      @include utils.itemBackground
-      --cornerRadius: 1.25rem
-
+      background: themes.$foregroundColor
+      padding: 0.75rem
+      border-radius: 1.25rem
       cursor: pointer
       font-size: large
+      flex-grow: 1
 
       svg
         width: 3rem
@@ -336,14 +339,12 @@
   textarea
     min-height: 10rem
 
+  textarea, input
+    width: 100%
+
   .mentionComposer
     width: 100%
     gap: 0.25rem
-
-  textarea, input
-    --padding: 0.25rem
-
-    @include utils.maxPaddedWidth
 
   .counter
     text-align: right
@@ -354,4 +355,23 @@
     max-width: 10rem
     max-height: 10rem
     min-height: 2rem
+
+  @media (max-width: variables.$mobileWidth)
+    .createView
+      background: themes.$backgroundColor
+      width: 100%
+      border-bottom-left-radius: 0
+      border-bottom-right-radius: 0
+      padding-bottom: max(1rem, calc(1rem + env(safe-area-inset-bottom)))
+
+    .createViewModal
+      z-index: 10000
+      justify-content: flex-end
+      padding: 0
+
+      :deep(.fullScreenCoverContent), :deep(.modalContent)
+        width: 100%
+        max-width: 100%
+        border-radius: 0
+        margin: 0
 </style>

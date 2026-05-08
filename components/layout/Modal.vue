@@ -1,13 +1,16 @@
 <script setup lang="ts">
   import FullscreenCover from '@/components/layout/FullscreenCover.vue'
+
   defineProps<{
     visible?: boolean
   }>()
+
+  const attrs = useAttrs()
 </script>
 
 <template>
   <Transition name="modal" appear>
-    <FullscreenCover v-if="visible !== false" class="modalCover">
+    <FullscreenCover v-if="visible !== false" class="modalCover" v-bind="attrs">
       <div class="modalContent">
         <slot />
       </div>
