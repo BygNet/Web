@@ -49,7 +49,7 @@
     try {
       const parsed = new URL(url)
 
-      let videoId: string | null = null
+      let videoId: string | null
 
       if (parsed.hostname.includes('youtu.be')) {
         videoId = parsed.pathname.slice(1)
@@ -119,10 +119,11 @@
     }
   }
 
+  onBeforeUnmount(() => {
+    postYoutubeCommand('pauseVideo')
+  })
+
   function platformIcon(platform: string): string {
-    onBeforeUnmount(() => {
-      postYoutubeCommand('pauseVideo')
-    })
     const normalized = platform.trim().toLowerCase()
 
     switch (normalized) {
