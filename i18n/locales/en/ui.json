@@ -88,6 +88,13 @@
       "sidebarInterface": "Interface",
       "editProfile": "Edit Profile",
       "loading": "Loading...",
+      "displayNameLabel": "Display Name",
+      "displayNamePlaceholder": "How your name should appear",
+      "pronounsLabel": "Pronouns",
+      "pronounsPlaceholder": "e.g. she/her, he/him, they/them",
+      "songLinkUrlLabel": "song.link URL",
+      "songLinkUrlPlaceholder": "https://song.link/...",
+      "songLinkUrlHelp": "Use a song.link or odesli.co link to show your profile music card.",
       "bioLabel": "Bio",
       "bioPlaceholder": "Tell us about yourself...",
       "avatarUrlLabel": "Avatar URL",
@@ -101,6 +108,7 @@
       "preview": "Preview",
       "saveSuccess": "Profile saved successfully!",
       "saveFailed": "Failed to save profile",
+      "saveInvalidSongLink": "Song link must be a valid song.link or odesli.co URL",
       "savePremiumLocked": "Profile colors are only available for paid plans",
       "saveChanges": "Save Changes",
       "saving": "Saving...",
@@ -222,7 +230,13 @@
       "follow": "Follow",
       "following": "Following",
       "chat": "Chat",
-      "joinedLabel": "Joined {date}"
+      "joinedLabel": "Joined {date}",
+      "pronounsLabel": "Pronouns",
+      "songLoading": "Loading song...",
+      "songOpen": "Open song link",
+      "songLinksMenuTitle": "Open in",
+      "openSongLink": "Open on song.link",
+      "openOnPlatform": "Open on {platform}"
     },
     "nav": {
       "openAlerts": "Open alerts"

@@ -105,6 +105,9 @@
   const shuttingDownMessage = ref<string | null>(null)
 
   const bio: Ref<string> = ref('')
+  const displayName: Ref<string> = ref('')
+  const pronouns: Ref<string> = ref('')
+  const songLinkUrl: Ref<string> = ref('')
   const avatarUrl: Ref<string> = ref('')
   const bannerUrl: Ref<string> = ref('')
   const color: Ref<string> = ref('')
@@ -139,6 +142,9 @@
 
     return {
       ...currentProfile.user,
+      displayName: displayName.value || null,
+      pronouns: pronouns.value || null,
+      songLinkUrl: songLinkUrl.value || null,
       bio: bio.value || null,
       avatarUrl: avatarUrl.value || null,
       bannerUrl: bannerUrl.value || null,
@@ -169,6 +175,9 @@
       profile.value = await fetchCurrentUserProfile(options)
       if (!profile.value) return
 
+      displayName.value = profile.value.user.displayName || ''
+      pronouns.value = profile.value.user.pronouns || ''
+      songLinkUrl.value = profile.value.user.songLinkUrl || ''
       bio.value = profile.value.user.bio || ''
       avatarUrl.value = profile.value.user.avatarUrl || ''
       bannerUrl.value = profile.value.user.bannerUrl || ''
@@ -186,6 +195,9 @@
       const res = await api('/update-profile', {
         method: 'POST',
         body: JSON.stringify({
+          displayName: displayName.value || null,
+          pronouns: pronouns.value || null,
+          songLinkUrl: songLinkUrl.value || null,
           bio: bio.value || null,
           avatarUrl: avatarUrl.value || null,
           bannerUrl: bannerUrl.value || null,
@@ -199,6 +211,8 @@
           saveMessage.value = null
         }, 3000)
         await loadProfile({ force: true })
+      } else if (res.status === 400) {
+        saveMessage.value = t('ui.settings.saveInvalidSongLink')
       } else if (res.status === 403) {
         saveMessage.value = t('ui.settings.savePremiumLocked')
       } else {
@@ -361,6 +375,36 @@
         </div>
 
         <VStack v-else class="formContainer">
+          <VStack class="formGroup">
+            <label>{{ t('ui.settings.displayNameLabel') }}</label>
+            <input
+              v-model="displayName"
+              type="text"
+              :placeholder="t('ui.settings.displayNamePlaceholder')"
+            />
+          </VStack>
+
+          <VStack class="formGroup">
+            <label>{{ t('ui.settings.pronounsLabel') }}</label>
+            <input
+              v-model="pronouns"
+              type="text"
+              :placeholder="t('ui.settings.pronounsPlaceholder')"
+            />
+          </VStack>
+
+          <VStack class="formGroup">
+            <label>{{ t('ui.settings.songLinkUrlLabel') }}</label>
+            <input
+              v-model="songLinkUrl"
+              type="url"
+              :placeholder="t('ui.settings.songLinkUrlPlaceholder')"
+            />
+            <p class="light">
+              {{ t('ui.settings.songLinkUrlHelp') }}
+            </p>
+          </VStack>
+
           <VStack class="formGroup">
             <label>{{ t('ui.settings.bioLabel') }}</label>
             <textarea

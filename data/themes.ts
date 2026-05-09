@@ -87,9 +87,38 @@ export const BygThemes: BygTheme[] = [
   },
 ]
 
+function clearThemeClasses(): void {
+  if (!html) return
+
+  for (const theme of BygThemes) {
+    html.classList.remove(theme.key)
+  }
+}
+
+function getResolvedThemeKey(key: string): string {
+  if (key !== 'auto') {
+    return key
+  }
+
+  return systemPrefersDark.value ? 'dark' : 'light'
+}
+
 if (systemThemeQuery) {
   systemThemeQuery.addEventListener('change', event => {
     systemPrefersDark.value = event.matches
+
+    if (currentThemeKey.value === 'auto') {
+      clearThemeClasses()
+
+      if (html) {
+        html.classList.add(event.matches ? 'dark' : 'light')
+        html.classList.add('auto')
+      }
+
+      document.documentElement.style.colorScheme = event.matches
+        ? 'dark'
+        : 'light'
+    }
   })
 }
 
@@ -110,8 +139,17 @@ export function loadTheme(): void {
 
   const savedTheme = cookie.value ?? 'auto'
 
+  clearThemeClasses()
+
   if (html) {
+    html.classList.add(getResolvedThemeKey(savedTheme))
     html.classList.add(savedTheme)
+  }
+
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.colorScheme = isThemeDark(savedTheme)
+      ? 'dark'
+      : 'light'
   }
 
   currentThemeKey.value = savedTheme
@@ -120,18 +158,24 @@ export function loadTheme(): void {
 export function setTheme(theme: BygTheme): void {
   if (typeof document === 'undefined') return
 
-  // remove old class
-  if (html && currentThemeKey.value) {
-    html.classList.remove(currentThemeKey.value)
-  }
+  clearThemeClasses()
 
-  // set cookie (1 year)
-  document.cookie = `bygTheme=${theme.key}; path=/; max-age=31536000`
+  const cookie = useCookie<string>('bygTheme', {
+    maxAge: 60 * 60 * 24 * 365,
+    path: '/',
+  })
+
+  cookie.value = theme.key
 
   // apply instantly
   if (html) {
+    html.classList.add(getResolvedThemeKey(theme.key))
     html.classList.add(theme.key)
   }
+
+  document.documentElement.style.colorScheme = isThemeDark(theme.key)
+    ? 'dark'
+    : 'light'
 
   currentThemeKey.value = theme.key
 }

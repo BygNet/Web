@@ -88,6 +88,13 @@
       "sidebarInterface": "Interfaz",
       "editProfile": "Editar perfil",
       "loading": "Cargando...",
+      "displayNameLabel": "Nombre para mostrar",
+      "displayNamePlaceholder": "Cómo quieres que aparezca tu nombre",
+      "pronounsLabel": "Pronombres",
+      "pronounsPlaceholder": "ej. ella, él, elle",
+      "songLinkUrlLabel": "URL de song.link",
+      "songLinkUrlPlaceholder": "https://song.link/...",
+      "songLinkUrlHelp": "Usa un enlace de song.link u odesli.co para mostrar tu tarjeta de música.",
       "bioLabel": "Biografía",
       "bioPlaceholder": "Cuéntanos sobre ti...",
       "avatarUrlLabel": "URL del avatar",
@@ -101,6 +108,7 @@
       "preview": "Vista previa",
       "saveSuccess": "¡Perfil guardado correctamente!",
       "saveFailed": "No se pudo guardar el perfil",
+      "saveInvalidSongLink": "El enlace debe ser una URL válida de song.link u odesli.co",
       "savePremiumLocked": "Los colores de perfil solo están disponibles en planes de pago",
       "saveChanges": "Guardar cambios",
       "saving": "Guardando...",
@@ -222,7 +230,13 @@
       "follow": "Seguir",
       "following": "Siguiendo",
       "chat": "Chat",
-      "joinedLabel": "Se unió en {date}"
+      "joinedLabel": "Se unió en {date}",
+      "pronounsLabel": "Pronombres",
+      "songLoading": "Cargando canción...",
+      "songOpen": "Abrir enlace de canción",
+      "songLinksMenuTitle": "Abrir en",
+      "openSongLink": "Abrir en song.link",
+      "openOnPlatform": "Abrir en {platform}"
     },
     "nav": {
       "openAlerts": "Abrir alertas"

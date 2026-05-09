@@ -88,6 +88,13 @@
       "sidebarInterface": "Interface",
       "editProfile": "Modifier le profil",
       "loading": "Chargement...",
+      "displayNameLabel": "Nom d'affichage",
+      "displayNamePlaceholder": "Comment votre nom doit apparaître",
+      "pronounsLabel": "Pronoms",
+      "pronounsPlaceholder": "ex. elle, il, iel",
+      "songLinkUrlLabel": "URL song.link",
+      "songLinkUrlPlaceholder": "https://song.link/...",
+      "songLinkUrlHelp": "Utilisez un lien song.link ou odesli.co pour afficher votre carte musicale.",
       "bioLabel": "Bio",
       "bioPlaceholder": "Parlez-nous de vous...",
       "avatarUrlLabel": "URL de l'avatar",
@@ -101,6 +108,7 @@
       "preview": "Aperçu",
       "saveSuccess": "Profil enregistré avec succès !",
       "saveFailed": "Échec de l'enregistrement du profil",
+      "saveInvalidSongLink": "Le lien doit être une URL song.link ou odesli.co valide",
       "savePremiumLocked": "Les couleurs de profil ne sont disponibles que pour les formules payantes",
       "saveChanges": "Enregistrer les modifications",
       "saving": "Enregistrement...",
@@ -222,7 +230,13 @@
       "follow": "Suivre",
       "following": "Abonné",
       "chat": "Chat",
-      "joinedLabel": "Inscrit en {date}"
+      "joinedLabel": "Inscrit en {date}",
+      "pronounsLabel": "Pronoms",
+      "songLoading": "Chargement du morceau...",
+      "songOpen": "Ouvrir le lien musical",
+      "songLinksMenuTitle": "Ouvrir dans",
+      "openSongLink": "Ouvrir sur song.link",
+      "openOnPlatform": "Ouvrir sur {platform}"
     },
     "nav": {
       "openAlerts": "Ouvrir les alertes"

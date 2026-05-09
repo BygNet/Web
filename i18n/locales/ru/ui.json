@@ -88,6 +88,13 @@
       "sidebarInterface": "Интерфейс",
       "editProfile": "Редактировать профиль",
       "loading": "Загрузка...",
+      "displayNameLabel": "Отображаемое имя",
+      "displayNamePlaceholder": "Как ваше имя должно отображаться",
+      "pronounsLabel": "Местоимения",
+      "pronounsPlaceholder": "например, она/её, он/его, они/их",
+      "songLinkUrlLabel": "URL song.link",
+      "songLinkUrlPlaceholder": "https://song.link/...",
+      "songLinkUrlHelp": "Используйте ссылку song.link или odesli.co для музыкальной карточки профиля.",
       "bioLabel": "О себе",
       "bioPlaceholder": "Расскажите о себе...",
       "avatarUrlLabel": "URL аватара",
@@ -101,6 +108,7 @@
       "preview": "Предпросмотр",
       "saveSuccess": "Профиль успешно сохранён!",
       "saveFailed": "Не удалось сохранить профиль",
+      "saveInvalidSongLink": "Ссылка должна быть корректным URL song.link или odesli.co",
       "savePremiumLocked": "Цвета профиля доступны только в платных планах",
       "saveChanges": "Сохранить изменения",
       "saving": "Сохранение...",
@@ -222,7 +230,13 @@
       "follow": "Подписаться",
       "following": "Вы подписаны",
       "chat": "Чат",
-      "joinedLabel": "Присоединился в {date}"
+      "joinedLabel": "Присоединился в {date}",
+      "pronounsLabel": "Местоимения",
+      "songLoading": "Загрузка трека...",
+      "songOpen": "Открыть музыкальную ссылку",
+      "songLinksMenuTitle": "Открыть в",
+      "openSongLink": "Открыть на song.link",
+      "openOnPlatform": "Открыть в {platform}"
     },
     "nav": {
       "openAlerts": "Открыть уведомления"

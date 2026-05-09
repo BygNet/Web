@@ -31,7 +31,7 @@
 </script>
 
 <template>
-  <nav class="desktopNav">
+  <nav class="desktopNav background">
     <VStack class="header">
       <SafeLink to="/">
         <HStack class="bygLogo">
@@ -96,6 +96,7 @@
 
   .desktopNav
     display: none
+    position: relative
     align-items: flex-start
     justify-content: space-between
     min-width: 14rem
@@ -105,7 +106,6 @@
     padding: calc(var(--padding) / 2)
     height: 100vh
     overflow-y: scroll
-    background: linear-gradient(to left, themes.$backgroundColor, themes.$foregroundColor)
     animation: slideIn 0.3s ease-in-out
 
     @keyframes slideIn
@@ -115,6 +115,11 @@
       to
         transform: translateX(0)
         opacity: 1
+
+    &::before
+      background: linear-gradient(to bottom, blue, yellow, blue)
+      mask-image: linear-gradient(to right, black, transparent)
+      opacity: 0.3
 
     .header
       width: 100%

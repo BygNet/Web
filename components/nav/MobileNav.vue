@@ -17,7 +17,7 @@
 </script>
 
 <template>
-  <div class="bygMobileNav">
+  <div class="bygMobileNav background">
     <button
       class="createButton prominent large"
       @click="toggleCreateModal()"
@@ -66,7 +66,11 @@
     z-index: 5001
     width: 100%
     border-radius: 0
-    background: linear-gradient(to top, themes.$backgroundColor, transparent)
+
+    &::before
+      background: linear-gradient(to right, blue, yellow, blue)
+      mask-image: linear-gradient(to top, black, transparent)
+      opacity: 0.3
 
     .createButton
       svg

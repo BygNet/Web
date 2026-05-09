@@ -88,6 +88,13 @@
       "sidebarInterface": "界面",
       "editProfile": "编辑资料",
       "loading": "加载中...",
+      "displayNameLabel": "显示名称",
+      "displayNamePlaceholder": "你的名称显示方式",
+      "pronounsLabel": "代词",
+      "pronounsPlaceholder": "例如：她/她、他/他、TA",
+      "songLinkUrlLabel": "song.link 链接",
+      "songLinkUrlPlaceholder": "https://song.link/...",
+      "songLinkUrlHelp": "使用 song.link 或 odesli.co 链接显示你的音乐卡片。",
       "bioLabel": "简介",
       "bioPlaceholder": "介绍一下自己...",
       "avatarUrlLabel": "头像 URL",
@@ -101,6 +108,7 @@
       "preview": "预览",
       "saveSuccess": "资料保存成功！",
       "saveFailed": "保存资料失败",
+      "saveInvalidSongLink": "音乐链接必须是有效的 song.link 或 odesli.co URL",
       "savePremiumLocked": "资料颜色仅对付费计划开放",
       "saveChanges": "保存更改",
       "saving": "保存中...",
@@ -222,7 +230,13 @@
       "follow": "关注",
       "following": "已关注",
       "chat": "聊天",
-      "joinedLabel": "加入于 {date}"
+      "joinedLabel": "加入于 {date}",
+      "pronounsLabel": "代词",
+      "songLoading": "正在加载歌曲...",
+      "songOpen": "打开音乐链接",
+      "songLinksMenuTitle": "打开方式",
+      "openSongLink": "在 song.link 打开",
+      "openOnPlatform": "在 {platform} 打开"
     },
     "nav": {
       "openAlerts": "打开提醒"

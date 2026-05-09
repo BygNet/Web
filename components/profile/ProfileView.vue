@@ -11,6 +11,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import ReportButton from '@/components/posts/ReportButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
+  import SongLink from '@/components/profile/SongLink.vue'
   import { currentThemeKey, systemPrefersDark } from '@/data/themes'
   import { capitalize } from '@/utils/formatters'
   import {
@@ -54,6 +55,9 @@
       month: 'long',
     }).format(new Date(props.user.createdAt))
   })
+
+  const displayName = computed(() => props.user.displayName?.trim() ?? '')
+  const pronouns = computed(() => props.user.pronouns?.trim() ?? '')
 
   async function handleFollow() {
     if (!auth.user) {
@@ -130,12 +134,18 @@
           </div>
 
           <VStack class="userInfo noSpace">
+            <p v-if="displayName" class="displayName">
+              {{ displayName }}
+            </p>
             <UsernameView
               :name="user.username"
               :avatar-url="user.avatarUrl"
               :subscription-state="user.subscriptionState"
               display-mode
             />
+            <p v-if="pronouns" class="light pronounsLabel">
+              {{ pronouns }}
+            </p>
             <p class="light">
               {{ t('ui.profile.joinedLabel', { date: joinDate }) }}
             </p>
@@ -187,6 +197,8 @@
         <p v-if="user.bio" class="bio">
           {{ user.bio }}
         </p>
+
+        <SongLink v-if="user.songLinkUrl" :url="user.songLinkUrl" />
 
         <!-- Stats -->
         <HStack class="stats">
@@ -263,6 +275,18 @@
 
       .bio
         line-height: 1.5
+
+      .displayName
+        margin: 0 0 -0.75rem
+        font-size: 1.2rem
+        font-weight: 700
+        max-width: 100%
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+
+      .pronounsLabel
+        margin: 0
 
       .stats
         gap: 2rem
