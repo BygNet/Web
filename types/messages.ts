@@ -18,11 +18,12 @@ export interface BygMessageSharedImage {
 
 export interface BygMessage {
   id: number
+  conversationId: number
   senderId: number
   senderUsername: string
   senderAvatarUrl: string | null
   senderSubscriptionState: BygSubscription
-  recipientId: number
+  recipientId: number | null
   recipientUsername: string
   recipientAvatarUrl: string | null
   recipientSubscriptionState: BygSubscription
@@ -32,20 +33,37 @@ export interface BygMessage {
   sharedImage: BygMessageSharedImage | null
 }
 
-export interface BygMessageThread {
+export interface BygMessageConversationMember {
   userId: number
   username: string
   avatarUrl: string | null
   subscriptionState: BygSubscription
+  isCreator: boolean
+  joinedDate: string
+}
+
+export interface BygMessageThread {
+  conversationId: number
+  type: 'direct' | 'group'
+  name: string | null
+  title: string | null
+  imageUrl: string | null
+  description: string | null
+  creatorId: number
+  members: BygMessageConversationMember[]
   lastMessagePreview: string
   lastMessageDate: string
 }
 
 export interface BygMessageConversation {
-  userId: number
-  username: string
-  avatarUrl: string | null
-  subscriptionState: BygSubscription
+  conversationId: number
+  type: 'direct' | 'group'
+  name: string | null
+  title: string | null
+  imageUrl: string | null
+  description: string | null
+  creatorId: number
+  members: BygMessageConversationMember[]
   messages: BygMessage[]
 }
 
@@ -58,10 +76,34 @@ export interface BygMessageShareTarget {
 }
 
 export interface BygMessageSendRequest {
-  recipientId: number
+  conversationId?: number
+  recipientId?: number
   content?: string
   sharedPostId?: number
   sharedImageId?: number
+}
+
+export interface BygMessageDirectConversationRequest {
+  recipientId: number
+}
+
+export interface BygMessageGroupConversationRequest {
+  name?: string
+  title?: string
+  imageUrl?: string
+  description?: string
+  memberIds: number[]
+}
+
+export interface BygMessageConversationInviteRequest {
+  userId: number
+}
+
+export interface BygMessageConversationInfoRequest {
+  name?: string | null
+  title?: string | null
+  imageUrl?: string | null
+  description?: string | null
 }
 
 export interface BygShareableContent {

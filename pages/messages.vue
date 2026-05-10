@@ -26,17 +26,24 @@
   import ContentArea from '@/components/layout/ContentArea.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
   import HStack from '@/components/layout/HStack.vue'
+  import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
   import MessageBubble from '@/components/messages/MessageBubble.vue'
   import MessageThreadItem from '@/components/messages/MessageThreadItem.vue'
   import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
   import { fetchUserSuggestions } from '@/data/mentions'
   import {
+    createGroupConversation,
     createMessagesSocket,
     fetchMessageConversation,
+    fetchMessageConversationById,
     fetchMessageThreads,
+    getOrCreateDirectConversation,
+    inviteGroupConversationMember,
+    removeGroupConversationMember,
     sendMessage,
     sendTypingEvent,
+    updateGroupConversationInfo,
   } from '@/data/messages'
   import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
@@ -44,6 +51,7 @@
   import type {
     BygMessage,
     BygMessageConversation,
+    BygMessageConversationMember,
     BygMessageLiveServerEvent,
     BygMessageThread,
   } from '@/types/messages'
@@ -75,6 +83,18 @@
   const sendingMessage: Ref<boolean> = ref(false)
   const connectedLive: Ref<boolean> = ref(false)
   const typingByUserId: Ref<Record<number, boolean>> = ref({})
+  const showingGroupCreateModal: Ref<boolean> = ref(false)
+  const showingGroupInfoModal: Ref<boolean> = ref(false)
+  const groupInfoThread: Ref<BygMessageThread | null> = ref(null)
+  const groupTitleInput: Ref<string> = ref('')
+  const groupImageUrlInput: Ref<string> = ref('')
+  const groupDescriptionInput: Ref<string> = ref('')
+  const groupMemberQuery: Ref<string> = ref('')
+  const groupMemberSuggestions: Ref<BygUserSuggestion[]> = ref([])
+  const selectedGroupMemberIds: Ref<number[]> = ref([])
+  const selectedGroupMemberDrafts: Ref<BygUserSuggestion[]> = ref([])
+  const groupStatusMessage: Ref<string | null> = ref(null)
+  const savingGroup: Ref<boolean> = ref(false)
 
   type MessageDeliveryState = 'sending' | 'sent'
   type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
@@ -89,6 +109,7 @@
     message: BygMessage
     outgoing: boolean
     showAvatar: boolean
+    showSenderName: boolean
     groupPosition: MessageGroupPosition
     deliveryState: MessageDeliveryState | null
   }
@@ -99,6 +120,7 @@
   const starterSuggestions: Ref<BygUserSuggestion[]> = ref([])
   const showingStarterSuggestions: Ref<boolean> = ref(false)
   let starterSuggestionRequestId = 0
+  let groupSuggestionRequestId = 0
 
   const conversationScroller: Ref<HTMLDivElement | null> = ref(null)
   const composerInput: Ref<HTMLTextAreaElement | null> = ref(null)
@@ -176,11 +198,13 @@
   }
 
   const isMobileConversationView = computed(() => {
-    return (
-      isMobileViewport.value &&
-      typeof route.query.with === 'string' &&
-      route.query.with.trim().length > 0
-    )
+    const hasConversation =
+      typeof route.query.conversation === 'string' &&
+      route.query.conversation.trim().length > 0
+    const hasDirect =
+      typeof route.query.with === 'string' && route.query.with.trim().length > 0
+
+    return isMobileViewport.value && (hasConversation || hasDirect)
   })
   const shouldShowThreadsPane = computed(() => {
     return !isMobileConversationView.value
@@ -197,6 +221,69 @@
     const normalized = Number(value)
     if (!Number.isFinite(normalized)) return null
     return Math.trunc(normalized)
+  }
+
+  function normalizeConversationId(value: unknown): number | null {
+    if (typeof value !== 'string' && typeof value !== 'number') return null
+    const normalized = Number(value)
+    if (!Number.isFinite(normalized)) return null
+    return Math.trunc(normalized)
+  }
+
+  function getDirectMember(
+    thread: Pick<BygMessageThread, 'type' | 'members'>
+  ): BygMessageConversationMember | null {
+    if (thread.type !== 'direct') return null
+    return (
+      thread.members.find(member => member.userId !== auth.user?.id) ?? null
+    )
+  }
+
+  function getThreadDisplayName(
+    thread: Pick<BygMessageThread, 'type' | 'title' | 'name' | 'members'>
+  ): string {
+    if (thread.type === 'group') {
+      return thread.title ?? t('ui.messages.groupChatFallback')
+    }
+
+    return (
+      getDirectMember(thread)?.username ?? t('ui.messages.directChatFallback')
+    )
+  }
+
+  function getThreadAvatarUrl(
+    thread: Pick<BygMessageThread, 'type' | 'imageUrl' | 'members'>
+  ): string | null {
+    if (thread.type === 'group') {
+      return thread.imageUrl ?? null
+    }
+
+    return getDirectMember(thread)?.avatarUrl ?? null
+  }
+
+  function getThreadTypingUserId(thread: BygMessageThread): number | null {
+    return thread.type === 'direct'
+      ? (getDirectMember(thread)?.userId ?? null)
+      : null
+  }
+
+  function threadFromConversation(
+    conversation: BygMessageConversation
+  ): BygMessageThread {
+    const lastMessage = conversation.messages[conversation.messages.length - 1]
+
+    return {
+      conversationId: conversation.conversationId,
+      type: conversation.type,
+      name: conversation.name,
+      title: conversation.title,
+      imageUrl: conversation.imageUrl,
+      description: conversation.description,
+      creatorId: conversation.creatorId,
+      members: conversation.members,
+      lastMessagePreview: previewFromMessage(lastMessage),
+      lastMessageDate: lastMessage?.createdDate ?? new Date().toISOString(),
+    }
   }
 
   function sortThreadsByDate(input: BygMessageThread[]): BygMessageThread[] {
@@ -235,7 +322,7 @@
 
   function upsertThread(thread: BygMessageThread): void {
     const existingIndex = threads.value.findIndex(
-      existing => existing.userId === thread.userId
+      existing => existing.conversationId === thread.conversationId
     )
 
     if (existingIndex >= 0) {
@@ -261,35 +348,17 @@
   }
 
   function upsertThreadFromMessage(message: BygMessage): void {
-    const currentUserId = auth.user?.id
-    if (!currentUserId) return
-
-    const counterpart =
-      message.senderId === currentUserId
-        ? {
-            userId: message.recipientId,
-            username: message.recipientUsername,
-            avatarUrl: message.recipientAvatarUrl,
-            subscriptionState: message.recipientSubscriptionState,
-          }
-        : {
-            userId: message.senderId,
-            username: message.senderUsername,
-            avatarUrl: message.senderAvatarUrl,
-            subscriptionState: message.senderSubscriptionState,
-          }
-
-    const previewContent = previewFromMessage(message)
+    const existingThread = threads.value.find(
+      thread => thread.conversationId === message.conversationId
+    )
+    if (!existingThread) {
+      loadThreads({ force: true })
+      return
+    }
 
     upsertThread({
-      userId: counterpart.userId,
-      username: counterpart.username,
-      avatarUrl: counterpart.avatarUrl,
-      subscriptionState: counterpart.subscriptionState,
-      lastMessagePreview:
-        previewContent.length <= 80
-          ? previewContent
-          : `${previewContent.slice(0, 80)}…`,
+      ...existingThread,
+      lastMessagePreview: previewFromMessage(message),
       lastMessageDate: message.createdDate,
     })
   }
@@ -299,12 +368,7 @@
     const activeThread = selectedThread.value
     if (!currentUserId || !activeThread) return false
 
-    return (
-      (message.senderId === currentUserId &&
-        message.recipientId === activeThread.userId) ||
-      (message.senderId === activeThread.userId &&
-        message.recipientId === currentUserId)
-    )
+    return message.conversationId === activeThread.conversationId
   }
 
   function setOutgoingDeliveryState(
@@ -371,7 +435,7 @@
       const candidate = messages.value[index]
       if (!candidate || candidate.id >= 0) continue
       if (candidate.senderId !== confirmed.senderId) continue
-      if (candidate.recipientId !== confirmed.recipientId) continue
+      if (candidate.conversationId !== confirmed.conversationId) continue
       if (candidate.content !== confirmed.content) continue
 
       const candidateTime = parseMessageTimestamp(candidate.createdDate)
@@ -435,8 +499,7 @@
 
   function buildOptimisticOutgoingMessage(
     content: string,
-    thread: BygMessageThread,
-    recipientId: number
+    thread: BygMessageThread
   ): BygMessage | null {
     if (!auth.user) return null
 
@@ -453,16 +516,18 @@
       break
     }
 
+    const directMember = getDirectMember(thread)
     const optimisticMessage: BygMessage = {
       id: nextOptimisticMessageId,
+      conversationId: thread.conversationId,
       senderId: auth.user.id,
       senderUsername: auth.user.username,
       senderAvatarUrl,
       senderSubscriptionState,
-      recipientId,
-      recipientUsername: thread.username,
-      recipientAvatarUrl: thread.avatarUrl,
-      recipientSubscriptionState: thread.subscriptionState,
+      recipientId: directMember?.userId ?? null,
+      recipientUsername: directMember?.username ?? 'unknown',
+      recipientAvatarUrl: directMember?.avatarUrl ?? null,
+      recipientSubscriptionState: directMember?.subscriptionState ?? 'free',
       content,
       createdDate: new Date().toISOString(),
       sharedPost: null,
@@ -519,6 +584,10 @@
         message,
         outgoing,
         showAvatar: !outgoing && !groupedWithNext,
+        showSenderName:
+          selectedThread.value?.type === 'group' &&
+          !outgoing &&
+          !groupedWithPrevious,
         groupPosition,
         deliveryState: outgoing
           ? (outgoingDeliveryByMessageId.value[message.id] ?? null)
@@ -581,18 +650,7 @@
   async function applyConversationSnapshot(
     conversation: BygMessageConversation
   ): Promise<void> {
-    selectedThread.value = {
-      userId: conversation.userId,
-      username: conversation.username,
-      avatarUrl: conversation.avatarUrl,
-      subscriptionState: conversation.subscriptionState,
-      lastMessagePreview: previewFromMessage(
-        conversation.messages[conversation.messages.length - 1]
-      ),
-      lastMessageDate:
-        conversation.messages[conversation.messages.length - 1]?.createdDate ??
-        new Date().toISOString(),
-    }
+    selectedThread.value = threadFromConversation(conversation)
     upsertThread(selectedThread.value)
 
     messages.value = conversation.messages
@@ -600,22 +658,24 @@
     await scrollConversationToBottom()
   }
 
-  async function loadConversation(
-    username: string,
+  async function loadConversationByThread(
+    thread: BygMessageThread,
     options: { force?: boolean } = {}
   ): Promise<void> {
-    const activeUsername = normalizeUsername(username)
-    if (!activeUsername) return
+    const activeConversationId = thread.conversationId
 
     loadingConversation.value = true
     error.value = null
     let loadedInitialConversation = false
 
     try {
-      const conversation = await fetchMessageConversation(
-        activeUsername,
-        options
-      )
+      const conversation =
+        activeConversationId > 0
+          ? await fetchMessageConversationById(activeConversationId, options)
+          : await fetchMessageConversation(
+              getThreadDisplayName(thread),
+              options
+            )
 
       if (!conversation) {
         messages.value = []
@@ -625,7 +685,7 @@
 
       if (
         selectedThread.value &&
-        normalizeUsername(selectedThread.value.username) !== activeUsername
+        selectedThread.value.conversationId !== activeConversationId
       ) {
         return
       }
@@ -635,14 +695,18 @@
 
       if (!options.force) {
         try {
-          const refreshedConversation = await fetchMessageConversation(
-            activeUsername,
-            { force: true }
-          )
+          const refreshedConversation =
+            activeConversationId > 0
+              ? await fetchMessageConversationById(activeConversationId, {
+                  force: true,
+                })
+              : await fetchMessageConversation(getThreadDisplayName(thread), {
+                  force: true,
+                })
           if (!refreshedConversation) return
           if (
             selectedThread.value &&
-            normalizeUsername(selectedThread.value.username) !== activeUsername
+            selectedThread.value.conversationId !== activeConversationId
           ) {
             return
           }
@@ -668,10 +732,11 @@
       syncQuery?: boolean
     } = {}
   ): Promise<void> {
-    const isSwitchingThread = selectedThread.value?.userId !== thread.userId
+    const isSwitchingThread =
+      selectedThread.value?.conversationId !== thread.conversationId
     if (
       selectedThread.value &&
-      selectedThread.value.userId !== thread.userId &&
+      selectedThread.value.conversationId !== thread.conversationId &&
       sentTypingState
     ) {
       stopTypingSignal()
@@ -689,7 +754,8 @@
           path: '/messages',
           query: {
             ...route.query,
-            with: thread.username,
+            conversation: String(thread.conversationId),
+            with: undefined,
           },
         })
       } else {
@@ -697,13 +763,14 @@
           path: '/messages',
           query: {
             ...route.query,
-            with: thread.username,
+            conversation: String(thread.conversationId),
+            with: undefined,
           },
         })
       }
     }
 
-    await loadConversation(thread.username, {
+    await loadConversationByThread(thread, {
       force: options.force,
     })
     await nextTick()
@@ -721,15 +788,7 @@
   function pickThreadFromConversation(
     conversation: BygMessageConversation
   ): void {
-    const lastMessage = conversation.messages[conversation.messages.length - 1]
-    upsertThread({
-      userId: conversation.userId,
-      username: conversation.username,
-      avatarUrl: conversation.avatarUrl,
-      subscriptionState: conversation.subscriptionState,
-      lastMessagePreview: previewFromMessage(lastMessage),
-      lastMessageDate: lastMessage?.createdDate ?? new Date().toISOString(),
-    })
+    upsertThread(threadFromConversation(conversation))
   }
 
   async function chooseStarterSuggestion(username: string): Promise<void> {
@@ -745,8 +804,9 @@
 
     const existingThread = threads.value.find(
       thread =>
-        normalizeUsername(thread.username) ===
-        normalizeUsername(pickedSuggestion.username)
+        thread.type === 'direct' &&
+        normalizeUsername(getThreadDisplayName(thread)) ===
+          normalizeUsername(pickedSuggestion.username)
     )
 
     if (existingThread) {
@@ -756,19 +816,275 @@
       return
     }
 
-    const optimisticThread: BygMessageThread = {
-      userId: pickedSuggestion.id,
-      username: pickedSuggestion.username,
-      avatarUrl: pickedSuggestion.avatarUrl,
-      subscriptionState: pickedSuggestion.subscriptionState,
-      lastMessagePreview: t('ui.chat.previewNoChats'),
-      lastMessageDate: new Date().toISOString(),
+    const conversation = await getOrCreateDirectConversation({
+      recipientId: pickedSuggestion.id,
+    })
+    if (!conversation) {
+      error.value = t('ui.chat.errorLoadConversation')
+      return
     }
-    upsertThread(optimisticThread)
-    await pickThread(optimisticThread, {
+
+    const thread = threadFromConversation(conversation)
+    upsertThread(thread)
+    await pickThread(thread, {
       force: true,
       syncQuery: true,
     })
+  }
+
+  function resetGroupForm(): void {
+    groupTitleInput.value = ''
+    groupImageUrlInput.value = ''
+    groupDescriptionInput.value = ''
+    groupMemberQuery.value = ''
+    groupMemberSuggestions.value = []
+    selectedGroupMemberIds.value = []
+    selectedGroupMemberDrafts.value = []
+    groupStatusMessage.value = null
+  }
+
+  function openGroupCreateModal(): void {
+    resetGroupForm()
+    showingGroupCreateModal.value = true
+  }
+
+  function closeGroupCreateModal(): void {
+    showingGroupCreateModal.value = false
+    resetGroupForm()
+  }
+
+  function openGroupInfoModal(thread: BygMessageThread): void {
+    if (thread.type !== 'group') return
+
+    groupInfoThread.value = thread
+    groupTitleInput.value = thread.title ?? ''
+    groupImageUrlInput.value = thread.imageUrl ?? ''
+    groupDescriptionInput.value = thread.description ?? ''
+    groupMemberQuery.value = ''
+    groupMemberSuggestions.value = []
+    selectedGroupMemberIds.value = []
+    groupStatusMessage.value = null
+    showingGroupInfoModal.value = true
+  }
+
+  function closeGroupInfoModal(): void {
+    showingGroupInfoModal.value = false
+    groupInfoThread.value = null
+    resetGroupForm()
+  }
+
+  function isSelectedGroupMember(userId: number): boolean {
+    return selectedGroupMemberIds.value.includes(userId)
+  }
+
+  function addSelectedGroupMember(user: BygUserSuggestion): void {
+    if (user.id === auth.user?.id || isSelectedGroupMember(user.id)) return
+
+    selectedGroupMemberIds.value = [ ...selectedGroupMemberIds.value, user.id ]
+    selectedGroupMemberDrafts.value = [ ...selectedGroupMemberDrafts.value, user ]
+    groupMemberQuery.value = ''
+    groupMemberSuggestions.value = []
+  }
+
+  function chooseGroupMemberSuggestion(username: string): void {
+    const pickedSuggestion = groupMemberSuggestions.value.find(
+      suggestion =>
+        normalizeUsername(suggestion.username) === normalizeUsername(username)
+    )
+    if (!pickedSuggestion) return
+
+    addSelectedGroupMember(pickedSuggestion)
+  }
+
+  function removeSelectedGroupMember(userId: number): void {
+    selectedGroupMemberIds.value = selectedGroupMemberIds.value.filter(
+      existingUserId => existingUserId !== userId
+    )
+    selectedGroupMemberDrafts.value = selectedGroupMemberDrafts.value.filter(
+      user => user.id !== userId
+    )
+  }
+
+  function getSelectedGroupMembers(): BygUserSuggestion[] {
+    return selectedGroupMemberIds.value.map(userId => {
+      const suggestedUser = selectedGroupMemberDrafts.value.find(
+        user => user.id === userId
+      )
+      const existingMember = groupInfoThread.value?.members.find(
+        member => member.userId === userId
+      )
+
+      return {
+        id: userId,
+        username:
+          suggestedUser?.username ??
+          existingMember?.username ??
+          `user-${userId}`,
+        avatarUrl:
+          suggestedUser?.avatarUrl ?? existingMember?.avatarUrl ?? null,
+        subscriptionState:
+          suggestedUser?.subscriptionState ??
+          existingMember?.subscriptionState ??
+          'free',
+      }
+    })
+  }
+
+  async function updateGroupMemberSuggestions(): Promise<void> {
+    const normalized = groupMemberQuery.value.trim().replace(/^@/, '')
+    if (!normalized) {
+      groupMemberSuggestions.value = []
+      return
+    }
+
+    const requestId = ++groupSuggestionRequestId
+    const suggestions = await fetchUserSuggestions(normalized)
+    if (requestId !== groupSuggestionRequestId) return
+
+    const existingMemberIds = new Set(
+      groupInfoThread.value?.members.map(member => member.userId) ?? [
+        auth.user?.id,
+      ]
+    )
+    if (auth.user?.id) {
+      existingMemberIds.add(auth.user.id)
+    }
+
+    groupMemberSuggestions.value = suggestions.filter(
+      suggestion =>
+        !existingMemberIds.has(suggestion.id) &&
+        !selectedGroupMemberIds.value.includes(suggestion.id)
+    )
+  }
+
+  async function createCurrentGroupConversation(): Promise<void> {
+    if (savingGroup.value || selectedGroupMemberIds.value.length < 1) return
+
+    savingGroup.value = true
+    groupStatusMessage.value = null
+
+    const conversation = await createGroupConversation({
+      title: groupTitleInput.value.trim() || undefined,
+      imageUrl: groupImageUrlInput.value.trim() || undefined,
+      description: groupDescriptionInput.value.trim() || undefined,
+      memberIds: selectedGroupMemberIds.value,
+    })
+
+    savingGroup.value = false
+
+    if (!conversation) {
+      groupStatusMessage.value = t('ui.messages.failedToCreateGroupChat')
+      return
+    }
+
+    const thread = threadFromConversation(conversation)
+    upsertThread(thread)
+    closeGroupCreateModal()
+    await pickThread(thread, {
+      force: true,
+      syncQuery: true,
+    })
+  }
+
+  async function saveCurrentGroupInfo(): Promise<void> {
+    const thread = groupInfoThread.value
+    if (!thread || savingGroup.value) return
+
+    savingGroup.value = true
+    groupStatusMessage.value = null
+
+    const conversation = await updateGroupConversationInfo(
+      thread.conversationId,
+      {
+        title: groupTitleInput.value.trim() || null,
+        imageUrl: groupImageUrlInput.value.trim() || null,
+        description: groupDescriptionInput.value.trim() || null,
+      }
+    )
+
+    savingGroup.value = false
+
+    if (!conversation) {
+      groupStatusMessage.value = t('ui.messages.failedToUpdateGroupChat')
+      return
+    }
+
+    const updatedThread = threadFromConversation(conversation)
+    groupInfoThread.value = updatedThread
+    upsertThread(updatedThread)
+    if (selectedThread.value?.conversationId === updatedThread.conversationId) {
+      selectedThread.value = updatedThread
+    }
+    groupStatusMessage.value = t('ui.messages.groupChatUpdated')
+  }
+
+  async function inviteSelectedGroupMembers(): Promise<void> {
+    const thread = groupInfoThread.value
+    if (
+      !thread ||
+      savingGroup.value ||
+      selectedGroupMemberIds.value.length < 1
+    ) {
+      return
+    }
+
+    savingGroup.value = true
+    groupStatusMessage.value = null
+
+    let latestConversation: BygMessageConversation | null = null
+    for (const userId of selectedGroupMemberIds.value) {
+      latestConversation = await inviteGroupConversationMember(
+        thread.conversationId,
+        { userId }
+      )
+      if (!latestConversation) break
+    }
+
+    savingGroup.value = false
+
+    if (!latestConversation) {
+      groupStatusMessage.value = t('ui.messages.failedToAddMember')
+      return
+    }
+
+    const updatedThread = threadFromConversation(latestConversation)
+    selectedGroupMemberIds.value = []
+    selectedGroupMemberDrafts.value = []
+    groupMemberSuggestions.value = []
+    groupInfoThread.value = updatedThread
+    upsertThread(updatedThread)
+    if (selectedThread.value?.conversationId === updatedThread.conversationId) {
+      selectedThread.value = updatedThread
+    }
+    groupStatusMessage.value = t('ui.messages.memberAdded')
+  }
+
+  async function removeExistingGroupMember(userId: number): Promise<void> {
+    const thread = groupInfoThread.value
+    if (!thread || savingGroup.value || userId === thread.creatorId) return
+
+    savingGroup.value = true
+    groupStatusMessage.value = null
+
+    const conversation = await removeGroupConversationMember(
+      thread.conversationId,
+      userId
+    )
+
+    savingGroup.value = false
+
+    if (!conversation) {
+      groupStatusMessage.value = t('ui.messages.failedToRemoveMember')
+      return
+    }
+
+    const updatedThread = threadFromConversation(conversation)
+    groupInfoThread.value = updatedThread
+    upsertThread(updatedThread)
+    if (selectedThread.value?.conversationId === updatedThread.conversationId) {
+      selectedThread.value = updatedThread
+    }
+    groupStatusMessage.value = t('ui.messages.memberRemoved')
   }
 
   function clearTypingIndicators(): void {
@@ -891,7 +1207,11 @@
       return
     }
 
-    const recipientId = normalizeUserId(selectedThread.value.userId)
+    if (selectedThread.value.type !== 'direct') return
+
+    const recipientId = normalizeUserId(
+      getDirectMember(selectedThread.value)?.userId ?? NaN
+    )
     if (recipientId === null) return
 
     if (
@@ -929,8 +1249,11 @@
     if (!selectedThread.value || sendingMessage.value) return
 
     const thread = selectedThread.value
-    const recipientId = normalizeUserId(thread.userId)
-    if (recipientId === null) {
+    const recipientId =
+      thread.type === 'direct'
+        ? normalizeUserId(getDirectMember(thread)?.userId ?? NaN)
+        : null
+    if (thread.type === 'direct' && recipientId === null) {
       error.value = t('ui.chat.errorInvalidRecipient')
       return
     }
@@ -941,11 +1264,7 @@
     sendingMessage.value = true
     error.value = null
 
-    const optimisticMessage = buildOptimisticOutgoingMessage(
-      content,
-      thread,
-      recipientId
-    )
+    const optimisticMessage = buildOptimisticOutgoingMessage(content, thread)
     if (optimisticMessage) {
       messages.value = [ ...messages.value, optimisticMessage ]
       setOutgoingDeliveryState(optimisticMessage.id, 'sending', {
@@ -959,7 +1278,7 @@
     await scrollConversationToBottom()
 
     const sent = await sendMessage({
-      recipientId,
+      conversationId: thread.conversationId,
       content,
     })
 
@@ -992,18 +1311,54 @@
   }
 
   async function hydrateInitialThread(): Promise<void> {
+    const targetConversationId = normalizeConversationId(
+      route.query.conversation
+    )
+    if (targetConversationId !== null) {
+      const existingThread = threads.value.find(
+        thread => thread.conversationId === targetConversationId
+      )
+      if (existingThread) {
+        await pickThread(existingThread, {
+          syncQuery: false,
+        })
+        return
+      }
+
+      const conversation = await fetchMessageConversationById(
+        targetConversationId,
+        { force: true }
+      )
+      if (!conversation) return
+
+      pickThreadFromConversation(conversation)
+      const loadedThread = threads.value.find(
+        thread => thread.conversationId === conversation.conversationId
+      )
+      if (loadedThread) {
+        await pickThread(loadedThread, {
+          syncQuery: false,
+        })
+      }
+      return
+    }
+
     const targetUsername =
       typeof route.query.with === 'string'
         ? route.query.with
         : isMobileViewport.value
           ? undefined
-          : threads.value[0]?.username
+          : threads.value[0]
+            ? getThreadDisplayName(threads.value[0])
+            : undefined
 
     if (!targetUsername) return
 
     const existingThread = threads.value.find(
       thread =>
-        normalizeUsername(thread.username) === normalizeUsername(targetUsername)
+        thread.type === 'direct' &&
+        normalizeUsername(getThreadDisplayName(thread)) ===
+          normalizeUsername(targetUsername)
     )
 
     if (existingThread) {
@@ -1021,9 +1376,7 @@
     pickThreadFromConversation(directConversation)
 
     const loadedThread = threads.value.find(
-      thread =>
-        normalizeUsername(thread.username) ===
-        normalizeUsername(directConversation.username)
+      thread => thread.conversationId === directConversation.conversationId
     )
     if (loadedThread) {
       await pickThread(loadedThread, {
@@ -1073,12 +1426,48 @@
   })
 
   watch(
+    () => route.query.conversation,
+    async nextConversation => {
+      const conversationId = normalizeConversationId(nextConversation)
+      if (conversationId === null) return
+      if (selectedThread.value?.conversationId === conversationId) return
+
+      const matchingThread = threads.value.find(
+        thread => thread.conversationId === conversationId
+      )
+      if (matchingThread) {
+        await pickThread(matchingThread, {
+          syncQuery: false,
+        })
+        return
+      }
+
+      const loadedConversation = await fetchMessageConversationById(
+        conversationId,
+        { force: true }
+      )
+      if (!loadedConversation) return
+
+      pickThreadFromConversation(loadedConversation)
+      const loadedThread = threads.value.find(
+        thread => thread.conversationId === loadedConversation.conversationId
+      )
+      if (loadedThread) {
+        await pickThread(loadedThread, {
+          syncQuery: false,
+        })
+      }
+    }
+  )
+
+  watch(
     () => route.query.with,
     async nextWith => {
       if (typeof nextWith !== 'string') return
       if (
         selectedThread.value &&
-        normalizeUsername(selectedThread.value.username) ===
+        selectedThread.value.type === 'direct' &&
+        normalizeUsername(getThreadDisplayName(selectedThread.value)) ===
           normalizeUsername(nextWith)
       ) {
         return
@@ -1086,7 +1475,9 @@
 
       const matchingThread = threads.value.find(
         thread =>
-          normalizeUsername(thread.username) === normalizeUsername(nextWith)
+          thread.type === 'direct' &&
+          normalizeUsername(getThreadDisplayName(thread)) ===
+            normalizeUsername(nextWith)
       )
       if (matchingThread) {
         await pickThread(matchingThread, {
@@ -1102,8 +1493,7 @@
 
       pickThreadFromConversation(loadedConversation)
       const loadedThread = threads.value.find(
-        thread =>
-          normalizeUsername(thread.username) === normalizeUsername(nextWith)
+        thread => thread.conversationId === loadedConversation.conversationId
       )
       if (loadedThread) {
         await pickThread(loadedThread, {
@@ -1163,6 +1553,11 @@
           />
         </div>
 
+        <button class="createGroupButton" @click="openGroupCreateModal">
+          <Icon icon="solar:users-group-rounded-line-duotone" />
+          {{ t('ui.messages.createGroupChat') }}
+        </button>
+
         <div class="threadsContent">
           <p v-if="loadingThreads" class="light threadState">
             {{ t('ui.chat.loadingChats') }}
@@ -1174,11 +1569,18 @@
           <div class="threadList" v-else>
             <MessageThreadItem
               v-for="thread in threads"
-              :key="thread.userId"
+              :key="thread.conversationId"
               :thread="thread"
-              :selected="selectedThread?.userId === thread.userId"
-              :typing="typingByUserId[thread.userId]"
+              :selected="
+                selectedThread?.conversationId === thread.conversationId
+              "
+              :typing="
+                getThreadTypingUserId(thread) !== null
+                  ? typingByUserId[getThreadTypingUserId(thread)!]
+                  : false
+              "
               @select="pickThread(thread)"
+              @info="openGroupInfoModal(thread)"
             />
           </div>
         </div>
@@ -1196,7 +1598,13 @@
             </button>
 
             <div class="conversationTitle">
-              <h3 v-if="selectedThread">@{{ selectedThread.username }}</h3>
+              <h3 v-if="selectedThread">
+                {{
+                  selectedThread.type === 'direct'
+                    ? `@${getThreadDisplayName(selectedThread)}`
+                    : getThreadDisplayName(selectedThread)
+                }}
+              </h3>
               <h3 v-else>{{ t('ui.chat.selectChat') }}</h3>
 
               <HStack class="connectionState">
@@ -1247,6 +1655,7 @@
                 :message="entry.message"
                 :outgoing="entry.outgoing"
                 :show-avatar="entry.showAvatar"
+                :show-sender-name="entry.showSenderName"
                 :group-position="entry.groupPosition"
                 :delivery-state="entry.deliveryState"
               />
@@ -1256,7 +1665,11 @@
           <VStack class="composer" @click.stop>
             <HStack
               class="typingIndicator"
-              v-if="selectedThread && typingByUserId[selectedThread.userId]"
+              v-if="
+                selectedThread &&
+                getThreadTypingUserId(selectedThread) !== null &&
+                typingByUserId[getThreadTypingUserId(selectedThread)!]
+              "
             >
               <Icon icon="svg-spinners:3-dots-move" />
               <p>{{ t('ui.chat.typing') }}</p>
@@ -1291,11 +1704,191 @@
       </section>
     </HStack>
   </ContentArea>
+
+  <Modal :visible="showingGroupCreateModal">
+    <VStack class="groupModal">
+      <HStack class="autoSpace fullWidth">
+        <h3>{{ t('ui.messages.createGroupChat') }}</h3>
+        <button @click="closeGroupCreateModal">
+          <Icon icon="mingcute:close-fill" />
+        </button>
+      </HStack>
+
+      <input
+        v-model="groupTitleInput"
+        :placeholder="t('ui.messages.groupTitlePlaceholder')"
+      />
+      <input
+        v-model="groupImageUrlInput"
+        :placeholder="t('ui.messages.groupImageUrlPlaceholder')"
+      />
+      <textarea
+        v-model="groupDescriptionInput"
+        :placeholder="t('ui.messages.groupDescriptionPlaceholder')"
+      />
+
+      <div class="groupMemberPicker">
+        <input
+          v-model="groupMemberQuery"
+          :placeholder="t('ui.messages.addMembersPlaceholder')"
+          @input="updateGroupMemberSuggestions"
+          @focus="updateGroupMemberSuggestions"
+        />
+        <MentionSuggestions
+          v-if="groupMemberSuggestions.length > 0"
+          :suggestions="groupMemberSuggestions"
+          @select="chooseGroupMemberSuggestion"
+        />
+      </div>
+
+      <VStack v-if="selectedGroupMemberIds.length > 0" class="groupMembers">
+        <HStack
+          v-for="member in getSelectedGroupMembers()"
+          :key="member.id"
+          class="autoSpace fullWidth groupMemberRow"
+        >
+          <p>@{{ member.username }}</p>
+          <button
+            class="transparent"
+            @click="removeSelectedGroupMember(member.id)"
+          >
+            <Icon icon="solar:trash-bin-trash-line-duotone" />
+          </button>
+        </HStack>
+      </VStack>
+
+      <p v-if="groupStatusMessage" class="light">
+        {{ groupStatusMessage }}
+      </p>
+
+      <HStack class="autoSpace fullWidth">
+        <button @click="closeGroupCreateModal" class="transparent">
+          {{ t('ui.messages.cancel') }}
+        </button>
+        <button
+          class="prominent"
+          :disabled="savingGroup || selectedGroupMemberIds.length < 1"
+          @click="createCurrentGroupConversation"
+        >
+          <Icon icon="solar:pen-new-square-line-duotone" />
+          {{ t('ui.messages.createGroupChatAction') }}
+        </button>
+      </HStack>
+    </VStack>
+  </Modal>
+
+  <Modal :visible="showingGroupInfoModal">
+    <VStack v-if="groupInfoThread" class="groupModal">
+      <HStack class="autoSpace fullWidth">
+        <h3>{{ getThreadDisplayName(groupInfoThread) }}</h3>
+        <button @click="closeGroupInfoModal">
+          <Icon icon="mingcute:close-fill" />
+        </button>
+      </HStack>
+
+      <img
+        v-if="getThreadAvatarUrl(groupInfoThread)"
+        class="groupInfoImage"
+        :src="getThreadAvatarUrl(groupInfoThread)!"
+        :alt="
+          t('ui.messages.groupImageAlt', {
+            name: getThreadDisplayName(groupInfoThread),
+          })
+        "
+      />
+
+      <template v-if="groupInfoThread.creatorId === auth.user?.id">
+        <input
+          v-model="groupTitleInput"
+          :placeholder="t('ui.messages.groupTitlePlaceholder')"
+        />
+        <input
+          v-model="groupImageUrlInput"
+          :placeholder="t('ui.messages.groupImageUrlPlaceholder')"
+        />
+        <textarea
+          v-model="groupDescriptionInput"
+          :placeholder="t('ui.messages.groupDescriptionPlaceholder')"
+        />
+        <button
+          class="prominent"
+          :disabled="savingGroup"
+          @click="saveCurrentGroupInfo"
+        >
+          {{ t('ui.messages.saveInfo') }}
+        </button>
+
+        <div class="groupMemberPicker">
+          <input
+            v-model="groupMemberQuery"
+            :placeholder="t('ui.messages.inviteMemberPlaceholder')"
+            @input="updateGroupMemberSuggestions"
+            @focus="updateGroupMemberSuggestions"
+          />
+          <MentionSuggestions
+            v-if="groupMemberSuggestions.length > 0"
+            :suggestions="groupMemberSuggestions"
+            @select="chooseGroupMemberSuggestion"
+          />
+        </div>
+
+        <VStack v-if="selectedGroupMemberIds.length > 0" class="groupMembers">
+          <HStack
+            v-for="member in getSelectedGroupMembers()"
+            :key="member.id"
+            class="autoSpace fullWidth groupMemberRow"
+          >
+            <p>@{{ member.username }}</p>
+            <button
+              class="transparent"
+              @click="removeSelectedGroupMember(member.id)"
+            >
+              <Icon icon="solar:trash-bin-trash-line-duotone" />
+            </button>
+          </HStack>
+        </VStack>
+
+        <button
+          :disabled="savingGroup || selectedGroupMemberIds.length < 1"
+          @click="inviteSelectedGroupMembers"
+        >
+          {{ t('ui.messages.addSelectedMembers') }}
+        </button>
+      </template>
+
+      <VStack class="groupMembers">
+        <h4>{{ t('ui.messages.members') }}</h4>
+        <HStack
+          v-for="member in groupInfoThread.members"
+          :key="member.userId"
+          class="autoSpace fullWidth groupMemberRow"
+        >
+          <p>@{{ member.username }}</p>
+          <p v-if="member.isCreator" class="light">
+            {{ t('ui.messages.creator') }}
+          </p>
+          <button
+            v-else-if="groupInfoThread.creatorId === auth.user?.id"
+            class="transparent"
+            :disabled="savingGroup"
+            @click="removeExistingGroupMember(member.userId)"
+          >
+            <Icon icon="solar:trash-bin-trash-line-duotone" />
+          </button>
+        </HStack>
+      </VStack>
+
+      <p v-if="groupStatusMessage" class="light">
+        {{ groupStatusMessage }}
+      </p>
+    </VStack>
+  </Modal>
 </template>
 
 <style scoped lang="sass">
   @use "@/styles/themes"
   @use "@/styles/variables"
+  @use "@/styles/utils"
 
   .messagesLayout
     width: 100%
@@ -1342,6 +1935,10 @@
           right: 0
           width: 100%
           max-width: none
+
+      .createGroupButton
+        width: 100%
+        justify-content: center
 
       .threadsContent
         width: 100%
@@ -1462,6 +2059,43 @@
             .sendButton
               flex: 0 0 auto
               align-self: flex-end
+
+  .groupModal
+    @include utils.itemBackground
+    width: min(32rem, calc(100vw - 3rem))
+    align-items: stretch
+
+    h3, h4, p
+      margin: 0
+
+    textarea
+      min-height: 5rem
+      resize: vertical
+
+    .groupMemberPicker
+      position: relative
+
+      input
+        width: 100%
+
+      :deep(.mentionSuggestions)
+        top: calc(100% + 0.35rem)
+        left: 0
+        right: 0
+        width: 100%
+        max-width: none
+
+    .groupMembers
+      align-items: stretch
+
+    .groupMemberRow
+      align-items: center
+
+    .groupInfoImage
+      width: 100%
+      max-height: 12rem
+      object-fit: cover
+      border-radius: 1rem
 
   @media (max-width: variables.$mobileWidth)
     .messagesLayout

@@ -18,11 +18,13 @@
       message: BygMessage
       outgoing: boolean
       showAvatar?: boolean
+      showSenderName?: boolean
       groupPosition?: MessageGroupPosition
       deliveryState?: MessageDeliveryState | null
     }>(),
     {
       showAvatar: true,
+      showSenderName: false,
       groupPosition: 'single',
       deliveryState: null,
     }
@@ -75,6 +77,10 @@
     </template>
 
     <div class="bubbleWrap" :class="{ outgoing: outgoing }">
+      <p v-if="!outgoing && props.showSenderName" class="senderName light">
+        @{{ message.senderUsername }}
+      </p>
+
       <div
         class="bubble"
         :class="[
@@ -168,6 +174,10 @@
 
     &.outgoing
       align-items: flex-end
+
+  .senderName
+    font-size: x-small
+    margin: 0 0.25rem
 
   .bubble
     --cornerRadius: 1.25rem

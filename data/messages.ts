@@ -3,6 +3,10 @@ import { auth } from '@/auth/session'
 import type {
   BygMessage,
   BygMessageConversation,
+  BygMessageConversationInfoRequest,
+  BygMessageConversationInviteRequest,
+  BygMessageDirectConversationRequest,
+  BygMessageGroupConversationRequest,
   BygMessageLiveClientEvent,
   BygMessageLiveServerEvent,
   BygMessageSendRequest,
@@ -101,8 +105,16 @@ function shareTargetsCacheKey(userId: number): string {
   return buildCacheKey(userId, 'share-targets')
 }
 
-function conversationCacheKey(userId: number, username: string): string {
-  return buildCacheKey(userId, `conversation:${normalizeUsername(username)}`)
+function conversationCacheKey(userId: number, key: string): string {
+  return buildCacheKey(userId, `conversation:${key}`)
+}
+
+function conversationUsernameKey(username: string): string {
+  return `username:${normalizeUsername(username)}`
+}
+
+function conversationIdKey(conversationId: number): string {
+  return `id:${conversationId}`
 }
 
 function readThreadsDeviceCache(
@@ -124,10 +136,10 @@ function writeThreadsDeviceCache(
 
 function readConversationDeviceCache(
   userId: number,
-  username: string
+  key: string
 ): TimedCache<BygMessageConversation> | null {
   const cache = readLocalCache<BygMessageConversation>(
-    conversationCacheKey(userId, username)
+    conversationCacheKey(userId, key)
   )
   if (!cache || !cache.value || !Array.isArray(cache.value.messages)) {
     return null
@@ -137,10 +149,10 @@ function readConversationDeviceCache(
 
 function writeConversationDeviceCache(
   userId: number,
-  username: string,
+  key: string,
   cache: TimedCache<BygMessageConversation>
 ): void {
-  writeLocalCache(conversationCacheKey(userId, username), cache)
+  writeLocalCache(conversationCacheKey(userId, key), cache)
 }
 
 function readShareTargetsDeviceCache(
@@ -292,12 +304,12 @@ export async function fetchMessageConversation(
   }
   const cacheUserId = userId
 
-  const normalizedUsername = normalizeUsername(username)
-  if (!normalizedUsername) {
+  const conversationKey = conversationUsernameKey(username)
+  if (conversationKey === 'username:') {
     return null
   }
 
-  const cachedConversation = conversationCache.get(normalizedUsername)
+  const cachedConversation = conversationCache.get(conversationKey)
   if (
     !options.force &&
     cachedConversation &&
@@ -306,14 +318,14 @@ export async function fetchMessageConversation(
     return cachedConversation.value
   }
 
-  if (!options.force && conversationRequests.has(normalizedUsername)) {
-    return conversationRequests.get(normalizedUsername) ?? null
+  if (!options.force && conversationRequests.has(conversationKey)) {
+    return conversationRequests.get(conversationKey) ?? null
   }
 
   async function loadConversation(): Promise<BygMessageConversation | null> {
     const res = await api(
       `/messages/conversation/${encodeURIComponent(
-        normalizedUsername
+        normalizeUsername(username)
       )}?limit=200`
     )
     if (!res.ok) {
@@ -324,8 +336,14 @@ export async function fetchMessageConversation(
       value: (await res.json()) as BygMessageConversation,
       timestamp: Date.now(),
     }
-    conversationCache.set(normalizedUsername, cacheEntry)
-    writeConversationDeviceCache(cacheUserId, normalizedUsername, cacheEntry)
+    conversationCache.set(conversationKey, cacheEntry)
+    if (cacheEntry.value.conversationId > 0) {
+      conversationCache.set(
+        conversationIdKey(cacheEntry.value.conversationId),
+        cacheEntry
+      )
+    }
+    writeConversationDeviceCache(cacheUserId, conversationKey, cacheEntry)
 
     return cacheEntry.value
   }
@@ -333,19 +351,19 @@ export async function fetchMessageConversation(
   if (!options.force) {
     const deviceCache = readConversationDeviceCache(
       cacheUserId,
-      normalizedUsername
+      conversationKey
     )
     if (
       deviceCache &&
       isCacheUsable(deviceCache, CONVERSATION_CACHE_STALE_TTL_MS)
     ) {
-      conversationCache.set(normalizedUsername, deviceCache)
+      conversationCache.set(conversationKey, deviceCache)
 
       if (!isCacheFresh(deviceCache, CONVERSATION_CACHE_TTL_MS)) {
         const request = loadConversation().finally(() => {
-          conversationRequests.delete(normalizedUsername)
+          conversationRequests.delete(conversationKey)
         })
-        conversationRequests.set(normalizedUsername, request)
+        conversationRequests.set(conversationKey, request)
       }
 
       return deviceCache.value
@@ -353,9 +371,82 @@ export async function fetchMessageConversation(
   }
 
   const request = loadConversation().finally(() => {
-    conversationRequests.delete(normalizedUsername)
+    conversationRequests.delete(conversationKey)
   })
-  conversationRequests.set(normalizedUsername, request)
+  conversationRequests.set(conversationKey, request)
+  return request
+}
+
+export async function fetchMessageConversationById(
+  conversationId: number,
+  options: { force?: boolean } = {}
+): Promise<BygMessageConversation | null> {
+  if (!auth.user || !auth.token) {
+    return null
+  }
+
+  const userId = getCacheUserId()
+  if (userId === null || !Number.isFinite(conversationId)) {
+    return null
+  }
+  const cacheUserId = userId
+  const normalizedConversationId = Math.trunc(conversationId)
+  const cacheKey = conversationIdKey(normalizedConversationId)
+
+  const cachedConversation = conversationCache.get(cacheKey)
+  if (
+    !options.force &&
+    cachedConversation &&
+    isCacheFresh(cachedConversation, CONVERSATION_CACHE_TTL_MS)
+  ) {
+    return cachedConversation.value
+  }
+
+  if (!options.force && conversationRequests.has(cacheKey)) {
+    return conversationRequests.get(cacheKey) ?? null
+  }
+
+  async function loadConversation(): Promise<BygMessageConversation | null> {
+    const res = await api(
+      `/messages/conversations/${normalizedConversationId}?limit=200`
+    )
+    if (!res.ok) {
+      return null
+    }
+
+    const cacheEntry: TimedCache<BygMessageConversation> = {
+      value: (await res.json()) as BygMessageConversation,
+      timestamp: Date.now(),
+    }
+    conversationCache.set(cacheKey, cacheEntry)
+    writeConversationDeviceCache(cacheUserId, cacheKey, cacheEntry)
+
+    return cacheEntry.value
+  }
+
+  if (!options.force) {
+    const deviceCache = readConversationDeviceCache(cacheUserId, cacheKey)
+    if (
+      deviceCache &&
+      isCacheUsable(deviceCache, CONVERSATION_CACHE_STALE_TTL_MS)
+    ) {
+      conversationCache.set(cacheKey, deviceCache)
+
+      if (!isCacheFresh(deviceCache, CONVERSATION_CACHE_TTL_MS)) {
+        const request = loadConversation().finally(() => {
+          conversationRequests.delete(cacheKey)
+        })
+        conversationRequests.set(cacheKey, request)
+      }
+
+      return deviceCache.value
+    }
+  }
+
+  const request = loadConversation().finally(() => {
+    conversationRequests.delete(cacheKey)
+  })
+  conversationRequests.set(cacheKey, request)
   return request
 }
 
@@ -425,6 +516,140 @@ export async function fetchMessageShareTargets(
   return shareTargetRequest
 }
 
+function invalidateThreadCaches(): void {
+  threadsCache = null
+  shareTargetsCache = null
+  const userId = getCacheUserId()
+  if (userId !== null) {
+    removeLocalCache(threadsCacheKey(userId))
+    removeLocalCache(shareTargetsCacheKey(userId))
+  }
+}
+
+function cacheConversation(conversation: BygMessageConversation): void {
+  const userId = getCacheUserId()
+  const cacheEntry: TimedCache<BygMessageConversation> = {
+    value: conversation,
+    timestamp: Date.now(),
+  }
+  const idKey = conversationIdKey(conversation.conversationId)
+
+  conversationCache.set(idKey, cacheEntry)
+  if (userId !== null) {
+    writeConversationDeviceCache(userId, idKey, cacheEntry)
+  }
+}
+
+export async function getOrCreateDirectConversation(
+  payload: BygMessageDirectConversationRequest
+): Promise<BygMessageConversation | null> {
+  if (!auth.user || !auth.token) {
+    return null
+  }
+
+  const res = await api('/messages/conversations/direct', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) {
+    return null
+  }
+
+  const conversation = (await res.json()) as BygMessageConversation
+  cacheConversation(conversation)
+  invalidateThreadCaches()
+  return conversation
+}
+
+export async function createGroupConversation(
+  payload: BygMessageGroupConversationRequest
+): Promise<BygMessageConversation | null> {
+  if (!auth.user || !auth.token) {
+    return null
+  }
+
+  const res = await api('/messages/conversations/group', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) {
+    return null
+  }
+
+  const conversation = (await res.json()) as BygMessageConversation
+  cacheConversation(conversation)
+  invalidateThreadCaches()
+  return conversation
+}
+
+export async function inviteGroupConversationMember(
+  conversationId: number,
+  payload: BygMessageConversationInviteRequest
+): Promise<BygMessageConversation | null> {
+  if (!auth.user || !auth.token) {
+    return null
+  }
+
+  const res = await api(`/messages/conversations/${conversationId}/members`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) {
+    return null
+  }
+
+  const conversation = (await res.json()) as BygMessageConversation
+  cacheConversation(conversation)
+  invalidateThreadCaches()
+  return conversation
+}
+
+export async function removeGroupConversationMember(
+  conversationId: number,
+  userId: number
+): Promise<BygMessageConversation | null> {
+  if (!auth.user || !auth.token) {
+    return null
+  }
+
+  const res = await api(
+    `/messages/conversations/${conversationId}/members/${userId}`,
+    {
+      method: 'DELETE',
+    }
+  )
+  if (!res.ok) {
+    return null
+  }
+
+  const conversation = (await res.json()) as BygMessageConversation
+  cacheConversation(conversation)
+  invalidateThreadCaches()
+  return conversation
+}
+
+export async function updateGroupConversationInfo(
+  conversationId: number,
+  payload: BygMessageConversationInfoRequest
+): Promise<BygMessageConversation | null> {
+  if (!auth.user || !auth.token) {
+    return null
+  }
+
+  const res = await api(`/messages/conversations/${conversationId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) {
+    return null
+  }
+
+  const conversation = (await res.json()) as BygMessageConversation
+  cacheConversation(conversation)
+  invalidateThreadCaches()
+  return conversation
+}
+
 export async function sendMessage(
   payload: BygMessageSendRequest
 ): Promise<BygMessage | null> {
@@ -442,18 +667,15 @@ export async function sendMessage(
 
   const message = (await res.json()) as BygMessage
 
-  threadsCache = null
-  shareTargetsCache = null
+  invalidateThreadCaches()
   const userId = getCacheUserId()
-  if (userId !== null) {
-    removeLocalCache(threadsCacheKey(userId))
-    removeLocalCache(shareTargetsCacheKey(userId))
+  const keys = [ conversationIdKey(message.conversationId) ]
+  if (message.recipientId !== null) {
+    keys.push(conversationUsernameKey(message.senderUsername))
+    keys.push(conversationUsernameKey(message.recipientUsername))
   }
 
-  const senderConversationKey = normalizeUsername(message.senderUsername)
-  const recipientConversationKey = normalizeUsername(message.recipientUsername)
-
-  for (const key of [ senderConversationKey, recipientConversationKey ]) {
+  for (const key of keys) {
     const existingConversation =
       conversationCache.get(key) ??
       (userId !== null ? readConversationDeviceCache(userId, key) : null)

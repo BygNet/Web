@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import { computed } from 'vue'
 
+  import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import type { BygMessageThread } from '@/types/messages'
@@ -13,34 +15,65 @@
 
   const emit = defineEmits<{
     select: []
+    info: []
   }>()
 
-  const formattedDate = new Intl.DateTimeFormat(undefined, {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit',
-  }).format(new Date(props.thread.lastMessageDate))
+  const otherDirectMember = computed(() => {
+    return props.thread.members.find(member => member.userId !== auth.user?.id)
+  })
+  const displayName = computed(() => {
+    if (props.thread.type === 'group') {
+      return props.thread.title ?? 'Group chat'
+    }
+
+    return otherDirectMember.value?.username ?? 'Direct chat'
+  })
+  const avatarUrl = computed(() => {
+    return props.thread.type === 'direct'
+      ? (otherDirectMember.value?.avatarUrl ?? null)
+      : props.thread.imageUrl
+  })
+  const subscriptionState = computed(() => {
+    return props.thread.type === 'direct'
+      ? (otherDirectMember.value?.subscriptionState ?? 'free')
+      : 'free'
+  })
+  const formattedDate = computed(() =>
+    new Intl.DateTimeFormat(undefined, {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+    }).format(new Date(props.thread.lastMessageDate))
+  )
 </script>
 
 <template>
   <HStack class="threadItem" :class="{ selected }" @click="emit('select')">
     <HStack class="threadRow">
       <VStack class="threadMain">
-        <HStack class="threadTitle">
+        <HStack
+          class="threadTitle"
+          @click.stop="thread.type === 'group' ? emit('info') : emit('select')"
+        >
           <img
-            v-if="thread.avatarUrl"
-            :src="thread.avatarUrl"
-            :alt="`${thread.username}'s avatar`"
+            v-if="avatarUrl"
+            :src="avatarUrl"
+            :alt="`${displayName}'s avatar`"
+          />
+          <Icon
+            v-else-if="thread.type === 'direct'"
+            class="avatarFallback"
+            icon="solar:user-circle-line-duotone"
           />
           <Icon
             v-else
             class="avatarFallback"
-            icon="solar:user-circle-line-duotone"
+            icon="solar:users-group-rounded-line-duotone"
           />
 
-          <p class="username">{{ thread.username }}</p>
+          <p class="username">{{ displayName }}</p>
           <Icon
-            v-if="thread.subscriptionState !== 'free'"
+            v-if="subscriptionState !== 'free'"
             icon="solar:crown-star-line-duotone"
           />
         </HStack>

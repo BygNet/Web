@@ -11,6 +11,9 @@
   scroll-behavior: smooth
   box-sizing: border-box
 
+  &:focus-visible
+    outline: themes.$accentColor 0.1rem solid
+
 html
   height: 100vh
   width: 100vw
@@ -95,9 +98,6 @@ input, textarea
   background: themes.$foregroundColor
   border: none
   color: themes.$textColor
-
-  &:focus
-    outline: themes.$accentColor 0.1rem solid
 
 ul, ol
   padding-inline-start: 1.25rem
