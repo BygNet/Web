@@ -76,6 +76,7 @@
             :name="activeAccount.user.username"
             minimal
             hide-follow-button
+            no-link
           />
           <p class="light">{{ activeAccount.user.email }}</p>
         </VStack>
@@ -122,6 +123,7 @@
                 :name="account.user.username"
                 minimal
                 hide-follow-button
+                no-link
               />
             </VStack>
           </HStack>

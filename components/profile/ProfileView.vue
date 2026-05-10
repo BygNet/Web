@@ -134,23 +134,22 @@
           </div>
 
           <VStack class="userInfo noSpace">
-            <p v-if="displayName" class="displayName">
-              {{ displayName }}
-            </p>
             <UsernameView
               :name="user.username"
               :avatar-url="user.avatarUrl"
-              :subscription-state="user.subscriptionState"
               display-mode
             />
             <p v-if="pronouns" class="light pronounsLabel">
               {{ pronouns }}
             </p>
-            <p class="light">
-              {{ t('ui.profile.joinedLabel', { date: joinDate }) }}
-            </p>
           </VStack>
         </HStack>
+
+        <SongLink
+          v-if="user.songLinkUrl"
+          :url="user.songLinkUrl"
+          class="songWidget"
+        />
 
         <HStack
           v-if="!isOwnProfileResolved && showActions"
@@ -186,28 +185,36 @@
         </HStack>
 
         <SafeLink to="/settings">
-          <button v-if="isOwnProfileResolved && showActions" class="editButton">
+          <button
+            v-if="isOwnProfileResolved && showActions"
+            class="editButton actionButtons"
+          >
             <Icon icon="solar:pen-2-line-duotone" />
             Edit Profile
           </button>
         </SafeLink>
 
         <!-- Bio & Sub -->
-        <p class="light">Byg {{ capitalize(user.subscriptionState) }}</p>
+        <HStack class="light">
+          <p>Byg {{ capitalize(user.subscriptionState) }}</p>
+          <p>∙</p>
+          <p>
+            {{ t('ui.profile.joinedLabel', { date: joinDate }) }}
+          </p>
+        </HStack>
+
         <p v-if="user.bio" class="bio">
           {{ user.bio }}
         </p>
 
-        <SongLink v-if="user.songLinkUrl" :url="user.songLinkUrl" />
-
         <!-- Stats -->
         <HStack class="stats">
           <VStack class="stat">
-            <strong>{{ followingCount ?? 0 }}</strong>
+            <h3>{{ followingCount ?? 0 }}</h3>
             <p class="light">Following</p>
           </VStack>
           <VStack class="stat">
-            <strong>{{ followerCount ?? 0 }}</strong>
+            <h3>{{ followerCount ?? 0 }}</h3>
             <p class="light">Followers</p>
           </VStack>
         </HStack>
@@ -219,6 +226,7 @@
 <style scoped lang="sass">
   @use "@/styles/utils"
   @use "@/styles/themes"
+  @use "@/styles/fonts"
 
   .profileCardContainer
     width: 100%
@@ -244,9 +252,8 @@
       background: linear-gradient(135deg, themes.$accentColor 0%, rgba(0,0,0,0.1) 100%)
 
     .profileContent
-      padding: var(--padding)
-      margin-top: -2.5rem
-      gap: 1rem
+      padding: max(var(--padding), 1rem)
+      margin-top: -3.5rem
       width: 100%
 
       .avatarSection
@@ -273,25 +280,25 @@
             height: 2.5rem
             opacity: 0.5
 
+      .songWidget
+        margin-top: 1rem
+
+      .actionButtons
+        margin-bottom: 1rem
+
       .bio
         line-height: 1.5
-
-      .displayName
-        margin: 0 0 -0.75rem
-        font-size: 1.2rem
-        font-weight: 700
-        max-width: 100%
-        overflow: hidden
-        text-overflow: ellipsis
-        white-space: nowrap
 
       .pronounsLabel
         margin: 0
 
       .stats
         gap: 2rem
-        padding-top: 1rem
+        margin-top: 1rem
 
       .stat
         gap: 0.25rem
+
+        h3
+          font-family: fonts.$code
 </style>
