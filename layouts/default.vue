@@ -9,6 +9,8 @@
 
   <main class="defaultLayout">
     <TitleView />
+    <h2>NOTICE: Byg Chat may be degraded or down during API maintenance.</h2>
+    <p>Thank you for your understanding.</p>
     <slot />
     <MobileNav />
   </main>

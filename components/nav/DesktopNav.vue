@@ -117,7 +117,7 @@
         opacity: 1
 
     &::before
-      background: linear-gradient(to bottom, blue, yellow, blue)
+      background: linear-gradient(to bottom, var(--gradientOfTheDay))
       mask-image: linear-gradient(to right, black, transparent)
       opacity: 0.3
 
