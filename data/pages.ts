@@ -85,6 +85,15 @@ export const InboxPage: BygPageMeta = {
   color: '#e0803c',
 }
 
+export const AsksPage: BygPageMeta = {
+  key: 'asks',
+  titleKey: 'pages.asks.title',
+  descriptionKey: 'pages.asks.description',
+  path: '/asks',
+  icon: 'solar:question-square-line-duotone',
+  color: '#dd289e',
+}
+
 export const LinkPage: BygPageMeta = {
   key: 'link',
   titleKey: 'pages.link.title',
@@ -124,6 +133,7 @@ export const CreditsPage: BygPageMeta = {
 export const MorePages: BygPageMeta[] = [
   SearchPage,
   InboxPage,
+  AsksPage,
   LinkPage,
   VerificationPage,
   SettingsPage,
@@ -210,6 +220,7 @@ export const DesktopPages: BygPageMeta[] = [
   SpacerPage,
 
   MessagesPage,
+  AsksPage,
   MySpacePage,
   SettingsPage,
   SpacerPage,

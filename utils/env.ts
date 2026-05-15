@@ -8,6 +8,7 @@ export const useEnv = () => {
   return {
     apiBase: config.public.apiBase,
     adsBase: config.public.adsBase,
+    asksBase: config.public.asksBase,
   }
 }
 
@@ -16,6 +17,7 @@ export const getEnv = () => {
     return {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://api.byg.a35.dev',
       adsBase: process.env.NUXT_PUBLIC_ADS_BASE || 'https://ads.byg.a35.dev',
+      asksBase: process.env.NUXT_PUBLIC_ASKS_BASE || 'https://asks.byg.gg',
     }
   }
   // Client-side access via import.meta.env won't work, use composable

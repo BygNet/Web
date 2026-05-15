@@ -24,6 +24,8 @@
         return 'solar:at-line-duotone'
       case 'comment_mention':
         return 'solar:chat-round-line-line-duotone'
+      case 'ask':
+        return 'solar:question-square-line-duotone'
       case 'message':
         return 'solar:chat-round-line-line-duotone'
       case 'post_comment':

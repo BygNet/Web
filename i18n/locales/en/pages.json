@@ -24,6 +24,10 @@
       "title": "Inbox",
       "description": "Your Byg alerts."
     },
+    "asks": {
+      "title": "Asks",
+      "description": "Anonymous questions for your profile."
+    },
     "link": {
       "title": "Link",
       "description": "Link collections."

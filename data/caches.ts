@@ -1,6 +1,8 @@
 import type { BygAd, BygImage, BygPost, BygUser } from '@bygnet/types'
 import { type Ref, ref } from 'vue'
 
+import { clearAsksState } from '@/data/asks'
+
 // Posts Cache - Heavy caching with 5-minute TTL
 export const postCache: Ref<BygPost[] | null> = ref(null)
 export const postCacheTime: Ref<number> = ref(0)
@@ -167,4 +169,5 @@ export function clearUserCaches(): void {
   currentUserCacheTime.value = 0
   profileCache.value = {}
   subscriptionStateCache.value = {}
+  clearAsksState()
 }

@@ -41,6 +41,21 @@
       "line2": "Go to Notifications, and enable push alerts.",
       "action": "Notifications"
     },
+    "asks": {
+      "title": "Asks",
+      "subtitle": "Copy your public asks URL and review anonymous questions.",
+      "copyUrl": "Copy URL",
+      "openPublicUrl": "Open public page",
+      "copySuccess": "URL copied to clipboard.",
+      "copyFailed": "Failed to copy URL.",
+      "loading": "Loading asks...",
+      "emptyState": "No asks yet. Share your URL to start receiving questions.",
+      "errorLoadAsks": "Failed to load asks.",
+      "shareImage": "Share as image",
+      "sharingImage": "Preparing image...",
+      "shareReady": "Image ready.",
+      "shareFailed": "Failed to create share image."
+    },
     "share": {
       "title": "Share",
       "by": "by",
@@ -253,6 +268,7 @@
     "profile": {
       "follow": "Follow",
       "following": "Following",
+      "asks": "Asks",
       "chat": "Chat",
       "joinedLabel": "Joined {date}",
       "pronounsLabel": "Pronouns",

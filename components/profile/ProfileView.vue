@@ -173,6 +173,13 @@
               }}
             </button>
 
+            <SafeLink v-if="isOwnProfileResolved" to="/asks">
+              <button>
+                <Icon icon="solar:question-square-line-duotone" />
+                {{ t('ui.profile.asks') }}
+              </button>
+            </SafeLink>
+
             <SafeLink :to="'/messages?with=' + user.username">
               <button>
                 <Icon icon="solar:plain-line-duotone" />
