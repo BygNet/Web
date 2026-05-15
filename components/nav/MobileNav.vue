@@ -40,7 +40,6 @@
                 : page.icon
             "
           />
-          <p>{{ t(page.titleKey) }}</p>
         </VStack>
       </SafeLink>
     </HStack>
@@ -93,8 +92,8 @@
         gap: 0
         border-radius: 10rem
 
-        &.selected *
-          color: themes.$accentColor
+        &:not(.selected)
+          opacity: 0.6
 
         svg
           width: 1.75rem

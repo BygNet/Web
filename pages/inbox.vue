@@ -8,11 +8,6 @@
     ref,
     watchEffect,
   } from 'vue'
-
-  definePageMeta({
-    middleware: 'auth',
-  })
-
   import { useI18n } from 'vue-i18n'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -36,6 +31,11 @@
   import { title } from '@/data/title'
   import type { BygNotification } from '@/types/notifications'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+
+  definePageMeta({
+    middleware: 'auth',
+    showBackButton: true,
+  })
 
   const { t } = useI18n()
   const pageMeta = PageMetaByPath['/inbox']
