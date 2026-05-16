@@ -14,6 +14,7 @@
     getPushPermissionState,
     syncPushSubscription,
   } from '@/data/pushAlerts'
+  import { loadTheme } from '@/data/themes'
   import {
     showingCookieBanner,
     showingNotificationsModal,
@@ -74,6 +75,8 @@
     consoleWarn()
     pushPermission.value = getPushPermissionState()
     showingCookieBanner.value = getFlag('showCookieBanner', true)
+
+    loadTheme()
 
     if (canEnablePush.value && !pushEnabled.value && auth.token) {
       showingNotificationsModal.value = true
