@@ -1,12 +1,8 @@
 <script setup lang="ts">
   import { Icon } from '@iconify/vue'
+  import domtoimage from 'dom-to-image'
   import { computed, type Ref, ref, watch, watchEffect } from 'vue'
   import { useI18n } from 'vue-i18n'
-
-  definePageMeta({
-    middleware: 'auth',
-    showBackButton: true,
-  })
 
   import { auth } from '@/auth/session'
   import AskCard from '@/components/asks/AskCard.vue'
@@ -21,10 +17,17 @@
   import type { BygAsk } from '@/types/asks'
   import { useEnv } from '@/utils/env'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+  import Modal from '~/components/layout/Modal.vue'
+  import ModalActions from '~/components/layout/ModalActions.vue'
 
   const { t } = useI18n()
   const config = useEnv()
   const pageMeta = PageMetaByPath['/asks']!
+
+  definePageMeta({
+    middleware: 'auth',
+    showBackButton: true,
+  })
 
   watchEffect(() => {
     title.value = t(pageMeta.titleKey)
@@ -45,6 +48,9 @@
     const base = String(config.asksBase).replace(/\/+$/, '')
     return `${base}/${encodeURIComponent(username.value)}`
   })
+  const showingAsksShareModal: Ref<boolean> = ref(false)
+  const currentSharingAsk: Ref<BygAsk | null> = ref(null)
+  const shareCardRef: Ref<HTMLElement | null> = ref(null)
 
   async function loadAsks(options: { force?: boolean } = {}): Promise<void> {
     loading.value = true
@@ -78,6 +84,52 @@
     window.open(asksUrl.value, '_blank', 'noopener,noreferrer')
   }
 
+  function showShareModal(ask: BygAsk): void {
+    currentSharingAsk.value = ask
+    showingAsksShareModal.value = true
+  }
+
+  async function exportToImage(): Promise<void> {
+    if (!shareCardRef.value || !currentSharingAsk.value) return
+    await document.fonts.ready
+
+    try {
+      const blob = await domtoimage.toBlob(shareCardRef.value, {
+        quality: 1,
+        bgcolor: '#00000000',
+        width: shareCardRef.value.offsetWidth * 4,
+        height: shareCardRef.value.offsetHeight * 4,
+        style: {
+          transform: 'scale(4)',
+          transformOrigin: 'top left',
+          width: `${shareCardRef.value.offsetWidth}px`,
+          height: `${shareCardRef.value.offsetHeight}px`,
+        },
+      })
+
+      const file = new File([ blob ], `ask-${currentSharingAsk.value.id}.png`, {
+        type: 'image/png',
+      })
+
+      if (navigator.share && navigator.canShare?.({ files: [ file ] })) {
+        await navigator.share({
+          files: [ file ],
+        })
+      } else {
+        const downloadUrl = URL.createObjectURL(blob)
+
+        const link = document.createElement('a')
+        link.href = downloadUrl
+        link.download = file.name
+        link.click()
+
+        URL.revokeObjectURL(downloadUrl)
+      }
+    } catch (error) {
+      console.error('Failed to export ask card', error)
+    }
+  }
+
   watch(
     () => auth.user?.id,
     async (nextId, previousId) => {
@@ -96,6 +148,33 @@
 
 <template>
   <ContentArea class="asksPage">
+    <Modal :visible="showingAsksShareModal && currentSharingAsk !== null">
+      <VStack class="fullWidth asksShare" v-if="currentSharingAsk !== null">
+        <div class="shareCardContainer" ref="shareCardRef">
+          <div class="shareCard">
+            <h2 class="titleBand">Ask @{{ username }} anything!</h2>
+            <p>{{ currentSharingAsk.content }}</p>
+            <p class="date">{{ formatDate(currentSharingAsk.createdDate) }}</p>
+          </div>
+        </div>
+
+        <ModalActions>
+          <template #cancellationAction>
+            <button class="transparent" @click="showingAsksShareModal = false">
+              {{ t('common.cancel') }}
+            </button>
+          </template>
+
+          <template #confirmationAction>
+            <button class="prominent" @click="exportToImage()">
+              <Icon icon="solar:square-share-line-line-duotone" />
+              {{ t('ui.asks.shareImage') }}
+            </button>
+          </template>
+        </ModalActions>
+      </VStack>
+    </Modal>
+
     <VStack class="asksHeader fullWidth">
       <HStack class="fullWidth autoSpace headerRow">
         <VStack class="headerCopy noSpace">
@@ -140,6 +219,7 @@
         :ask="ask"
         :username="username"
         :asks-url="asksUrl"
+        @share="showShareModal(ask)"
       />
     </VStack>
   </ContentArea>
@@ -147,9 +227,50 @@
 
 <style scoped lang="sass">
   @use "@/styles/utils"
+  @use "@/styles/fonts"
 
   .asksPage, .asksList
     width: 100%
+
+  .asksShare
+    @include utils.itemBackground
+
+    .shareCardContainer
+      padding: 0
+
+      &, *
+        all: initial
+        font-family: fonts.$global
+        color: #f3eaf4
+
+      .shareCard
+        width: calc(100% - 0.75rem*2)
+        padding: 0.75rem
+        background: #2c0a40
+        border-radius: 1.5rem
+        overflow: hidden
+        align-items: flex-start
+        display: flex
+        flex-direction: column
+        gap: 0.5rem
+
+        .titleBand
+          margin: 0
+          padding: 0.75rem
+          background: linear-gradient(to left, #c52475, #5c2ec1)
+          border-radius: 0.75rem
+          font-size: larger
+          font-weight: bold
+
+        p
+          margin: 0
+          width: 100%
+          font-size: medium
+          font-weight: 500
+
+        .date
+          opacity: 0.4
+          font-size: small
 
   .asksHeader
     @include utils.itemBackground

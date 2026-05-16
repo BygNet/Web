@@ -44,17 +44,14 @@
     "asks": {
       "title": "Asks",
       "subtitle": "Copy your public asks URL and review anonymous questions.",
-      "copyUrl": "Copy URL",
-      "openPublicUrl": "Open public page",
+      "copyUrl": "Copy Public URL",
+      "openPublicUrl": "Open Public URL",
       "copySuccess": "URL copied to clipboard.",
       "copyFailed": "Failed to copy URL.",
       "loading": "Loading asks...",
       "emptyState": "No asks yet. Share your URL to start receiving questions.",
       "errorLoadAsks": "Failed to load asks.",
-      "shareImage": "Share as image",
-      "sharingImage": "Preparing image...",
-      "shareReady": "Image ready.",
-      "shareFailed": "Failed to create share image."
+      "shareImage": "Share"
     },
     "share": {
       "title": "Share",

@@ -6,7 +6,6 @@
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import type { BygAsk } from '@/types/asks'
-  import { shareAskAsImage } from '@/utils/askShareImage'
 
   const props = defineProps<{
     ask: BygAsk
@@ -14,8 +13,9 @@
     asksUrl: string
   }>()
 
+  defineEmits([ 'share' ])
+
   const { t } = useI18n()
-  const isSharing = ref(false)
   const shareMessage = ref<string | null>(null)
   const formattedDate = computed(() =>
     new Intl.DateTimeFormat(undefined, {
@@ -24,29 +24,6 @@
       day: 'numeric',
     }).format(new Date(props.ask.createdDate))
   )
-
-  async function share(): Promise<void> {
-    if (isSharing.value) return
-
-    isSharing.value = true
-    shareMessage.value = null
-    try {
-      await shareAskAsImage({
-        username: props.username,
-        asksUrl: props.asksUrl,
-        content: props.ask.content,
-        createdDate: props.ask.createdDate,
-      })
-      shareMessage.value = t('ui.asks.shareReady')
-    } catch {
-      shareMessage.value = t('ui.asks.shareFailed')
-    } finally {
-      isSharing.value = false
-      window.setTimeout(() => {
-        shareMessage.value = null
-      }, 2500)
-    }
-  }
 </script>
 
 <template>
@@ -56,9 +33,10 @@
         {{ formattedDate }}
       </p>
 
-      <button @click="share" :disabled="isSharing">
+      <button @click="$emit('share')">
         <Icon icon="solar:gallery-send-line-duotone" />
-        {{ isSharing ? t('ui.asks.sharingImage') : t('ui.asks.shareImage') }}
+
+        {{ t('ui.asks.shareImage') }}
       </button>
     </HStack>
 
@@ -71,9 +49,10 @@
   @use "@/styles/utils"
 
   .askCard
-    @include utils.itemBackground
-    @include utils.maxPostPaddedWidth
+    @include utils.listItemBorder
 
+    border-radius: 0
+    padding: 0.75rem 0
     width: 100%
     align-items: flex-start
     gap: 0.75rem

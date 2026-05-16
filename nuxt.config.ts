@@ -148,6 +148,7 @@ export default defineNuxtConfig({
         },
         {
           rel: 'stylesheet',
+          crossorigin: 'anonymous',
           href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap',
         },
         {
@@ -201,6 +202,7 @@ export default defineNuxtConfig({
         '@tiptap/starter-kit',
         '@tiptap/extension-placeholder',
         '@tiptap/markdown',
+        'dom-to-image',
       ],
     },
   },

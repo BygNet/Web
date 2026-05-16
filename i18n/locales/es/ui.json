@@ -41,6 +41,18 @@
       "line2": "Ve a Notificaciones y habilita las alertas push.",
       "action": "Notificaciones"
     },
+    "asks": {
+      "title": "Preguntas",
+      "subtitle": "Copia tu URL pública de preguntas y revisa las preguntas anónimas.",
+      "copyUrl": "Copiar URL pública",
+      "openPublicUrl": "Abrir URL pública",
+      "copySuccess": "URL copiada al portapapeles.",
+      "copyFailed": "No se pudo copiar la URL.",
+      "loading": "Cargando preguntas...",
+      "emptyState": "Todavía no hay preguntas. Comparte tu URL para empezar a recibir preguntas.",
+      "errorLoadAsks": "No se pudieron cargar las preguntas.",
+      "shareImage": "Compartir"
+    },
     "share": {
       "title": "Compartir",
       "by": "por",
