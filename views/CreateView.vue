@@ -179,7 +179,7 @@
         <HStack class="autoSpace fullWidth">
           <h2>{{ t('ui.create.title') }}</h2>
 
-          <button @click="showingCreateModal = false">
+          <button class="spinIcon" @click="showingCreateModal = false">
             <Icon icon="mingcute:close-fill" />
           </button>
         </HStack>

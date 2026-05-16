@@ -166,7 +166,7 @@
           </template>
 
           <template #confirmationAction>
-            <button class="prominent" @click="exportToImage()">
+            <button class="prominent bounceRightIcon" @click="exportToImage()">
               <Icon icon="solar:square-share-line-line-duotone" />
               {{ t('ui.asks.shareImage') }}
             </button>

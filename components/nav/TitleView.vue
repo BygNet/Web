@@ -26,7 +26,7 @@
         <button
           @click="goBack()"
           v-if="$route.meta.showBackButton"
-          class="backButton"
+          class="backButton bounceLeftIcon"
         >
           <Icon icon="solar:arrow-left-line-duotone" />
         </button>
@@ -42,7 +42,7 @@
       </HStack>
 
       <button
-        class="alertsButton"
+        class="alertsButton bounceIcon"
         :class="{
           prominent: isActive(route.path, '/inbox'),
         }"

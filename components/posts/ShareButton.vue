@@ -28,8 +28,8 @@
 </script>
 
 <template>
-  <button class="shareButton" @click="share">
-    <Icon icon="solar:share-line-duotone" />
+  <button class="shareButton bounceRightIcon" @click="share">
+    <Icon icon="solar:square-share-line-line-duotone" />
     {{ compact ? formatStat(shareCount) : formatNumber(shareCount) }}
   </button>
 </template>

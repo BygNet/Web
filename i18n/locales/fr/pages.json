@@ -24,6 +24,10 @@
       "title": "Alertes",
       "description": "Vos alertes Byg."
     },
+    "asks": {
+      "title": "Questions",
+      "description": "Recevez des questions anonymes."
+    },
     "link": {
       "title": "Liens",
       "description": "Collections de liens."

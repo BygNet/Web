@@ -24,6 +24,10 @@
       "title": "收件箱",
       "description": "你的 Byg 提醒。"
     },
+    "asks": {
+      "title": "提问",
+      "description": "接收匿名问题。"
+    },
     "link": {
       "title": "链接",
       "description": "链接合集。"

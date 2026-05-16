@@ -1,0 +1,55 @@
+// Movement
+.bounceLeftIcon:hover svg
+  animation: bounceLeft 0.4s ease-in-out
+
+@keyframes bounceLeft
+  0%
+    transform: translateX(0)
+  40%
+    transform: translateX(-0.35rem)
+  100%
+    transform: translateX(0)
+
+.bounceUpIcon:hover svg
+  animation: bounceUp 0.4s ease-in-out
+
+@keyframes bounceUp
+  0%
+    transform: translateY(0)
+  40%
+    transform: translateY(-0.35rem)
+  100%
+    transform: translateY(0)
+
+.bounceRightIcon:hover svg
+  animation: bounceRight 0.4s ease-in-out
+
+@keyframes bounceRight
+  0%
+    transform: translateX(0)
+  40%
+    transform: translateX(0.35rem)
+  100%
+    transform: translateX(0)
+
+// Rotation
+.spinIcon:hover svg
+  animation: spin 0.6s ease-in-out
+
+@keyframes spin
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)
+
+// Scale
+.bounceIcon:hover svg
+  animation: bounce 0.4s ease-in-out
+
+@keyframes bounce
+  0%
+    transform: scale(1)
+  50%
+    transform: scale(1.1)
+  100%
+    transform: scale(1)

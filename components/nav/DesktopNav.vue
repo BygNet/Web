@@ -138,39 +138,28 @@
     cursor: default
 
   .desktopNavItem
-    padding: 0.35rem 0.35rem
+    padding: 0.45rem 0.65rem
     cursor: pointer
     width: 100%
     gap: 0.5rem
     border-radius: 1.25rem
+    opacity: 0.9
 
     &, *
       transition: 0.2s ease
 
-    &:not(.selected, :hover)
-      opacity: 0.9
-
     &:hover, &.selected
+      opacity: 1
       background: themes.$foregroundColor
 
-      svg
-        scale: 1.2
-
-    &:hover
-      padding: 0.35rem 0.65rem
-
-    &.selected
-      padding: 0.45rem 0.75rem
-      gap: 0.75rem
-
     svg
-      width: 1.65rem
-      height: 1.65rem
+      width: 1.85rem
+      height: 1.85rem
 
   .pages
     position: relative
     width: 100%
-    gap: 0.5rem
+    gap: 0.25rem
 
   .accountSection
     gap: 1rem

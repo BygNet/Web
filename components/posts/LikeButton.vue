@@ -22,6 +22,7 @@
 
   const likeCount: Ref<number> = ref(0)
   const liking: Ref<boolean> = ref(false)
+  const clicked: Ref<boolean> = ref(false)
 
   onMounted(() => {
     likeCount.value = props.likes
@@ -36,6 +37,7 @@
     if (liking.value) return
 
     liking.value = true
+    clicked.value = true
     try {
       const res = await fetch(fetchUrl.value, { method: 'POST' })
       if (!res.ok) throw new Error('Like failed')
@@ -50,8 +52,34 @@
 </script>
 
 <template>
-  <button class="likeButton" :disabled="liking" @click="like">
-    <Icon icon="solar:hearts-line-duotone" />
+  <button
+    class="likeButton"
+    :class="{ clicked }"
+    :disabled="liking"
+    @click="like"
+  >
+    <Icon :icon="clicked ? 'solar:heart-bold' : 'solar:heart-outline'" />
     {{ compact ? formatStat(likeCount) : formatNumber(likeCount) }}
   </button>
 </template>
+
+<style scoped lang="sass">
+  $likedColor: red
+
+  .likeButton
+    &:hover svg
+      scale: 1.1
+
+    &.clicked svg
+      animation: like 0.4s ease-in-out forwards
+
+  @keyframes like
+    0%
+      transform: scale(1)
+    50%
+      transform: scale(1.5)
+      color: $likedColor
+    100%
+      transform: scale(1)
+      color: $likedColor
+</style>

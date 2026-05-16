@@ -33,9 +33,8 @@
         {{ formattedDate }}
       </p>
 
-      <button @click="$emit('share')">
+      <button @click="$emit('share')" class="bounceUpIcon">
         <Icon icon="solar:gallery-send-line-duotone" />
-
         {{ t('ui.asks.shareImage') }}
       </button>
     </HStack>

@@ -124,7 +124,7 @@
     <VStack class="shareModal">
       <HStack class="fullWidth autoSpace">
         <h2>{{ t('ui.share.title') }}</h2>
-        <button @click="closeShareModal()">
+        <button class="spinIcon" @click="closeShareModal()">
           <Icon icon="mingcute:close-fill" />
         </button>
       </HStack>
@@ -143,15 +143,15 @@
         </p>
       </VStack>
 
-      <button class="fullWidth" @click="shareUsingSystemSheet">
-        <Icon icon="solar:share-line-duotone" />
+      <button class="fullWidth bounceRightIcon" @click="shareUsingSystemSheet">
+        <Icon icon="solar:square-share-line-line-duotone" />
         {{ t('ui.share.shareToOtherApps') }}
       </button>
 
       <VStack class="targetsSection fullWidth">
         <HStack class="fullWidth autoSpace">
           <h3>{{ t('ui.share.sendInChat') }}</h3>
-          <button @click="loadShareTargets">
+          <button class="spinIcon" @click="loadShareTargets">
             <Icon icon="solar:refresh-line-duotone" />
           </button>
         </HStack>

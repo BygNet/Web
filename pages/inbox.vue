@@ -148,7 +148,7 @@
             }}
           </button>
 
-          <button @click="loadNotifications({ force: true })">
+          <button class="spinIcon" @click="loadNotifications({ force: true })">
             <Icon icon="solar:refresh-line-duotone" />
             {{ t('common.refresh') }}
           </button>
