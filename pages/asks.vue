@@ -236,15 +236,17 @@
     @include utils.itemBackground
 
     .shareCardContainer
-      padding: 0
-
       &, *
         all: initial
+        box-sizing: border-box
         font-family: fonts.$global
         color: #f3eaf4
 
+      padding: 0
+      max-width: 25rem
+
       .shareCard
-        width: calc(100% - 0.75rem*2)
+        width: 100%
         padding: 0.75rem
         background: #2c0a40
         border-radius: 1.5rem
@@ -261,6 +263,7 @@
           border-radius: 0.75rem
           font-size: larger
           font-weight: bold
+          width: 100%
 
         p
           margin: 0
