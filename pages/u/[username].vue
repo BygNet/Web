@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { BygProfile } from '@bygnet/types'
+  import type { BygPost, BygProfile } from '@bygnet/types'
   import { computed, type Ref, ref, watch } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -9,13 +9,16 @@
   import { fetchProfileByUsername } from '@/data/profiles'
   import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
-  import { useRoute } from '#app'
+  import { useLazyAsyncData, useRoute } from '#app'
+  import SafeLink from '~/components/base/SafeLink.vue'
+  import VStack from '~/components/layout/VStack.vue'
+  import PostItem from '~/components/posts/PostItem.vue'
 
   definePageMeta({ showBackButton: true })
 
   const route = useRoute()
+  const config = useRuntimeConfig()
   const usernameParam = (route.params.username as string) || null
-
   const username = computed(() => usernameParam)
 
   const profile: Ref<BygProfile | null> = ref(null)
@@ -23,6 +26,7 @@
   const error: Ref<string | null> = ref(null)
   const isFollowing: Ref<boolean> = ref(false)
   const pageSubtitle: Ref<string> = ref('Loading...')
+  const userPosts: Ref<BygPost[]> = ref([])
 
   // Set initial head meta
   title.value = 'Profile'
@@ -48,6 +52,13 @@
 
       title.value = profile.value?.user.username ?? 'Profile'
       pageSubtitle.value = profile.value?.user.bio ?? 'No bio'
+      const [ { data: posts } ] = await Promise.all([
+        useLazyAsyncData(`posts-${username.value}`, () =>
+          $fetch<BygPost[]>(`${config.public.apiBase}/posts/${username.value}`)
+        ),
+      ])
+
+      userPosts.value = posts.value ?? []
     } catch (err) {
       error.value = 'Failed to load profile'
       console.error(err)
@@ -85,5 +96,22 @@
       :following-count="profile.followingCount"
       @follow="handleFollow"
     />
+
+    <VStack class="postList">
+      <VStack
+        v-for="post in userPosts"
+        :key="post.id"
+        class="postContainer fullWidth"
+      >
+        <SafeLink
+          class="postLink fullWidth"
+          :to="`/details/${post.id}`"
+          custom
+          v-slot="{ navigate }"
+        >
+          <PostItem class="fullWidth" :post="post" @navigate="navigate" />
+        </SafeLink>
+      </VStack>
+    </VStack>
   </ContentArea>
 </template>

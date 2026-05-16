@@ -195,7 +195,8 @@
   </ContentArea>
 </template>
 
-<style scoped lang="sass">
+<!-- Unscoped for use in /u/:username pages -->
+<style lang="sass">
   .postList, .postContainer
     width: 100%
     gap: 0
