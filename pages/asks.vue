@@ -154,7 +154,15 @@
           <div class="shareCard">
             <h2 class="titleBand">Ask @{{ username }} anything!</h2>
             <p>{{ currentSharingAsk.content }}</p>
-            <p class="date">{{ formatDate(currentSharingAsk.createdDate) }}</p>
+
+            <HStack class="infoBar">
+              <p class="url" v-if="asksUrl">
+                {{ asksUrl.replace('http://', '').replace('https://', '') }}
+              </p>
+              <p class="date">
+                {{ formatDate(currentSharingAsk.createdDate) }}
+              </p>
+            </HStack>
           </div>
         </div>
 
@@ -271,9 +279,16 @@
           font-size: medium
           font-weight: 500
 
-        .date
-          opacity: 0.4
-          font-size: small
+        .infoBar
+          display: flex
+          justify-content: space-between
+          width: 100%
+          margin-top: 0.5rem
+
+          .date, .url
+            opacity: 0.4
+            font-size: small
+            width: fit-content
 
   .asksHeader
     @include utils.itemBackground
