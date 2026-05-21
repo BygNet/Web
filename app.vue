@@ -114,6 +114,8 @@
     <NotificationsModal @close="showingNotificationsModal = false" />
   </ClientOnly>
 
+  <span class="yandexTag" style="display: none">a38l7prussk7odyw</span>
+
   <Transition name="app" appear>
     <div class="appShell">
       <NuxtLayout>
