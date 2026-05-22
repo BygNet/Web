@@ -4,9 +4,13 @@
       "title": "动态",
       "description": "浏览 Byg Social 上的帖子。"
     },
-    "picture": {
-      "title": "图片",
-      "description": "浏览 Byg Picture 上的图片。"
+    "gallery": {
+      "title": "画廊",
+      "description": "浏览 Byg Gallery 上的图片。"
+    },
+    "drive": {
+      "title": "云盘",
+      "description": "浏览 Byg Drive 上的文件。"
     },
     "messages": {
       "title": "聊天",

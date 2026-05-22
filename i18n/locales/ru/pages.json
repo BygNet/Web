@@ -4,9 +4,13 @@
       "title": "Посты",
       "description": "Просматривайте посты в Byg Social."
     },
-    "picture": {
-      "title": "Фото",
-      "description": "Просматривайте изображения в Byg Picture."
+    "gallery": {
+      "title": "Галерея",
+      "description": "Просматривайте изображения в Byg Gallery."
+    },
+    "drive": {
+      "title": "Диск",
+      "description": "Просматривайте файлы в Byg Drive."
     },
     "messages": {
       "title": "Чаты",

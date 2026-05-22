@@ -8,6 +8,8 @@
   import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
 
+  definePageMeta({ showBackButton: true })
+
   title.value = 'Credits'
 
   setHeadMeta({

@@ -4,9 +4,13 @@
       "title": "Posts",
       "description": "Explora publicaciones en Byg Social."
     },
-    "picture": {
-      "title": "Fotos",
-      "description": "Explora imágenes en Byg Picture."
+    "gallery": {
+      "title": "Galería",
+      "description": "Explora imágenes en Byg Gallery."
+    },
+    "drive": {
+      "title": "Unidad",
+      "description": "Explora archivos en Byg Drive."
     },
     "messages": {
       "title": "Chats",

@@ -10,7 +10,7 @@ Byg Platform ("Byg", "we", "us", "the vibe") is an open-source social network wh
 - Exist online with intention
 - Have opinions (within reason)
 
-Byg includes multiple services such as Byg Social, Byg Picture, Byg Profile, and other things we are either building or thinking about building at 3am.
+Byg includes multiple services such as Byg Social, Byg Gallery, Byg Profile, and other things we are either building or thinking about building at 3am.
 
 ## 2. Eligibility
 You must be:

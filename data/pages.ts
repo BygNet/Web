@@ -33,13 +33,22 @@ export const SocialPage: BygPageMeta = {
   color: '#d136b9',
 }
 
-export const PicturePage: BygPageMeta = {
-  key: 'picture',
-  titleKey: 'pages.picture.title',
-  descriptionKey: 'pages.picture.description',
-  path: '/picture',
+export const GalleryPage: BygPageMeta = {
+  key: 'gallery',
+  titleKey: 'pages.gallery.title',
+  descriptionKey: 'pages.gallery.description',
+  path: '/gallery',
   icon: 'solar:gallery-wide-line-duotone',
   color: '#9163e9',
+}
+
+export const DrivePage: BygPageMeta = {
+  key: 'drive',
+  titleKey: 'pages.drive.title',
+  descriptionKey: 'pages.drive.description',
+  path: '/drive',
+  icon: 'solar:folder-line-duotone',
+  color: '#783ce0',
 }
 
 export const MessagesPage: BygPageMeta = {
@@ -62,7 +71,8 @@ export const MySpacePage: BygPageMeta = {
 
 export const BygPages: BygPageMeta[] = [
   SocialPage,
-  PicturePage,
+  GalleryPage,
+  DrivePage,
   MessagesPage,
   MySpacePage,
 ]
@@ -215,11 +225,12 @@ export const AllPages: BygPageMeta[] = [
 
 export const DesktopPages: BygPageMeta[] = [
   SocialPage,
-  PicturePage,
+  GalleryPage,
   CreatePage,
   SpacerPage,
 
   MessagesPage,
+  DrivePage,
   AsksPage,
   MySpacePage,
   SettingsPage,

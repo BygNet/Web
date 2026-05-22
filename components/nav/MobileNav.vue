@@ -87,7 +87,6 @@
 
       .mobileNavItem
         align-items: center
-        min-width: 3.75rem
         padding: 0.45rem 0.35rem
         gap: 0
         border-radius: 10rem

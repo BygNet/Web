@@ -2,6 +2,8 @@
   import UnavailableState from '@/components/layout/UnavailableState.vue'
   import { title } from '@/data/title'
 
+  definePageMeta({ showBackButton: true })
+
   title.value = 'Link'
 </script>
 

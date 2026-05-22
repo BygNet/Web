@@ -7,6 +7,9 @@
   import { title } from '@/data/title'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { getVerificationColor } from '@/utils/verificationData'
+
+  definePageMeta({ showBackButton: true })
+
   title.value = 'Verification'
 
   setHeadMeta({

@@ -12,6 +12,8 @@
   import { title } from '@/data/title'
   import { navigateTo } from '#app'
 
+  definePageMeta({ showBackButton: true })
+
   const localePath = useLocalePath()
   const { t } = useI18n()
 
