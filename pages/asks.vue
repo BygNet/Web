@@ -249,6 +249,9 @@
         box-sizing: border-box
         font-family: fonts.$global
         color: #f3eaf4
+        white-space: pre-wrap
+        word-break: break-word
+        overflow-wrap: anywhere
 
       padding: 0
       max-width: 25rem
