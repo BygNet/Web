@@ -10,9 +10,11 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://api.byg.a35.dev',
-      adsBase: process.env.NUXT_PUBLIC_ADS_BASE || 'https://ads.byg.a35.dev',
-      asksBase: process.env.NUXT_PUBLIC_ASKS_BASE || 'https://asks.byg.gg',
+      apiBase:
+        import.meta.env.NUXT_PUBLIC_API_BASE || 'https://api.byg.a35.dev',
+      adsBase:
+        import.meta.env.NUXT_PUBLIC_ADS_BASE || 'https://ads.byg.a35.dev',
+      asksBase: import.meta.env.NUXT_PUBLIC_ASKS_BASE || 'https://asks.byg.gg',
       posthogPublicKey: 'phc_M5dK6A49VD1zj7L5iamsBbIO4RhikB8FbxUyVfTlEZy',
       posthogHost: 'https://s.a35.dev',
       posthogDefaults: '2026-01-30',
@@ -24,7 +26,7 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    baseUrl: process.env.NUXT_PUBLIC_BASE_URL || 'https://byg.gg',
+    baseUrl: import.meta.env.NUXT_PUBLIC_BASE_URL || 'https://byg.gg',
     strategy: 'prefix',
     detectBrowserLanguage: {
       useCookie: true,
@@ -181,7 +183,7 @@ export default defineNuxtConfig({
     },
   },
 
-  css: [ '@/styles/global.sass' ],
+  css: [ '@/styles/global.sass', 'vue-color/style.css' ],
 
   vite: {
     define: {

@@ -7,6 +7,7 @@
 @use "search"
 @use "skeleton"
 @use "animations"
+@use "pickers"
 
 *
   scroll-behavior: smooth
@@ -99,6 +100,14 @@ input, textarea
   background: themes.$foregroundColor
   border: none
   color: themes.$textColor
+
+  &.plain
+    padding: 0
+    border-radius: 0
+    background: transparent
+
+    &:focus
+      outline: none
 
 ul, ol
   padding-inline-start: 1.25rem

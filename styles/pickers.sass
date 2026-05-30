@@ -1,0 +1,59 @@
+@use "themes"
+
+div.settingsColorPicker[data-picker]
+  background: themes.$foregroundOpaque
+  border-radius: 1.5rem
+  padding: 0.5rem
+
+  .controls
+    width: 100%
+    flex-direction: row
+    gap: 0.25rem
+
+    .color
+      margin: 0
+
+    .sliders
+      width: 100%
+
+      .hue, .alpha
+        width: 100%
+
+  .field
+    width: 100%
+    flex-direction: row
+    gap: 0.15rem
+
+    .field_single, .field_double
+      padding: 0
+
+    input
+      width: 100%
+      box-shadow: none
+      background: themes.$foregroundColor
+      font-size: smaller
+
+      &, label
+        color: themes.$textColor
+
+    label
+      opacity: 0.6
+
+  .presets
+    padding: 0.25rem
+    border: none
+    margin-top: 0.25rem
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(1.25rem, 1fr))
+    gap: 0.25rem
+    flex-wrap: wrap
+    justify-content: space-between
+    width: 100%
+
+    .preset-color
+      margin: 0
+      display: block
+      width: 100%
+      height: auto
+      aspect-ratio: 1/1
+      border-radius: 0.75rem

@@ -2,12 +2,6 @@
   import type { BygAuthUser, BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { computed, onMounted, type Ref, ref, watchEffect } from 'vue'
-
-  definePageMeta({
-    middleware: 'auth',
-    showBackButton: true,
-  })
-
   import { useI18n } from 'vue-i18n'
 
   import { api } from '@/api/client'
@@ -19,16 +13,22 @@
   import { PageMetaByPath } from '@/data/pages'
   import { fetchCurrentUserProfile } from '@/data/profiles'
   import { taskList } from '@/data/tasks'
-  import {
-    currentThemeKey,
-    isThemeDark,
-    systemPrefersDark,
-  } from '@/data/themes'
+  import { isThemeDark } from '@/data/themes'
   import { title } from '@/data/title'
   import { capitalize } from '@/utils/formatters'
   import { buildProfileThemeVars } from '@/utils/profileTheme'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import SafeLink from '~/components/base/SafeLink.vue'
+  import SettingsColorInput from '~/components/settings/SettingsColorInput.vue'
+  import SettingsImageInput from '~/components/settings/SettingsImageInput.vue'
+  import SettingsInput from '~/components/settings/SettingsInput.vue'
+  import SettingsStatusIndicator from '~/components/settings/SettingsStatusIndicator.vue'
+  import SettingsTextArea from '~/components/settings/SettingsTextArea.vue'
+
+  definePageMeta({
+    middleware: 'auth',
+    showBackButton: true,
+  })
 
   type SettingSection =
     | 'profile'
@@ -102,7 +102,6 @@
   const isSavingTwoFactor = ref(false)
   const twoFactorCode = ref('')
   const twoFactorSetup = ref<TwoFactorSetup | null>(null)
-  const shuttingDownMessage = ref<string | null>(null)
 
   const bio: Ref<string> = ref('')
   const displayName: Ref<string> = ref('')
@@ -122,18 +121,7 @@
   const isEmailVerified = computed(() => !auth.user?.emailVerificationCode)
 
   const previewThemeStyle = computed(() => {
-    currentThemeKey.value
-    systemPrefersDark.value
     return buildProfileThemeVars(color.value || null, isThemeDark())
-  })
-
-  const colorPickerValue = computed({
-    get() {
-      return color.value || '#e875b6'
-    },
-    set(value: string) {
-      color.value = value
-    },
   })
 
   const previewUser = computed(() => {
@@ -151,15 +139,6 @@
       color: color.value || null,
     }
   })
-
-  function shutDownByg(): void {
-    shuttingDownMessage.value = 'Shutting down...'
-    setTimeout(() => {
-      shuttingDownMessage.value =
-        'You really thought that would work? Silly goose.'
-    }, 2000)
-  }
-
   function applyAuthUser(user: BygAuthUser): void {
     updateActiveUser(user)
   }
@@ -368,108 +347,80 @@
 
     <VStack class="content">
       <VStack v-show="activeSection === 'profile'" class="section">
-        <h2>{{ t('ui.settings.editProfile') }}</h2>
-
         <div v-if="isLoading" class="loading">
           {{ t('ui.settings.loading') }}
         </div>
 
         <VStack v-else class="formContainer">
-          <VStack class="formGroup">
-            <label>{{ t('ui.settings.displayNameLabel') }}</label>
-            <input
+          <SettingsGroup title="ui.settings.editProfile">
+            <SettingsInput
+              label="ui.settings.displayNameLabel"
+              placeholder="John Doe"
               v-model="displayName"
               type="text"
-              :placeholder="t('ui.settings.displayNamePlaceholder')"
             />
-          </VStack>
 
-          <VStack class="formGroup">
-            <label>{{ t('ui.settings.pronounsLabel') }}</label>
-            <input
+            <SettingsInput
+              label="ui.settings.pronounsLabel"
+              placeholder="he/she/etc"
               v-model="pronouns"
               type="text"
-              :placeholder="t('ui.settings.pronounsPlaceholder')"
             />
-          </VStack>
 
-          <VStack class="formGroup">
-            <label>{{ t('ui.settings.songLinkUrlLabel') }}</label>
-            <input
+            <SettingsInput
+              label="ui.settings.songLinkUrlLabel"
+              placeholder="https://song.link/..."
               v-model="songLinkUrl"
               type="url"
-              :placeholder="t('ui.settings.songLinkUrlPlaceholder')"
+              no-border
             />
+
             <p class="light">
               {{ t('ui.settings.songLinkUrlHelp') }}
             </p>
-          </VStack>
+          </SettingsGroup>
 
-          <VStack class="formGroup">
-            <label>{{ t('ui.settings.bioLabel') }}</label>
-            <textarea
-              v-model="bio"
-              :placeholder="t('ui.settings.bioPlaceholder')"
-              rows="3"
-            />
-          </VStack>
+          <SettingsGroup>
+            <SettingsTextArea label="ui.settings.bioLabel" v-model="bio" />
+          </SettingsGroup>
 
-          <VStack class="formGroup">
-            <label>{{ t('ui.settings.avatarUrlLabel') }}</label>
-            <input
+          <SettingsGroup>
+            <SettingsImageInput
+              label="ui.settings.avatarUrlLabel"
+              placeholder="https://some.tld/example.jpg"
               v-model="avatarUrl"
-              type="url"
-              :placeholder="t('ui.settings.avatarUrlPlaceholder')"
             />
-            <div v-if="avatarUrl" class="preview">
-              <img :src="avatarUrl" :alt="auth.user?.username" />
-            </div>
-          </VStack>
-
-          <VStack class="formGroup">
-            <label>{{ t('ui.settings.bannerUrlLabel') }}</label>
-            <input
+            <SettingsImageInput
+              label="ui.settings.bannerUrlLabel"
+              placeholder="https://some.tld/example.jpg"
               v-model="bannerUrl"
-              type="url"
-              :placeholder="t('ui.settings.bannerUrlPlaceholder')"
+              no-border
             />
-            <div v-if="bannerUrl" class="preview">
-              <img :src="bannerUrl" :alt="auth.user?.username" />
-            </div>
-          </VStack>
+          </SettingsGroup>
 
-          <VStack v-if="canEditProfileColor" class="formGroup">
-            <label>{{ t('ui.settings.profileAccentLabel') }}</label>
-            <HStack class="colorRow">
-              <input
-                v-model="colorPickerValue"
-                type="color"
-                class="colorInput"
-              />
-              <input
-                v-model="color"
-                type="text"
-                placeholder="#e875b6"
-                maxlength="7"
-              />
-              <button @click="color = ''" type="button">
-                {{ t('ui.settings.reset') }}
-              </button>
-            </HStack>
+          <SettingsGroup v-if="canEditProfileColor" title="Pro">
+            <SettingsColorInput
+              label="ui.settings.profileAccentLabel"
+              v-model="color"
+            />
+
+            <button @click="color = ''" type="button">
+              {{ t('ui.settings.reset') }}
+            </button>
+
             <p class="light">
               {{ t('ui.settings.profileAccentHelp') }}
             </p>
-          </VStack>
+          </SettingsGroup>
 
-          <VStack v-else class="formGroup">
+          <SettingsGroup v-else title="Pro">
             <label>{{ t('ui.settings.profileAccentLabel') }}</label>
             <p class="light">
               {{ t('ui.settings.profileAccentLocked') }}
             </p>
-          </VStack>
+          </SettingsGroup>
 
-          <VStack v-if="previewUser" class="formGroup previewGroup">
-            <label>{{ t('ui.settings.preview') }}</label>
+          <SettingsGroup title="ui.settings.preview" plain>
             <div
               class="profileThemePreview"
               :class="{ themedProfile: !!color }"
@@ -484,7 +435,7 @@
                 :show-actions="false"
               />
             </div>
-          </VStack>
+          </SettingsGroup>
 
           <div v-if="saveMessage" :class="['message', { success: true }]">
             {{ saveMessage }}
@@ -500,22 +451,22 @@
       </VStack>
 
       <VStack v-show="activeSection === 'security'" class="section">
-        <h2>{{ t('ui.settings.securityTitle') }}</h2>
-
-        <VStack class="securityCard">
-          <HStack class="securityHeader">
-            <Icon icon="solar:letter-line-duotone" />
-            <VStack class="noSpace">
-              <h3>{{ t('ui.settings.emailVerification') }}</h3>
-              <p class="light">
-                {{
-                  isEmailVerified
-                    ? t('ui.settings.emailVerified')
-                    : t('ui.settings.emailPending')
-                }}
-              </p>
-            </VStack>
-          </HStack>
+        <SettingsGroup title="ui.settings.emailVerification">
+          <SettingsStatusIndicator
+            :status="
+              isEmailVerified
+                ? t('ui.settings.emailVerified')
+                : t('ui.settings.emailPending')
+            "
+            :text="
+              isEmailVerified
+                ? t('ui.settings.emailVerified')
+                : t('ui.settings.emailPending')
+            "
+            :enabled="isEmailVerified"
+            icon="solar:letter-line-duotone"
+            :no-border="isEmailVerified"
+          />
 
           <template v-if="!isEmailVerified">
             <label>
@@ -555,22 +506,18 @@
               </button>
             </HStack>
           </template>
-        </VStack>
+        </SettingsGroup>
 
-        <VStack class="securityCard">
-          <HStack class="securityHeader">
-            <Icon icon="solar:shield-keyhole-line-duotone" />
-            <VStack class="noSpace">
-              <h3>{{ t('ui.settings.authenticatorApp') }}</h3>
-              <p class="light">
-                {{
-                  auth.user?.twoFactorEnabled
-                    ? t('ui.settings.authenticatorEnabled')
-                    : t('ui.settings.authenticatorDisabled')
-                }}
-              </p>
-            </VStack>
-          </HStack>
+        <SettingsGroup title="ui.settings.authenticatorApp">
+          <SettingsStatusIndicator
+            :status="
+              auth.user?.twoFactorEnabled
+                ? t('ui.settings.authenticatorEnabled')
+                : t('ui.settings.authenticatorDisabled')
+            "
+            :enabled="auth.user?.twoFactorEnabled"
+            icon="solar:shield-keyhole-line-duotone"
+          />
 
           <p class="description">
             {{ t('ui.settings.authenticatorDescription') }}
@@ -637,7 +584,7 @@
               </button>
             </VStack>
           </template>
-        </VStack>
+        </SettingsGroup>
 
         <p v-if="securityMessage" class="message success">
           {{ securityMessage }}
@@ -648,53 +595,29 @@
       </VStack>
 
       <VStack v-show="activeSection === 'subscription'" class="section">
-        <h2>{{ t('ui.settings.subscriptionTitle') }}</h2>
+        <SettingsGroup title="ui.settings.subscriptionTitle">
+          <SettingsStatusIndicator
+            icon="solar:crown-star-line-duotone"
+            :status="capitalize(profile?.user.subscriptionState || 'free')"
+            :enabled="
+              !!profile?.user.subscriptionState &&
+              profile?.user.subscriptionState !== 'free'
+            "
+          />
+          <p class="description">
+            {{ t('ui.settings.upgradeDescription') }}
+          </p>
 
-        <VStack v-if="profile" class="subscriptionInfo">
-          <VStack class="subscriptionCard">
-            <HStack class="subscriptionHeader">
-              <Icon
-                class="subscriptionIcon"
-                icon="solar:crown-star-line-duotone"
-              />
-
-              <VStack class="noSpace">
-                <h3>{{ t('ui.settings.currentPlan') }}</h3>
-                <p class="light">
-                  {{
-                    capitalize(profile.user.subscriptionState).replace(
-                      '_legacy',
-                      ''
-                    )
-                  }}
-                </p>
-              </VStack>
-            </HStack>
-
-            <p class="description">
-              {{ t('ui.settings.upgradeDescription') }}
-            </p>
-
-            <button disabled class="upgradeButton">
-              <Icon icon="solar:crown-star-line-duotone" />
-              {{ t('ui.settings.upgradeComingSoon') }}
-            </button>
-          </VStack>
-        </VStack>
+          <button disabled class="upgradeButton">
+            <Icon icon="solar:crown-star-line-duotone" />
+            {{ t('ui.settings.upgradeComingSoon') }}
+          </button>
+        </SettingsGroup>
       </VStack>
 
       <VStack v-show="activeSection === 'interface'" class="section">
-        <h2>{{ t('ui.settings.interfaceTitle') }}</h2>
-
-        <VStack class="interfaceCard">
-          <HStack class="interfaceHeader">
-            <Icon icon="solar:global-line-duotone" />
-            <VStack class="noSpace">
-              <h3>{{ t('ui.settings.languageTitle') }}</h3>
-              <p class="light">{{ t('ui.settings.languageDescription') }}</p>
-            </VStack>
-          </HStack>
-
+        <SettingsGroup title="ui.settings.languageTitle">
+          <p class="light">{{ t('ui.settings.languageDescription') }}</p>
           <VStack class="languageGrid">
             <button
               v-for="lang in locales"
@@ -706,27 +629,37 @@
               {{ lang.name }}
             </button>
           </VStack>
-        </VStack>
+        </SettingsGroup>
       </VStack>
 
       <VStack v-show="activeSection === 'advanced'" class="section">
-        <h2>Advanced Settings</h2>
-        <p>Developer settings and tools.</p>
+        <SettingsGroup title="Advanced Settings">
+          <SettingsInput
+            label="Navigate"
+            placeholder="Go to..."
+            v-model="goToUrl"
+          />
 
-        <input name="go" v-model="goToUrl" placeholder="Go to..." />
-        <HStack>
-          <NuxtLink :to="goToUrl">
-            <button>Go (DIRECT)</button>
-          </NuxtLink>
+          <HStack>
+            <NuxtLink :to="goToUrl">
+              <button>Go (DIRECT)</button>
+            </NuxtLink>
 
-          <SafeLink :to="goToUrl">
-            <button class="prominent">Go (LOCALE)</button>
-          </SafeLink>
-        </HStack>
+            <SafeLink :to="goToUrl">
+              <button class="prominent">Go (LOCALE)</button>
+            </SafeLink>
+          </HStack>
+        </SettingsGroup>
 
-        <h3>WARNING: Destructive Actions</h3>
-        <button style="color: red" @click="shutDownByg()">Shut Down Byg</button>
-        <p v-if="shuttingDownMessage">{{ shuttingDownMessage }}</p>
+        <SettingsGroup title="Design">
+          <h1>H1</h1>
+          <h2>H2</h2>
+          <h3>H3</h3>
+          <h4>H4</h4>
+          <h5>H5</h5>
+          <h6>H6</h6>
+          <p>P</p>
+        </SettingsGroup>
       </VStack>
     </VStack>
   </ContentArea>
@@ -746,87 +679,18 @@
       text-wrap: nowrap
 
   .content
-    @include utils.itemBackground
     min-width: 15rem
     flex-grow: 2
     width: 100%
 
-  .section
+  .section, .formContainer, .profileThemePreview
     width: 100%
-    gap: 1.5rem
-
-  .formContainer
-    width: 100%
-
-    .formGroup
-      width: 100%
-      gap: 0.5rem
-
-      textarea, input
-        --padding: 0.25rem
-        @include utils.maxPaddedWidth
-
-    .colorRow
-      width: 100%
-      align-items: center
-      gap: 0.75rem
-      flex-wrap: wrap
-
-      .colorInput
-        width: 3.5rem
-        min-width: 3.5rem
-        height: 3rem
-        padding: 0.2rem
-
-    .previewGroup
-      gap: 0.75rem
-
-    .profileThemePreview
-      width: 100%
-      padding: 1rem
-      border-radius: 1.5rem
-      background: themes.$backgroundColor
-
-    .preview img
-      height: 4rem
-      width: 4rem
-      border-radius: 0.75rem
-
-  .securityCard, .subscriptionCard
-    gap: 1rem
-    border-radius: 1rem
-    background: color-mix(in srgb, var(--foreground) 3%, var(--background))
-
-  .securityCard, .subscriptionCard, .interfaceCard
-    gap: 1rem
-    border-radius: 1rem
-    background: color-mix(in srgb, var(--foreground) 3%, var(--background))
-
-  .securityHeader, .subscriptionHeader
-    align-items: center
-    gap: 1rem
-
-    svg
-      width: 2.25rem
-      height: 2.25rem
-
-    .subscriptionIcon
-      width: 4rem
-      height: 4rem
-
-  .interfaceHeader
-    align-items: center
-    gap: 1rem
-
-    svg
-      width: 2.25rem
-      height: 2.25rem
 
   .languageGrid
     width: 100%
     display: grid
     grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr))
-    gap: 0.75rem
+    gap: 0.5rem
 
   .setupBox
     width: 100%
@@ -841,8 +705,4 @@
 
     &.success
       color: #3c3
-
-  @media (max-width: 900px)
-    .mainContainer
-      flex-direction: column
 </style>

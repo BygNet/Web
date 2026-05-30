@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.12.6",
+  "version": "2.13.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -36,6 +36,7 @@
     "posthog-js": "^1.372.8",
     "shiki": "^4.0.2",
     "vue": "^3.5.33",
+    "vue-color": "^3.3.3",
     "vue-eslint-parser": "^10.2.0",
     "vue-progressive-blur": "^1.0.2",
     "vue-router": "^5.0.6"
