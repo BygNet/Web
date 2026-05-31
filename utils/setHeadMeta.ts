@@ -18,9 +18,9 @@ export default function setHeadMeta(config: {
   // Title (includes a group if specified)
   let title: string
   if (!config.group) {
-    title = `Byg ${config.page}`
+    title = `Byg ∙ ${config.page}`
   } else {
-    title = `${config.group} ${config.page}`
+    title = `${config.group} ∙ ${config.page}`
   }
 
   // Meta-tags (includes image if specified)
@@ -68,15 +68,15 @@ export function setHeadMetaKeys(config: {
 
   useHead({
     title: computed(() =>
-      group.value ? `${group.value} ${page.value}` : `Byg ${page.value}`
+      group.value ? `${group.value} ∙ ${page.value}` : `Byg ∙ ${page.value}`
     ),
     meta: computed(() => {
       const meta = [
         {
           property: 'og:title',
           content: group.value
-            ? `${group.value} ${page.value}`
-            : `Byg ${page.value}`,
+            ? `${group.value} ∙ ${page.value}`
+            : `Byg ∙ ${page.value}`,
         },
         { property: 'og:description', content: subtitle.value },
         { name: 'description', content: subtitle.value },
