@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.13.1",
+  "version": "2.14.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -42,7 +42,7 @@
     "vue-router": "^5.0.6"
   },
   "devDependencies": {
-    "@bygnet/types": "^1.8.0",
+    "@bygnet/types": "^1.10.1",
     "@tsconfig/node24": "^24.0.3",
     "@types/dom-to-image": "^2.6.7",
     "@types/node": "^25.5.0",
