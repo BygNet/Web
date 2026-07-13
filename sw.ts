@@ -1,4 +1,4 @@
-/// <reference lib="webworker" />
+// / <reference lib="webworker" />
 import { clientsClaim } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 

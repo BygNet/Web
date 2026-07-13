@@ -1,0 +1,24 @@
+{
+  "ask-variants": {
+    "ask": {
+      "title": "Ask",
+      "header": "Ask {username} anything!"
+    },
+    "confess": {
+      "title": "Confession",
+      "header": "Confess to {username}!"
+    },
+    "hot-take": {
+      "title": "Hot Take",
+      "header": "Give {username} a hot take!"
+    },
+    "compliment": {
+      "title": "Compliment",
+      "header": "Compliment {username}!"
+    },
+    "rate-me": {
+      "title": "Rate Me",
+      "header": "Rate {username}!"
+    }
+  }
+}

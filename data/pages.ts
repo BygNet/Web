@@ -42,15 +42,6 @@ export const GalleryPage: BygPageMeta = {
   color: '#9163e9',
 }
 
-export const DrivePage: BygPageMeta = {
-  key: 'drive',
-  titleKey: 'pages.drive.title',
-  descriptionKey: 'pages.drive.description',
-  path: '/drive',
-  icon: 'solar:folder-line-duotone',
-  color: '#783ce0',
-}
-
 export const MessagesPage: BygPageMeta = {
   key: 'messages',
   titleKey: 'pages.messages.title',
@@ -72,7 +63,6 @@ export const MySpacePage: BygPageMeta = {
 export const BygPages: BygPageMeta[] = [
   SocialPage,
   GalleryPage,
-  DrivePage,
   MessagesPage,
   MySpacePage,
 ]
@@ -230,7 +220,6 @@ export const DesktopPages: BygPageMeta[] = [
   SpacerPage,
 
   MessagesPage,
-  DrivePage,
   AsksPage,
   MySpacePage,
   SettingsPage,

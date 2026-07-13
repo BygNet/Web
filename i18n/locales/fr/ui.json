@@ -43,15 +43,13 @@
     },
     "asks": {
       "title": "Questions",
-      "subtitle": "Copiez votre URL publique de questions et consultez les questions anonymes.",
-      "copyUrl": "Copier l’URL publique",
-      "openPublicUrl": "Ouvrir l’URL publique",
-      "copySuccess": "URL copiée dans le presse-papiers.",
-      "copyFailed": "Impossible de copier l’URL.",
-      "loading": "Chargement des questions...",
-      "emptyState": "Aucune question pour le moment. Partagez votre URL pour commencer à recevoir des questions.",
+      "subtitle": "Partagez votre page publique de questions pour recevoir des messages anonymes !",
+      "emptyState": "Aucune question pour le moment.",
       "errorLoadAsks": "Impossible de charger les questions.",
-      "shareImage": "Partager"
+      "shareImage": "Partager",
+      "page": {
+        "title": "Page publique"
+      }
     },
     "share": {
       "title": "Partager",

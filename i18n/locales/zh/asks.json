@@ -1,0 +1,24 @@
+{
+  "ask-variants": {
+    "ask": {
+      "title": "提问",
+      "header": "向 {username} 提问吧！"
+    },
+    "confess": {
+      "title": "表白",
+      "header": "向 {username} 坦白心声！"
+    },
+    "hot-take": {
+      "title": "犀利观点",
+      "header": "给 {username} 一个犀利观点！"
+    },
+    "compliment": {
+      "title": "夸夸",
+      "header": "夸夸 {username}！"
+    },
+    "rate-me": {
+      "title": "给我打分",
+      "header": "给 {username} 打个分！"
+    }
+  }
+}

@@ -28,6 +28,8 @@
     "comments": "Commentaires",
     "brand": "Byg",
     "github": "GitHub",
+    "copy": "Copier",
+    "open": "Ouvrir",
     "createEllipsis": "Créer...",
     "errorLoadPosts": "Échec du chargement des publications.",
     "errorLoadImages": "Échec du chargement des images.",

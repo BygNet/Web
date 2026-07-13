@@ -36,8 +36,6 @@
       <SafeLink to="/">
         <HStack class="bygLogo">
           <BygLogo class="bygLogoImage" />
-          <!--          <img class="bygLogoImage" src="/favicon.ico" alt="Byg Icon" />-->
-          <!--          <h1>{{ t('common.brand') }}</h1>-->
         </HStack>
       </SafeLink>
 
@@ -118,7 +116,7 @@
 
     &::before
       background: linear-gradient(to bottom, var(--gradientOfTheDay))
-      mask-image: linear-gradient(to right, black, transparent)
+      mask-image: linear-gradient(to var(--trailing), black, transparent)
       opacity: 0.3
 
     .header

@@ -1,19 +1,17 @@
 <script setup lang="ts">
+  import type { BygAsk } from '@bygnet/types'
+  import { getAskGradient, getAskVariantById } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import type { BygAsk } from '@/types/asks'
 
   const props = defineProps<{
     ask: BygAsk
     username: string
-    asksUrl: string
   }>()
-
-  defineEmits([ 'share' ])
 
   const { t } = useI18n()
   const shareMessage = ref<string | null>(null)
@@ -24,19 +22,25 @@
       day: 'numeric',
     }).format(new Date(props.ask.createdDate))
   )
+  const askVariant = getAskVariantById(props.ask.variantId)
+  const askKey = computed(() => {
+    return `ask-variants.${askVariant.id}.`
+  })
 </script>
 
 <template>
   <VStack class="askCard">
+    <HStack class="type">
+      <Icon :icon="askVariant.icon" />
+      <p class="title" :style="{ '--tint': getAskGradient(askVariant) }">
+        {{ t(askKey + 'title') }}
+      </p>
+    </HStack>
+
     <HStack class="autoSpace askMeta">
       <p class="light">
         {{ formattedDate }}
       </p>
-
-      <button @click="$emit('share')" class="bounceUpIcon">
-        <Icon icon="solar:gallery-send-line-duotone" />
-        {{ t('ui.asks.shareImage') }}
-      </button>
     </HStack>
 
     <p class="askContent">{{ ask.content }}</p>
@@ -54,17 +58,26 @@
     padding: 0.75rem 0
     width: 100%
     align-items: flex-start
-    gap: 0.75rem
+    gap: 0.25rem
+    cursor: pointer
 
-  .askMeta
-    width: 100%
-    align-items: center
+    .type p
+      --tint: white, white
 
-  .askContent
-    margin: 0
-    white-space: pre-wrap
-    word-break: break-word
+      background: linear-gradient(to var(--trailing), var(--tint))
+      -webkit-background-clip: text
+      background-clip: text
+      color: transparent
 
-  .shareMessage
-    margin: 0
+    .askMeta
+      width: 100%
+      align-items: center
+
+    .askContent
+      margin: 0
+      white-space: pre-wrap
+      word-break: break-word
+
+    .shareMessage
+      margin: 0
 </style>

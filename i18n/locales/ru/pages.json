@@ -8,10 +8,6 @@
       "title": "Галерея",
       "description": "Просматривайте изображения в Byg Gallery."
     },
-    "drive": {
-      "title": "Диск",
-      "description": "Просматривайте файлы в Byg Drive."
-    },
     "messages": {
       "title": "Чаты",
       "description": "Личные сообщения."

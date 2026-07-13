@@ -28,6 +28,8 @@
     "comments": "Комментарии",
     "brand": "Byg",
     "github": "GitHub",
+    "copy": "Копировать",
+    "open": "Открыть",
     "createEllipsis": "Создать...",
     "errorLoadPosts": "Не удалось загрузить посты.",
     "errorLoadImages": "Не удалось загрузить изображения.",

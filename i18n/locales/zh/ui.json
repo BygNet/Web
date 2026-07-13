@@ -43,15 +43,13 @@
     },
     "asks": {
       "title": "提问",
-      "subtitle": "复制你的公开提问链接并查看匿名问题。",
-      "copyUrl": "复制公开链接",
-      "openPublicUrl": "打开公开链接",
-      "copySuccess": "链接已复制到剪贴板。",
-      "copyFailed": "复制链接失败。",
-      "loading": "正在加载提问...",
-      "emptyState": "还没有提问。分享你的链接以开始接收问题。",
+      "subtitle": "分享你的公开提问页面，接收匿名留言！",
+      "emptyState": "暂无提问。",
       "errorLoadAsks": "加载提问失败。",
-      "shareImage": "分享"
+      "shareImage": "分享",
+      "page": {
+        "title": "公开页面"
+      }
     },
     "share": {
       "title": "分享",

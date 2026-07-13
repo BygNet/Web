@@ -28,6 +28,8 @@
     "comments": "评论",
     "brand": "Byg",
     "github": "GitHub",
+    "copy": "复制",
+    "open": "打开",
     "createEllipsis": "创建...",
     "errorLoadPosts": "加载帖子失败。",
     "errorLoadImages": "加载图片失败。",

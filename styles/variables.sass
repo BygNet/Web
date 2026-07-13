@@ -8,3 +8,12 @@ $mobileWidth: 50rem
     --tabBarHeight: 3.5rem
 
 $tabBarHeight: var(--tabBarHeight)
+
+// RTL/LTR directions
+html
+  --leading: left
+  --trailing: right
+
+  &[dir="rtl"]
+    --leading: right
+    --trailing: left

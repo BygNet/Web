@@ -1,8 +1,8 @@
+import type { BygAsk } from '@bygnet/types'
 import { type Ref, ref } from 'vue'
 
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'
-import type { BygAsk } from '@/types/asks'
 
 const DEFAULT_ASKS_LIMIT = 50
 const ASK_CACHE_TTL = 30 * 1000

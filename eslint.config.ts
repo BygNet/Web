@@ -49,6 +49,9 @@ export default defineConfig([
 
       // spacing inside array brackets
       'array-bracket-spacing': [ 'error', 'always' ],
+
+      // spacing in comments
+      'spaced-comment': [ 'error', 'always' ],
     },
   },
 ])

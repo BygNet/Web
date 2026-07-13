@@ -49,6 +49,7 @@ export default defineNuxtConfig({
           'en/nav.json',
           'en/pages.json',
           'en/ui.json',
+          'en/asks.json',
         ],
       },
       {
@@ -63,6 +64,7 @@ export default defineNuxtConfig({
           'fr/nav.json',
           'fr/pages.json',
           'fr/ui.json',
+          'fr/asks.json',
         ],
       },
       {
@@ -77,6 +79,7 @@ export default defineNuxtConfig({
           'es/nav.json',
           'es/pages.json',
           'es/ui.json',
+          'es/asks.json',
         ],
       },
       {
@@ -91,6 +94,7 @@ export default defineNuxtConfig({
           'zh/nav.json',
           'zh/pages.json',
           'zh/ui.json',
+          'zh/asks.json',
         ],
       },
       {
@@ -105,6 +109,7 @@ export default defineNuxtConfig({
           'ru/nav.json',
           'ru/pages.json',
           'ru/ui.json',
+          'ru/asks.json',
         ],
       },
     ],

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { type BygAsk, getAskGradient, getAskVariantById } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
   import domtoimage from 'dom-to-image'
   import { computed, type Ref, ref, watch, watchEffect } from 'vue'
@@ -14,11 +15,13 @@
   import { fetchCurrentUserAsks } from '@/data/asks'
   import { PageMetaByPath } from '@/data/pages'
   import { title } from '@/data/title'
-  import type { BygAsk } from '@/types/asks'
   import { useEnv } from '@/utils/env'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import Modal from '~/components/layout/Modal.vue'
   import ModalActions from '~/components/layout/ModalActions.vue'
+  import SkeletonText from '~/components/layout/skeletons/SkeletonText.vue'
+  import SkeletonUser from '~/components/layout/skeletons/SkeletonUser.vue'
+  import { shortenUrl } from '~/utils/shortenUrl'
 
   const { t } = useI18n()
   const config = useEnv()
@@ -41,7 +44,7 @@
   const asks: Ref<BygAsk[]> = ref<BygAsk[]>([])
   const loading: Ref<boolean> = ref(true)
   const error: Ref<string | null> = ref(null)
-  const copyMessage: Ref<string | null> = ref(null)
+  const copyIcon: Ref<string> = ref('solar:copy-line-duotone')
   const username = computed(() => auth.user?.username ?? '')
   const asksUrl = computed(() => {
     if (!username.value) return ''
@@ -51,6 +54,10 @@
   const showingAsksShareModal: Ref<boolean> = ref(false)
   const currentSharingAsk: Ref<BygAsk | null> = ref(null)
   const shareCardRef: Ref<HTMLElement | null> = ref(null)
+
+  const askVariant = computed(() => {
+    return getAskVariantById(currentSharingAsk.value?.variantId!)
+  })
 
   async function loadAsks(options: { force?: boolean } = {}): Promise<void> {
     loading.value = true
@@ -69,13 +76,13 @@
 
     try {
       await navigator.clipboard.writeText(asksUrl.value)
-      copyMessage.value = t('ui.asks.copySuccess')
+      copyIcon.value = 'solar:check-circle-line-duotone'
     } catch {
-      copyMessage.value = t('ui.asks.copyFailed')
+      copyIcon.value = 'solar:danger-triangle-line-duotone'
     }
 
     window.setTimeout(() => {
-      copyMessage.value = null
+      copyIcon.value = 'solar:copy-line-duotone'
     }, 2500)
   }
 
@@ -151,18 +158,36 @@
     <Modal :visible="showingAsksShareModal && currentSharingAsk !== null">
       <VStack class="fullWidth asksShare" v-if="currentSharingAsk !== null">
         <div class="shareCardContainer" ref="shareCardRef">
-          <div class="shareCard">
-            <h2 class="titleBand">Ask @{{ username }} anything!</h2>
-            <p>{{ currentSharingAsk.content }}</p>
+          <div
+            class="shareCard"
+            :style="{
+              background: askVariant.colors.background,
+              color: askVariant.colors.text,
+            }"
+          >
+            <h2
+              class="titleBand"
+              :style="{ '--tint': getAskGradient(askVariant) }"
+            >
+              {{
+                t(`ask-variants.${currentSharingAsk.variantId}.header`, {
+                  username: '@' + username,
+                })
+              }}
+            </h2>
 
-            <HStack class="infoBar">
-              <p class="url" v-if="asksUrl">
-                {{ asksUrl.replace('http://', '').replace('https://', '') }}
-              </p>
-              <p class="date">
-                {{ formatDate(currentSharingAsk.createdDate) }}
-              </p>
-            </HStack>
+            <div class="askContent">
+              <p>{{ currentSharingAsk.content }}</p>
+
+              <HStack class="infoBar">
+                <p class="url" v-if="asksUrl">
+                  {{ shortenUrl(asksUrl) }}
+                </p>
+                <p class="date">
+                  {{ formatDate(currentSharingAsk.createdDate) }}
+                </p>
+              </HStack>
+            </div>
           </div>
         </div>
 
@@ -184,36 +209,37 @@
     </Modal>
 
     <VStack class="asksHeader fullWidth">
-      <HStack class="fullWidth autoSpace headerRow">
-        <VStack class="headerCopy noSpace">
-          <h2>{{ t('ui.asks.title') }}</h2>
-          <p class="light">{{ t('ui.asks.subtitle') }}</p>
-        </VStack>
+      <VStack class="fullWidth autoSpace header">
+        <p>{{ t('ui.asks.subtitle') }}</p>
 
+        <h3>{{ t('ui.asks.page.title') }}</h3>
         <HStack class="headerActions">
           <button @click="copyUrl" :disabled="!asksUrl">
-            <Icon icon="solar:copy-line-duotone" />
-            {{ copyMessage ? copyMessage : t('ui.asks.copyUrl') }}
+            <Icon :icon="copyIcon" />
+            {{ t('common.copy') }}
           </button>
 
           <button class="prominent" @click="openPublicUrl" :disabled="!asksUrl">
             <Icon icon="solar:link-line-duotone" />
-            {{ t('ui.asks.openPublicUrl') }}
+            {{ t('common.open') }}
           </button>
         </HStack>
-      </HStack>
+      </VStack>
 
       <p class="light asksUrl" v-if="asksUrl">
         {{ asksUrl }}
       </p>
-
-      <p v-if="copyMessage" class="light copyMessage">
-        {{ copyMessage }}
-      </p>
     </VStack>
 
-    <EmptyState v-if="loading" :message="t('ui.asks.loading')" />
-    <ErrorState v-else-if="error" :message="error" />
+    <VStack v-if="loading" class="asksList placeholder">
+      <VStack class="askCard placeholder fullWidth" v-for="() in 50">
+        <SkeletonUser />
+        <SkeletonText :lines="2" />
+        <SkeletonText :lines="1" style="width: 30%" />
+      </VStack>
+    </VStack>
+
+    <ErrorState v-if="error" :message="error" />
 
     <EmptyState
       v-else-if="asks.length < 1"
@@ -226,8 +252,7 @@
         :key="ask.id"
         :ask="ask"
         :username="username"
-        :asks-url="asksUrl"
-        @share="showShareModal(ask)"
+        @click="showShareModal(ask)"
       />
     </VStack>
   </ContentArea>
@@ -239,6 +264,12 @@
 
   .asksPage, .asksList
     width: 100%
+
+    .askCard.placeholder
+      @include utils.listItemBorder
+
+      padding-bottom: 1rem
+      border-radius: 0
 
   .asksShare
     @include utils.itemBackground
@@ -258,35 +289,38 @@
 
       .shareCard
         width: 100%
-        padding: 0.75rem
+        padding: 0.35rem
         background: #2c0a40
-        border-radius: 1.5rem
+        border-radius: 1.25rem
         overflow: hidden
         align-items: flex-start
         display: flex
         flex-direction: column
-        gap: 0.5rem
 
         .titleBand
           margin: 0
-          padding: 0.75rem
-          background: linear-gradient(to left, #c52475, #5c2ec1)
-          border-radius: 0.75rem
+          padding: 0.35rem 0.40rem // reduce inline padding due to font spacing
+          background: linear-gradient(to left, var(--tint))
+          border-radius: 0.9rem
           font-size: larger
           font-weight: bold
           width: 100%
 
-        p
-          margin: 0
-          width: 100%
-          font-size: medium
-          font-weight: 500
+        .askContent
+          padding: 0.5rem
 
-        .infoBar
-          display: flex
-          justify-content: space-between
-          width: 100%
-          margin-top: 0.5rem
+          p
+            margin: 0
+            width: 100%
+            font-size: medium
+            font-weight: 500
+
+          .infoBar
+            display: flex
+            justify-content: space-between
+            width: 100%
+            margin-top: 0.5rem
+            gap: 0.5rem
 
           .date, .url
             opacity: 0.4
@@ -294,19 +328,13 @@
             width: fit-content
 
   .asksHeader
-    @include utils.itemBackground
-    @include utils.maxPostPaddedWidth
+    @include utils.listItemBorder
 
-    margin-bottom: 0.75rem
+    border-radius: 0
+    padding-bottom: 0.5rem
+    margin-bottom: 1.5rem
     align-items: flex-start
     gap: 0.5rem
-
-  .headerRow
-    align-items: flex-start
-    gap: 0.75rem
-
-  .headerCopy
-    gap: 0.2rem
 
   .headerActions
     gap: 0.5rem
@@ -316,7 +344,4 @@
   .asksUrl
     margin: 0
     word-break: break-all
-
-  .copyMessage
-    margin: 0
 </style>

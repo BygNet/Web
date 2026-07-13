@@ -1,0 +1,24 @@
+{
+  "ask-variants": {
+    "ask": {
+      "title": "Question",
+      "header": "Posez une question à {username} !"
+    },
+    "confess": {
+      "title": "Confession",
+      "header": "Faites une confession à {username} !"
+    },
+    "hot-take": {
+      "title": "Opinion tranchée",
+      "header": "Donnez une opinion tranchée à {username} !"
+    },
+    "compliment": {
+      "title": "Compliment",
+      "header": "Faites un compliment à {username} !"
+    },
+    "rate-me": {
+      "title": "Note-moi",
+      "header": "Notez {username} !"
+    }
+  }
+}

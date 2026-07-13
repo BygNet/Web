@@ -67,7 +67,7 @@
     border-radius: 0
 
     &::before
-      background: linear-gradient(to right, var(--gradientOfTheDay))
+      background: linear-gradient(to var(--trailing), var(--gradientOfTheDay))
       mask-image: linear-gradient(to top, black, transparent)
       opacity: 0.3
 

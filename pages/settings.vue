@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { BygAuthUser, BygProfile } from '@bygnet/types'
   import { Icon } from '@iconify/vue'
+  import { document } from 'posthog-js/lib/src/utils/globals'
   import { computed, onMounted, type Ref, ref, watchEffect } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -328,6 +329,13 @@
   onMounted(() => {
     loadProfile()
   })
+
+  function toggleRtl(): void {
+    if (import.meta.client && document) {
+      document.documentElement.dir =
+        document.documentElement.dir === 'rtl' ? 'ltr' : 'rtl'
+    }
+  }
 </script>
 
 <template>
@@ -659,6 +667,10 @@
           <h5>H5</h5>
           <h6>H6</h6>
           <p>P</p>
+        </SettingsGroup>
+
+        <SettingsGroup title="i18n">
+          <button @click="toggleRtl()">Toggle RTL</button>
         </SettingsGroup>
       </VStack>
     </VStack>

@@ -28,6 +28,8 @@
     "comments": "Comments",
     "brand": "Byg",
     "github": "GitHub",
+    "copy": "Copy",
+    "open": "Open",
     "createEllipsis": "Create...",
     "errorLoadPosts": "Failed to load posts.",
     "errorLoadImages": "Failed to load images.",

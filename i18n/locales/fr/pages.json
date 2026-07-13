@@ -8,10 +8,6 @@
       "title": "Galerie",
       "description": "Parcourez les images sur Byg Gallery."
     },
-    "drive": {
-      "title": "Drive",
-      "description": "Parcourez les fichiers sur Byg Drive."
-    },
     "messages": {
       "title": "Chats",
       "description": "Messages directs."
