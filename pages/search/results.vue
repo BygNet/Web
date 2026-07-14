@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { computed, type Ref, ref, watch } from 'vue'
 
   import SafeLink from '@/components/base/SafeLink.vue'
@@ -252,7 +251,7 @@
           />
 
           <button class="prominent searchSubmitButton" :disabled="loading">
-            <Icon icon="solar:minimalistic-magnifer-line-duotone" />
+            <Icon name="solar:minimalistic-magnifer-line-duotone" />
           </button>
         </HStack>
       </form>
@@ -266,7 +265,7 @@
           @click="pickCategory(category.id)"
           :disabled="loading"
         >
-          <Icon :icon="category.icon" />
+          <Icon :name="category.icon" />
           {{ category.label }}
         </button>
       </HStack>
@@ -280,7 +279,7 @@
     />
 
     <VStack v-else-if="!searchResponse" class="searchLandingCard">
-      <Icon icon="solar:rocket-2-line-duotone" />
+      <Icon name="solar:rocket-2-line-duotone" />
       <h3>Start searching with Byg Search</h3>
       <p class="light">Try one of these ideas:</p>
 
@@ -291,14 +290,14 @@
           class="starterSuggestionButton"
           @click="pickSuggestion(suggestion)"
         >
-          <Icon icon="solar:bolt-circle-line-duotone" />
+          <Icon name="solar:bolt-circle-line-duotone" />
           {{ suggestion }}
         </button>
       </HStack>
     </VStack>
 
     <VStack v-else-if="!hasResults" class="searchLandingCard">
-      <Icon icon="solar:ghost-smile-line-duotone" />
+      <Icon name="solar:ghost-smile-line-duotone" />
       <h3>No results found</h3>
       <p class="light">
         Try different wording, switch category, or search without filters.
@@ -311,7 +310,7 @@
           class="starterSuggestionButton"
           @click="pickSuggestion(suggestion)"
         >
-          <Icon icon="solar:restart-line-duotone" />
+          <Icon name="solar:restart-line-duotone" />
           {{ suggestion }}
         </button>
       </HStack>
@@ -326,7 +325,7 @@
       </HStack>
 
       <HStack class="answerRow" v-if="searchResponse.answers.length > 0">
-        <Icon icon="solar:lightbulb-line-duotone" />
+        <Icon name="solar:lightbulb-line-duotone" />
         <p>{{ searchResponse.answers[0] }}</p>
       </HStack>
 
@@ -337,7 +336,7 @@
           class="suggestionButton"
           @click="pickSuggestion(suggestion)"
         >
-          <Icon icon="solar:minimalistic-magnifer-line-duotone" />
+          <Icon name="solar:minimalistic-magnifer-line-duotone" />
           {{ suggestion }}
         </button>
       </HStack>
@@ -359,7 +358,7 @@
               loading="lazy"
             />
             <div class="imagePreviewFallback" v-else>
-              <Icon icon="solar:gallery-wide-line-duotone" />
+              <Icon name="solar:gallery-wide-line-duotone" />
             </div>
           </div>
 
@@ -381,7 +380,7 @@
         >
           <VStack class="result">
             <HStack class="resultHeading">
-              <Icon icon="solar:global-line-duotone" />
+              <Icon name="solar:global-line-duotone" />
               <h3>{{ result.title }}</h3>
             </HStack>
 
@@ -401,13 +400,13 @@
 
       <HStack class="paginationBar autoSpace">
         <button :disabled="page <= 1 || loading" @click="goToPreviousPage">
-          <Icon icon="solar:arrow-left-line-duotone" />
+          <Icon name="solar:arrow-left-line-duotone" />
           Previous
         </button>
         <p class="light">Page {{ page }}</p>
         <button :disabled="loading" @click="goToNextPage">
           Next
-          <Icon icon="solar:arrow-right-line-duotone" />
+          <Icon name="solar:arrow-right-line-duotone" />
         </button>
       </HStack>
     </VStack>
@@ -548,7 +547,7 @@
             height: 100%
             justify-content: center
 
-            svg
+            span.iconify
               width: 2rem
               height: 2rem
 

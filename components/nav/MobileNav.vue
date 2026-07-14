@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { useI18n } from 'vue-i18n'
   import { ProgressiveBlur } from 'vue-progressive-blur'
 
@@ -23,7 +22,7 @@
       @click="toggleCreateModal()"
       :class="{ open: showingCreateModal }"
     >
-      <Icon icon="mingcute:add-fill" />
+      <Icon name="mingcute:add-fill" />
       {{ t('common.createEllipsis') }}
     </button>
 
@@ -34,7 +33,7 @@
           :class="{ selected: isActive(route.path, page.path) }"
         >
           <Icon
-            :icon="
+            :name="
               isActive(route.path, page.path)
                 ? page.icon.replace('line-duotone', 'bold-duotone')
                 : page.icon
@@ -72,10 +71,10 @@
       opacity: 0.3
 
     .createButton
-      svg
+      span.iconify
         transition: 0.2s ease-in-out
       &.open
-        svg
+        span.iconify
           transform: rotate(45deg)
 
     .mobileNavItems
@@ -94,7 +93,7 @@
         &:not(.selected)
           opacity: 0.6
 
-        svg
+        span.iconify
           width: 1.75rem
           height: 1.75rem
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygAuthUser, BygProfile } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import { document } from 'posthog-js/lib/src/utils/globals'
   import { computed, onMounted, type Ref, ref, watchEffect } from 'vue'
   import { useI18n } from 'vue-i18n'
@@ -348,7 +347,7 @@
         :class="{ prominent: activeSection === page.key }"
         class="menuItem"
       >
-        <Icon :icon="page.icon" />
+        <Icon :name="page.icon" />
         {{ t(page.titleKey) }}
       </button>
     </HStack>
@@ -451,7 +450,7 @@
           </div>
 
           <button @click="saveProfile" :disabled="isSaving" class="saveButton">
-            <Icon icon="solar:diskette-line-duotone" />
+            <Icon name="solar:diskette-line-duotone" />
             {{
               isSaving ? t('ui.settings.saving') : t('ui.settings.saveChanges')
             }}
@@ -547,7 +546,7 @@
               @click="loadTwoFactorSetup"
               :disabled="isLoadingTwoFactorSetup"
             >
-              <Icon icon="solar:key-minimalistic-line-duotone" />
+              <Icon name="solar:key-minimalistic-line-duotone" />
               {{
                 isLoadingTwoFactorSetup
                   ? t('ui.settings.generatingKey')
@@ -584,7 +583,7 @@
                 @click="enableTwoFactor"
                 :disabled="isSavingTwoFactor"
               >
-                <Icon icon="solar:lock-keyhole-line-duotone" />
+                <Icon name="solar:lock-keyhole-line-duotone" />
                 {{
                   isSavingTwoFactor
                     ? t('ui.settings.enabling2fa')
@@ -618,7 +617,7 @@
           </p>
 
           <button disabled class="upgradeButton">
-            <Icon icon="solar:crown-star-line-duotone" />
+            <Icon name="solar:crown-star-line-duotone" />
             {{ t('ui.settings.upgradeComingSoon') }}
           </button>
         </SettingsGroup>

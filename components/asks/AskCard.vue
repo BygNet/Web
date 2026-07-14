@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import type { BygAsk } from '@bygnet/types'
   import { getAskGradient, getAskVariantById } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -31,7 +30,7 @@
 <template>
   <VStack class="askCard">
     <HStack class="type">
-      <Icon :icon="askVariant.icon" />
+      <Icon :name="askVariant.icon" />
       <p class="title" :style="{ '--tint': getAskGradient(askVariant) }">
         {{ t(askKey + 'title') }}
       </p>

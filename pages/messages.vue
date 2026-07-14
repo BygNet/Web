@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import {
     computed,
     nextTick,
@@ -1522,7 +1521,7 @@
         <header class="threadsHeader">
           <SafeLink to="/">
             <button class="backButton transparent">
-              <Icon icon="solar:alt-arrow-left-line-duotone" />
+              <Icon name="solar:alt-arrow-left-line-duotone" />
               {{ t('common.back') }}
             </button>
           </SafeLink>
@@ -1532,7 +1531,7 @@
             :disabled="loadingThreads"
             @click="loadThreads({ force: true })"
           >
-            <Icon icon="solar:refresh-line-duotone" />
+            <Icon name="solar:refresh-line-duotone" />
             {{ t('common.refresh') }}
           </button>
         </header>
@@ -1554,7 +1553,7 @@
         </div>
 
         <button class="createGroupButton" @click="openGroupCreateModal">
-          <Icon icon="solar:users-group-rounded-line-duotone" />
+          <Icon name="solar:users-group-rounded-line-duotone" />
           {{ t('ui.messages.createGroupChat') }}
         </button>
 
@@ -1594,7 +1593,7 @@
               v-if="isMobileConversationView"
               @click="closeMobileConversation()"
             >
-              <Icon icon="solar:arrow-left-line-duotone" />
+              <Icon name="solar:arrow-left-line-duotone" />
             </button>
 
             <div class="conversationTitle">
@@ -1609,7 +1608,7 @@
 
               <HStack class="connectionState">
                 <Icon
-                  :icon="
+                  :name="
                     connectedLive
                       ? 'solar:cloud-check-line-duotone'
                       : 'solar:cloud-cross-line-duotone'
@@ -1633,7 +1632,7 @@
           class="conversationEmpty"
           v-else-if="!selectedThread && !loadingConversation"
         >
-          <Icon icon="solar:chat-round-line-line-duotone" />
+          <Icon name="solar:chat-round-line-line-duotone" />
           <h3>{{ t('ui.chat.emptyState') }}</h3>
         </div>
 
@@ -1671,7 +1670,7 @@
                 typingByUserId[getThreadTypingUserId(selectedThread)!]
               "
             >
-              <Icon icon="svg-spinners:3-dots-move" />
+              <Icon name="svg-spinners:3-dots-move" />
               <p>{{ t('ui.chat.typing') }}</p>
             </HStack>
 
@@ -1695,7 +1694,7 @@
                 @mousedown.prevent
                 @click="sendCurrentMessage"
               >
-                <Icon icon="solar:plain-line-duotone" />
+                <Icon name="solar:plain-line-duotone" />
                 {{ t('ui.chat.send') }}
               </button>
             </HStack>
@@ -1710,7 +1709,7 @@
       <HStack class="autoSpace fullWidth">
         <h3>{{ t('ui.messages.createGroupChat') }}</h3>
         <button @click="closeGroupCreateModal">
-          <Icon icon="mingcute:close-fill" />
+          <Icon name="mingcute:close-fill" />
         </button>
       </HStack>
 
@@ -1752,7 +1751,7 @@
             class="transparent"
             @click="removeSelectedGroupMember(member.id)"
           >
-            <Icon icon="solar:trash-bin-trash-line-duotone" />
+            <Icon name="solar:trash-bin-trash-line-duotone" />
           </button>
         </HStack>
       </VStack>
@@ -1770,7 +1769,7 @@
           :disabled="savingGroup || selectedGroupMemberIds.length < 1"
           @click="createCurrentGroupConversation"
         >
-          <Icon icon="solar:pen-new-square-line-duotone" />
+          <Icon name="solar:pen-new-square-line-duotone" />
           {{ t('ui.messages.createGroupChatAction') }}
         </button>
       </HStack>
@@ -1782,7 +1781,7 @@
       <HStack class="autoSpace fullWidth">
         <h3>{{ getThreadDisplayName(groupInfoThread) }}</h3>
         <button @click="closeGroupInfoModal">
-          <Icon icon="mingcute:close-fill" />
+          <Icon name="mingcute:close-fill" />
         </button>
       </HStack>
 
@@ -1843,7 +1842,7 @@
               class="transparent"
               @click="removeSelectedGroupMember(member.id)"
             >
-              <Icon icon="solar:trash-bin-trash-line-duotone" />
+              <Icon name="solar:trash-bin-trash-line-duotone" />
             </button>
           </HStack>
         </VStack>
@@ -1873,7 +1872,7 @@
             :disabled="savingGroup"
             @click="removeExistingGroupMember(member.userId)"
           >
-            <Icon icon="solar:trash-bin-trash-line-duotone" />
+            <Icon name="solar:trash-bin-trash-line-duotone" />
           </button>
         </HStack>
       </VStack>

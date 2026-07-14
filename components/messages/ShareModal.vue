@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { computed, onMounted, type Ref, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -125,7 +124,7 @@
       <HStack class="fullWidth autoSpace">
         <h2>{{ t('ui.share.title') }}</h2>
         <button class="spinIcon" @click="closeShareModal()">
-          <Icon icon="mingcute:close-fill" />
+          <Icon name="mingcute:close-fill" />
         </button>
       </HStack>
 
@@ -144,7 +143,7 @@
       </VStack>
 
       <button class="fullWidth bounceRightIcon" @click="shareUsingSystemSheet">
-        <Icon icon="solar:square-share-line-line-duotone" />
+        <Icon name="solar:square-share-line-line-duotone" />
         {{ t('ui.share.shareToOtherApps') }}
       </button>
 
@@ -152,14 +151,14 @@
         <HStack class="fullWidth autoSpace">
           <h3>{{ t('ui.share.sendInChat') }}</h3>
           <button class="spinIcon" @click="loadShareTargets">
-            <Icon icon="solar:refresh-line-duotone" />
+            <Icon name="solar:refresh-line-duotone" />
           </button>
         </HStack>
 
         <VStack v-if="!auth.user" class="fullWidth emptyTargets">
           <p class="light">{{ t('ui.share.loginPrompt') }}</p>
           <button class="prominent" @click="openLogin">
-            <Icon icon="solar:login-2-line-duotone" />
+            <Icon name="solar:login-2-line-duotone" />
             {{ t('ui.share.loginButton') }}
           </button>
         </VStack>
@@ -190,7 +189,7 @@
                 <Icon
                   v-else
                   class="targetAvatarFallback"
-                  icon="solar:user-circle-line-duotone"
+                  name="solar:user-circle-line-duotone"
                 />
 
                 <VStack class="targetInfo noSpace">
@@ -208,9 +207,9 @@
               <HStack class="targetMeta noSpace">
                 <Icon
                   v-if="target.subscriptionState !== 'free'"
-                  icon="solar:crown-star-line-duotone"
+                  name="solar:crown-star-line-duotone"
                 />
-                <Icon icon="solar:plain-line-duotone" />
+                <Icon name="solar:plain-line-duotone" />
               </HStack>
             </HStack>
           </button>

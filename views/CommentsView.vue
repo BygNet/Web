@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygComment } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { nextTick, onMounted, type Ref, ref } from 'vue'
@@ -176,7 +175,7 @@
       </VStack>
 
       <button @click="postComment" :disabled="sendingComment">
-        <Icon icon="solar:plain-line-duotone" />
+        <Icon name="solar:plain-line-duotone" />
         {{ t('ui.comments.postButton') }}
       </button>
     </HStack>

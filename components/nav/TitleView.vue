@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { useI18n } from 'vue-i18n'
   import { ProgressiveBlur } from 'vue-progressive-blur'
 
@@ -28,7 +27,7 @@
           v-if="$route.meta.showBackButton"
           class="backButton bounceLeftIcon"
         >
-          <Icon icon="solar:arrow-left-line-duotone" />
+          <Icon name="solar:arrow-left-line-duotone" />
         </button>
 
         <h2>{{ title }}</h2>
@@ -37,7 +36,7 @@
           <p class="tasksCount" v-if="taskList.length > 1">
             {{ taskList.length }}
           </p>
-          <Icon icon="svg-spinners:90-ring-with-bg" class="tasksLoader" />
+          <Icon name="svg-spinners:90-ring-with-bg" class="tasksLoader" />
         </div>
       </HStack>
 
@@ -50,7 +49,7 @@
         :aria-label="t('ui.nav.openAlerts')"
       >
         <Icon
-          :icon="
+          :name="
             isActive(route.path, '/inbox')
               ? 'solar:inbox-line-bold-duotone'
               : 'solar:inbox-line-line-duotone'
@@ -122,14 +121,14 @@
   button.backButton
     padding: 0.75rem
 
-    svg
+    span.iconify
       width: 1.5rem !important
       height: 1.5rem !important
 
   button.alertsButton
     padding: 0.75rem
 
-    svg
+    span.iconify
       width: 1.5rem !important
       height: 1.5rem !important
 

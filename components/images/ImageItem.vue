@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygImage } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
 
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
@@ -48,7 +47,7 @@
           />
 
           <HStack class="noSpace">
-            <Icon icon="solar:chat-round-line-line-duotone" />
+            <Icon name="solar:chat-round-line-line-duotone" />
             {{ image.commentCount }}
           </HStack>
         </HStack>

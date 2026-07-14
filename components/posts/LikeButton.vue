@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { computed, onMounted, type Ref, ref } from 'vue'
 
   import { auth } from '@/auth/session'
@@ -58,7 +57,7 @@
     :disabled="liking"
     @click="like"
   >
-    <Icon :icon="clicked ? 'solar:heart-bold' : 'solar:heart-outline'" />
+    <Icon :name="clicked ? 'solar:heart-bold' : 'solar:heart-outline'" />
     {{ compact ? formatStat(likeCount) : formatNumber(likeCount) }}
   </button>
 </template>
@@ -67,10 +66,10 @@
   $likedColor: red
 
   .likeButton
-    &:hover svg
+    &:hover span.iconify
       scale: 1.1
 
-    &.clicked svg
+    &.clicked span.iconify
       animation: like 0.4s ease-in-out forwards
 
   @keyframes like

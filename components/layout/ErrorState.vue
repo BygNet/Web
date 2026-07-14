@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   import VStack from '@/components/layout/VStack.vue'
   import { navigateTo, useRoute } from '#app'
 
@@ -22,13 +20,13 @@
 
 <template>
   <VStack class="emptyState">
-    <Icon class="errorIcon" icon="solar:danger-triangle-line-duotone" />
+    <Icon name="solar:danger-triangle-line-duotone" class="errorIcon" />
 
     <h3>Something went wrong.</h3>
     <p>{{ message }}</p>
 
     <button @click="reload" class="reloadButton">
-      <Icon icon="solar:refresh-line-duotone" />
+      <Icon name="solar:refresh-line-duotone" />
       Reload
     </button>
   </VStack>

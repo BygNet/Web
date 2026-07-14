@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygUser } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -130,7 +129,7 @@
             class="avatar"
           />
           <div v-else class="avatarPlaceholder">
-            <Icon icon="solar:user-circle-line-duotone" />
+            <Icon name="solar:user-circle-line-duotone" />
           </div>
 
           <VStack class="userInfo noSpace">
@@ -162,7 +161,7 @@
               :class="{ following: isFollowing }"
             >
               <Icon
-                :icon="
+                :name="
                   isFollowing
                     ? 'solar:check-circle-line-duotone'
                     : 'solar:user-plus-line-duotone'
@@ -175,14 +174,14 @@
 
             <SafeLink v-if="isOwnProfileResolved" to="/asks">
               <button>
-                <Icon icon="solar:question-square-line-duotone" />
+                <Icon name="solar:question-square-line-duotone" />
                 {{ t('ui.profile.asks') }}
               </button>
             </SafeLink>
 
             <SafeLink :to="'/messages?with=' + user.username">
               <button>
-                <Icon icon="solar:plain-line-duotone" />
+                <Icon name="solar:plain-line-duotone" />
                 {{ t('ui.profile.chat') }}
               </button>
             </SafeLink>
@@ -196,7 +195,7 @@
             v-if="isOwnProfileResolved && showActions"
             class="editButton actionButtons"
           >
-            <Icon icon="solar:pen-2-line-duotone" />
+            <Icon name="solar:pen-2-line-duotone" />
             Edit Profile
           </button>
         </SafeLink>
@@ -282,7 +281,7 @@
           align-items: center
           justify-content: center
 
-          svg
+          span.iconify
             width: 2.5rem
             height: 2.5rem
             opacity: 0.5

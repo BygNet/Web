@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { useI18n } from 'vue-i18n'
 
   import SafeLink from '@/components/base/SafeLink.vue'
@@ -53,7 +52,7 @@
             :class="{ selected: isActive(route.path, page.path) }"
           >
             <Icon
-              :icon="
+              :name="
                 isActive(route.path, page.path)
                   ? page.icon.replace('line-duotone', 'bold-duotone')
                   : page.icon
@@ -76,7 +75,7 @@
       <HStack class="footer fullWidth autoSpace">
         <a href="https://git.new/bygpl" target="_blank">
           <HStack>
-            <Icon icon="solar:code-line-duotone" />
+            <Icon name="solar:code-line-duotone" />
             {{ t('common.github') }}
           </HStack>
         </a>
@@ -150,7 +149,7 @@
       opacity: 1
       background: themes.$foregroundColor
 
-    svg
+    span.iconify
       width: 1.85rem
       height: 1.85rem
 

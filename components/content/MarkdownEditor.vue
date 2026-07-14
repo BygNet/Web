@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import Placeholder from '@tiptap/extension-placeholder'
   import { Markdown } from '@tiptap/markdown'
   import StarterKit from '@tiptap/starter-kit'
@@ -200,7 +199,7 @@
       class="editorToolbarItem"
       :class="{ prominent: button.isActive() }"
     >
-      <Icon :icon="button.icon" />
+      <Icon :name="button.icon" />
     </button>
   </HStack>
 
@@ -230,7 +229,7 @@
         background: transparent
         backdrop-filter: none
 
-      svg
+      span.iconify
         width: 1.5rem !important
         height: 1.5rem !important
 

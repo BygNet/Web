@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { computed, type Ref, ref, watch } from 'vue'
@@ -71,7 +70,7 @@
       <Icon
         v-else-if="props.showAvatar"
         class="senderAvatar fallback"
-        icon="solar:user-circle-line-duotone"
+        name="solar:user-circle-line-duotone"
       />
       <span v-else class="senderAvatar spacer" aria-hidden="true" />
     </template>
@@ -123,7 +122,7 @@
 
       <div class="bubbleMeta light" v-if="outgoing && props.deliveryState">
         <Icon
-          :icon="
+          :name="
             props.deliveryState === 'sent'
               ? 'solar:check-read-line-duotone'
               : 'solar:clock-circle-line-duotone'

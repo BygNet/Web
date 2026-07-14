@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   import { showingReportPopup } from '@/data/visibility'
 
   function showReportPopup(): void {
@@ -10,7 +8,7 @@
 
 <template>
   <button class="reportButton" @click="showReportPopup()">
-    <Icon icon="solar:flag-line-duotone" />
+    <Icon name="solar:flag-line-duotone" />
   </button>
 </template>
 

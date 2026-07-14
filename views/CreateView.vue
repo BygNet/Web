@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { CreateType } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import { computed, nextTick, type Ref, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -180,18 +179,18 @@
           <h2>{{ t('ui.create.title') }}</h2>
 
           <button class="spinIcon" @click="showingCreateModal = false">
-            <Icon icon="mingcute:close-fill" />
+            <Icon name="mingcute:close-fill" />
           </button>
         </HStack>
 
         <HStack class="typePicker">
           <VStack class="type" @click="pickedType = 'post'">
-            <Icon icon="solar:pen-line-duotone" />
+            <Icon name="solar:pen-line-duotone" />
             {{ t('ui.create.typePost') }}
           </VStack>
 
           <VStack class="type" @click="pickedType = 'image'">
-            <Icon icon="solar:gallery-send-line-duotone" />
+            <Icon name="solar:gallery-send-line-duotone" />
             {{ t('ui.create.typeImage') }}
           </VStack>
         </HStack>
@@ -201,7 +200,7 @@
         <HStack class="autoSpace fullWidth">
           <h2>{{ t('ui.create.newPost') }}</h2>
           <button @click="pickedType = undefined">
-            <Icon icon="mingcute:arrow-left-fill" />
+            <Icon name="mingcute:arrow-left-fill" />
           </button>
         </HStack>
 
@@ -238,7 +237,7 @@
           :disabled="loading || charCount === 0"
           @click="submitPost"
         >
-          <Icon icon="solar:upload-minimalistic-bold-duotone" />
+          <Icon name="solar:upload-minimalistic-bold-duotone" />
           {{ t('ui.create.postButton') }}
         </button>
       </VStack>
@@ -247,7 +246,7 @@
         <HStack class="autoSpace fullWidth">
           <h2>{{ t('ui.create.uploadImage') }}</h2>
           <button @click="pickedType = undefined">
-            <Icon icon="mingcute:arrow-left-fill" />
+            <Icon name="mingcute:arrow-left-fill" />
           </button>
         </HStack>
 
@@ -279,7 +278,7 @@
           :disabled="loading || imageUrl.length === 0"
           @click="submitImage"
         >
-          <Icon icon="solar:gallery-send-line-duotone" />
+          <Icon name="solar:gallery-send-line-duotone" />
           {{ t('ui.create.uploadButton') }}
         </button>
       </VStack>
@@ -319,7 +318,7 @@
       font-size: large
       flex-grow: 1
 
-      svg
+      span.iconify
         width: 3rem
         height: 3rem
 

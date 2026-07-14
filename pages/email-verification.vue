@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -84,7 +83,7 @@
 
 <template>
   <ContentArea class="emailVerificationPage">
-    <Icon class="emailIcon" icon="solar:letter-line-duotone" />
+    <Icon name="solar:letter-line-duotone" class="emailIcon" />
     <h1>{{ t('ui.emailVerificationPage.heading') }}</h1>
     <p>
       {{
@@ -109,7 +108,7 @@
       </label>
 
       <button type="submit" class="prominent" :disabled="isSubmitting">
-        <Icon icon="solar:check-circle-line-duotone" />
+        <Icon name="solar:check-circle-line-duotone" />
         {{
           isSubmitting
             ? t('ui.emailVerificationPage.verifying')
@@ -119,7 +118,7 @@
     </form>
 
     <button @click="resend" class="transparent" :disabled="isResending">
-      <Icon icon="solar:letter-unread-line-duotone" />
+      <Icon name="solar:letter-unread-line-duotone" />
       {{
         isResending
           ? t('ui.emailVerificationPage.sending')

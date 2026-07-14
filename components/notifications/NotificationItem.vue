@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { computed } from 'vue'
 
   import SafeLink from '@/components/base/SafeLink.vue'
@@ -38,7 +37,7 @@
 <template>
   <SafeLink :to="notification.path" class="notificationLink">
     <HStack class="notificationItem" :class="{ unread: unread }">
-      <Icon class="notificationIcon" :icon="notificationIcon" />
+      <Icon :name="notificationIcon" class="notificationIcon" />
 
       <VStack class="notificationBody noSpace">
         <HStack class="autoSpace topLine">

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -86,7 +85,7 @@
         v-if="variant !== 'profile'"
         class="toggleIcon"
         :class="{ open: isExpanded }"
-        icon="solar:alt-arrow-down-line-duotone"
+        name="solar:alt-arrow-down-line-duotone"
       />
     </button>
 
@@ -94,11 +93,11 @@
       <p class="light">{{ t('ui.accountSwitcher.emptyState') }}</p>
       <HStack class="emptyActions autoSpace fullWidth">
         <button @click="addAccount">
-          <Icon icon="solar:login-2-line-duotone" />
+          <Icon name="solar:login-2-line-duotone" />
           {{ t('common.login') }}
         </button>
         <button class="prominent" @click="addSignup">
-          <Icon icon="solar:user-plus-line-duotone" />
+          <Icon name="solar:user-plus-line-duotone" />
           {{ t('common.signup') }}
         </button>
       </HStack>
@@ -131,7 +130,7 @@
           <Icon
             v-if="account.id === auth.activeAccountId"
             class="activeIcon"
-            icon="solar:check-circle-line-duotone"
+            name="solar:check-circle-line-duotone"
           />
 
           <button
@@ -139,14 +138,14 @@
             class="removeAccount"
             @click="removeLocalAccount(account.id)"
           >
-            <Icon icon="solar:logout-2-line-duotone" />
+            <Icon name="solar:logout-2-line-duotone" />
           </button>
         </button>
       </HStack>
 
       <HStack class="accountActions fullWidth autoSpace">
         <button class="addAccount prominent" @click="addAccount">
-          <Icon icon="solar:user-plus-rounded-line-duotone" />
+          <Icon name="solar:user-plus-rounded-line-duotone" />
           {{ t('ui.accountSwitcher.addAccount') }}
         </button>
         <button
@@ -154,7 +153,7 @@
           class="logoutAccount"
           @click="logoutActive"
         >
-          <Icon icon="solar:logout-2-line-duotone" />
+          <Icon name="solar:logout-2-line-duotone" />
           {{ t('common.logout') }}
         </button>
       </HStack>

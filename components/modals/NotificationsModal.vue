@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { useI18n } from 'vue-i18n'
 
   import Modal from '@/components/layout/Modal.vue'
@@ -36,7 +35,7 @@
         </template>
         <template #confirmationAction>
           <button class="prominent" @click="openNotifications">
-            <Icon icon="solar:bell-bing-line-duotone" />
+            <Icon name="solar:bell-bing-line-duotone" />
             {{ t('ui.notificationsModal.action') }}
           </button>
         </template>

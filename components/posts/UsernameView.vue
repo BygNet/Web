@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygProfile, BygUser } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import { type Ref, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -173,19 +172,19 @@
           v-if="user?.verification"
           class="verificationBadge"
           :class="{ largeBadge: displayMode }"
-          icon="solar:verified-check-bold"
+          name="solar:verified-check-bold"
           :style="{ color: getVerificationColor(user.verification) }"
         />
       </SafeLink>
 
       <HStack class="badges" v-if="!minimal">
         <HStack class="badge staff" v-if="isStaff">
-          <Icon icon="solar:shield-check-line-duotone" />
+          <Icon name="solar:shield-check-line-duotone" />
           Staff
         </HStack>
 
         <HStack class="badge author" v-if="author">
-          <Icon icon="carbon:user-avatar-filled" />
+          <Icon name="carbon:user-avatar-filled" />
           Author
         </HStack>
 
@@ -193,7 +192,7 @@
           class="badge subscription"
           v-if="user?.subscriptionState && user.subscriptionState !== 'free'"
         >
-          <Icon icon="solar:crown-star-line-duotone" />
+          <Icon name="solar:crown-star-line-duotone" />
         </HStack>
       </HStack>
 
@@ -204,7 +203,7 @@
         v-if="!displayMode && !hideFollowButton && !minimal && !isOwnUser()"
       >
         <Icon
-          :icon="
+          :name="
             isFollowing
               ? 'solar:check-circle-line-duotone'
               : 'solar:user-plus-line-duotone'
@@ -270,7 +269,7 @@
       &.subscription
         background: rgba(255, 215, 0, 0.6)
 
-      svg
+      span.iconify
         width: 1rem
         height: 1rem
 

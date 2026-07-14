@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   const props = defineProps<{
     title: string
     icon: string
@@ -13,7 +11,7 @@
 
 <template>
   <button class="contextMenuItem" type="button" @click="$emit('click')">
-    <Icon :icon="props.icon" />
+    <Icon :name="props.icon" />
     {{ props.title }}
   </button>
 </template>

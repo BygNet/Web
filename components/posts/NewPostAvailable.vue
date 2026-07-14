@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
 
@@ -14,7 +12,7 @@
     <HStack>
       <Icon
         class="notiIcon"
-        icon="solar:notification-unread-lines-line-duotone"
+        name="solar:notification-unread-lines-line-duotone"
       />
 
       <VStack class="notiText">

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { onMounted, type Ref, ref } from 'vue'
 
   import { openShareModal } from '@/data/share'
@@ -29,7 +28,7 @@
 
 <template>
   <button class="shareButton bounceRightIcon" @click="share">
-    <Icon icon="solar:square-share-line-line-duotone" />
+    <Icon name="solar:square-share-line-line-duotone" />
     {{ compact ? formatStat(shareCount) : formatNumber(shareCount) }}
   </button>
 </template>

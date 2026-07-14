@@ -201,7 +201,6 @@ export default defineNuxtConfig({
         '@vue/devtools-core',
         '@vue/devtools-kit',
         'vue-progressive-blur',
-        '@iconify/vue',
         'dompurify',
         'marked',
         'mitt',

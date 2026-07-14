@@ -9,7 +9,7 @@
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
 
   const { t } = useI18n()
-  const pageMeta = PageMetaByPath['/explore']
+  const pageMeta = PageMetaByPath['/explore']!
 
   watchEffect(() => {
     title.value = t(pageMeta.titleKey)

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -100,17 +99,17 @@
 
       <HStack>
         <button disabled>
-          <Icon icon="solar:stars-line-duotone" />
+          <Icon name="solar:stars-line-duotone" />
           {{ t('ui.profilePage.pro') }}
         </button>
 
         <button @click="showingAppearances = true">
-          <Icon icon="solar:pallete-2-line-duotone" />
+          <Icon name="solar:pallete-2-line-duotone" />
           {{ t('ui.profilePage.appearance') }}
         </button>
 
         <button @click="goSettings">
-          <Icon icon="solar:settings-minimalistic-line-duotone" />
+          <Icon name="solar:settings-minimalistic-line-duotone" />
           {{ t('ui.profilePage.settings') }}
         </button>
       </HStack>
@@ -120,7 +119,7 @@
       <HStack class="autoSpace">
         <h2>{{ t('ui.profilePage.themes') }}</h2>
         <button @click="showingAppearances = false">
-          <Icon icon="mingcute:close-fill" />
+          <Icon name="mingcute:close-fill" />
         </button>
       </HStack>
 
@@ -151,11 +150,11 @@
 
       <HStack class="accountActions">
         <button @click="goLogin">
-          <Icon icon="solar:login-2-line-duotone" />
+          <Icon name="solar:login-2-line-duotone" />
           {{ t('common.login') }}
         </button>
         <button @click="goSignup">
-          <Icon icon="solar:user-plus-line-duotone" />
+          <Icon name="solar:user-plus-line-duotone" />
           {{ t('common.signup') }}
         </button>
       </HStack>

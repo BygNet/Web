@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygSongLinkInfo } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import { computed, onBeforeUnmount, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -262,13 +261,17 @@
       @click="handlePillClick"
     >
       <HStack class="songPillContent">
-        <img v-if="info" :src="info.thumbnailUrl" alt="album art" />
-        <Icon v-else :icon="songLinkPrimaryIcon()" />
+        <img
+          v-if="info && info.thumbnailUrl"
+          :src="info.thumbnailUrl"
+          alt="album art"
+        />
+        <Icon v-else :name="songLinkPrimaryIcon()" />
 
         <span class="songLabel">{{ pillTitle }}</span>
         <Icon
           v-if="actionItems.length > 1"
-          icon="solar:alt-arrow-down-line-duotone"
+          name="solar:alt-arrow-down-line-duotone"
           class="caretIcon"
         />
       </HStack>
@@ -281,7 +284,7 @@
       @click="togglePlayback"
     >
       <Icon
-        :icon="
+        :name="
           isPlaying ? 'solar:pause-line-duotone' : 'solar:play-line-duotone'
         "
       />

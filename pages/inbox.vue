@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import {
     computed,
     onMounted,
@@ -38,7 +37,7 @@
   })
 
   const { t } = useI18n()
-  const pageMeta = PageMetaByPath['/inbox']
+  const pageMeta = PageMetaByPath['/inbox']!
 
   watchEffect(() => {
     title.value = t(pageMeta.titleKey)
@@ -142,14 +141,14 @@
             :disabled="enablingPush"
             class="prominent"
           >
-            <Icon icon="solar:bell-bing-line-duotone" />
+            <Icon name="solar:bell-bing-line-duotone" />
             {{
               enablingPush ? t('common.enabling') : t('common.enablePushAlerts')
             }}
           </button>
 
           <button class="spinIcon" @click="loadNotifications({ force: true })">
-            <Icon icon="solar:refresh-line-duotone" />
+            <Icon name="solar:refresh-line-duotone" />
             {{ t('common.refresh') }}
           </button>
         </HStack>
@@ -159,7 +158,7 @@
           :disabled="unreadCount < 1"
           class="prominent"
         >
-          <Icon icon="solar:check-read-line-duotone" />
+          <Icon name="solar:check-read-line-duotone" />
           {{ t('common.markAllRead') }} ({{ unreadCount }})
         </button>
       </HStack>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -383,11 +382,11 @@
 
               <div class="favoriteMenuActions">
                 <button @click="startFavoriteEdit(favorite)">
-                  <Icon icon="solar:pen-line-duotone" />
+                  <Icon name="solar:pen-line-duotone" />
                   Edit
                 </button>
                 <button @click="removeFavorite(favorite.id)">
-                  <Icon icon="solar:trash-bin-trash-line-duotone" />
+                  <Icon name="solar:trash-bin-trash-line-duotone" />
                   Remove
                 </button>
               </div>
@@ -414,7 +413,7 @@
       </section>
 
       <button class="editPageButton prominent large" @click="openEditorModal">
-        <Icon icon="solar:pen-line-duotone" />
+        <Icon name="solar:pen-line-duotone" />
       </button>
     </div>
 
@@ -424,7 +423,7 @@
           <h2>Customize</h2>
 
           <button @click="closeEditorModal">
-            <Icon icon="mingcute:close-fill" />
+            <Icon name="mingcute:close-fill" />
           </button>
         </HStack>
 
@@ -459,7 +458,7 @@
             class="editorSecondaryButton"
             @click="resetFavoriteForm"
           >
-            <Icon icon="mingcute:close-fill" />
+            <Icon name="mingcute:close-fill" />
             Cancel Edit
           </button>
         </VStack>
@@ -483,7 +482,7 @@
             </button>
 
             <button class="prominent">
-              <Icon icon="solar:diskette-line-duotone" />
+              <Icon name="solar:diskette-line-duotone" />
               Set Wallpaper
             </button>
           </form>

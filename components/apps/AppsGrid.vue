@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { useI18n } from 'vue-i18n'
 
   import SafeLink from '@/components/base/SafeLink.vue'
@@ -26,7 +25,7 @@
     >
       <HStack class="appItem fullWidth">
         <div class="appIcon">
-          <Icon :icon="app.icon" />
+          <Icon :name="app.icon" />
           <div class="appIconBackground" :style="{ '--tint': app.color }" />
         </div>
 
@@ -40,7 +39,7 @@
     <SafeLink v-else v-for="app in [...BygPages, ...MorePages]" :to="app.path">
       <div class="appItem fullWidth">
         <div class="appIcon" :style="{ '--tint': app.color }">
-          <Icon :icon="app.icon" />
+          <Icon :name="app.icon" />
           <div class="appIconBackground" />
         </div>
 
@@ -72,7 +71,7 @@
         .appIcon
           padding: 0.75rem
 
-          svg
+          span.iconify
             width: 2.25rem
             height: 2.25rem
 
@@ -90,7 +89,7 @@
         padding: 0.5rem
         filter: drop-shadow(0 0 3rem var(--tint))
 
-        svg
+        span.iconify
           width: 2rem
           height: 2rem
           z-index: 1

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { type BygAsk, getAskGradient, getAskVariantById } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import domtoimage from 'dom-to-image'
   import { computed, type Ref, ref, watch, watchEffect } from 'vue'
   import { useI18n } from 'vue-i18n'
@@ -200,7 +199,7 @@
 
           <template #confirmationAction>
             <button class="prominent bounceRightIcon" @click="exportToImage()">
-              <Icon icon="solar:square-share-line-line-duotone" />
+              <Icon name="solar:square-share-line-line-duotone" />
               {{ t('ui.asks.shareImage') }}
             </button>
           </template>
@@ -215,12 +214,12 @@
         <h3>{{ t('ui.asks.page.title') }}</h3>
         <HStack class="headerActions">
           <button @click="copyUrl" :disabled="!asksUrl">
-            <Icon :icon="copyIcon" />
+            <Icon :name="copyIcon" />
             {{ t('common.copy') }}
           </button>
 
           <button class="prominent" @click="openPublicUrl" :disabled="!asksUrl">
-            <Icon icon="solar:link-line-duotone" />
+            <Icon name="solar:link-line-duotone" />
             {{ t('common.open') }}
           </button>
         </HStack>

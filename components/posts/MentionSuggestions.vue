@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import type { BygUserSuggestion } from '@/types/mentions'
@@ -33,14 +31,14 @@
           <Icon
             v-else
             class="suggestionAvatar fallback"
-            icon="solar:user-circle-line-duotone"
+            name="solar:user-circle-line-duotone"
           />
           <p>@{{ user.username }}</p>
         </HStack>
 
         <Icon
           v-if="user.subscriptionState !== 'free'"
-          icon="solar:crown-star-line-duotone"
+          name="solar:crown-star-line-duotone"
         />
       </HStack>
     </button>

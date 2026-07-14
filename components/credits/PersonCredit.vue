@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   import UsernameView from '@/components/posts/UsernameView.vue'
 
   defineProps<{
@@ -18,7 +16,7 @@
       <img v-if="avatarUrl" :src="avatarUrl" :alt="name" />
 
       <div class="placeholder" v-else>
-        <Icon icon="solar:user-rounded-line-duotone" />
+        <Icon name="solar:user-rounded-line-duotone" />
       </div>
     </div>
 
@@ -26,7 +24,7 @@
     <UsernameView v-if="bygUsername" :name="bygUsername" minimal />
     <a v-if="homepage" :href="homepage" target="_blank">
       <button class="link">
-        <Icon icon="solar:link-minimalistic-2-line-duotone" />
+        <Icon name="solar:link-minimalistic-2-line-duotone" />
         Homepage
       </button>
     </a>
@@ -51,7 +49,7 @@
         background: themes.$foregroundColor
         justify-content: center
 
-        svg
+        span.iconify
           width: 3rem
           height: 3rem
 

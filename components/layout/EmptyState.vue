@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   import VStack from '@/components/layout/VStack.vue'
 
   defineProps<{
@@ -10,7 +8,7 @@
 
 <template>
   <VStack class="emptyState">
-    <Icon class="loader" icon="svg-spinners:90-ring-with-bg" />
+    <Icon name="svg-spinners:90-ring-with-bg" class="loader" />
 
     <h3>Please wait...</h3>
     <p>{{ message }}</p>

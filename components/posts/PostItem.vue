@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import DOMPurify from 'dompurify'
   import { marked } from 'marked'
   import { nextTick, ref, watchEffect } from 'vue'
@@ -91,7 +90,7 @@
         />
 
         <HStack class="noSpace">
-          <Icon icon="solar:chat-round-line-line-duotone" />
+          <Icon name="solar:chat-round-line-line-duotone" />
           {{ post.commentCount }}
         </HStack>
       </HStack>

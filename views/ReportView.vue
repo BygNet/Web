@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -22,7 +21,7 @@
       <h2>{{ t('ui.report.title') }}</h2>
 
       <button class="spinIcon" @click="showingReportPopup = false">
-        <Icon icon="mingcute:close-fill" />
+        <Icon name="mingcute:close-fill" />
       </button>
     </HStack>
 

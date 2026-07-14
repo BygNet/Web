@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { computed } from 'vue'
 
   import { auth } from '@/auth/session'
@@ -63,18 +62,18 @@
           <Icon
             v-else-if="thread.type === 'direct'"
             class="avatarFallback"
-            icon="solar:user-circle-line-duotone"
+            name="solar:user-circle-line-duotone"
           />
           <Icon
             v-else
             class="avatarFallback"
-            icon="solar:users-group-rounded-line-duotone"
+            name="solar:users-group-rounded-line-duotone"
           />
 
           <p class="username">{{ displayName }}</p>
           <Icon
             v-if="subscriptionState !== 'free'"
-            icon="solar:crown-star-line-duotone"
+            name="solar:crown-star-line-duotone"
           />
         </HStack>
 

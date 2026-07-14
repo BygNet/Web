@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -90,7 +89,7 @@
 
         <VStack class="loginFormItems">
           <button type="submit" :disabled="loading">
-            <Icon icon="solar:login-2-line-duotone" />
+            <Icon name="solar:login-2-line-duotone" />
             {{ loading ? t('auth.loginPage.loggingIn') : t('auth.login') }}
           </button>
 

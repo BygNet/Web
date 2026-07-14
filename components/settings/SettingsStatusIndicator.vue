@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   import HStack from '~/components/layout/HStack.vue'
 
   defineProps<{
@@ -18,7 +16,7 @@
     class="settingsStatusIndicator settingsBorder"
     :class="{ noBorder, enabled }"
   >
-    <Icon class="icon" :icon="icon" />
+    <Icon :name="icon" class="icon" />
     <p>{{ t(status) }}</p>
   </HStack>
 </template>

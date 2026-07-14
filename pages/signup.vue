@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -68,7 +67,7 @@
         </label>
 
         <button type="submit" :disabled="loading">
-          <Icon icon="solar:user-plus-line-duotone" />
+          <Icon name="solar:user-plus-line-duotone" />
           {{
             loading ? t('auth.signupPage.creatingAccount') : t('auth.signup')
           }}

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
-  import { Icon } from '@iconify/vue'
   import { computed, type Ref, ref } from 'vue'
 
   import EmbedShell from '@/components/embeds/EmbedShell.vue'
@@ -67,7 +66,7 @@
           class="userAvatar"
         />
         <Icon
-          icon="solar:user-rounded-line-duotone"
+          name="solar:user-rounded-line-duotone"
           class="userAvatar"
           v-else
         />
@@ -83,14 +82,14 @@
       <HStack class="fullWidth actions">
         <a :href="'/messages?with=' + profile.user.username" target="_top">
           <button class="prominent">
-            <Icon icon="solar:plain-line-duotone" />
+            <Icon name="solar:plain-line-duotone" />
             Message
           </button>
         </a>
 
         <a :href="'/u/' + profile.user.username" target="_top">
           <button>
-            <Icon icon="solar:user-rounded-line-duotone" />
+            <Icon name="solar:user-rounded-line-duotone" />
             Profile
           </button>
         </a>

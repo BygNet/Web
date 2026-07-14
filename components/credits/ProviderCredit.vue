@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-
   import HStack from '@/components/layout/HStack.vue'
 
   defineProps<{
@@ -13,7 +11,7 @@
 <template>
   <a :href="link" target="_blank">
     <HStack class="providerCredit">
-      <Icon :icon="icon" class="icon" />
+      <Icon :name="icon" class="icon" />
       <p class="name">{{ name }}</p>
     </HStack>
   </a>

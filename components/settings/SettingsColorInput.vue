@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
   import { SketchPicker, tinycolor } from 'vue-color'
 
   import VStack from '~/components/layout/VStack.vue'
@@ -55,7 +54,7 @@
         class="colorInput"
         @click="showingColorPicker = !showingColorPicker"
       >
-        <Icon icon="solar:palette-round-line-duotone" />
+        <Icon name="solar:palette-round-line-duotone" />
       </button>
     </SettingsInput>
 

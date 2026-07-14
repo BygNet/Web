@@ -50,7 +50,7 @@
   let interval: number | undefined
 
   const { t } = useI18n()
-  const pageMeta = PageMetaByPath['/']
+  const pageMeta = PageMetaByPath['/']!
 
   watchEffect(() => {
     title.value = t(pageMeta.titleKey)
