@@ -435,6 +435,7 @@
               :style="previewThemeStyle ?? undefined"
             >
               <ProfileView
+                v-if="previewUser"
                 :user="previewUser"
                 :follower-count="profile?.followerCount"
                 :following-count="profile?.followingCount"
@@ -523,7 +524,7 @@
                 ? t('ui.settings.authenticatorEnabled')
                 : t('ui.settings.authenticatorDisabled')
             "
-            :enabled="auth.user?.twoFactorEnabled"
+            :enabled="auth.user?.twoFactorEnabled ?? false"
             icon="solar:shield-keyhole-line-duotone"
           />
 

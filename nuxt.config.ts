@@ -6,15 +6,13 @@ export default defineNuxtConfig({
   ssr: true,
   future: { compatibilityVersion: 4 },
 
-  modules: [ '@nuxtjs/i18n', '@vite-pwa/nuxt' ],
+  modules: [ '@nuxtjs/i18n', '@vite-pwa/nuxt', '@nuxt/icon', '@nuxt/fonts' ],
 
   runtimeConfig: {
     public: {
-      apiBase:
-        import.meta.env.NUXT_PUBLIC_API_BASE || 'https://api.byg.a35.dev',
-      adsBase:
-        import.meta.env.NUXT_PUBLIC_ADS_BASE || 'https://ads.byg.a35.dev',
-      asksBase: import.meta.env.NUXT_PUBLIC_ASKS_BASE || 'https://asks.byg.gg',
+      apiBase: import.meta.env.NUXT_PUBLIC_API_BASE,
+      adsBase: import.meta.env.NUXT_PUBLIC_ADS_BASE,
+      asksBase: import.meta.env.NUXT_PUBLIC_ASKS_BASE,
       posthogPublicKey: 'phc_M5dK6A49VD1zj7L5iamsBbIO4RhikB8FbxUyVfTlEZy',
       posthogHost: 'https://s.a35.dev',
       posthogDefaults: '2026-01-30',
@@ -26,7 +24,7 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    baseUrl: import.meta.env.NUXT_PUBLIC_BASE_URL || 'https://byg.gg',
+    baseUrl: import.meta.env.BASE_URL,
     strategy: 'prefix',
     detectBrowserLanguage: {
       useCookie: true,
@@ -147,17 +145,6 @@ export default defineNuxtConfig({
         { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' },
         { rel: 'dns-prefetch', href: 'https://cdn.jsdelivr.net' },
         { rel: 'dns-prefetch', href: 'https://emojis.byg.a35.dev' },
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        {
-          rel: 'preconnect',
-          href: 'https://fonts.gstatic.com',
-          crossorigin: '',
-        },
-        {
-          rel: 'stylesheet',
-          crossorigin: 'anonymous',
-          href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap',
-        },
         {
           rel: 'stylesheet',
           href: 'https://emojis.byg.a35.dev/FluentEmojiColor.css',
@@ -165,6 +152,21 @@ export default defineNuxtConfig({
       ],
       script: [ { src: 'https://tally.so/widgets/embed.js' } ],
     },
+  },
+
+  fonts: {
+    processCSSVariables: true,
+    families: [
+      {
+        name: 'Wix Madefor Text',
+        global: true,
+        weights: [ 400, 600, 700 ],
+      },
+      {
+        name: 'Jetbrains Mono',
+        global: true,
+      },
+    ],
   },
 
   pwa: {
@@ -209,7 +211,10 @@ export default defineNuxtConfig({
         '@tiptap/starter-kit',
         '@tiptap/extension-placeholder',
         '@tiptap/markdown',
-        'dom-to-image',
+        'dom-to-image', // CJS
+        '@bygnet/types',
+        'posthog-js/lib/src/utils/globals', // CJS
+        'vue-color',
       ],
     },
   },
