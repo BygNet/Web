@@ -221,6 +221,9 @@ export const DesktopPages: BygPageMeta[] = [
 
   MessagesPage,
   AsksPage,
+  SearchPage,
+  SpacerPage,
+
   MySpacePage,
   SettingsPage,
   SpacerPage,
