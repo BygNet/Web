@@ -10,7 +10,7 @@
 
 <template>
   <Transition name="modal" appear>
-    <FullscreenCover v-if="visible !== false" class="modalCover" v-bind="attrs">
+    <FullscreenCover v-if="visible" class="modalCover" v-bind="attrs">
       <div class="modalContent">
         <slot />
       </div>
@@ -24,7 +24,6 @@
     z-index: 500
     padding: var(--margin) 0
     backdrop-filter: blur(0.5rem)
-    background: rgb(62 62 62 / 0.3)
     overflow: visible
 
     .modalContent

@@ -205,16 +205,21 @@
     width: 100%
     align-items: flex-start
 
+
     .commentInput
       flex-grow: 1
       min-width: 20rem
       gap: 0.25rem
 
-    textarea
-      width: 100%
-      resize: vertical
-      background: transparent
-      outline: none
+      &, *
+        border-radius: 0
+
+      textarea
+        padding: 0
+        width: 100%
+        resize: vertical
+        background: transparent
+        outline: none
 
   .commentsView
     width: 100%

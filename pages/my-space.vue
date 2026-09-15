@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
-  import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
+  import { computed, onMounted, type Ref, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
@@ -10,14 +10,10 @@
   import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
   import ProfileView from '@/components/profile/ProfileView.vue'
   import { fetchCurrentUserProfile } from '@/data/profiles'
-  import { BygThemes, currentThemeKey, setTheme } from '@/data/themes'
   import { title } from '@/data/title'
-  import {
-    applyProfileThemeToDocument,
-    clearDocumentProfileTheme,
-  } from '@/utils/profileTheme'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo } from '#app'
+  import ThemePicker from '~/components/settings/ThemePicker.vue'
 
   const localePath = useLocalePath()
   const { t } = useI18n()
@@ -33,7 +29,6 @@
   const profile: Ref<BygProfile | null> = ref(null)
   const isPreviewingBaseTheme: Ref<boolean> = ref(false)
   const AppVersion = __AppVersion
-  let themePreviewTimeout: number | null = null
 
   async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
     profile.value = await fetchCurrentUserProfile(options)
@@ -51,31 +46,9 @@
     navigateTo(localePath('/settings'))
   }
 
-  function previewAndSetTheme(theme: (typeof BygThemes)[number]) {
-    if (themePreviewTimeout != null) {
-      window.clearTimeout(themePreviewTimeout)
-    }
-
-    isPreviewingBaseTheme.value = true
-    setTheme(theme)
-    clearDocumentProfileTheme()
-
-    themePreviewTimeout = window.setTimeout(() => {
-      isPreviewingBaseTheme.value = false
-      applyProfileThemeToDocument(profile.value?.user.color)
-      themePreviewTimeout = null
-    }, 900)
-  }
-
   onMounted(() => {
     if (isLoggedIn.value) {
       loadProfile()
-    }
-  })
-
-  onUnmounted(() => {
-    if (themePreviewTimeout != null) {
-      window.clearTimeout(themePreviewTimeout)
     }
   })
 
@@ -115,33 +88,16 @@
       </HStack>
     </HStack>
 
-    <VStack v-if="showingAppearances" class="appearanceSidebar">
-      <HStack class="autoSpace">
-        <h2>{{ t('ui.profilePage.themes') }}</h2>
-        <button @click="showingAppearances = false">
-          <Icon name="mingcute:close-fill" />
-        </button>
-      </HStack>
-
-      <VStack class="themeList">
-        <HStack
-          v-for="theme in BygThemes"
-          class="bygTheme"
-          @click="previewAndSetTheme(theme)"
-        >
-          <div
-            class="previewCircle"
-            :style="{ background: theme.colorPreview }"
-            :class="{ selected: currentThemeKey === theme.key }"
-          />
-
-          <VStack class="themeInfo">
-            <h4>{{ theme.title }}</h4>
-            <p class="light">{{ theme.description }}</p>
-          </VStack>
-        </HStack>
-      </VStack>
-    </VStack>
+    <ThemePicker
+      v-if="showingAppearances"
+      :profile="profile"
+      @previewing="isPreviewingBaseTheme = true"
+      @done-previewing="isPreviewingBaseTheme = false"
+    >
+      <button @click="showingAppearances = false">
+        <Icon name="mingcute:close-fill" />
+      </button>
+    </ThemePicker>
 
     <!-- Logged out -->
     <VStack v-if="!isLoggedIn" class="guest">
@@ -194,55 +150,6 @@
   .guest, .quickSettings, .bygTheme
     @include utils.maxPostPaddedWidth
     @include utils.itemBackground
-
-  .appearanceSidebar
-    --padding: 0.75rem
-    --margin: 1rem
-
-    position: fixed
-    top: env(safe-area-inset-top)
-    bottom: 0
-    right: 0
-    height: calc(100vh - var(--padding)*2 - var(--margin)*2 - var(--tabBarHeight) - env(safe-area-inset-top) - env(safe-area-inset-bottom))
-    backdrop-filter: blur(0.5rem)
-    width: fit-content
-    max-width: 90vw
-    padding: var(--padding)
-    margin: var(--margin)
-
-    background: themes.$foregroundColor
-    border-radius: 1.5rem
-    z-index: 200
-    animation: sidebarSlide 0.4s ease forwards
-
-  @keyframes sidebarSlide
-    0%
-      transform: translateX(100%)
-    100%
-      transform: none
-
-  .themeList
-    flex: 1
-    min-height: 0
-    overflow-y: auto
-    flex-wrap: nowrap
-
-    .bygTheme
-      gap: 1rem
-      cursor: pointer
-
-      .previewCircle
-        width: 2rem
-        height: 2rem
-        border-radius: 50%
-        mask: linear-gradient(to bottom right, black, rgba(0,0,0,0.8), black)
-        margin: 0.25rem
-
-        &.selected
-          border: 0.25rem solid themes.$accentColor
-
-      .themeInfo
-        gap: 0
 
   .accountSwitcherSection
     @include utils.maxPostPaddedWidth

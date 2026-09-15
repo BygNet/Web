@@ -6,6 +6,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import setHeadMeta from '@/utils/setHeadMeta'
   import { navigateTo } from '#app'
+  import { title } from '~/data/title.ts'
 
   const localePath = useLocalePath()
   const query = ref('')
@@ -15,7 +16,7 @@
     subtitle: 'Search the web privately.',
   })
 
-  definePageMeta({ layout: 'plain' })
+  title.value = 'Search'
 
   async function submitSearch() {
     if (!query.value.trim()) return

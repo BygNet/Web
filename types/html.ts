@@ -1,7 +1,2 @@
 export type HTMLInputType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'number'
-  | 'tel'
-  | 'url'
+  'text' | 'email' | 'password' | 'number' | 'tel' | 'url'

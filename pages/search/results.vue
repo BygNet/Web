@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, type Ref, ref, watch } from 'vue'
 
-  import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import EmptyState from '@/components/layout/EmptyState.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
@@ -70,12 +69,12 @@
     'open source social media projects',
   ]
 
-  title.value = 'Search'
+  title.value = 'Results'
   setHeadMeta({
     page: 'Search',
     subtitle: 'Search the web, images, videos, music and more with Byg Search.',
   })
-  definePageMeta({ layout: 'plain' })
+  definePageMeta({ showBackButton: true })
 
   const route = useRoute()
 
@@ -236,10 +235,6 @@
 
 <template>
   <ContentArea class="bygSearchResults" left-align>
-    <SafeLink to="/search">
-      <h1>Byg Search</h1>
-    </SafeLink>
-
     <VStack class="searchHeaderCard">
       <form class="searchForm" @submit.prevent="submitSearch">
         <HStack class="searchInputWrap">

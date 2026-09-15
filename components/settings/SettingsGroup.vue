@@ -28,6 +28,7 @@
 
     &:not(.plain)
       background: themes.$foregroundColor
+      box-shadow: inset 0 0.2rem 0.3rem var(--foregroundColor)
       padding: 0.95rem
-      border-radius: 1.5rem
+      border-radius: 1.75rem
 </style>

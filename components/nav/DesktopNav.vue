@@ -21,11 +21,7 @@
   const { t } = useI18n()
 
   function create(page: BygPageMeta): void {
-    if (page === CreatePage) {
-      openCreateModal()
-    } else {
-      return
-    }
+    if (page === CreatePage) openCreateModal()
   }
 </script>
 
@@ -41,28 +37,33 @@
       <VStack class="pages">
         <SafeLink
           v-for="page in DesktopPages"
+          :key="page.path"
           :to="page.path"
           class="fullWidth"
           :disable="page === CreatePage"
           @click="create(page)"
         >
           <HStack
-            class="desktopNavItem"
             v-if="page !== SpacerPage"
+            class="desktopNavItem"
             :class="{ selected: isActive(route.path, page.path) }"
           >
-            <Icon
-              :name="
-                isActive(route.path, page.path)
-                  ? page.icon.replace('line-duotone', 'bold-duotone')
-                  : page.icon
-              "
-            />
-            <h3>
+            <div class="icon">
+              <Icon
+                :name="
+                  isActive(route.path, page.path)
+                    ? page.icon.replace('line-duotone', 'bold-duotone')
+                    : page.icon
+                "
+              />
+            </div>
+
+            <h3 class="title">
               {{ t(page.titleKey) }}
             </h3>
           </HStack>
-          <div class="desktopSpacer" v-else />
+
+          <div v-else class="desktopSpacer" />
         </SafeLink>
       </VStack>
     </VStack>
@@ -89,28 +90,59 @@
 <style scoped lang="sass">
   @use "@/styles/variables"
   @use "@/styles/themes"
-  @use "@/styles/utils"
 
   .desktopNav
     display: none
     position: relative
+    height: 100vh
+    padding: calc(var(--padding) / 2)
+    gap: 2rem
+    overflow-x: hidden
+    overflow-y: auto
     align-items: flex-start
     justify-content: space-between
-    min-width: 14rem
-    width: 20rem
-    flex-grow: 1
-    gap: 2rem
-    padding: calc(var(--padding) / 2)
-    height: 100vh
-    overflow-y: scroll
     animation: slideIn 0.3s ease-in-out
+    flex: 0 0 7rem
+    width: 7rem
+    min-width: 0
+    transition: width 0.25s ease, flex-basis 0.25s ease
 
-    @keyframes slideIn
-      from
-        transform: translateX(-100%)
-        opacity: 0.4
-      to
-        transform: translateX(0)
+    &:not(:hover)
+      .desktopNavItem
+        &:hover,
+        &.selected
+          padding: 0
+
+          .icon
+            border-radius: 1.25rem
+            padding: 0.45rem 0.65rem
+            background-color: themes.$foregroundColor
+
+    &:hover
+      width: 18rem
+      flex-basis: 18rem
+
+      .desktopNavItem
+        &:hover,
+        &.selected
+          opacity: 1
+          background: themes.$foregroundColor
+          box-shadow: inset 0 0.1rem 0.2rem themes.$foregroundColor
+
+        .title
+          width: 10rem
+          opacity: 1
+          transform: translateX(0)
+
+      .bygLogo
+        justify-content: flex-start
+
+      .accountSection
+        opacity: 1
+        transform: translateY(0)
+        pointer-events: auto
+
+      .footer
         opacity: 1
 
     &::before
@@ -118,49 +150,81 @@
       mask-image: linear-gradient(to var(--trailing), black, transparent)
       opacity: 0.3
 
-    .header
-      width: 100%
-      gap: 1rem
-
-    .bygLogo
-      padding: 0.35rem
-
-      .bygLogoImage
-        width: 4.5rem
-        height: 2.5rem
-        mask-image: linear-gradient(to bottom, black, rgb(0 0 0 / 0.65))
-
-  .desktopSpacer
-    height: 1rem
-    cursor: default
-
-  .desktopNavItem
-    padding: 0.45rem 0.65rem
-    cursor: pointer
+  .header
     width: 100%
-    gap: 0.5rem
-    border-radius: 1.25rem
-    opacity: 0.9
+    gap: 1rem
 
-    &, *
-      transition: 0.2s ease
+  .bygLogo
+    width: 100%
+    padding: 0.35rem
+    justify-content: center
+    transition: justify-content 0.25s ease
 
-    &:hover, &.selected
-      opacity: 1
-      background: themes.$foregroundColor
-
-    span.iconify
-      width: 1.85rem
-      height: 1.85rem
+    .bygLogoImage
+      width: 4.5rem
+      height: 2.5rem
+      flex-shrink: 0
+      mask-image: linear-gradient(to bottom, black, rgb(0 0 0 / 0.65))
 
   .pages
     position: relative
     width: 100%
     gap: 0.25rem
 
-  .accountSection
-    gap: 1rem
+  .desktopSpacer
+    height: 1rem
+    cursor: default
+
+  .desktopNavItem
     width: 100%
+    height: 3rem
+    padding: 0.45rem 0.65rem
+    gap: 0.5rem
+    border-radius: 1.25rem
+    cursor: pointer
+    opacity: 0.9
+    overflow: hidden
+
+    transition: background 0.2s ease, opacity 0.2s ease
+
+    .icon
+      transition: background-color 0.2s ease
+      background-color: transparent
+
+      span.iconify
+        width: 1.85rem
+        height: 1.85rem
+        flex: 0 0 1.85rem
+
+    .title
+      width: 0
+      margin: 0
+      opacity: 0
+      overflow: hidden
+      white-space: nowrap
+      transform: translateX(-0.25rem)
+      transition: width 0.25s ease, opacity 0.15s ease, transform 0.25s ease
+
+  .accountSection
+    width: 100%
+    gap: 1rem
+    opacity: 0
+    transform: translateY(0.5rem)
+    pointer-events: none
+    transition: opacity 0.05s ease, transform 0.05s ease
+
+  .footer
+    opacity: 0
+    transition: opacity 0.2s ease
+
+  @keyframes slideIn
+    from
+      transform: translateX(-100%)
+      opacity: 0.4
+
+    to
+      transform: translateX(0)
+      opacity: 1
 
   @media (min-width: variables.$mobileWidth)
     .desktopNav

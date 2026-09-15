@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.15.3",
+  "version": "2.16.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -16,7 +16,7 @@
   "dependencies": {
     "@eslint/compat": "^2.0.1",
     "@nuxt/icon": "^2.3.1",
-    "@nuxtjs/i18n": "^10.3.0",
+    "@nuxtjs/i18n": "^10.6.0",
     "@tiptap/extension-placeholder": "^3.22.5",
     "@tiptap/markdown": "^3.22.5",
     "@tiptap/pm": "^3.22.5",
@@ -30,15 +30,14 @@
     "marked": "^17.0.4",
     "marked-shiki": "^1.2.1",
     "mitt": "^3.0.1",
-    "nuxt": "^4.4.4",
-    "pinia": "^3.0.4",
+    "nuxt": "^4.5.2",
     "posthog-js": "^1.372.8",
     "shiki": "^4.0.2",
-    "vue": "^3.5.33",
+    "vue": "^3.5.42",
     "vue-color": "^3.3.3",
     "vue-eslint-parser": "^10.2.0",
     "vue-progressive-blur": "^1.0.2",
-    "vue-router": "^5.0.6"
+    "vue-router": "^5.3.1"
   },
   "devDependencies": {
     "@bygnet/types": "^1.10.2",
@@ -48,7 +47,7 @@
     "@nuxt/fonts": "^0.14.0",
     "@tsconfig/node24": "^24.0.3",
     "@types/dom-to-image": "^2.6.7",
-    "@types/node": "^25.5.0",
+    "@types/node": "^26.6.0",
     "@typescript-eslint/eslint-plugin": "^8.58.2",
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.39.2",
@@ -56,8 +55,8 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "jiti": "^2.6.1",
     "npm-run-all2": "^8.0.4",
-    "prettier": "^3.8.1",
-    "sass-embedded": "^1.97.2",
+    "prettier": "^3.9.6",
+    "sass-embedded": "^1.104.1",
     "typescript": "~5.9.3",
     "vite-plugin-vue-devtools": "^8.1.0"
   }

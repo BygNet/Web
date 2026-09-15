@@ -24,18 +24,17 @@
   import SettingsInput from '~/components/settings/SettingsInput.vue'
   import SettingsStatusIndicator from '~/components/settings/SettingsStatusIndicator.vue'
   import SettingsTextArea from '~/components/settings/SettingsTextArea.vue'
+  import ThemePicker from '~/components/settings/ThemePicker.vue'
 
   definePageMeta({
     middleware: 'auth',
-    showBackButton: true,
   })
 
+  const route = useRoute()
+  const router = useRouter()
+
   type SettingSection =
-    | 'profile'
-    | 'subscription'
-    | 'security'
-    | 'interface'
-    | 'advanced'
+    'profile' | 'subscription' | 'security' | 'interface' | 'advanced'
 
   interface TwoFactorSetup {
     secret: string
@@ -60,7 +59,31 @@
     subtitleKey: pageMeta.descriptionKey,
   })
 
-  const activeSection: Ref<SettingSection> = ref('profile')
+  const validSections: SettingSection[] = [
+    'profile',
+    'subscription',
+    'security',
+    'interface',
+    'advanced',
+  ]
+
+  function getSectionFromHash(): SettingSection {
+    const hash = route.hash.slice(1)
+
+    return validSections.includes(hash as SettingSection)
+      ? (hash as SettingSection)
+      : 'profile'
+  }
+
+  function setActiveSection(section: SettingSection): void {
+    activeSection.value = section
+
+    router.replace({
+      hash: `#${section}`,
+    })
+  }
+
+  const activeSection: Ref<SettingSection> = ref(getSectionFromHash())
   const settingsPages: SettingsPage[] = [
     {
       key: 'profile',
@@ -110,8 +133,14 @@
   const avatarUrl: Ref<string> = ref('')
   const bannerUrl: Ref<string> = ref('')
   const color: Ref<string> = ref('')
-
   const goToUrl: Ref<string> = ref('')
+
+  watch(
+    () => route.hash,
+    () => {
+      activeSection.value = getSectionFromHash()
+    }
+  )
 
   const canEditProfileColor = computed(() => {
     const subscriptionState = profile.value?.user.subscriptionState
@@ -343,7 +372,7 @@
       <button
         v-for="page in settingsPages"
         :key="page.key"
-        @click="activeSection = page.key"
+        @click="setActiveSection(page.key)"
         :class="{ prominent: activeSection === page.key }"
         class="menuItem"
       >
@@ -637,6 +666,10 @@
               {{ lang.name }}
             </button>
           </VStack>
+        </SettingsGroup>
+
+        <SettingsGroup title="ui.profilePage.themes">
+          <ThemePicker full />
         </SettingsGroup>
       </VStack>
 

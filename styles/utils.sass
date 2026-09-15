@@ -34,18 +34,7 @@
   padding: 0.75rem
   background: themes.$foregroundColor
   border-radius: var(--cornerRadius)
-
-  &::after
-    content: ""
-    position: absolute
-    top: 0
-    bottom: 0
-    right: 0
-    left: 0
-    box-shadow: inset themes.$shadowColor 0 -0.5rem 1rem
-    border-radius: var(--cornerRadius)
-    opacity: 0.1
-    pointer-events: none
+  box-shadow: inset 0 0.2rem 0.3rem var(--foregroundColor)
 
 @mixin maxPaddedWidth
   width: 100%

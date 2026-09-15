@@ -51,6 +51,7 @@
 
 <style scoped lang="sass">
   @use "@/styles/themes"
+  @use "@/styles/variables"
 
   .appsList
     display: grid
@@ -72,8 +73,7 @@
           padding: 0.75rem
 
           span.iconify
-            width: 2.25rem
-            height: 2.25rem
+            font-size: 2.25rem
 
           .appIconBackground
             border-radius: 1.25rem
@@ -90,8 +90,7 @@
         filter: drop-shadow(0 0 3rem var(--tint))
 
         span.iconify
-          width: 2rem
-          height: 2rem
+          font-size: 2rem
           z-index: 1
 
         .appIconBackground
@@ -109,4 +108,17 @@
 
         *
           margin: 0
+
+  @media (min-width: variables.$mobileWidth)
+    .appsList:not(.embed)
+      grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr))
+      row-gap: 5rem
+
+      .appItem
+        .appIcon
+          padding: 0.75rem
+          border-radius: 1.5rem
+
+          span.iconify
+            font-size: 3rem
 </style>

@@ -29,6 +29,7 @@
 
     &.enabled.noBorder
       background: themes.$accentColor
+      border-radius: 1.25rem
       padding: 0.5rem
       margin: -0.5rem
       width: calc(100% + 1rem)

@@ -122,8 +122,7 @@ async function getPublicKey(): Promise<string> {
 }
 
 export function getPushPermissionState():
-  | NotificationPermission
-  | 'unsupported' {
+  NotificationPermission | 'unsupported' {
   if (!supportsPushAlerts()) return 'unsupported'
   return Notification.permission
 }

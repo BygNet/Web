@@ -25,7 +25,7 @@
     opacity: 0
     border-radius: 0
     animation: opacity 0.2s ease forwards
-    background: themes.$foregroundColor
+    background: rgba(66, 66, 66, 0.3)
 
   .fullScreenCoverContent
     flex-direction: column
