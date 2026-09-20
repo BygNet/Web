@@ -36,7 +36,7 @@ export const SocialPage: BygPageMeta = {
   descriptionKey: 'pages.social.description',
   path: '/',
   icon: 'solar:home-angle-line-duotone',
-  color: '#d136b9',
+  color: '#e140c8',
 }
 
 export const GalleryPage: BygPageMeta = {
@@ -45,7 +45,7 @@ export const GalleryPage: BygPageMeta = {
   descriptionKey: 'pages.gallery.description',
   path: '/gallery',
   icon: 'solar:gallery-wide-line-duotone',
-  color: '#9163e9',
+  color: '#9f63e9',
 }
 
 export const MessagesPage: BygPageMeta = {
@@ -54,7 +54,7 @@ export const MessagesPage: BygPageMeta = {
   descriptionKey: 'pages.messages.description',
   path: '/messages',
   icon: 'solar:plain-line-duotone',
-  color: '#4091a0',
+  color: '#677fdf',
   badge: messageUnreadCount,
 }
 
@@ -80,7 +80,7 @@ export const SearchPage: BygPageMeta = {
   descriptionKey: 'pages.search.description',
   path: '/search',
   icon: 'solar:minimalistic-magnifer-line-duotone',
-  color: '#a77c20',
+  color: '#ddd545',
 }
 
 export const InboxPage: BygPageMeta = {
@@ -89,7 +89,7 @@ export const InboxPage: BygPageMeta = {
   descriptionKey: 'pages.inbox.description',
   path: '/inbox',
   icon: 'solar:inbox-line-line-duotone',
-  color: '#e0803c',
+  color: '#f49b5b',
   badge: inboxUnreadCount,
 }
 
@@ -99,16 +99,7 @@ export const AsksPage: BygPageMeta = {
   descriptionKey: 'pages.asks.description',
   path: '/asks',
   icon: 'solar:question-square-line-duotone',
-  color: '#dd289e',
-}
-
-export const LinkPage: BygPageMeta = {
-  key: 'link',
-  titleKey: 'pages.link.title',
-  descriptionKey: 'pages.link.description',
-  path: '/link',
-  icon: 'solar:link-minimalistic-2-line-duotone',
-  color: '#e03c72',
+  color: '#ff5c61',
 }
 
 export const VerificationPage: BygPageMeta = {
@@ -117,7 +108,7 @@ export const VerificationPage: BygPageMeta = {
   descriptionKey: 'pages.verification.description',
   path: '/verification',
   icon: 'solar:verified-check-line-duotone',
-  color: '#aa89e9',
+  color: '#89e9e6',
 }
 
 export const SettingsPage: BygPageMeta = {
@@ -135,14 +126,13 @@ export const CreditsPage: BygPageMeta = {
   descriptionKey: 'pages.credits.description',
   path: '/credits',
   icon: 'solar:hand-heart-line-duotone',
-  color: '#bfb26f',
+  color: '#bea3ff',
 }
 
 export const MorePages: BygPageMeta[] = [
   SearchPage,
   InboxPage,
   AsksPage,
-  LinkPage,
   VerificationPage,
   SettingsPage,
   CreditsPage,

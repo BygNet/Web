@@ -73,15 +73,15 @@
                     : page.icon
                 "
               />
+
+              <span v-if="badgeValue(page)" class="navBadge">
+                {{ badgeValue(page) }}
+              </span>
             </div>
 
             <h3 class="title">
               {{ t(page.titleKey) }}
             </h3>
-
-            <span v-if="badgeValue(page)" class="navBadge">
-              {{ badgeValue(page) }}
-            </span>
           </HStack>
 
           <div v-else class="desktopSpacer" />
@@ -205,11 +205,11 @@
     border-radius: 1.25rem
     cursor: pointer
     opacity: 0.9
-    overflow: hidden
 
     transition: background 0.2s ease, opacity 0.2s ease
 
     .icon
+      position: relative
       transition: background-color 0.2s ease
       background-color: transparent
 
@@ -217,6 +217,18 @@
         width: 1.85rem
         height: 1.85rem
         flex: 0 0 1.85rem
+
+      .navBadge
+        position: absolute
+        top: -0.75rem
+        right: -0.75rem
+        min-width: 1.1rem
+        padding: 0.25rem 0.5rem
+        border-radius: 10rem
+        background: themes.$accentColor
+        font-size: small
+        line-height: 1
+        text-align: center
 
     .title
       width: 0
@@ -226,18 +238,6 @@
       white-space: nowrap
       transform: translateX(-0.25rem)
       transition: width 0.25s ease, opacity 0.15s ease, transform 0.25s ease
-
-    .navBadge
-      position: absolute
-      top: 0.2rem
-      right: 0.2rem
-      min-width: 1.1rem
-      padding: 0.15rem
-      border-radius: 10rem
-      background: themes.$accentColor
-      font-size: 0.65rem
-      line-height: 1
-      text-align: center
 
   .accountSection
     width: 100%

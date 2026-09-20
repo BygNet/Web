@@ -103,7 +103,11 @@
       </HStack>
     </VStack>
 
-    <VStack v-if="isExpanded && accounts.length" class="accountList">
+    <VStack
+      v-if="isExpanded && accounts.length"
+      class="accountList"
+      @click="showingAccounts = false"
+    >
       <HStack
         v-for="account in accounts"
         :key="account.id"
@@ -148,6 +152,7 @@
           <Icon name="solar:user-plus-rounded-line-duotone" />
           {{ t('ui.accountSwitcher.addAccount') }}
         </button>
+
         <button
           v-if="activeAccount"
           class="logoutAccount"

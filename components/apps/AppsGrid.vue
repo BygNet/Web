@@ -73,7 +73,8 @@
           padding: 0.75rem
 
           span.iconify
-            font-size: 2.25rem
+            width: 2.25rem
+            height: 2.25rem
 
           .appIconBackground
             border-radius: 1.25rem
@@ -84,13 +85,23 @@
         overflow: hidden
         text-overflow: ellipsis
 
+      &:hover
+        .appIcon
+          scale: 1.05
+
+      &:active
+        .appIcon
+          scale: 0.95
+
       .appIcon
         position: relative
         padding: 0.5rem
         filter: drop-shadow(0 0 3rem var(--tint))
+        transition: 0.2s ease
 
         span.iconify
-          font-size: 2rem
+          width: 2rem
+          height: 2rem
           z-index: 1
 
         .appIconBackground
@@ -120,5 +131,6 @@
           border-radius: 1.5rem
 
           span.iconify
-            font-size: 3rem
+            width: 3rem
+            height: 3rem
 </style>

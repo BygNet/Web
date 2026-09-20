@@ -131,13 +131,13 @@
 
         .navBadge
           position: absolute
-          top: 0
-          right: 0
+          top: -0.5rem
+          right: -0.5rem
           min-width: 1.1rem
-          padding: 0.15rem
+          padding: 0.25rem 0.5rem
           border-radius: 10rem
           background: themes.$accentColor
-          font-size: 0.65rem
+          font-size: small
           line-height: 1
           text-align: center
 

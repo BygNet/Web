@@ -138,17 +138,17 @@
       width: 1.5rem !important
       height: 1.5rem !important
 
-  .notificationBadge
-    position: absolute
-    top: 0.15rem
-    right: 0.15rem
-    min-width: 1.1rem
-    padding: 0.15rem
-    border-radius: 10rem
-    background: themes.$accentColor
-    font-size: 0.65rem
-    line-height: 1
-    text-align: center
+    .notificationBadge
+      position: absolute
+      top: -0.25rem
+      right: -0.25rem
+      min-width: 1.1rem
+      padding: 0.25rem 0.5rem
+      border-radius: 10rem
+      background: themes.$accentColor
+      font-size: small
+      line-height: 1
+      text-align: center
 
   .titleMaskContainer
     background: linear-gradient(to bottom, themes.$backgroundColor, transparent)
