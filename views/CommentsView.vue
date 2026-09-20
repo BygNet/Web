@@ -1,7 +1,5 @@
 <script setup lang="ts">
   import type { BygComment } from '@bygnet/types'
-  import DOMPurify from 'dompurify'
-  import { marked } from 'marked'
   import { nextTick, onMounted, type Ref, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -20,6 +18,7 @@
     getMentionContext,
     type MentionContext,
   } from '@/utils/mentions'
+  import { renderMarkdown } from '@/utils/renderMarkdown'
 
   const comments: Ref<BygComment[]> = ref([])
   const writtenComment: Ref<string> = ref('')
@@ -30,7 +29,6 @@
   const showingMentionSuggestions: Ref<boolean> = ref(false)
   let mentionRequestId = 0
 
-  const config = useRuntimeConfig()
   const localePath = useLocalePath()
   const { t } = useI18n()
 
@@ -43,9 +41,7 @@
   }>()
 
   const fetchComments = async () => {
-    const res = await fetch(
-      `${config.public.apiBase}${props.getUrl}/${props.id}`
-    )
+    const res = await api(`${props.getUrl}/${props.id}`)
     if (!res.ok) {
       console.error('Failed to fetch comments')
       comments.value = []
@@ -54,8 +50,7 @@
     const data = (await res.json()) as BygComment[]
 
     for (const c of data) {
-      const html = await marked.parse(c.content ?? '')
-      ;(c as any).rendered = DOMPurify.sanitize(html)
+      ;(c as any).rendered = renderMarkdown(c.content ?? '')
     }
 
     comments.value = data
@@ -127,23 +122,25 @@
 
     sendingComment.value = true
     taskList.value.push('commenting')
+    try {
+      const res = await api(props.postUrl, {
+        method: 'POST',
+        json: { id: props.id, content: writtenComment.value },
+        offlineQueue: true,
+      })
 
-    const res = await api(props.postUrl, {
-      method: 'POST',
-      body: JSON.stringify({ id: props.id, content: writtenComment.value }),
-    })
+      if (!res.ok && res.status !== 202) {
+        console.error('Failed to post comment')
+        return
+      }
 
-    if (!res.ok) {
-      console.error('Failed to post comment')
-      return
+      writtenComment.value = ''
+      clearMentionSuggestions()
+      if (res.status !== 202) await fetchComments()
+    } finally {
+      sendingComment.value = false
+      taskList.value.remove('commenting')
     }
-
-    writtenComment.value = ''
-    clearMentionSuggestions()
-    await fetchComments()
-
-    sendingComment.value = false
-    taskList.value.remove('commenting')
   }
 
   onMounted(() => {

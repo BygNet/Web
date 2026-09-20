@@ -182,7 +182,7 @@ export async function syncPushSubscription(
 
     const response = await api('/push/subscribe', {
       method: 'POST',
-      body: JSON.stringify(payload),
+      json: payload,
     })
 
     if (!response.ok) {
@@ -223,9 +223,9 @@ export async function unsubscribePushAlerts(): Promise<void> {
   if (auth.token) {
     await api('/push/unsubscribe', {
       method: 'POST',
-      body: JSON.stringify({
+      json: {
         endpoint: subscription.endpoint,
-      }),
+      },
     })
   }
 

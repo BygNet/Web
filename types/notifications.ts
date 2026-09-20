@@ -16,6 +16,8 @@ export interface BygNotification {
   actorAvatarUrl: string | null
   actorSubscriptionState: BygSubscription
   text: string
+  title?: string
   path: string
   createdDate: string
+  readAt?: string | null
 }

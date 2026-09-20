@@ -47,6 +47,48 @@
     },
   })
 
+  function getMentionText(): string {
+    return editor.value?.getText() ?? model.value
+  }
+
+  function getMentionCaret(): number {
+    const instance = editor.value
+    if (!instance) return model.value.length
+    return instance.state.doc.textBetween(
+      0,
+      instance.state.selection.from,
+      '\n'
+    ).length
+  }
+
+  function replaceMention(username: string): void {
+    const instance = editor.value
+    if (!instance) return
+
+    const text = getMentionText()
+    const caret = getMentionCaret()
+    const beforeCaret = text.slice(0, caret)
+    const match = /(^|[\s([{\n])@([^\s]{0,64})$/.exec(beforeCaret)
+    if (!match) return
+
+    const queryLength = match[2]?.length ?? 0
+    const from = Math.max(1, instance.state.selection.from - queryLength - 1)
+    instance
+      .chain()
+      .focus()
+      .insertContentAt(
+        { from, to: instance.state.selection.from },
+        `@${username} `
+      )
+      .run()
+  }
+
+  function focusEditor(): void {
+    editor.value?.commands.focus()
+  }
+
+  defineExpose({ getMentionText, getMentionCaret, replaceMention, focusEditor })
+
   const toolbarButtons: ToolbarButton[] = [
     {
       title: 'Bold',

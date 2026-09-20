@@ -3,6 +3,7 @@
   import { ProgressiveBlur } from 'vue-progressive-blur'
 
   import HStack from '@/components/layout/HStack.vue'
+  import { inboxUnreadCount } from '@/data/notifications'
   import { taskList } from '@/data/tasks'
   import { title } from '@/data/title'
   import { isActive } from '@/utils/isActive'
@@ -12,6 +13,7 @@
   const route = useRoute()
   const router = useRouter()
   const { t } = useI18n()
+  const unreadCount = inboxUnreadCount
 
   function goBack() {
     router.back()
@@ -55,6 +57,9 @@
               : 'solar:inbox-line-line-duotone'
           "
         />
+        <span v-if="unreadCount" class="notificationBadge">{{
+          unreadCount
+        }}</span>
       </button>
     </HStack>
 
@@ -126,11 +131,24 @@
       height: 1.5rem !important
 
   button.alertsButton
+    position: relative
     padding: 0.75rem
 
     span.iconify
       width: 1.5rem !important
       height: 1.5rem !important
+
+  .notificationBadge
+    position: absolute
+    top: 0.15rem
+    right: 0.15rem
+    min-width: 1.1rem
+    padding: 0.15rem
+    border-radius: 10rem
+    background: themes.$accentColor
+    font-size: 0.65rem
+    line-height: 1
+    text-align: center
 
   .titleMaskContainer
     background: linear-gradient(to bottom, themes.$backgroundColor, transparent)

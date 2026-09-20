@@ -4,7 +4,7 @@ export default defineNuxtPlugin(nuxtApp => {
   const originalT = nuxtApp.$i18n.t.bind(nuxtApp.$i18n)
 
   nuxtApp.$i18n.t = ((...args) => {
-    const result = originalT(...args)
+    const result = originalT(...(args as Parameters<typeof originalT>))
 
     if (route.query.uwu !== undefined && typeof result === 'string') {
       return uwuify(result)

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { BygProfile } from '@bygnet/types'
-  import { onUnmounted, type Ref,ref } from 'vue'
+  import { onUnmounted, type Ref, ref } from 'vue'
 
   import {
     applyProfileThemeToDocument,

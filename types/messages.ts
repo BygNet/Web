@@ -53,6 +53,7 @@ export interface BygMessageThread {
   members: BygMessageConversationMember[]
   lastMessagePreview: string
   lastMessageDate: string
+  unreadCount: number
 }
 
 export interface BygMessageConversation {
@@ -157,4 +158,7 @@ export type BygMessageLiveServerEvent =
   | {
       type: 'message:new'
       message: BygMessage
+    }
+  | {
+      type: 'notification:new'
     }

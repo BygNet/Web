@@ -1,3 +1,8 @@
+import type { Ref } from 'vue'
+
+import { messageUnreadCount } from '@/data/messages'
+import { inboxUnreadCount } from '@/data/notifications'
+
 export interface BygPageMeta {
   key: string
   titleKey: string
@@ -5,6 +10,7 @@ export interface BygPageMeta {
   path: string
   icon: string
   color?: string
+  badge?: Ref<number>
 }
 
 export const SpacerPage: BygPageMeta = {
@@ -49,6 +55,7 @@ export const MessagesPage: BygPageMeta = {
   path: '/messages',
   icon: 'solar:plain-line-duotone',
   color: '#4091a0',
+  badge: messageUnreadCount,
 }
 
 export const MySpacePage: BygPageMeta = {
@@ -83,6 +90,7 @@ export const InboxPage: BygPageMeta = {
   path: '/inbox',
   icon: 'solar:inbox-line-line-duotone',
   color: '#e0803c',
+  badge: inboxUnreadCount,
 }
 
 export const AsksPage: BygPageMeta = {

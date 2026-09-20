@@ -65,7 +65,7 @@
   <a
     v-else
     v-bind="attrs"
-    :href="href"
+    :href="typeof href === 'string' ? href : href.hash"
     :target="newTab ? '_blank' : undefined"
     :rel="newTab ? 'noopener noreferrer' : undefined"
   >

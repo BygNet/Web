@@ -32,10 +32,17 @@
         return 'solar:chat-round-line-line-duotone'
     }
   })
+
+  const isExternal = computed(() => props.notification.path.startsWith('http'))
 </script>
 
 <template>
-  <SafeLink :to="notification.path" class="notificationLink">
+  <SafeLink
+    :to="notification.path"
+    :external="isExternal"
+    :new-tab="isExternal"
+    class="notificationLink"
+  >
     <HStack class="notificationItem" :class="{ unread: unread }">
       <Icon :name="notificationIcon" class="notificationIcon" />
 

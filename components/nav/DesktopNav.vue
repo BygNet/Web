@@ -9,9 +9,11 @@
     type BygPageMeta,
     CreatePage,
     DesktopPages,
+    MessagesPage,
     SpacerPage,
   } from '@/data/pages'
   import { openCreateModal } from '@/utils/createModalManager'
+  import { useEnv } from '@/utils/env'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
   import BygLogo from '~/components/brand/BygLogo.vue'
@@ -19,6 +21,21 @@
   const AppVersion = __AppVersion
   const route = useRoute()
   const { t } = useI18n()
+  // const { chatUrl } = useEnv()
+
+  function pageHref(page: BygPageMeta): string {
+    // Disable new chat for now
+    // return page === MessagesPage ? chatUrl : page.path
+    return page.path
+  }
+
+  function isExternalPage(page: BygPageMeta): boolean {
+    return page === MessagesPage
+  }
+
+  function badgeValue(page: BygPageMeta): number {
+    return Math.max(0, page.badge?.value ?? 0)
+  }
 
   function create(page: BygPageMeta): void {
     if (page === CreatePage) openCreateModal()
@@ -38,7 +55,7 @@
         <SafeLink
           v-for="page in DesktopPages"
           :key="page.path"
-          :to="page.path"
+          :to="pageHref(page)"
           class="fullWidth"
           :disable="page === CreatePage"
           @click="create(page)"
@@ -61,6 +78,10 @@
             <h3 class="title">
               {{ t(page.titleKey) }}
             </h3>
+
+            <span v-if="badgeValue(page)" class="navBadge">
+              {{ badgeValue(page) }}
+            </span>
           </HStack>
 
           <div v-else class="desktopSpacer" />
@@ -176,6 +197,7 @@
     cursor: default
 
   .desktopNavItem
+    position: relative
     width: 100%
     height: 3rem
     padding: 0.45rem 0.65rem
@@ -204,6 +226,18 @@
       white-space: nowrap
       transform: translateX(-0.25rem)
       transition: width 0.25s ease, opacity 0.15s ease, transform 0.25s ease
+
+    .navBadge
+      position: absolute
+      top: 0.2rem
+      right: 0.2rem
+      min-width: 1.1rem
+      padding: 0.15rem
+      border-radius: 10rem
+      background: themes.$accentColor
+      font-size: 0.65rem
+      line-height: 1
+      text-align: center
 
   .accountSection
     width: 100%

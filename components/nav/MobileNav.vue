@@ -5,14 +5,35 @@
   import SafeLink from '@/components/base/SafeLink.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import { BygPages, ExplorePage } from '@/data/pages'
+  import {
+    type BygPageMeta,
+    BygPages,
+    ExplorePage,
+    MessagesPage,
+  } from '@/data/pages'
   import { showingCreateModal } from '@/data/visibility'
   import { toggleCreateModal } from '@/utils/createModalManager'
+  import { useEnv } from '@/utils/env'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
 
   const route = useRoute()
   const { t } = useI18n()
+  // const { chatUrl } = useEnv()
+
+  function pageHref(page: BygPageMeta): string {
+    // Disable new chat for now
+    // return page === MessagesPage ? chatUrl : page.path
+    return page.path
+  }
+
+  function isExternalPage(page: BygPageMeta): boolean {
+    return page === MessagesPage
+  }
+
+  function badgeValue(page: BygPageMeta): number {
+    return Math.max(0, page.badge?.value ?? 0)
+  }
 </script>
 
 <template>
@@ -27,7 +48,11 @@
     </button>
 
     <HStack class="mobileNavItems">
-      <SafeLink v-for="page in [...BygPages, ExplorePage]" :to="page.path">
+      <SafeLink
+        v-for="page in [...BygPages, ExplorePage]"
+        :to="pageHref(page)"
+        class="mobileNavLink"
+      >
         <VStack
           class="mobileNavItem"
           :class="{ selected: isActive(route.path, page.path) }"
@@ -39,6 +64,9 @@
                 : page.icon
             "
           />
+          <span v-if="badgeValue(page)" class="navBadge">
+            {{ badgeValue(page) }}
+          </span>
         </VStack>
       </SafeLink>
     </HStack>
@@ -85,6 +113,7 @@
       margin-bottom: var(--bottom)
 
       .mobileNavItem
+        position: relative
         align-items: center
         padding: 0.45rem 0.35rem
         gap: 0
@@ -99,6 +128,18 @@
 
         p
           font-size: 0.75rem
+
+        .navBadge
+          position: absolute
+          top: 0
+          right: 0
+          min-width: 1.1rem
+          padding: 0.15rem
+          border-radius: 10rem
+          background: themes.$accentColor
+          font-size: 0.65rem
+          line-height: 1
+          text-align: center
 
     .navBlur
       position: absolute

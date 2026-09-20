@@ -36,9 +36,9 @@
     try {
       const res = await api('/auth/verify-email', {
         method: 'POST',
-        body: JSON.stringify({
+        json: {
           code: code.value,
-        }),
+        },
       })
 
       if (!res.ok) {

@@ -10,11 +10,11 @@ export async function signup(
 ) {
   const res = await api('/auth/signup', {
     method: 'POST',
-    body: JSON.stringify({
+    json: {
       email,
       username,
       password,
-    }),
+    },
   })
 
   if (!res.ok) throw new Error('Signup failed')

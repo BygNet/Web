@@ -1,7 +1,5 @@
 <script setup lang="ts">
   import type { BygPost } from '@bygnet/types'
-  import DOMPurify from 'dompurify'
-  import { marked } from 'marked'
   import { nextTick, ref, watchEffect } from 'vue'
 
   import HStack from '@/components/layout/HStack.vue'
@@ -10,6 +8,7 @@
   import ReportButton from '@/components/posts/ReportButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
+  import { renderMarkdown } from '@/utils/renderMarkdown'
 
   const { format } = useRelativeTime()
 
@@ -26,8 +25,7 @@
   const isClippable = ref(false)
 
   watchEffect(async () => {
-    const html = await marked.parse(props.post.content ?? '')
-    renderedContent.value = DOMPurify.sanitize(html)
+    renderedContent.value = renderMarkdown(props.post.content ?? '')
     await nextTick()
 
     if (contentEl.value && !props.detailMode) {

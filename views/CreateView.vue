@@ -3,6 +3,7 @@
   import { computed, nextTick, type Ref, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import { api } from '@/api/client'
   import { auth } from '@/auth/session'
   import HStack from '@/components/layout/HStack.vue'
   import Modal from '@/components/layout/Modal.vue'
@@ -13,14 +14,9 @@
   import { taskList } from '@/data/tasks'
   import { showingCreateModal } from '@/data/visibility'
   import type { BygUserSuggestion } from '@/types/mentions'
-  import {
-    applyMention,
-    getMentionContext,
-    type MentionContext,
-  } from '@/utils/mentions'
+  import { getMentionContext, type MentionContext } from '@/utils/mentions'
   import MarkdownEditor from '~/components/content/MarkdownEditor.vue'
 
-  const config = useRuntimeConfig()
   const { t } = useI18n()
 
   const pickedType: Ref<CreateType | undefined> = ref(undefined)
@@ -29,7 +25,7 @@
   const postTitle = ref('')
   const imageUrl = ref('')
   const imageTitle = ref('')
-  const postTextarea: Ref<HTMLTextAreaElement | null> = ref(null)
+  const postEditor = ref<InstanceType<typeof MarkdownEditor> | null>(null)
   const postMentionSuggestions: Ref<BygUserSuggestion[]> = ref([])
   const postMentionContext: Ref<MentionContext | null> = ref(null)
   const showingPostMentionSuggestions: Ref<boolean> = ref(false)
@@ -47,14 +43,15 @@
   }
 
   async function updatePostMentionSuggestions(): Promise<void> {
-    const textarea = postTextarea.value
-    if (!textarea) {
+    const editor = postEditor.value
+    if (!editor) {
       clearPostMentionSuggestions()
       return
     }
 
-    const caret = textarea.selectionStart ?? postText.value.length
-    const context = getMentionContext(postText.value, caret)
+    const mentionText = editor.getMentionText()
+    const caret = editor.getMentionCaret()
+    const context = getMentionContext(mentionText, caret)
     if (!context || context.query.length < 1) {
       clearPostMentionSuggestions()
       return
@@ -81,18 +78,10 @@
   async function insertPostMention(username: string): Promise<void> {
     if (!postMentionContext.value) return
 
-    const result = applyMention(
-      postText.value,
-      postMentionContext.value,
-      username
-    )
-
-    postText.value = result.text
+    postEditor.value?.replaceMention(username)
     clearPostMentionSuggestions()
-
     await nextTick()
-    postTextarea.value?.focus()
-    postTextarea.value?.setSelectionRange(result.caret, result.caret)
+    postEditor.value?.focusEditor()
   }
 
   async function submitPost() {
@@ -105,16 +94,13 @@
     loading.value = true
     error.value = null
 
-    const res = await fetch(`${config.public.apiBase}/create-post`, {
+    const res = await api('/create-post', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${auth.token}`,
-      },
-      body: JSON.stringify({
+      json: {
         title: postTitle.value,
         content: postText.value,
-      }),
+      },
+      offlineQueue: true,
     })
 
     loading.value = false
@@ -143,16 +129,13 @@
     loading.value = true
     error.value = null
 
-    const res = await fetch(`${config.public.apiBase}/upload-image`, {
+    const res = await api('/upload-image', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${auth.token}`,
-      },
-      body: JSON.stringify({
+      json: {
         title: imageTitle.value,
         imageUrl: imageUrl.value,
-      }),
+      },
+      offlineQueue: true,
     })
 
     taskList.value.remove('uploading')
@@ -212,6 +195,7 @@
 
         <div class="mentionComposer">
           <MarkdownEditor
+            ref="postEditor"
             v-model="postText"
             :placeholder="t('ui.create.postBodyPlaceholder')"
             @input="onPostTextareaInteraction"

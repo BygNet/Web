@@ -9,7 +9,14 @@
   import CookieBanner from '@/components/modals/CookieBanner.vue'
   import NotificationsModal from '@/components/modals/NotificationsModal.vue'
   import { adCache } from '@/data/caches'
-  import { loadNotificationReadState } from '@/data/notifications'
+  import {
+    fetchMessageThreads,
+    subscribeToMessagesRealtime,
+  } from '@/data/messages'
+  import {
+    fetchNotifications,
+    loadNotificationReadState,
+  } from '@/data/notifications'
   import {
     getPushPermissionState,
     syncPushSubscription,
@@ -36,6 +43,7 @@
     )
   })
   const pushEnabled = computed(() => pushPermission.value === 'granted')
+  let stopMessageRealtime: (() => void) | null = null
   const { locale } = useI18n()
   const manifestHref = computed(() => {
     const code = locale.value || 'en'
@@ -44,6 +52,21 @@
 
   const theme = useCookie<string>('bygTheme')
   const themeClass = theme.value ?? 'auto'
+
+  function syncMessageRealtime(): void {
+    stopMessageRealtime?.()
+    stopMessageRealtime = null
+    if (!auth.token) return
+
+    void fetchMessageThreads({ force: true })
+    stopMessageRealtime = subscribeToMessagesRealtime({
+      onEvent: event => {
+        if (event.type === 'notification:new') {
+          void fetchNotifications({ force: true })
+        }
+      },
+    })
+  }
 
   useHead({
     htmlAttrs: {
@@ -77,6 +100,9 @@
     showingCookieBanner.value = getFlag('showCookieBanner', true)
 
     loadTheme()
+    loadNotificationReadState()
+    fetchNotifications().catch(() => undefined)
+    syncMessageRealtime()
 
     if (canEnablePush.value && !pushEnabled.value && auth.token) {
       showingNotificationsModal.value = true
@@ -92,6 +118,7 @@
       if (next === previous) return
       resetActiveAccountState()
       loadNotificationReadState()
+      syncMessageRealtime()
       if (!auth.token) return
       try {
         await syncPushSubscription()

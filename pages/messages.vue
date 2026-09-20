@@ -282,6 +282,7 @@
       members: conversation.members,
       lastMessagePreview: previewFromMessage(lastMessage),
       lastMessageDate: lastMessage?.createdDate ?? new Date().toISOString(),
+      unreadCount: 0,
     }
   }
 

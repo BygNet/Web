@@ -1,3 +1,5 @@
+import { ref } from 'vue'
+
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'
 import type {
@@ -39,6 +41,17 @@ const conversationRequests = new Map<
   Promise<BygMessageConversation | null>
 >()
 
+export const messageUnreadCount = ref(0)
+
+type RealtimeSubscriber = {
+  onEvent: (event: BygMessageLiveServerEvent) => void
+  onConnectedChange?: (connected: boolean) => void
+}
+
+const realtimeSubscribers = new Set<RealtimeSubscriber>()
+let unreadSocket: WebSocket | null = null
+let unreadReconnectTimer: number | undefined
+
 function normalizeUsername(username: string): string {
   return username.trim().toLowerCase()
 }
@@ -57,6 +70,13 @@ function isCacheFresh(cache: TimedCache<unknown>, ttlMs: number): boolean {
 
 function isCacheUsable(cache: TimedCache<unknown>, ttlMs: number): boolean {
   return Date.now() - cache.timestamp < ttlMs
+}
+
+function updateMessageUnreadCount(value: BygMessageThread[]): void {
+  messageUnreadCount.value = value.reduce(
+    (total, thread) => total + Math.max(0, thread.unreadCount ?? 0),
+    0
+  )
 }
 
 function buildCacheKey(userId: number, scope: string): string {
@@ -215,6 +235,7 @@ export function clearMessagesState(
   options: { clearDevice?: boolean; userId?: number } = {}
 ): void {
   threadsCache = null
+  messageUnreadCount.value = 0
   shareTargetsCache = null
   conversationCache.clear()
   threadRequest = null
@@ -230,12 +251,14 @@ export async function fetchMessageThreads(
 ): Promise<BygMessageThread[]> {
   if (!auth.user || !auth.token) {
     clearMessagesState()
+    messageUnreadCount.value = 0
     return []
   }
 
   const userId = getCacheUserId()
   if (userId === null) {
     clearMessagesState()
+    messageUnreadCount.value = 0
     return []
   }
   const cacheUserId = userId
@@ -245,6 +268,7 @@ export async function fetchMessageThreads(
     threadsCache &&
     isCacheFresh(threadsCache, THREAD_CACHE_TTL_MS)
   ) {
+    updateMessageUnreadCount(threadsCache.value)
     return threadsCache.value
   }
 
@@ -264,6 +288,7 @@ export async function fetchMessageThreads(
     }
     threadsCache = cacheEntry
     writeThreadsDeviceCache(cacheUserId, cacheEntry)
+    updateMessageUnreadCount(cacheEntry.value)
 
     return cacheEntry.value
   }
@@ -272,6 +297,7 @@ export async function fetchMessageThreads(
     const deviceCache = readThreadsDeviceCache(cacheUserId)
     if (deviceCache && isCacheUsable(deviceCache, THREAD_CACHE_STALE_TTL_MS)) {
       threadsCache = deviceCache
+      updateMessageUnreadCount(deviceCache.value)
 
       if (!isCacheFresh(deviceCache, THREAD_CACHE_TTL_MS)) {
         threadRequest = loadThreads().finally(() => {
@@ -549,7 +575,7 @@ export async function getOrCreateDirectConversation(
 
   const res = await api('/messages/conversations/direct', {
     method: 'POST',
-    body: JSON.stringify(payload),
+    json: payload,
   })
   if (!res.ok) {
     return null
@@ -570,7 +596,7 @@ export async function createGroupConversation(
 
   const res = await api('/messages/conversations/group', {
     method: 'POST',
-    body: JSON.stringify(payload),
+    json: payload,
   })
   if (!res.ok) {
     return null
@@ -592,7 +618,7 @@ export async function inviteGroupConversationMember(
 
   const res = await api(`/messages/conversations/${conversationId}/members`, {
     method: 'POST',
-    body: JSON.stringify(payload),
+    json: payload,
   })
   if (!res.ok) {
     return null
@@ -638,7 +664,7 @@ export async function updateGroupConversationInfo(
 
   const res = await api(`/messages/conversations/${conversationId}`, {
     method: 'PATCH',
-    body: JSON.stringify(payload),
+    json: payload,
   })
   if (!res.ok) {
     return null
@@ -659,7 +685,7 @@ export async function sendMessage(
 
   const res = await api('/messages/send', {
     method: 'POST',
-    body: JSON.stringify(payload),
+    json: payload,
   })
   if (!res.ok) {
     return null
@@ -747,6 +773,66 @@ export function createMessagesSocket(
   })
 
   return ws
+}
+
+function scheduleUnreadSocketReconnect(): void {
+  if (unreadReconnectTimer || realtimeSubscribers.size < 1) return
+
+  unreadReconnectTimer = window.setTimeout(() => {
+    unreadReconnectTimer = undefined
+    connectUnreadSocket()
+  }, 1500)
+}
+
+function connectUnreadSocket(): void {
+  if (unreadSocket || realtimeSubscribers.size < 1 || !auth.token) return
+
+  unreadSocket = createMessagesSocket(
+    event => {
+      for (const subscriber of realtimeSubscribers) subscriber.onEvent(event)
+      if (event.type === 'message:new') {
+        void fetchMessageThreads({ force: true })
+      }
+    },
+    connected => {
+      for (const subscriber of realtimeSubscribers) {
+        subscriber.onConnectedChange?.(connected)
+      }
+    }
+  )
+
+  if (!unreadSocket) {
+    scheduleUnreadSocketReconnect()
+    return
+  }
+
+  unreadSocket.addEventListener('close', () => {
+    unreadSocket = null
+    for (const subscriber of realtimeSubscribers) {
+      subscriber.onConnectedChange?.(false)
+    }
+    scheduleUnreadSocketReconnect()
+  })
+  unreadSocket.addEventListener('error', scheduleUnreadSocketReconnect)
+}
+
+export function subscribeToMessagesRealtime(
+  subscriber: RealtimeSubscriber
+): () => void {
+  realtimeSubscribers.add(subscriber)
+  connectUnreadSocket()
+
+  return () => {
+    realtimeSubscribers.delete(subscriber)
+    if (realtimeSubscribers.size > 0) return
+
+    if (unreadReconnectTimer) {
+      window.clearTimeout(unreadReconnectTimer)
+      unreadReconnectTimer = undefined
+    }
+    unreadSocket?.close()
+    unreadSocket = null
+  }
 }
 
 export function sendTypingEvent(

@@ -2,6 +2,7 @@
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import { completeServiceLogin } from '@/auth/serviceLogin'
   import { signup } from '@/auth/signup'
   import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
@@ -13,6 +14,7 @@
   definePageMeta({ showBackButton: true })
 
   const localePath = useLocalePath()
+  const route = useRoute()
   const { t } = useI18n()
 
   title.value = t('auth.signup')
@@ -28,7 +30,11 @@
 
     try {
       await signup(email.value, username.value, password.value)
-      await navigateTo(localePath('/'))
+      const serviceRedirect = await completeServiceLogin(
+        route.query.redirect_uri,
+        route.query.state
+      )
+      await navigateTo(serviceRedirect ?? localePath('/'))
     } catch {
       error.value = t('auth.signupPage.signupFailed')
     } finally {
@@ -53,6 +59,7 @@
             type="text"
             autocomplete="username"
             required
+            @input="username = username.replace(/\s/g, '')"
           />
         </label>
 

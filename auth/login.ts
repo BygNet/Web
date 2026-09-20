@@ -12,7 +12,7 @@ export async function login(
 ): Promise<LoginResult> {
   const res: Response = await api('/auth/login', {
     method: 'POST',
-    body: JSON.stringify({ email, password, twoFactorCode }),
+    json: { email, password, ...(twoFactorCode ? { twoFactorCode } : {}) },
   })
 
   if (res.status === 403) {

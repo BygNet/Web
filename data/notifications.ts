@@ -1,4 +1,4 @@
-import { type Ref, ref } from 'vue'
+import { computed, type Ref, ref } from 'vue'
 
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'
@@ -10,6 +10,9 @@ const DEFAULT_NOTIFICATIONS_LIMIT = 50
 export const notificationsCache: Ref<BygNotification[] | null> = ref(null)
 export const notificationsCacheTime: Ref<number> = ref(0)
 export const notificationsLastReadAt: Ref<number> = ref(0)
+export const inboxUnreadCount = computed(
+  () => notificationsCache.value?.filter(isUnreadNotification).length ?? 0
+)
 
 let notificationsRequest: Promise<BygNotification[]> | null = null
 
@@ -26,9 +29,11 @@ export function markNotificationsRead(): void {
   const now = Date.now()
   notificationsLastReadAt.value = now
   localStorage.setItem(readTimestampStorageKey(), now.toString())
+  api('/notifications/read-all', { method: 'POST' }).catch(() => undefined)
 }
 
 export function isUnreadNotification(notification: BygNotification): boolean {
+  if (notification.readAt) return false
   return (
     new Date(notification.createdDate).getTime() > notificationsLastReadAt.value
   )

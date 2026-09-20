@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       apiBase: import.meta.env.NUXT_PUBLIC_API_BASE,
       adsBase: import.meta.env.NUXT_PUBLIC_ADS_BASE,
       asksBase: import.meta.env.NUXT_PUBLIC_ASKS_BASE,
+      chatUrl: import.meta.env.NUXT_PUBLIC_CHAT_URL,
       posthogPublicKey: 'phc_M5dK6A49VD1zj7L5iamsBbIO4RhikB8FbxUyVfTlEZy',
       posthogHost: 'https://s.a35.dev',
       posthogDefaults: '2026-01-30',

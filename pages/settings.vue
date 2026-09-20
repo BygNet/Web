@@ -19,6 +19,7 @@
   import { buildProfileThemeVars } from '@/utils/profileTheme'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import SafeLink from '~/components/base/SafeLink.vue'
+  import SessionsSettings from '~/components/settings/SessionsSettings.vue'
   import SettingsColorInput from '~/components/settings/SettingsColorInput.vue'
   import SettingsImageInput from '~/components/settings/SettingsImageInput.vue'
   import SettingsInput from '~/components/settings/SettingsInput.vue'
@@ -34,7 +35,12 @@
   const router = useRouter()
 
   type SettingSection =
-    'profile' | 'subscription' | 'security' | 'interface' | 'advanced'
+    | 'sessions'
+    | 'profile'
+    | 'subscription'
+    | 'security'
+    | 'interface'
+    | 'advanced'
 
   interface TwoFactorSetup {
     secret: string
@@ -63,6 +69,7 @@
     'profile',
     'subscription',
     'security',
+    'sessions',
     'interface',
     'advanced',
   ]
@@ -94,6 +101,11 @@
       key: 'security',
       icon: 'solar:shield-keyhole-line-duotone',
       titleKey: 'ui.settings.sidebarSecurity',
+    },
+    {
+      key: 'sessions',
+      icon: 'solar:devices-line-duotone',
+      titleKey: 'ui.settings.sidebarSessions',
     },
     {
       key: 'subscription',
@@ -202,7 +214,7 @@
     try {
       const res = await api('/update-profile', {
         method: 'POST',
-        body: JSON.stringify({
+        json: {
           displayName: displayName.value || null,
           pronouns: pronouns.value || null,
           songLinkUrl: songLinkUrl.value || null,
@@ -210,7 +222,7 @@
           avatarUrl: avatarUrl.value || null,
           bannerUrl: bannerUrl.value || null,
           ...(canEditProfileColor.value ? { color: color.value || null } : {}),
-        }),
+        },
       })
 
       if (res.ok) {
@@ -259,9 +271,9 @@
     try {
       const res = await api('/auth/verify-email', {
         method: 'POST',
-        body: JSON.stringify({
+        json: {
           code: emailCode.value,
-        }),
+        },
       })
 
       if (!res.ok) {
@@ -311,10 +323,10 @@
     try {
       const res = await api('/auth/2fa/enable', {
         method: 'POST',
-        body: JSON.stringify({
+        json: {
           secret: twoFactorSetup.value.secret,
           code: twoFactorCode.value,
-        }),
+        },
       })
 
       if (!res.ok) {
@@ -650,6 +662,10 @@
             {{ t('ui.settings.upgradeComingSoon') }}
           </button>
         </SettingsGroup>
+      </VStack>
+
+      <VStack v-show="activeSection === 'sessions'" class="section">
+        <SessionsSettings />
       </VStack>
 
       <VStack v-show="activeSection === 'interface'" class="section">
