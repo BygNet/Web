@@ -1,6 +1,13 @@
 <script setup lang="ts">
   import type { BygAd } from '@bygnet/types'
-  import { computed, onMounted, type Ref, ref, watch } from 'vue'
+  import {
+    computed,
+    onMounted,
+    onUnmounted,
+    type Ref,
+    ref,
+    watch,
+  } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import { resetActiveAccountState } from '@/auth/accountState'
@@ -23,6 +30,7 @@
   } from '@/data/pushAlerts'
   import { loadTheme } from '@/data/themes'
   import {
+    isDisconnected,
     showingCookieBanner,
     showingNotificationsModal,
     showingReportPopup,
@@ -43,7 +51,7 @@
     )
   })
   const pushEnabled = computed(() => pushPermission.value === 'granted')
-  let stopMessageRealtime: (() => void) | null = null
+
   const { locale } = useI18n()
   const manifestHref = computed(() => {
     const code = locale.value || 'en'
@@ -53,17 +61,76 @@
   const theme = useCookie<string>('bygTheme')
   const themeClass = theme.value ?? 'auto'
 
+  let stopMessageRealtime: (() => void) | null = null
+  let pingInterval: ReturnType<typeof setInterval> | null = null
+  let pingInProgress = false
+
+  async function pingApi(): Promise<void> {
+    if (pingInProgress) return
+
+    pingInProgress = true
+
+    try {
+      const { apiBase } = useEnv()
+
+      const response = await fetch(`${apiBase}/ping`, {
+        method: 'GET',
+        cache: 'no-store',
+        signal: AbortSignal.timeout(5000),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Ping failed: ${response.status}`)
+      }
+
+      isDisconnected.value = false
+    } catch {
+      isDisconnected.value = true
+    } finally {
+      pingInProgress = false
+    }
+  }
+
+  function startConnectionMonitor(): void {
+    stopConnectionMonitor()
+
+    void pingApi()
+
+    pingInterval = setInterval(() => {
+      void pingApi()
+    }, 15_000)
+  }
+
+  function stopConnectionMonitor(): void {
+    if (pingInterval !== null) {
+      clearInterval(pingInterval)
+      pingInterval = null
+    }
+  }
+
   function syncMessageRealtime(): void {
     stopMessageRealtime?.()
     stopMessageRealtime = null
-    if (!auth.token) return
+
+    if (!auth.token) {
+      isDisconnected.value = false
+      return
+    }
 
     void fetchMessageThreads({ force: true })
+
     stopMessageRealtime = subscribeToMessagesRealtime({
       onEvent: event => {
+        // Any realtime event proves that the realtime connection is alive.
+        isDisconnected.value = false
+
         if (event.type === 'notification:new') {
           void fetchNotifications({ force: true })
         }
+      },
+
+      onConnectedChange: connected => {
+        isDisconnected.value = !connected
       },
     })
   }
@@ -102,7 +169,9 @@
     loadTheme()
     loadNotificationReadState()
     fetchNotifications().catch(() => undefined)
+
     syncMessageRealtime()
+    startConnectionMonitor()
 
     if (canEnablePush.value && !pushEnabled.value && auth.token) {
       showingNotificationsModal.value = true
@@ -110,6 +179,13 @@
 
     const adsRes: Response = await fetch(`${useEnv().adsBase}/index.json`)
     adCache.value = (await adsRes.json()) as BygAd[]
+  })
+
+  onUnmounted(() => {
+    stopMessageRealtime?.()
+    stopMessageRealtime = null
+
+    stopConnectionMonitor()
   })
 
   watch(

@@ -8,6 +8,7 @@
   import { title } from '@/data/title'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
+  import {isDisconnected} from "~/data/visibility.ts";
 
   const localePath = useLocalePath()
   const route = useRoute()
@@ -40,6 +41,10 @@
           </p>
           <Icon name="svg-spinners:90-ring-with-bg" class="tasksLoader" />
         </div>
+
+        <HStack class="noConnection" v-show="isDisconnected">
+          <Icon name="solar:wi-fi-cross-bold-duotone" />
+        </HStack>
       </HStack>
 
       <button
@@ -57,9 +62,10 @@
               : 'solar:inbox-line-line-duotone'
           "
         />
-        <span v-if="unreadCount" class="notificationBadge">{{
-          unreadCount
-        }}</span>
+
+        <span v-if="unreadCount" class="notificationBadge">
+          {{ unreadCount }}
+        </span>
       </button>
     </HStack>
 
@@ -120,6 +126,14 @@
           border-radius: 10rem
 
         .tasksLoader
+          width: 1.5rem
+          height: 1.5rem
+
+      .noConnection
+        background: var(--accentColor)
+        padding: 0.25rem
+
+        span.iconify
           width: 1.5rem
           height: 1.5rem
 
