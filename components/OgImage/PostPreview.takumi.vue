@@ -68,7 +68,7 @@
     font-weight: bold;
     margin: 0 0 24px;
     line-height: 1.1;
-    text-align: center;
+    text-align: start;
     text-wrap: balance;
   }
 
