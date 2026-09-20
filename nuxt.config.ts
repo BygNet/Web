@@ -6,7 +6,13 @@ export default defineNuxtConfig({
   ssr: true,
   future: { compatibilityVersion: 4 },
 
-  modules: [ '@nuxtjs/i18n', '@vite-pwa/nuxt', '@nuxt/icon', '@nuxt/fonts' ],
+  modules: [
+    '@nuxtjs/i18n',
+    '@vite-pwa/nuxt',
+    '@nuxt/icon',
+    '@nuxt/fonts',
+    'nuxt-og-image',
+  ],
 
   runtimeConfig: {
     public: {
@@ -18,6 +24,11 @@ export default defineNuxtConfig({
       posthogHost: 'https://s.a35.dev',
       posthogDefaults: '2026-01-30',
     },
+  },
+
+  site: {
+    url: import.meta.env.BASE_URL,
+    name: 'Byg',
   },
 
   alias: {

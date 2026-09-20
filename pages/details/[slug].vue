@@ -26,47 +26,42 @@
 
   title.value = t('ui.details.postTitle')
 
-  // Fetch post data - track for meta tags
-  let postMetaData: BygPost | null = null
-  const { data: post } = await useLazyAsyncData(
-    `post-${id}`,
-    async () => {
-      if (!id) return null
+  const { data: post } = await useLazyAsyncData(`post-${id}`, async () => {
+    if (!id) return null
 
-      const cached = getCachedPostDetail(id)
-      if (cached) {
-        postMetaData = cached
-        return cached
-      }
+    const cached = getCachedPostDetail(id)
+    if (cached) return cached
 
-      try {
-        const response = await fetch(`${useEnv().apiBase}/post-details/${id}`)
-        if (!response.ok) throw new Error(`API error: ${response.status}`)
-        const json = (await response.json()) as BygPost
-        setCachedPostDetail(id, json)
-        postMetaData = json
-        return json
-      } catch (err) {
-        console.error('Failed to fetch post:', err)
-        return null
-      }
-    },
-    {
-      server: import.meta.server,
-      lazy: import.meta.client,
+    try {
+      const response = await fetch(`${useEnv().apiBase}/post-details/${id}`)
+      if (!response.ok) throw new Error(`API error: ${response.status}`)
+
+      const json = (await response.json()) as BygPost
+      setCachedPostDetail(id, json)
+
+      return json
+    } catch (err) {
+      console.error('Failed to fetch post:', err)
+      return null
     }
-  )
+  })
+
+  if (post.value) {
+    defineOgImage('PostPreview', {
+      post: post.value,
+    })
+  }
 
   // Set meta tags for SEO with fetched post data
   useHead(() => {
-    if (postMetaData) {
+    if (post.value) {
       return {
-        title: t('ui.details.postMetaTitle', { title: postMetaData.title }),
+        title: t('ui.details.postMetaTitle', { title: post.value.title }),
         meta: [
           {
             name: 'description',
             content: t('ui.details.postMetaDescription', {
-              author: postMetaData.author,
+              author: post.value.author,
             }),
           },
         ],
@@ -90,7 +85,9 @@
     <div v-if="error" class="error-state">
       <p>{{ error }}</p>
     </div>
+
     <SkeletonPost v-else-if="post == undefined" class="fullWidth" />
+
     <ClientOnly v-else>
       <PostItem :post="post" detail-mode class="postDetail" />
     </ClientOnly>

@@ -8,7 +8,7 @@
   import { title } from '@/data/title'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
-  import {isDisconnected} from "~/data/visibility.ts";
+  import { isDisconnected } from '~/data/visibility.ts'
 
   const localePath = useLocalePath()
   const route = useRoute()
