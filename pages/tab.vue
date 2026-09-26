@@ -15,36 +15,18 @@
     url: string
   }
 
-  interface WallpaperPayload {
-    download_url?: string
-    author?: string
-  }
-
   const FAVORITES_STORAGE_KEY = 'bygTabFavorites'
-  const WALLPAPER_STORAGE_KEY = 'bygTabWallpaper'
-  const CUSTOM_WALLPAPER_STORAGE_KEY = 'bygTabCustomWallpaper'
   const DEFAULT_FAVORITES: FavoriteItem[] = [
     { id: createId(), title: 'Byg', url: 'https://byg.gg/' },
     { id: createId(), title: 'Gmail', url: 'https://mail.google.com' },
     { id: createId(), title: 'YouTube', url: 'https://youtube.com' },
     { id: createId(), title: 'GitHub', url: 'https://github.com' },
   ]
-  const WALLPAPER_ROTATION_MS = 1000 * 60 * 10
   const CLOCK_TICK_MS = 1000
 
   const favoritesCookie = useCookie<FavoriteItem[]>(FAVORITES_STORAGE_KEY, {
     default: () => DEFAULT_FAVORITES,
   })
-  const wallpaperCookie = useCookie<string>(WALLPAPER_STORAGE_KEY, {
-    default: () => '',
-  })
-  const customWallpaperCookie = useCookie<string>(
-    CUSTOM_WALLPAPER_STORAGE_KEY,
-    {
-      default: () => '',
-    }
-  )
-
   const query = ref('')
   const now = ref(new Date())
   const favorites = ref<FavoriteItem[]>(favoritesCookie.value)
@@ -53,15 +35,9 @@
   const editingFavoriteId = ref<string | null>(null)
   const showingEditorModal = ref(false)
   const favoriteError = ref('')
-  const wallpaperUrl = ref(wallpaperCookie.value)
-  const customWallpaperUrl = ref(customWallpaperCookie.value)
-  const wallpaperInput = ref(customWallpaperCookie.value)
-  const wallpaperError = ref('')
-  const wallpaperLoading = ref(false)
   const brokenFavicons = ref<Record<string, boolean>>({})
 
   let clockTimer: number | undefined
-  let wallpaperTimer: number | undefined
 
   const greeting = computed(() => {
     const hour = now.value.getHours()
@@ -114,33 +90,14 @@
     { deep: true }
   )
 
-  watch(wallpaperUrl, value => {
-    wallpaperCookie.value = value || ''
-  })
-
-  watch(customWallpaperUrl, value => {
-    customWallpaperCookie.value = value || ''
-  })
-
   onMounted(() => {
     clockTimer = window.setInterval(() => {
       now.value = new Date()
     }, CLOCK_TICK_MS)
-
-    if (customWallpaperUrl.value) {
-      wallpaperUrl.value = customWallpaperUrl.value
-    } else {
-      void updateWallpaper()
-    }
-
-    wallpaperTimer = window.setInterval(() => {
-      void updateWallpaper()
-    }, WALLPAPER_ROTATION_MS)
   })
 
   onUnmounted(() => {
     if (clockTimer) window.clearInterval(clockTimer)
-    if (wallpaperTimer) window.clearInterval(wallpaperTimer)
   })
 
   async function submitSearch() {
@@ -167,7 +124,6 @@
   function closeEditorModal() {
     showingEditorModal.value = false
     resetFavoriteForm()
-    wallpaperError.value = ''
   }
 
   function resetFavoriteForm() {
@@ -213,45 +169,6 @@
 
     if (editingFavoriteId.value === id) resetFavoriteForm()
   }
-
-  async function updateWallpaper() {
-    if (customWallpaperUrl.value) {
-      wallpaperUrl.value = customWallpaperUrl.value
-      wallpaperLoading.value = false
-      return
-    }
-
-    wallpaperLoading.value = true
-
-    try {
-      const page = Math.max(1, Math.floor(Math.random() * 30))
-      const response = await fetch(
-        `https://picsum.photos/v2/list?page=${page}&limit=100`
-      )
-      if (!response.ok) throw new Error('Wallpaper request failed')
-
-      const payload = (await response.json()) as WallpaperPayload[]
-      const candidates = payload.filter(item => !!item.download_url)
-      if (!candidates.length)
-        throw new Error('No wallpaper candidates available')
-
-      const wallpaper =
-        candidates[Math.floor(Math.random() * candidates.length)] ?? null
-      if (!wallpaper) throw new Error('No wallpaper selected')
-
-      wallpaperUrl.value = `${wallpaper.download_url}?blur=0`
-    } catch (error) {
-      console.error('Failed to update wallpaper', error)
-
-      if (!wallpaperUrl.value) {
-        wallpaperUrl.value =
-          'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80'
-      }
-    } finally {
-      wallpaperLoading.value = false
-    }
-  }
-
   function createId(): string {
     if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
       return crypto.randomUUID()
@@ -276,36 +193,6 @@
       return null
     }
   }
-
-  function normalizeImageUrl(input: string): string | null {
-    const normalizedUrl = normalizeUrl(input)
-
-    if (!normalizedUrl || normalizedUrl.startsWith('/')) return null
-
-    return normalizedUrl
-  }
-
-  function saveCustomWallpaper() {
-    const normalizedUrl = normalizeImageUrl(wallpaperInput.value)
-
-    if (!normalizedUrl) {
-      wallpaperError.value = 'Enter a valid image URL.'
-      return
-    }
-
-    wallpaperError.value = ''
-    customWallpaperUrl.value = normalizedUrl
-    wallpaperUrl.value = normalizedUrl
-    wallpaperInput.value = normalizedUrl
-  }
-
-  function resetCustomWallpaper() {
-    customWallpaperUrl.value = ''
-    wallpaperInput.value = ''
-    wallpaperError.value = ''
-    void updateWallpaper()
-  }
-
   function getFaviconUrl(url: string): string | null {
     if (url.startsWith('/')) return null
 
@@ -339,14 +226,7 @@
 </script>
 
 <template>
-  <ContentArea
-    class="bygTab"
-    hide-terms-link
-    :style="wallpaperUrl ? { '--wallpaper-image': `url(${wallpaperUrl})` } : {}"
-  >
-    <div class="wallpaperLayer" :class="{ ready: !!wallpaperUrl }" />
-    <div class="wallpaperTint" />
-
+  <ContentArea class="bygTab" hide-terms-link>
     <div class="tabShell">
       <section class="heroPanel">
         <p class="greeting">{{ greeting }}</p>
@@ -462,35 +342,6 @@
             Cancel Edit
           </button>
         </VStack>
-
-        <VStack class="editorSection">
-          <h3>Wallpaper</h3>
-
-          <form class="wallpaperForm" @submit.prevent="saveCustomWallpaper">
-            <input
-              v-model="wallpaperInput"
-              type="text"
-              placeholder="Custom wallpaper image URL"
-            />
-
-            <button
-              class="transparent"
-              v-if="customWallpaperUrl"
-              @click="resetCustomWallpaper"
-            >
-              Use Default Wallpaper
-            </button>
-
-            <button class="prominent">
-              <Icon name="solar:diskette-line-duotone" />
-              Set Wallpaper
-            </button>
-          </form>
-
-          <p v-if="wallpaperError" class="favoriteError">
-            {{ wallpaperError }}
-          </p>
-        </VStack>
       </VStack>
     </Modal>
   </ContentArea>
@@ -499,34 +350,6 @@
 <style scoped lang="sass">
   @use "@/styles/utils"
   @use "@/styles/themes"
-
-  .bygTab
-    background-image: var(--wallpaper-image), linear-gradient(135deg, #20344b, #0e1624 65%, #081018)
-    background-position: center
-    background-size: cover
-    background-repeat: no-repeat
-
-  .wallpaperLayer,
-  .wallpaperTint
-    position: absolute
-    inset: -2rem
-    border-radius: 0
-
-  .wallpaperLayer
-    background-image: var(--wallpaper-image), linear-gradient(135deg, #20344b, #0e1624 65%, #081018)
-    background-position: center
-    background-size: cover
-    filter: saturate(1.08)
-    transform: scale(1.03)
-    opacity: 0.75
-    transition: opacity 0.45s ease
-
-    &.ready
-      opacity: 1
-
-  .wallpaperTint
-    background: linear-gradient(180deg, rgb(24 22 32 / 0.4), rgb(51 44 62 / 0.78))
-    backdrop-filter: blur(0.25rem)
 
   .tabShell
     position: relative
@@ -666,8 +489,7 @@
     bottom: 1.5rem
 
   @media (max-width: 60rem)
-    .favoriteForm,
-    .wallpaperForm
+    .favoriteForm
       grid-template-columns: 1fr
 
   @media (max-width: 40rem)
