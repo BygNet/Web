@@ -146,6 +146,14 @@
   const color: Ref<string> = ref('')
   const goToUrl: Ref<string> = ref('')
 
+  const wallpaperMode = useCookie<boolean>('bygWallpaperMode', {
+    default: () => false,
+  })
+
+  const wallpaperUrl = useCookie<string>('bygWallpaperUrl', {
+    default: () => '',
+  })
+
   watch(
     () => route.hash,
     () => {
@@ -665,6 +673,7 @@
       <VStack v-show="activeSection === 'interface'" class="section">
         <SettingsGroup title="ui.settings.languageTitle">
           <p class="light">{{ t('ui.settings.languageDescription') }}</p>
+
           <VStack class="languageGrid">
             <button
               v-for="lang in locales"
@@ -683,6 +692,36 @@
 
         <SettingsGroup title="ui.profilePage.themes">
           <ThemePicker full />
+        </SettingsGroup>
+
+        <SettingsGroup title="ui.settings.wallpaper">
+          <HStack class="appearanceModes">
+            <button
+              :class="{ prominent: wallpaperMode }"
+              @click="wallpaperMode = true"
+              type="button"
+            >
+              <Icon name="solar:palette-round-line-duotone" />
+              {{ t('ui.settings.modes.clear') }}
+            </button>
+
+            <button
+              :class="{ prominent: !wallpaperMode }"
+              @click="wallpaperMode = false"
+              type="button"
+            >
+              <Icon name="solar:gallery-wide-line-duotone" />
+              {{ t('ui.settings.modes.color') }}
+            </button>
+          </HStack>
+
+          <SettingsInput
+            v-model="wallpaperUrl"
+            label="ui.settings.wallpaperUrl"
+            placeholder="https://example.com/wallpaper.jpg"
+            type="url"
+            no-border
+          />
         </SettingsGroup>
       </VStack>
 

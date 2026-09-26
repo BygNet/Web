@@ -95,14 +95,6 @@ function clearThemeClasses(): void {
   }
 }
 
-function getResolvedThemeKey(key: string): string {
-  if (key !== 'auto') {
-    return key
-  }
-
-  return systemPrefersDark.value ? 'dark' : 'light'
-}
-
 if (systemThemeQuery) {
   systemThemeQuery.addEventListener('change', event => {
     systemPrefersDark.value = event.matches
@@ -142,7 +134,6 @@ export function loadTheme(): void {
   clearThemeClasses()
 
   if (html) {
-    html.classList.add(getResolvedThemeKey(savedTheme))
     html.classList.add(savedTheme)
   }
 
@@ -169,7 +160,6 @@ export function setTheme(theme: BygTheme): void {
 
   // apply instantly
   if (html) {
-    html.classList.add(getResolvedThemeKey(theme.key))
     html.classList.add(theme.key)
   }
 

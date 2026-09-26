@@ -54,6 +54,14 @@
   const theme = useCookie<string>('bygTheme')
   const themeClass = theme.value ?? 'auto'
 
+  const wallpaperMode = useCookie<boolean>('bygWallpaperMode', {
+    default: () => false,
+  })
+
+  const wallpaperUrl = useCookie<string>('bygWallpaperUrl', {
+    default: () => '',
+  })
+
   let stopMessageRealtime: (() => void) | null = null
   let pingInterval: ReturnType<typeof setInterval> | null = null
   let pingInProgress = false
@@ -128,31 +136,21 @@
     })
   }
 
-  useHead({
+  useHead(() => ({
     htmlAttrs: {
-      class: themeClass,
+      class: `${themeClass} ${wallpaperMode.value ? 'clear' : 'color'}`,
+      style: {
+        '--wallpaper-url': wallpaperUrl.value
+          ? `url("${wallpaperUrl.value}")`
+          : 'none',
+      },
     },
-  })
+  }))
 
   useHead(() => ({
     link: [ { rel: 'manifest', href: manifestHref.value } ],
   }))
 
-  useHead({
-    script: [
-      {
-        innerHTML: `
-        (function() {
-          const theme = document.cookie.match(/bygTheme=([^;]+)/)?.[1] || 'auto';
-          if (theme === 'auto') {
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.documentElement.classList.add(prefersDark ? 'dark' : 'light');
-          }
-        })();
-      `,
-      },
-    ],
-  })
 
   onMounted(async () => {
     consoleWarn()
@@ -177,7 +175,6 @@
   onUnmounted(() => {
     stopMessageRealtime?.()
     stopMessageRealtime = null
-
     stopConnectionMonitor()
   })
 
@@ -224,7 +221,6 @@
 <!--Unscoped due to layouts-->
 <style lang="sass">
   @use "@/styles/variables"
-  @use "@/styles/themes"
 
   .appShell
     display: flex
