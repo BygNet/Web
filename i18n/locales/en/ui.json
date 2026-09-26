@@ -3,6 +3,7 @@
     "app": {
       "loading": "Byg is Loading..."
     },
+
     "create": {
       "title": "Create...",
       "typePost": "Write Post",
@@ -22,10 +23,12 @@
       "errorUploadImage": "Failed to upload image",
       "unknownUser": "unknown"
     },
+
     "report": {
       "title": "Report an Issue",
       "iframeTitle": "Byg Platform Trust and Safety"
     },
+
     "cookie": {
       "title": "Cookies and privacy",
       "line1": "We use cookies and data stored on your device to keep you logged in and save some preferences.",
@@ -35,12 +38,14 @@
       "dismissSecondary": "Damn",
       "dismissPrimary": "Aww, okay"
     },
+
     "notificationsModal": {
       "title": "Don't forget to enable notifications!",
       "line1": "Stay up to date with messages, comments, and more.",
       "line2": "Go to Notifications, and enable push alerts.",
       "action": "Notifications"
     },
+
     "asks": {
       "title": "Asks",
       "subtitle": "Share your public Asks page to receive anonymous messages!",
@@ -51,6 +56,7 @@
         "title": "Public Page"
       }
     },
+
     "share": {
       "title": "Share",
       "by": "by",
@@ -68,6 +74,7 @@
       "statusFailedSendToUser": "Failed to send to {username}.",
       "avatarAlt": "{username}'s avatar"
     },
+
     "chat": {
       "title": "Byg Chat",
       "selectChat": "Select a chat",
@@ -91,6 +98,7 @@
       "previewSharedImage": "Shared an image",
       "previewSentChat": "Sent a chat"
     },
+
     "messages": {
       "createGroupChat": "Create group chat",
       "createGroupChatAction": "Create",
@@ -115,24 +123,31 @@
       "directChatFallback": "Direct chat",
       "groupImageAlt": "Image of {name}"
     },
+
     "settings": {
-      "sidebarProfile": "Profile",
-      "sidebarSecurity": "Security",
-      "sidebarSubscription": "Subscription",
-      "sidebarInterface": "Interface",
-      "sidebarSessions": "Sessions",
-      "sessionsTitle": "Sessions",
-      "sessionsDescription": "Review where your Byg account is signed in. Country is estimated from the session IP and may be inaccurate.",
-      "sessionsLoading": "Loading sessions...",
-      "sessionsUnknownDevice": "Unknown device",
-      "sessionsThisDevice": "This device",
-      "sessionsRemove": "Remove",
-      "sessionsUnknownCountry": "Unknown country",
-      "sessionsLastUsed": "Last used {date}",
-      "sessionsExpires": "Expires {date}",
-      "sessionsNeverExpires": "Never expires",
-      "sessionsDisableExpiry": "Disable expiry",
-      "sessionsEnableExpiry": "Enable expiry",
+      "sidebar": {
+        "profile": "Profile",
+        "security": "Security",
+        "subscription": "Subscription",
+        "interface": "Interface",
+        "sessions": "Sessions"
+      },
+
+      "sessions": {
+        "title": "Sessions",
+        "description": "Review where your Byg account is signed in. Country is estimated from the session IP and may be inaccurate.",
+        "loading": "Loading sessions...",
+        "unknownDevice": "Unknown device",
+        "thisDevice": "This device",
+        "remove": "Remove",
+        "unknownCountry": "Unknown country",
+        "lastUsed": "Last used {date}",
+        "expires": "Expires {date}",
+        "neverExpires": "Never expires",
+        "disableExpiry": "Disable expiry",
+        "enableExpiry": "Enable expiry"
+      },
+
       "editProfile": "Edit Profile",
       "loading": "Loading...",
       "displayNameLabel": "Display Name",
@@ -160,46 +175,66 @@
       "saveChanges": "Save Changes",
       "saving": "Saving...",
       "securityTitle": "Security",
-      "emailVerification": "Email Verification",
-      "emailVerified": "Verified",
-      "emailPending": "Verification pending",
+
+      "email": {
+        "title": "Email Verification",
+        "verification": "Email Verification",
+        "verified": "Verified",
+        "pending": "Verification pending"
+      },
+
       "verificationCode": "Verification Code",
       "verificationPlaceholder": "123456",
       "verifyEmail": "Verify Email",
       "verifying": "Verifying...",
       "resendCode": "Resend Code",
       "sending": "Sending...",
-      "authenticatorApp": "Authenticator App",
-      "authenticatorEnabled": "Enabled",
-      "authenticatorDisabled": "Not enabled yet",
-      "authenticatorDescription": "Protect your login with a 6-digit TOTP code from an authenticator app.",
-      "disable2fa": "Disable 2FA",
-      "disabling": "Disabling...",
-      "generateSetupKey": "Generate Setup Key",
-      "regenerateSetupKey": "Regenerate Setup Key",
-      "generatingKey": "Generating Key...",
-      "manualEntryKey": "Manual Entry Key",
-      "authenticatorCode": "Authenticator Code",
-      "openAuthenticatorApp": "Open In Authenticator App",
-      "enable2fa": "Enable 2FA",
-      "enabling2fa": "Enabling...",
-      "securityMessageEmailSent": "Verification email sent.",
-      "securityMessageEmailVerified": "Your email is verified.",
-      "securityMessage2faEnabled": "Authenticator app 2FA is enabled.",
-      "securityMessage2faDisabled": "Authenticator app 2FA is disabled.",
-      "securityErrorEmailResend": "Could not resend the verification email",
-      "securityErrorInvalidCode": "That email verification code is not valid",
-      "securityErrorSetup2fa": "Could not create a 2FA setup key",
-      "securityErrorEnable2fa": "That authenticator code was not accepted",
-      "securityErrorDisable2fa": "Could not disable authenticator app 2FA",
+
+      "2fa": {
+        "app": "Authenticator App",
+        "enabled": "Enabled",
+        "disabled": "Not enabled yet",
+        "description": "Protect your login with a 6-digit TOTP code from an authenticator app.",
+        "disable2fa": "Disable 2FA",
+        "disabling": "Disabling...",
+        "generateSetupKey": "Generate Setup Key",
+        "regenerateSetupKey": "Regenerate Setup Key",
+        "generatingKey": "Generating Key...",
+        "manualEntryKey": "Manual Entry Key",
+        "authenticatorCode": "Authenticator Code",
+        "openAuthenticatorApp": "Open In Authenticator App",
+        "enable2fa": "Enable 2FA",
+        "enabling2fa": "Enabling..."
+      },
+
+      "security": {
+        "messageEmailSent": "Verification email sent.",
+        "messageEmailVerified": "Your email is verified.",
+        "message2faEnabled": "Authenticator app 2FA is enabled.",
+        "message2faDisabled": "Authenticator app 2FA is disabled.",
+        "errorEmailResend": "Could not resend the verification email",
+        "errorInvalidCode": "That email verification code is not valid",
+        "errorSetup2fa": "Could not create a 2FA setup key",
+        "errorEnable2fa": "That authenticator code was not accepted",
+        "errorDisable2fa": "Could not disable authenticator app 2FA"
+      },
+
       "subscriptionTitle": "Subscription",
       "currentPlan": "Current Plan",
       "upgradeDescription": "Upgrade to unlock more premium features and support the Byg platform.",
       "upgradeComingSoon": "Upgrade (Coming Soon)",
       "interfaceTitle": "Interface",
       "languageTitle": "Language",
-      "languageDescription": "Choose your preferred language"
+      "languageDescription": "Choose your preferred language",
+      "wallpaperUrl": "Wallpaper URL",
+
+      "modes": {
+        "title": "Modes",
+        "color": "Color",
+        "clear": "Clear"
+      }
     },
+
     "details": {
       "postTitle": "Post",
       "imageTitle": "Image",
@@ -212,6 +247,7 @@
       "postMetaFallbackDescription": "View posts on Byg social network.",
       "imageMetaFallbackDescription": "View images on Byg social network."
     },
+
     "emailVerificationBanner": {
       "title": "Email verification pending",
       "description": "Verify {email} to secure your account.",
@@ -223,11 +259,13 @@
       "resendButton": "Resend Code",
       "sending": "Sending..."
     },
+
     "terms": {
       "noticePrefix": "To use this platform, you agree to the ",
       "noticeLink": "Terms of Service",
       "noticeSuffix": "."
     },
+
     "emailVerificationPage": {
       "title": "Verify Email",
       "subtitle": "Confirm your account email with the code we sent you.",
@@ -244,6 +282,7 @@
       "resendFailure": "Could not resend the verification email.",
       "fallbackInbox": "your inbox"
     },
+
     "afterLogin": {
       "title": "Welcome!",
       "heading": "Welcome to Byg!",
@@ -253,16 +292,19 @@
       "getStarted": "Get Started",
       "customizeProfile": "Customize Profile"
     },
+
     "comments": {
       "titleWithCount": "Comments: {count}",
       "writePlaceholder": "Write a comment...",
       "postButton": "Post",
       "emptyState": "No comments yet."
     },
+
     "accountSwitcher": {
       "emptyState": "No accounts connected yet.",
       "addAccount": "Add"
     },
+
     "profilePage": {
       "subtitle": "Your Byg profile.",
       "options": "Options",
@@ -273,6 +315,7 @@
       "guestTitle": "Welcome to Byg!",
       "guestMessage": "You are not logged in."
     },
+
     "profile": {
       "follow": "Follow",
       "following": "Following",
@@ -286,6 +329,7 @@
       "openSongLink": "Open on song.link",
       "openOnPlatform": "Open on {platform}"
     },
+
     "nav": {
       "openAlerts": "Open alerts"
     }

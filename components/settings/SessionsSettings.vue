@@ -53,13 +53,13 @@
 </script>
 
 <template>
-  <SettingsGroup title="ui.settings.sessionsTitle">
+  <SettingsGroup title="ui.settings.sessions.title">
     <p class="light">
-      {{ t('ui.settings.sessionsDescription') }}
+      {{ t('ui.settings.sessions.description') }}
     </p>
 
     <VStack v-if="loading" class="sessionsList">
-      <p>{{ t('ui.settings.sessionsLoading') }}</p>
+      <p>{{ t('ui.settings.sessions.loading') }}</p>
     </VStack>
 
     <VStack v-else class="sessionsList">
@@ -78,17 +78,17 @@
             </strong>
 
             <span v-if="session.current" class="currentPill">
-              {{ t('ui.settings.sessionsThisDevice') }}
+              {{ t('ui.settings.sessions.thisDevice') }}
             </span>
           </HStack>
         </HStack>
 
         <p class="light">
-          {{ session.countryName || t('ui.settings.sessionsUnknownCountry') }}
+          {{ session.countryName || t('ui.settings.sessions.unknownCountry') }}
           <span v-if="session.ipAddress"> · {{ session.ipAddress }}</span>
           ·
           {{
-            t('ui.settings.sessionsLastUsed', {
+            t('ui.settings.sessions.lastUsed', {
               date: sessionDate(session.lastUsedAt),
             })
           }}
@@ -98,10 +98,10 @@
           <span
             >{{
               session.expiresAt
-                ? t('ui.settings.sessionsExpires', {
+                ? t('ui.settings.sessions.expires', {
                     date: sessionDate(session.expiresAt),
                   })
-                : t('ui.settings.sessionsNeverExpires')
+                : t('ui.settings.sessions.neverExpires')
             }}
           </span>
         </HStack>
@@ -109,7 +109,7 @@
         <HStack class="fullWidth autoSpace actions">
           <button @click="remove(session)" :disabled="busy === session.id">
             <Icon name="solar:trash-bin-minimalistic-line-duotone" />
-            {{ t('ui.settings.sessionsRemove') }}
+            {{ t('ui.settings.sessions.remove') }}
           </button>
 
           <button
@@ -120,8 +120,8 @@
             <Icon name="solar:clock-circle-line-duotone" />
             {{
               session.expiresAt
-                ? t('ui.settings.sessionsDisableExpiry')
-                : t('ui.settings.sessionsEnableExpiry')
+                ? t('ui.settings.sessions.disableExpiry')
+                : t('ui.settings.sessions.enableExpiry')
             }}
           </button>
         </HStack>

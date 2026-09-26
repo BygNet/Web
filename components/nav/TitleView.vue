@@ -22,7 +22,7 @@
 </script>
 
 <template>
-  <header class="titleView">
+  <header class="titleView" id="appHeader">
     <HStack class="titleViewContent autoSpace">
       <HStack class="titleMain">
         <button

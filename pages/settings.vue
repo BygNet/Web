@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { BygAuthUser, BygProfile } from '@bygnet/types'
-  import { document } from 'posthog-js/lib/src/utils/globals'
   import { computed, onMounted, type Ref, ref, watchEffect } from 'vue'
   import { useI18n } from 'vue-i18n'
 
@@ -95,27 +94,27 @@
     {
       key: 'profile',
       icon: 'solar:user-circle-line-duotone',
-      titleKey: 'ui.settings.sidebarProfile',
+      titleKey: 'ui.settings.sidebar.profile',
+    },
+    {
+      key: 'interface',
+      icon: 'solar:palette-round-line-duotone',
+      titleKey: 'ui.settings.sidebar.interface',
     },
     {
       key: 'security',
       icon: 'solar:shield-keyhole-line-duotone',
-      titleKey: 'ui.settings.sidebarSecurity',
+      titleKey: 'ui.settings.sidebar.security',
     },
     {
       key: 'sessions',
       icon: 'solar:devices-line-duotone',
-      titleKey: 'ui.settings.sidebarSessions',
+      titleKey: 'ui.settings.sidebar.sessions',
     },
     {
       key: 'subscription',
       icon: 'solar:crown-star-line-duotone',
-      titleKey: 'ui.settings.sidebarSubscription',
-    },
-    {
-      key: 'interface',
-      icon: 'solar:settings-line-duotone',
-      titleKey: 'ui.settings.sidebarInterface',
+      titleKey: 'ui.settings.sidebar.subscription',
     },
     {
       key: 'advanced',
@@ -254,11 +253,11 @@
       })
 
       if (!res.ok) {
-        securityError.value = t('ui.settings.securityErrorEmailResend')
+        securityError.value = t('ui.settings.security.errorEmailResend')
         return
       }
 
-      securityMessage.value = t('ui.settings.securityMessageEmailSent')
+      securityMessage.value = t('ui.settings.security.messageEmailSent')
     } finally {
       isResendingEmail.value = false
     }
@@ -277,7 +276,7 @@
       })
 
       if (!res.ok) {
-        securityError.value = t('ui.settings.securityErrorInvalidCode')
+        securityError.value = t('ui.settings.security.errorInvalidCode')
         return
       }
 
@@ -289,7 +288,7 @@
       }
 
       emailCode.value = ''
-      securityMessage.value = t('ui.settings.securityMessageEmailVerified')
+      securityMessage.value = t('ui.settings.security.messageEmailVerified')
     } finally {
       isVerifyingEmail.value = false
     }
@@ -303,7 +302,7 @@
       const res = await api('/auth/2fa/setup')
 
       if (!res.ok) {
-        securityError.value = t('ui.settings.securityErrorSetup2fa')
+        securityError.value = t('ui.settings.security.errorSetup2fa')
         return
       }
 
@@ -330,14 +329,14 @@
       })
 
       if (!res.ok) {
-        securityError.value = t('ui.settings.securityErrorEnable2fa')
+        securityError.value = t('ui.settings.security.errorEnable2fa')
         return
       }
 
       applyAuthUser(await res.json())
       twoFactorSetup.value = null
       twoFactorCode.value = ''
-      securityMessage.value = t('ui.settings.securityMessage2faEnabled')
+      securityMessage.value = t('ui.settings.security.message2faEnabled')
     } finally {
       isSavingTwoFactor.value = false
     }
@@ -353,14 +352,14 @@
       })
 
       if (!res.ok) {
-        securityError.value = t('ui.settings.securityErrorDisable2fa')
+        securityError.value = t('ui.settings.security.errorDisable2fa')
         return
       }
 
       applyAuthUser(await res.json())
       twoFactorSetup.value = null
       twoFactorCode.value = ''
-      securityMessage.value = t('ui.settings.securityMessage2faDisabled')
+      securityMessage.value = t('ui.settings.security.message2faDisabled')
     } finally {
       isSavingTwoFactor.value = false
     }
@@ -385,8 +384,8 @@
         v-for="page in settingsPages"
         :key="page.key"
         @click="setActiveSection(page.key)"
-        :class="{ prominent: activeSection === page.key }"
-        class="menuItem"
+        :class="{ selected: activeSection === page.key }"
+        class="menuItem transparent"
       >
         <Icon :name="page.icon" />
         {{ t(page.titleKey) }}
@@ -500,17 +499,12 @@
       </VStack>
 
       <VStack v-show="activeSection === 'security'" class="section">
-        <SettingsGroup title="ui.settings.emailVerification">
+        <SettingsGroup title="ui.settings.email.title">
           <SettingsStatusIndicator
             :status="
               isEmailVerified
-                ? t('ui.settings.emailVerified')
-                : t('ui.settings.emailPending')
-            "
-            :text="
-              isEmailVerified
-                ? t('ui.settings.emailVerified')
-                : t('ui.settings.emailPending')
+                ? t('ui.settings.email.verified')
+                : t('ui.settings.email.pending')
             "
             :enabled="isEmailVerified"
             icon="solar:letter-line-duotone"
@@ -557,27 +551,27 @@
           </template>
         </SettingsGroup>
 
-        <SettingsGroup title="ui.settings.authenticatorApp">
+        <SettingsGroup title="ui.settings.2fa.app">
           <SettingsStatusIndicator
             :status="
               auth.user?.twoFactorEnabled
-                ? t('ui.settings.authenticatorEnabled')
-                : t('ui.settings.authenticatorDisabled')
+                ? t('ui.settings.2fa.enabled')
+                : t('ui.settings.2fa.disabled')
             "
             :enabled="auth.user?.twoFactorEnabled ?? false"
             icon="solar:shield-keyhole-line-duotone"
           />
 
           <p class="description">
-            {{ t('ui.settings.authenticatorDescription') }}
+            {{ t('ui.settings.2fa.description') }}
           </p>
 
           <template v-if="auth.user?.twoFactorEnabled">
             <button @click="disableTwoFactor" :disabled="isSavingTwoFactor">
               {{
                 isSavingTwoFactor
-                  ? t('ui.settings.disabling')
-                  : t('ui.settings.disable2fa')
+                  ? t('ui.settings.2fa.disabling')
+                  : t('ui.settings.2fa.disable2fa')
               }}
             </button>
           </template>
@@ -590,21 +584,21 @@
               <Icon name="solar:key-minimalistic-line-duotone" />
               {{
                 isLoadingTwoFactorSetup
-                  ? t('ui.settings.generatingKey')
+                  ? t('ui.settings.2fa.generatingKey')
                   : twoFactorSetup
-                    ? t('ui.settings.regenerateSetupKey')
-                    : t('ui.settings.generateSetupKey')
+                    ? t('ui.settings.2fa.regenerateSetupKey')
+                    : t('ui.settings.2fa.generateSetupKey')
               }}
             </button>
 
             <VStack v-if="twoFactorSetup" class="setupBox">
               <label>
-                {{ t('ui.settings.manualEntryKey') }}
+                {{ t('ui.settings.2fa.manualEntryKey') }}
                 <input :value="twoFactorSetup.manualEntryKey" readonly />
               </label>
 
               <label>
-                {{ t('ui.settings.authenticatorCode') }}
+                {{ t('ui.settings.2fa.authenticatorCode') }}
                 <input
                   v-model="twoFactorCode"
                   type="text"
@@ -616,7 +610,7 @@
               </label>
 
               <a :href="twoFactorSetup.otpauthUrl" class="prominentLink">
-                {{ t('ui.settings.openAuthenticatorApp') }}
+                {{ t('ui.settings.2fa.openAuthenticatorApp') }}
               </a>
 
               <button
@@ -627,8 +621,8 @@
                 <Icon name="solar:lock-keyhole-line-duotone" />
                 {{
                   isSavingTwoFactor
-                    ? t('ui.settings.enabling2fa')
-                    : t('ui.settings.enable2fa')
+                    ? t('ui.settings.2fa.enabling2fa')
+                    : t('ui.settings.2fa.enable2fa')
                 }}
               </button>
             </VStack>
@@ -679,6 +673,9 @@
               :class="{ prominent: locale === lang.code }"
               class="languageButton"
             >
+              <Icon
+                :name="`circle-flags:${lang.language?.toLowerCase().slice(-2)}`"
+              />
               {{ lang.name }}
             </button>
           </VStack>
@@ -728,16 +725,27 @@
 
 <style scoped lang="sass">
   @use "@/styles/utils"
-  @use "@/styles/themes"
 
   .settingsTabBar
-    width: 100%
+    @include utils.itemBackground
     flex-wrap: nowrap
     overflow: scroll
-    padding: 0.5rem 0.5rem 1.5rem
+    padding: 0.5rem
+    border-radius: 2rem
+    margin-bottom: 1.5rem
+    gap: 0.25rem
+    max-width: 100%
+    position: sticky
+    top: var(--headerHeight)
+    z-index: 110
+    backdrop-filter: blur(1rem)
 
     button
       text-wrap: nowrap
+
+      &.selected
+        background: var(--accentColor)
+        padding: 0.5rem 0.75rem
 
   .content
     min-width: 15rem

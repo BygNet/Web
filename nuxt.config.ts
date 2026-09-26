@@ -49,7 +49,7 @@ export default defineNuxtConfig({
     locales: [
       {
         code: 'en',
-        iso: 'en-US',
+        language: 'en-US',
         name: 'English',
         dir: 'ltr',
         files: [
@@ -64,7 +64,7 @@ export default defineNuxtConfig({
       },
       {
         code: 'fr',
-        iso: 'fr-FR',
+        language: 'fr-FR',
         name: 'Français',
         dir: 'ltr',
         files: [
@@ -79,7 +79,7 @@ export default defineNuxtConfig({
       },
       {
         code: 'es',
-        iso: 'es-ES',
+        language: 'es-ES',
         name: 'Español',
         dir: 'ltr',
         files: [
@@ -94,7 +94,7 @@ export default defineNuxtConfig({
       },
       {
         code: 'zh',
-        iso: 'zh-CN',
+        language: 'zh-CN',
         name: '中文',
         dir: 'ltr',
         files: [
@@ -109,7 +109,7 @@ export default defineNuxtConfig({
       },
       {
         code: 'ru',
-        iso: 'ru-RU',
+        language: 'ru-RU',
         name: 'Русский',
         dir: 'ltr',
         files: [
