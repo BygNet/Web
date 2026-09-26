@@ -164,6 +164,10 @@
       line-height: 1
       text-align: center
 
+  .clear
+    .titleMaskContainer
+      background: transparent
+
   .titleMaskContainer
     background: linear-gradient(to bottom, themes.$backgroundColor, transparent)
     opacity: 0.7

@@ -31,4 +31,8 @@
       box-shadow: inset 0 0.2rem 0.3rem var(--foregroundColor)
       padding: 0.95rem
       border-radius: 1.75rem
+
+  .clear
+    .settingsGroup:not(.plain)
+      backdrop-filter: blur(0.75rem)
 </style>

@@ -691,10 +691,6 @@
         </SettingsGroup>
 
         <SettingsGroup title="ui.profilePage.themes">
-          <ThemePicker full />
-        </SettingsGroup>
-
-        <SettingsGroup title="ui.settings.wallpaper">
           <HStack class="appearanceModes">
             <button
               :class="{ prominent: wallpaperMode }"
@@ -716,12 +712,15 @@
           </HStack>
 
           <SettingsInput
+            v-if="wallpaperMode"
             v-model="wallpaperUrl"
             label="ui.settings.wallpaperUrl"
             placeholder="https://example.com/wallpaper.jpg"
             type="url"
             no-border
           />
+
+          <ThemePicker full v-if="!wallpaperMode" />
         </SettingsGroup>
       </VStack>
 

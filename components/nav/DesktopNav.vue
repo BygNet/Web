@@ -187,6 +187,11 @@
       flex-shrink: 0
       mask-image: linear-gradient(to bottom, black, rgb(0 0 0 / 0.65))
 
+  .clear .desktopNav:hover
+    .desktopNavItem
+      &:hover, &.selected
+        backdrop-filter: blur(0.75rem)
+
   .pages
     position: relative
     width: 100%

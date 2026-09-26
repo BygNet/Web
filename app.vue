@@ -151,7 +151,6 @@
     link: [ { rel: 'manifest', href: manifestHref.value } ],
   }))
 
-
   onMounted(async () => {
     consoleWarn()
     pushPermission.value = getPushPermissionState()
@@ -207,6 +206,7 @@
     <NotificationsModal @close="showingNotificationsModal = false" />
   </ClientOnly>
 
+  <div class="wallpaper" aria-hidden="true" v-if="wallpaperMode" />
   <span class="yandexTag" style="display: none">a38l7prussk7odyw</span>
 
   <Transition name="app" appear>
@@ -221,6 +221,28 @@
 <!--Unscoped due to layouts-->
 <style lang="sass">
   @use "@/styles/variables"
+
+  .wallpaper
+    position: fixed
+    inset: 0
+    z-index: -1
+    pointer-events: none
+    background-image: var(--wallpaper-url)
+    background-position: center
+    background-size: cover
+    background-repeat: no-repeat
+    animation: wallIn 0.3s ease forwards
+
+  @keyframes wallIn
+    from
+      scale: 0.8
+      opacity: 0
+      border-radius: 2rem
+
+    to
+      scale: 1
+      opacity: 0.3
+      border-radius: 0
 
   .appShell
     display: flex

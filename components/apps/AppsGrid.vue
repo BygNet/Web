@@ -50,8 +50,12 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
   @use "@/styles/variables"
+
+  .clear
+    .appIcon
+      --tint: var(--foregroundColor) !important
+      backdrop-filter: blur(1rem)
 
   .appsList
     display: grid
