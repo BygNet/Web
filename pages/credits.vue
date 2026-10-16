@@ -30,15 +30,7 @@
 
       <div class="peopleGrid">
         <PersonCredit
-          avatar-url="https://a35hie.me/images/avatar-26.webp"
-          role="CEO"
-          name="ashie"
-          byg-username="a35hie"
-          homepage="https://a35.dev/"
-        />
-
-        <PersonCredit
-          avatar-url="https://a35hie.me/images/avatar-26.webp"
+          avatar-url="https://a35hie.me/images/avatar-27.webp"
           role="Owner"
           name="ashie"
           byg-username="a35hie"
@@ -46,33 +38,18 @@
         />
 
         <PersonCredit
-          avatar-url="https://cdn.discordapp.com/avatars/1346178810566938675/17e2d26cb32da23daeae47600748ec9d.webp?size=240"
-          role="Co-Owner"
+          avatar-url="https://preview.redd.it/can-someone-draw-me-a-kurzgesagt-bird-for-profile-picture-v0-9cxl5nfwoipb1.png?width=750&format=png&auto=webp&s=6415072767a8567c3ddc87673e6ff364a8d1eb3f"
+          role="Co-Owner / Marketing"
           name="Dima"
           byg-username="dima"
         />
 
         <PersonCredit
-          avatar-url="https://a35hie.me/images/avatar-26.webp"
-          role="Lead Developer"
+          avatar-url="https://a35hie.me/images/avatar-27.webp"
+          role="Developer / Designer"
           name="ashie"
           byg-username="a35hie"
           homepage="https://a35.dev/"
-        />
-
-        <PersonCredit
-          avatar-url="https://a35hie.me/images/avatar-26.webp"
-          role="Lead Designer"
-          name="ashie"
-          byg-username="a35hie"
-          homepage="https://a35.dev/"
-        />
-
-        <PersonCredit
-          avatar-url="https://cdn.discordapp.com/avatars/1346178810566938675/17e2d26cb32da23daeae47600748ec9d.webp?size=240"
-          role="Marketer"
-          name="Dima"
-          byg-username="dima"
         />
 
         <PersonCredit
@@ -82,7 +59,7 @@
         />
 
         <PersonCredit
-          avatar-url="https://cdn.discordapp.com/avatars/1428344120291623015/ff231ed7894195d0c183a341b66bb8b5.webp?size=240"
+          avatar-url="https://i.pinimg.com/736x/48/65/15/4865157bb8ff6a029d1ee21398659224.jpg"
           role="Character Design"
           name="Lulu"
           byg-username="Le_Lulu"

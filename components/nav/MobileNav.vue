@@ -5,30 +5,16 @@
   import SafeLink from '@/components/base/SafeLink.vue'
   import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import {
-    type BygPageMeta,
-    BygPages,
-    ExplorePage,
-    MessagesPage,
-  } from '@/data/pages'
+  import { type BygPageMeta, BygPages, ExplorePage } from '@/data/pages'
   import { showingCreateModal } from '@/data/visibility'
   import { toggleCreateModal } from '@/utils/createModalManager'
-  import { useEnv } from '@/utils/env'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
 
   const route = useRoute()
   const { t } = useI18n()
-  // const { chatUrl } = useEnv()
-
   function pageHref(page: BygPageMeta): string {
-    // Disable new chat for now
-    // return page === MessagesPage ? chatUrl : page.path
     return page.path
-  }
-
-  function isExternalPage(page: BygPageMeta): boolean {
-    return page === MessagesPage
   }
 
   function badgeValue(page: BygPageMeta): number {

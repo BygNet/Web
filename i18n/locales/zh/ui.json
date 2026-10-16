@@ -80,8 +80,15 @@
       "loadingChats": "正在加载聊天...",
       "noMessagesYet": "暂无消息。在上方开始对话。",
       "loadingConversation": "正在加载对话...",
+      "loadingOlderMessages": "正在加载较早的消息...",
       "typeMessagePlaceholder": "输入消息...",
       "send": "发送",
+      "replyTo": "回复 {'@'}{username}",
+      "replyingTo": "正在回复 {'@'}{username}",
+      "replyToMessage": "回复消息",
+      "goToRepliedMessage": "跳转到被回复的消息",
+      "cancelReply": "取消回复",
+      "messageFallback": "消息",
       "errorLoadThreads": "加载聊天列表失败。",
       "errorLoadConversation": "加载对话失败。",
       "errorInvalidRecipient": "聊天收件人无效。",
@@ -90,6 +97,13 @@
       "previewSharedPost": "分享了一条帖子",
       "previewSharedImage": "分享了一张图片",
       "previewSentChat": "发送了一条聊天"
+    },
+    "markdown": {
+      "insertLink": "插入链接",
+      "displayText": "显示文本",
+      "linkUrl": "链接 URL",
+      "linkUrlPlaceholder": "https://example.com",
+      "invalidUrl": "请输入有效的 URL。"
     },
     "messages": {
       "createGroupChat": "创建群聊",
@@ -289,6 +303,7 @@
     "profile": {
       "follow": "关注",
       "following": "已关注",
+      "asks": "提问",
       "chat": "聊天",
       "joinedLabel": "加入于 {date}",
       "pronounsLabel": "代词",

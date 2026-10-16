@@ -9,11 +9,9 @@
     type BygPageMeta,
     CreatePage,
     DesktopPages,
-    MessagesPage,
     SpacerPage,
   } from '@/data/pages'
   import { openCreateModal } from '@/utils/createModalManager'
-  import { useEnv } from '@/utils/env'
   import { isActive } from '@/utils/isActive'
   import { useRoute } from '#app'
   import BygLogo from '~/components/brand/BygLogo.vue'
@@ -21,16 +19,8 @@
   const AppVersion = __AppVersion
   const route = useRoute()
   const { t } = useI18n()
-  // const { chatUrl } = useEnv()
-
   function pageHref(page: BygPageMeta): string {
-    // Disable new chat for now
-    // return page === MessagesPage ? chatUrl : page.path
     return page.path
-  }
-
-  function isExternalPage(page: BygPageMeta): boolean {
-    return page === MessagesPage
   }
 
   function badgeValue(page: BygPageMeta): number {

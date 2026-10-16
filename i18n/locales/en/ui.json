@@ -87,8 +87,15 @@
       "loadingChats": "Loading chats...",
       "noMessagesYet": "No messages yet. Start a conversation above.",
       "loadingConversation": "Loading conversation...",
+      "loadingOlderMessages": "Loading older messages...",
       "typeMessagePlaceholder": "Type a message...",
       "send": "Send",
+      "replyTo": "Reply to {'@'}{username}",
+      "replyingTo": "Replying to {'@'}{username}",
+      "replyToMessage": "Reply to message",
+      "goToRepliedMessage": "Go to replied message",
+      "cancelReply": "Cancel reply",
+      "messageFallback": "Message",
       "errorLoadThreads": "Failed to load chat threads.",
       "errorLoadConversation": "Failed to load conversation.",
       "errorInvalidRecipient": "Invalid chat recipient.",
@@ -97,6 +104,14 @@
       "previewSharedPost": "Shared a post",
       "previewSharedImage": "Shared an image",
       "previewSentChat": "Sent a chat"
+    },
+
+    "markdown": {
+      "insertLink": "Insert link",
+      "displayText": "Display text",
+      "linkUrl": "Link URL",
+      "linkUrlPlaceholder": "https://example.com",
+      "invalidUrl": "Enter a valid URL."
     },
 
     "messages": {

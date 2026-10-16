@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import DOMPurify from 'dompurify'
-  import { marked } from 'marked'
   import { computed, type Ref, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import SafeLink from '@/components/base/SafeLink.vue'
   import type { BygMessage } from '@/types/messages'
   import { formatDate } from '@/utils/formatters'
+  import { renderMarkdown } from '@/utils/renderMarkdown'
 
   type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
   type MessageDeliveryState = 'sending' | 'sent'
@@ -29,6 +29,13 @@
     }
   )
 
+  const emit = defineEmits<{
+    reply: []
+    openReply: [messageId: number]
+  }>()
+
+  const { t } = useI18n()
+
   const renderedContent: Ref<string> = ref('')
   const showingTime: Ref<boolean> = ref(false)
   const isEmojiOnly = computed(() => {
@@ -43,9 +50,8 @@
 
   watch(
     () => props.message.content,
-    async () => {
-      const parsed = await marked.parse(props.message.content ?? '')
-      renderedContent.value = DOMPurify.sanitize(parsed as string)
+    () => {
+      renderedContent.value = renderMarkdown(props.message.content ?? '')
     },
     { immediate: true }
   )
@@ -54,6 +60,7 @@
 <template>
   <div
     class="messageRow"
+    :data-message-id="message.id"
     @click="showingTime = !showingTime"
     :class="[
       { outgoing: outgoing, emojiOnly: isEmojiOnly },
@@ -114,10 +121,26 @@
 
         <div
           v-if="message.content.trim()"
-          class="messageContent"
+          class="messageContent markdownContent markdownContent--compact"
           :class="{ emojiOnly: isEmojiOnly }"
           v-html="renderedContent"
         />
+
+        <button
+          v-if="message.replyTo"
+          class="replyReference transparent"
+          type="button"
+          :aria-label="t('ui.chat.goToRepliedMessage')"
+          :title="t('ui.chat.goToRepliedMessage')"
+          @click.stop="emit('openReply', message.replyTo.id)"
+        >
+          <p>
+            {{
+              t('ui.chat.replyTo', { username: message.replyTo.senderUsername })
+            }}
+          </p>
+          <p>{{ message.replyTo.content || t('ui.chat.messageFallback') }}</p>
+        </button>
       </div>
 
       <div class="bubbleMeta light" v-if="outgoing && props.deliveryState">
@@ -135,6 +158,16 @@
         {{ formatDate(message.createdDate) }}
       </p>
     </div>
+
+    <button
+      class="replyAction transparent"
+      type="button"
+      :aria-label="t('ui.chat.replyToMessage')"
+      :title="t('ui.chat.replyToMessage')"
+      @click.stop="emit('reply')"
+    >
+      <Icon name="solar:reply-line-duotone" />
+    </button>
   </div>
 </template>
 
@@ -142,6 +175,7 @@
   @use "@/styles/themes"
 
   .messageRow
+    position: relative
     width: 100%
     flex-direction: row
     align-items: flex-end
@@ -178,6 +212,26 @@
     font-size: x-small
     margin: 0 0.25rem
 
+  .replyAction
+    flex: 0 0 auto
+    align-self: center
+    width: 1.8rem
+    height: 1.8rem
+    padding: 0.25rem
+    opacity: 0
+    transition: opacity 120ms ease
+
+    &:focus-visible
+      opacity: 0.85
+
+  .messageRow:hover .replyAction,
+  .messageRow:focus-within .replyAction
+    opacity: 0.7
+
+  @media (hover: none)
+    .replyAction
+      opacity: 0.7
+
   .bubble
     --cornerRadius: 1.25rem
     --groupCornerRadius: 0.55rem
@@ -208,6 +262,10 @@
       padding: 0
       border-radius: 0
 
+  .messageRow.messageTarget .bubble
+    outline: 0.15rem solid themes.$accentColor
+    outline-offset: 0.1rem
+
   .messageContent
     width: 100%
     min-width: 0
@@ -224,6 +282,27 @@
       :deep(p)
         font-size: clamp(2rem, 7vw, 3rem)
         line-height: 1.2
+
+  .replyReference
+    display: block
+    width: 100%
+    padding: 0.35rem 0.5rem
+    border-left: 0.2rem solid themes.$accentColor
+    background: rgba(0, 0, 0, 0.08)
+    border-radius: 0.35rem
+    overflow: hidden
+    text-align: left
+    cursor: pointer
+
+    p
+      margin: 0
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+
+      &:first-child
+        font-size: x-small
+        font-weight: 600
 
   .sharedEmbed
     width: 100%

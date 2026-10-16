@@ -12,7 +12,6 @@
   import UsernameView from '@/components/posts/UsernameView.vue'
   import SongLink from '@/components/profile/SongLink.vue'
   import { currentThemeKey, systemPrefersDark } from '@/data/themes'
-  import { useEnv } from '@/utils/env'
   import { capitalize } from '@/utils/formatters'
   import {
     applyProfileThemeToDocument,
@@ -22,7 +21,6 @@
 
   const localePath = useLocalePath()
   const { t } = useI18n()
-  const { chatUrl } = useEnv()
   const props = withDefaults(
     defineProps<{
       user: BygUser
@@ -181,7 +179,7 @@
               </button>
             </SafeLink>
 
-            <SafeLink :to="chatUrl" external>
+            <SafeLink :to="localePath('/messages')">
               <button>
                 <Icon name="solar:plain-line-duotone" />
                 {{ t('ui.profile.chat') }}

@@ -21,14 +21,12 @@
   import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
-  import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
-  import ErrorState from '@/components/layout/ErrorState.vue'
   import HStack from '@/components/layout/HStack.vue'
   import Modal from '@/components/layout/Modal.vue'
   import VStack from '@/components/layout/VStack.vue'
-  import MessageBubble from '@/components/messages/MessageBubble.vue'
-  import MessageThreadItem from '@/components/messages/MessageThreadItem.vue'
+  import MessagesConversationPane from '@/components/messages/MessagesConversationPane.vue'
+  import MessagesThreadsPane from '@/components/messages/MessagesThreadsPane.vue'
   import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
   import { fetchUserSuggestions } from '@/data/mentions'
   import {
@@ -37,8 +35,11 @@
     fetchMessageConversation,
     fetchMessageConversationById,
     fetchMessageThreads,
+    fetchOlderMessageHistory,
     getOrCreateDirectConversation,
     inviteGroupConversationMember,
+    markMessageConversationRead,
+    mergeCachedConversationMessages,
     removeGroupConversationMember,
     sendMessage,
     sendTypingEvent,
@@ -54,6 +55,11 @@
     BygMessageLiveServerEvent,
     BygMessageThread,
   } from '@/types/messages'
+  import type {
+    ConversationEntry,
+    MessageDeliveryState,
+    MessageGroupPosition,
+  } from '@/types/messages-ui'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
 
   const { t } = useI18n()
@@ -76,6 +82,9 @@
   const threads: Ref<BygMessageThread[]> = ref([])
   const selectedThread: Ref<BygMessageThread | null> = ref(null)
   const messages: Ref<BygMessage[]> = ref([])
+  const hasOlderMessages: Ref<boolean> = ref(false)
+  const loadingOlderMessages: Ref<boolean> = ref(false)
+  const replyToMessage: Ref<BygMessage | null> = ref(null)
   const outgoingDeliveryByMessageId: Ref<Record<number, MessageDeliveryState>> =
     ref({})
   const composerText: Ref<string> = ref('')
@@ -95,24 +104,6 @@
   const groupStatusMessage: Ref<string | null> = ref(null)
   const savingGroup: Ref<boolean> = ref(false)
 
-  type MessageDeliveryState = 'sending' | 'sent'
-  type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
-  type ConversationTimestampEntry = {
-    type: 'timestamp'
-    key: string
-    label: string
-  }
-  type ConversationMessageEntry = {
-    type: 'message'
-    key: string
-    message: BygMessage
-    outgoing: boolean
-    showAvatar: boolean
-    showSenderName: boolean
-    groupPosition: MessageGroupPosition
-    deliveryState: MessageDeliveryState | null
-  }
-  type ConversationEntry = ConversationTimestampEntry | ConversationMessageEntry
   const CONTINUATION_GAP_MS = 3 * 60 * 60 * 1000
 
   const starterQuery: Ref<string> = ref('')
@@ -121,8 +112,17 @@
   let starterSuggestionRequestId = 0
   let groupSuggestionRequestId = 0
 
-  const conversationScroller: Ref<HTMLDivElement | null> = ref(null)
-  const composerInput: Ref<HTMLTextAreaElement | null> = ref(null)
+  type MessagesConversationPaneInstance = {
+    conversationScroller: HTMLDivElement | null
+    composerInput: HTMLTextAreaElement | null
+  }
+  const conversationPane = ref<MessagesConversationPaneInstance | null>(null)
+  const conversationScroller = computed(
+    () => conversationPane.value?.conversationScroller ?? null
+  )
+  const composerInput = computed(
+    () => conversationPane.value?.composerInput ?? null
+  )
   const isMobileViewport: Ref<boolean> = ref(false)
   const liveSocket: Ref<WebSocket | null> = ref(null)
   let reconnectTimer: number | undefined
@@ -134,6 +134,7 @@
   let allowSocketReconnect = true
   let mainEl: HTMLElement | null = null
   let stopNavigationEnforcement: WatchStopHandle | null = null
+  let conversationLoadGeneration = 0
   let mobileMediaQuery: MediaQueryList | null = null
   const MAIN_SCROLL_LOCK_COUNT_ATTR = 'data-messages-scroll-lock-count'
   const MAIN_SCROLL_LOCK_ORIGINAL_ATTR = 'data-messages-original-overflow-y'
@@ -360,6 +361,11 @@
       ...existingThread,
       lastMessagePreview: previewFromMessage(message),
       lastMessageDate: message.createdDate,
+      unreadCount:
+        message.senderId !== auth.user?.id &&
+        !isMessageInSelectedThread(message)
+          ? existingThread.unreadCount + 1
+          : existingThread.unreadCount,
     })
   }
 
@@ -532,6 +538,14 @@
       createdDate: new Date().toISOString(),
       sharedPost: null,
       sharedImage: null,
+      replyToMessageId: replyToMessage.value?.id ?? null,
+      replyTo: replyToMessage.value
+        ? {
+            id: replyToMessage.value.id,
+            senderUsername: replyToMessage.value.senderUsername,
+            content: replyToMessage.value.content,
+          }
+        : null,
     }
     nextOptimisticMessageId -= 1
     return optimisticMessage
@@ -622,6 +636,44 @@
     composerInput.value.focus({ preventScroll: true })
   }
 
+  async function handleReply(message: BygMessage): Promise<void> {
+    replyToMessage.value = message
+    await nextTick()
+    focusComposerInput()
+  }
+
+  async function openRepliedMessage(messageId: number): Promise<void> {
+    while (
+      !messages.value.some(message => message.id === messageId) &&
+      hasOlderMessages.value
+    ) {
+      const previousOldestMessageId = messages.value[0]?.id
+      const previousMessageCount = messages.value.length
+      await loadOlderMessages()
+
+      if (
+        messages.value.length === previousMessageCount &&
+        messages.value[0]?.id === previousOldestMessageId
+      ) {
+        break
+      }
+    }
+
+    await nextTick()
+    const targetMessage =
+      conversationScroller.value?.querySelector<HTMLElement>(
+        `[data-message-id="${messageId}"]`
+      )
+    if (!targetMessage) return
+
+    targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    targetMessage.classList.add('messageTarget')
+    window.setTimeout(
+      () => targetMessage.classList.remove('messageTarget'),
+      900
+    )
+  }
+
   async function loadThreads(options: { force?: boolean } = {}): Promise<void> {
     loadingThreads.value = true
     let loadedInitialData = false
@@ -654,8 +706,88 @@
     upsertThread(selectedThread.value)
 
     messages.value = conversation.messages
+    hasOlderMessages.value = conversation.pagination?.hasOlder ?? false
     resetOutgoingDeliveryState()
     await scrollConversationToBottom()
+
+    const latestMessage = messages.value[messages.value.length - 1]
+    if (conversation.conversationId > 0) {
+      await markMessageConversationRead(
+        conversation.conversationId,
+        latestMessage?.id
+      )
+      if (selectedThread.value) {
+        const readThread = {
+          ...selectedThread.value,
+          unreadCount: 0,
+        }
+        selectedThread.value = readThread
+        upsertThread(readThread)
+      }
+    }
+  }
+
+  function isNearConversationBottom(): boolean {
+    const scroller = conversationScroller.value
+    if (!scroller) return true
+    return (
+      scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 96
+    )
+  }
+
+  async function loadOlderMessages(): Promise<void> {
+    const thread = selectedThread.value
+    const oldestMessage = messages.value[0]
+    if (
+      !thread ||
+      thread.conversationId <= 0 ||
+      !hasOlderMessages.value ||
+      loadingOlderMessages.value ||
+      !oldestMessage ||
+      oldestMessage.id < 0
+    ) {
+      return
+    }
+
+    const generation = conversationLoadGeneration
+    const scroller = conversationScroller.value
+    const previousHeight = scroller?.scrollHeight ?? 0
+    const previousTop = scroller?.scrollTop ?? 0
+    loadingOlderMessages.value = true
+
+    try {
+      const older = await fetchOlderMessageHistory(
+        thread.conversationId,
+        oldestMessage.id
+      )
+      if (
+        !older ||
+        generation !== conversationLoadGeneration ||
+        selectedThread.value?.conversationId !== thread.conversationId
+      ) {
+        return
+      }
+
+      const messagesById = new Map(
+        [ ...older.messages, ...messages.value ].map(message => [
+          message.id,
+          message,
+        ])
+      )
+      messages.value = [ ...messagesById.values() ].sort(
+        (a, b) =>
+          new Date(a.createdDate).getTime() - new Date(b.createdDate).getTime()
+      )
+      hasOlderMessages.value = older.pagination?.hasOlder ?? false
+      mergeCachedConversationMessages(thread.conversationId, older.messages)
+      await nextTick()
+      if (scroller) {
+        scroller.scrollTop =
+          scroller.scrollHeight - previousHeight + previousTop
+      }
+    } finally {
+      loadingOlderMessages.value = false
+    }
   }
 
   async function loadConversationByThread(
@@ -663,10 +795,10 @@
     options: { force?: boolean } = {}
   ): Promise<void> {
     const activeConversationId = thread.conversationId
+    conversationLoadGeneration += 1
 
     loadingConversation.value = true
     error.value = null
-    let loadedInitialConversation = false
 
     try {
       const conversation =
@@ -691,33 +823,6 @@
       }
 
       await applyConversationSnapshot(conversation)
-      loadedInitialConversation = true
-
-      if (!options.force) {
-        try {
-          const refreshedConversation =
-            activeConversationId > 0
-              ? await fetchMessageConversationById(activeConversationId, {
-                  force: true,
-                })
-              : await fetchMessageConversation(getThreadDisplayName(thread), {
-                  force: true,
-                })
-          if (!refreshedConversation) return
-          if (
-            selectedThread.value &&
-            selectedThread.value.conversationId !== activeConversationId
-          ) {
-            return
-          }
-
-          await applyConversationSnapshot(refreshedConversation)
-        } catch {
-          if (!loadedInitialConversation) {
-            throw new Error('conversation_refresh_failed')
-          }
-        }
-      }
     } catch {
       error.value = t('ui.chat.errorLoadConversation')
     } finally {
@@ -745,6 +850,8 @@
     selectedThread.value = thread
     if (isSwitchingThread) {
       messages.value = []
+      hasOlderMessages.value = false
+      replyToMessage.value = null
       resetOutgoingDeliveryState()
     }
 
@@ -1136,9 +1243,16 @@
         upsertThreadFromMessage(event.message)
 
         if (isMessageInSelectedThread(event.message)) {
+          const shouldStickToBottom = isNearConversationBottom()
           const addedNewMessage = upsertConversationMessage(event.message)
-          if (addedNewMessage) {
+          if (addedNewMessage && shouldStickToBottom) {
             scrollConversationToBottom()
+          }
+          if (addedNewMessage && event.message.senderId !== auth.user?.id) {
+            void markMessageConversationRead(
+              event.message.conversationId,
+              event.message.id
+            )
           }
           markThreadTyping(event.message.senderId, false)
         }
@@ -1280,6 +1394,7 @@
     const sent = await sendMessage({
       conversationId: thread.conversationId,
       content,
+      replyToMessageId: replyToMessage.value?.id,
     })
 
     sendingMessage.value = false
@@ -1299,6 +1414,7 @@
     }
 
     upsertThreadFromMessage(sent)
+    replyToMessage.value = null
 
     const addedNewMessage = upsertConversationMessage(sent, {
       markOutgoingSent: true,
@@ -1514,194 +1630,55 @@
 <template>
   <ContentArea class="messagesPage" hide-terms-link>
     <HStack class="messagesLayout">
-      <aside
-        class="threadsPane"
-        v-if="shouldShowThreadsPane"
-        :class="{ only: !shouldShowConversationPane }"
-      >
-        <header class="threadsHeader">
-          <SafeLink to="/">
-            <button class="backButton transparent">
-              <Icon name="solar:alt-arrow-left-line-duotone" />
-              {{ t('common.back') }}
-            </button>
-          </SafeLink>
+      <MessagesThreadsPane
+        :visible="shouldShowThreadsPane"
+        :only="!shouldShowConversationPane"
+        :loading="loadingThreads"
+        :threads="threads"
+        :selected-thread="selectedThread"
+        :typing-by-user-id="typingByUserId"
+        :starter-query="starterQuery"
+        :starter-suggestions="starterSuggestions"
+        :showing-starter-suggestions="showingStarterSuggestions"
+        :get-thread-typing-user-id="getThreadTypingUserId"
+        @refresh="loadThreads({ force: true })"
+        @create-group="openGroupCreateModal"
+        @update-starter-suggestions="updateStarterSuggestions"
+        @choose-starter-suggestion="chooseStarterSuggestion"
+        @update:starter-query="starterQuery = $event"
+        @select="pickThread"
+        @info="openGroupInfoModal"
+      />
 
-          <button
-            class="refreshThreadsButton"
-            :disabled="loadingThreads"
-            @click="loadThreads({ force: true })"
-          >
-            <Icon name="solar:refresh-line-duotone" />
-            {{ t('common.refresh') }}
-          </button>
-        </header>
-
-        <div class="starterBox">
-          <input
-            v-model="starterQuery"
-            class="starterInput"
-            :placeholder="t('ui.chat.startChatPlaceholder')"
-            @input="updateStarterSuggestions"
-            @focus="updateStarterSuggestions"
-          />
-
-          <MentionSuggestions
-            v-if="showingStarterSuggestions"
-            :suggestions="starterSuggestions"
-            @select="chooseStarterSuggestion"
-          />
-        </div>
-
-        <button class="createGroupButton" @click="openGroupCreateModal">
-          <Icon name="solar:users-group-rounded-line-duotone" />
-          {{ t('ui.messages.createGroupChat') }}
-        </button>
-
-        <div class="threadsContent">
-          <p v-if="loadingThreads" class="light threadState">
-            {{ t('ui.chat.loadingChats') }}
-          </p>
-          <p v-else-if="threads.length < 1" class="light threadState">
-            {{ t('ui.chat.noMessagesYet') }}
-          </p>
-
-          <div class="threadList" v-else>
-            <MessageThreadItem
-              v-for="thread in threads"
-              :key="thread.conversationId"
-              :thread="thread"
-              :selected="
-                selectedThread?.conversationId === thread.conversationId
-              "
-              :typing="
-                getThreadTypingUserId(thread) !== null
-                  ? typingByUserId[getThreadTypingUserId(thread)!]
-                  : false
-              "
-              @select="pickThread(thread)"
-              @info="openGroupInfoModal(thread)"
-            />
-          </div>
-        </div>
-      </aside>
-
-      <section class="conversationPane" v-if="shouldShowConversationPane">
-        <header class="conversationHeader">
-          <HStack class="conversationTitleWrap">
-            <button
-              class="mobileBackButton"
-              v-if="isMobileConversationView"
-              @click="closeMobileConversation()"
-            >
-              <Icon name="solar:arrow-left-line-duotone" />
-            </button>
-
-            <div class="conversationTitle">
-              <h3 v-if="selectedThread">
-                {{
-                  selectedThread.type === 'direct'
-                    ? `@${getThreadDisplayName(selectedThread)}`
-                    : getThreadDisplayName(selectedThread)
-                }}
-              </h3>
-              <h3 v-else>{{ t('ui.chat.selectChat') }}</h3>
-
-              <HStack class="connectionState">
-                <Icon
-                  :name="
-                    connectedLive
-                      ? 'solar:cloud-check-line-duotone'
-                      : 'solar:cloud-cross-line-duotone'
-                  "
-                />
-                <p class="light">
-                  {{
-                    connectedLive
-                      ? t('ui.chat.statusLive')
-                      : t('ui.chat.statusOffline')
-                  }}
-                </p>
-              </HStack>
-            </div>
-          </HStack>
-        </header>
-
-        <ErrorState v-if="error" :message="error" />
-
-        <div
-          class="conversationEmpty"
-          v-else-if="!selectedThread && !loadingConversation"
-        >
-          <Icon name="solar:chat-round-line-line-duotone" />
-          <h3>{{ t('ui.chat.emptyState') }}</h3>
-        </div>
-
-        <div class="conversationBody" v-else>
-          <p v-if="loadingConversation" class="light loadingConversationText">
-            {{ t('ui.chat.loadingConversation') }}
-          </p>
-
-          <div ref="conversationScroller" class="messageList">
-            <template v-for="entry in conversationEntries" :key="entry.key">
-              <p
-                v-if="entry.type === 'timestamp'"
-                class="light messageGapMarker"
-              >
-                {{ entry.label }}
-              </p>
-              <MessageBubble
-                v-else
-                :message="entry.message"
-                :outgoing="entry.outgoing"
-                :show-avatar="entry.showAvatar"
-                :show-sender-name="entry.showSenderName"
-                :group-position="entry.groupPosition"
-                :delivery-state="entry.deliveryState"
-              />
-            </template>
-          </div>
-
-          <VStack class="composer" @click.stop>
-            <HStack
-              class="typingIndicator"
-              v-if="
-                selectedThread &&
-                getThreadTypingUserId(selectedThread) !== null &&
-                typingByUserId[getThreadTypingUserId(selectedThread)!]
-              "
-            >
-              <Icon name="svg-spinners:3-dots-move" />
-              <p>{{ t('ui.chat.typing') }}</p>
-            </HStack>
-
-            <HStack class="composerInputRow">
-              <textarea
-                ref="composerInput"
-                v-model="composerText"
-                class="composerInput"
-                :placeholder="t('ui.chat.typeMessagePlaceholder')"
-                :disabled="!selectedThread"
-                @input="onComposerInput"
-                @blur="stopTypingSignal"
-                @keydown.enter.exact.prevent="sendCurrentMessage"
-              />
-
-              <button
-                class="prominent sendButton"
-                :disabled="
-                  !selectedThread || sendingMessage || !composerText.trim()
-                "
-                @mousedown.prevent
-                @click="sendCurrentMessage"
-              >
-                <Icon name="solar:plain-line-duotone" />
-                {{ t('ui.chat.send') }}
-              </button>
-            </HStack>
-          </VStack>
-        </div>
-      </section>
+      <MessagesConversationPane
+        ref="conversationPane"
+        :visible="shouldShowConversationPane"
+        :is-mobile-conversation-view="isMobileConversationView"
+        :selected-thread="selectedThread"
+        :connected-live="connectedLive"
+        :error="error"
+        :loading-conversation="loadingConversation"
+        :loading-older-messages="loadingOlderMessages"
+        :conversation-entries="conversationEntries"
+        :reply-to-message="replyToMessage"
+        :typing="
+          selectedThread !== null &&
+          getThreadTypingUserId(selectedThread) !== null &&
+          typingByUserId[getThreadTypingUserId(selectedThread)!] === true
+        "
+        :composer-text="composerText"
+        :sending-message="sendingMessage"
+        :get-thread-display-name="getThreadDisplayName"
+        @close-mobile="closeMobileConversation"
+        @scroll="loadOlderMessages"
+        @reply="handleReply"
+        @open-reply="openRepliedMessage"
+        @update:composer-text="composerText = $event"
+        @composer-input="onComposerInput"
+        @composer-blur="stopTypingSignal"
+        @cancel-reply="replyToMessage = null"
+        @send="sendCurrentMessage"
+      />
     </HStack>
   </ContentArea>
 
@@ -2012,6 +1989,12 @@
         .loadingConversationText
           margin: 0
 
+        .historyLoading
+          width: 100%
+          margin: 0.25rem 0
+          text-align: center
+          font-size: x-small
+
         .messageList
           flex: 1 1 auto
           min-height: 0
@@ -2033,6 +2016,26 @@
           width: 100%
           flex-shrink: 0
           padding: 0.1rem
+
+          .replyComposerPreview
+            width: 100%
+            justify-content: space-between
+            align-items: center
+            padding: 0.35rem 0.5rem
+            border-left: 0.2rem solid themes.$accentColor
+            background: themes.$foregroundColor
+            border-radius: 0.5rem
+
+            p
+              max-width: 80%
+              margin: 0
+              overflow: hidden
+              text-overflow: ellipsis
+              white-space: nowrap
+
+              &:first-child
+                font-size: x-small
+                font-weight: 600
 
           .typingIndicator
             width: 100%

@@ -19,6 +19,7 @@ import { useEnv } from '@/utils/env'
 
 const THREAD_CACHE_TTL_MS = 20 * 60 * 1000
 const CONVERSATION_CACHE_TTL_MS = 12 * 60 * 60 * 1000
+const MESSAGE_PAGE_SIZE = 40
 const SHARE_TARGET_CACHE_TTL_MS = 45 * 60 * 1000
 const THREAD_CACHE_STALE_TTL_MS = 7 * 24 * 60 * 60 * 1000
 const CONVERSATION_CACHE_STALE_TTL_MS = 14 * 24 * 60 * 60 * 1000
@@ -318,7 +319,7 @@ export async function fetchMessageThreads(
 
 export async function fetchMessageConversation(
   username: string,
-  options: { force?: boolean } = {}
+  options: { force?: boolean; beforeMessageId?: number } = {}
 ): Promise<BygMessageConversation | null> {
   if (!auth.user || !auth.token) {
     return null
@@ -352,7 +353,7 @@ export async function fetchMessageConversation(
     const res = await api(
       `/messages/conversation/${encodeURIComponent(
         normalizeUsername(username)
-      )}?limit=200`
+      )}?limit=${MESSAGE_PAGE_SIZE}`
     )
     if (!res.ok) {
       return null
@@ -405,7 +406,7 @@ export async function fetchMessageConversation(
 
 export async function fetchMessageConversationById(
   conversationId: number,
-  options: { force?: boolean } = {}
+  options: { force?: boolean; beforeMessageId?: number } = {}
 ): Promise<BygMessageConversation | null> {
   if (!auth.user || !auth.token) {
     return null
@@ -433,8 +434,11 @@ export async function fetchMessageConversationById(
   }
 
   async function loadConversation(): Promise<BygMessageConversation | null> {
+    const before = options.beforeMessageId
+      ? `&before=${options.beforeMessageId}`
+      : ''
     const res = await api(
-      `/messages/conversations/${normalizedConversationId}?limit=200`
+      `/messages/conversations/${normalizedConversationId}?limit=${MESSAGE_PAGE_SIZE}${before}`
     )
     if (!res.ok) {
       return null
@@ -444,8 +448,10 @@ export async function fetchMessageConversationById(
       value: (await res.json()) as BygMessageConversation,
       timestamp: Date.now(),
     }
-    conversationCache.set(cacheKey, cacheEntry)
-    writeConversationDeviceCache(cacheUserId, cacheKey, cacheEntry)
+    if (options.beforeMessageId === undefined) {
+      conversationCache.set(cacheKey, cacheEntry)
+      writeConversationDeviceCache(cacheUserId, cacheKey, cacheEntry)
+    }
 
     return cacheEntry.value
   }
@@ -474,6 +480,16 @@ export async function fetchMessageConversationById(
   })
   conversationRequests.set(cacheKey, request)
   return request
+}
+
+export async function fetchOlderMessageHistory(
+  conversationId: number,
+  beforeMessageId: number
+): Promise<BygMessageConversation | null> {
+  return await fetchMessageConversationById(conversationId, {
+    force: true,
+    beforeMessageId,
+  })
 }
 
 export async function fetchMessageShareTargets(
@@ -564,6 +580,42 @@ function cacheConversation(conversation: BygMessageConversation): void {
   if (userId !== null) {
     writeConversationDeviceCache(userId, idKey, cacheEntry)
   }
+}
+
+export function mergeCachedConversationMessages(
+  conversationId: number,
+  incomingMessages: BygMessage[]
+): void {
+  const key = conversationIdKey(conversationId)
+  const existing = conversationCache.get(key)
+  if (!existing || incomingMessages.length < 1) return
+
+  const messagesById = new Map(
+    [ ...existing.value.messages, ...incomingMessages ].map(message => [
+      message.id,
+      message,
+    ])
+  )
+  existing.value = {
+    ...existing.value,
+    messages: [ ...messagesById.values() ].sort(
+      (a, b) =>
+        new Date(a.createdDate).getTime() - new Date(b.createdDate).getTime()
+    ),
+  }
+  existing.timestamp = Date.now()
+  conversationCache.set(key, existing)
+}
+
+export async function markMessageConversationRead(
+  conversationId: number,
+  messageId?: number
+): Promise<boolean> {
+  const res = await api(`/messages/conversations/${conversationId}/read`, {
+    method: 'POST',
+    json: messageId === undefined ? {} : { messageId },
+  })
+  return res.ok
 }
 
 export async function getOrCreateDirectConversation(

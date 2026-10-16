@@ -3,8 +3,10 @@
   import { Markdown } from '@tiptap/markdown'
   import StarterKit from '@tiptap/starter-kit'
   import { EditorContent, useEditor } from '@tiptap/vue-3'
-  import { computed, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
+  import { MarkdownImage } from '@/utils/markdownImage'
   import HStack from '~/components/layout/HStack.vue'
 
   interface ToolbarButton {
@@ -23,6 +25,8 @@
     plain?: string
   }>()
 
+  const { t } = useI18n()
+
   const emit = defineEmits<{
     input: []
     keyup: [event: KeyboardEvent]
@@ -30,12 +34,31 @@
   }>()
 
   const placeholder = computed(() => props.placeholder ?? '')
+  const showingLinkBuilder = ref(false)
+  const linkDisplayText = ref('')
+  const linkContent = ref('')
+  const linkError = ref('')
+  const linkDisplayInput = ref<HTMLInputElement | null>(null)
+  let linkSelection: { from: number; to: number } | null = null
+
+  function preserveRawLinks(markdown: string): string {
+    return markdown.replace(
+      /\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/gi,
+      (match, text: string, href: string) => (text === href ? href : match)
+    )
+  }
 
   const editor = useEditor({
     content: model.value,
     contentType: 'markdown',
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        link: {
+          autolink: false,
+          linkOnPaste: false,
+        },
+      }),
+      MarkdownImage,
       Markdown,
       Placeholder.configure({
         placeholder: placeholder.value,
@@ -43,7 +66,9 @@
     ],
     onUpdate: ({ editor }) => {
       if (!editor.markdown) return
-      model.value = editor.markdown.serialize(editor.getJSON())
+      model.value = preserveRawLinks(
+        editor.markdown.serialize(editor.getJSON())
+      )
     },
   })
 
@@ -85,6 +110,69 @@
 
   function focusEditor(): void {
     editor.value?.commands.focus()
+  }
+
+  async function openLinkBuilder(): Promise<void> {
+    const instance = editor.value
+    if (!instance) return
+
+    const { from, to } = instance.state.selection
+    linkSelection = { from, to }
+    linkDisplayText.value = instance.state.doc.textBetween(from, to, '\n')
+    linkContent.value = instance.getAttributes('link').href ?? ''
+    linkError.value = ''
+    showingLinkBuilder.value = true
+    await nextTick()
+    linkDisplayInput.value?.focus()
+  }
+
+  function closeLinkBuilder(): void {
+    showingLinkBuilder.value = false
+    linkError.value = ''
+    linkSelection = null
+  }
+
+  function normalizeLinkContent(value: string): string | null {
+    const trimmed = value.trim()
+    if (!trimmed) return null
+
+    if (/^(?:https?:\/\/|mailto:|\/|#)/i.test(trimmed)) {
+      return trimmed
+    }
+
+    if (/^[\w.-]+\.[a-z]{2,}(?:[/:?#]|$)/i.test(trimmed)) {
+      return `https://${trimmed}`
+    }
+
+    return null
+  }
+
+  function insertLink(): void {
+    const instance = editor.value
+    if (!instance) return
+
+    const href = normalizeLinkContent(linkContent.value)
+    if (!href) {
+      linkError.value = t('ui.markdown.invalidUrl')
+      return
+    }
+
+    const text = linkDisplayText.value.trim() || href
+    const selection = linkSelection ?? instance.state.selection
+    instance
+      .chain()
+      .focus()
+      .setTextSelection(selection)
+      .deleteSelection()
+      .insertContent({
+        type: 'text',
+        text,
+        // eslint-disable-next-line array-bracket-spacing
+        marks: [{ type: 'link', attrs: { href } }],
+      })
+      .run()
+
+    closeLinkBuilder()
   }
 
   defineExpose({ getMentionText, getMentionCaret, replaceMention, focusEditor })
@@ -144,6 +232,14 @@
       isActive: () => false,
       action: () => {
         editor.value?.chain().focus().clearNodes().run()
+      },
+    },
+    {
+      title: t('ui.markdown.insertLink'),
+      icon: 'lucide:link',
+      isActive: () => editor.value?.isActive('link') ?? false,
+      action: () => {
+        openLinkBuilder()
       },
     },
     {
@@ -245,6 +341,35 @@
     </button>
   </HStack>
 
+  <div v-if="showingLinkBuilder" class="linkBuilder" @mousedown.stop>
+    <input
+      ref="linkDisplayInput"
+      v-model="linkDisplayText"
+      :aria-label="t('ui.markdown.displayText')"
+      :placeholder="t('ui.markdown.displayText')"
+      @keydown.enter.prevent="insertLink"
+    />
+    <input
+      v-model="linkContent"
+      type="url"
+      :aria-label="t('ui.markdown.linkUrl')"
+      :placeholder="t('ui.markdown.linkUrlPlaceholder')"
+      @keydown.enter.prevent="insertLink"
+    />
+
+    <p v-if="linkError" class="linkBuilderError">{{ linkError }}</p>
+
+    <HStack class="linkBuilderActions">
+      <button class="transparent" type="button" @click="closeLinkBuilder">
+        {{ t('common.cancel') }}
+      </button>
+      <button class="prominent" type="button" @click="insertLink">
+        <Icon name="solar:link-minimalistic-2-line-duotone" />
+        {{ t('ui.markdown.insertLink') }}
+      </button>
+    </HStack>
+  </div>
+
   <EditorContent
     class="bygMarkdownEditor"
     :class="{ plain }"
@@ -264,12 +389,13 @@
     gap: 0.1rem !important
 
     .editorToolbarItem
-      --buttonRadius: 0.5rem
+      --buttonRadius: 0.75rem
       padding: 0.25rem !important
 
       &:not(:hover):not(.prominent)
         background: transparent
         backdrop-filter: none
+        box-shadow: none
 
       span.iconify
         width: 1.5rem !important
@@ -293,9 +419,28 @@
       .plain
         outline: none !important
 
-      *
-        width: 100%
 
-      ul, ol
-        margin: 0.5rem 0
+  .linkBuilder
+    width: 100%
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    align-items: center
+    gap: 0.35rem
+    padding: 0.5rem
+    border-radius: 1.75rem
+    background: themes.$foregroundColor
+
+    input
+      flex: 1 1 12rem
+      min-width: 8rem
+
+    .linkBuilderError
+      width: 100%
+      margin: 0
+      color: #ff8f9f
+
+    .linkBuilderActions
+      flex: 0 0 auto
+      gap: 0.25rem
 </style>

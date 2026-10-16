@@ -80,8 +80,15 @@
       "loadingChats": "Cargando chats...",
       "noMessagesYet": "Aún no hay mensajes. Empieza una conversación arriba.",
       "loadingConversation": "Cargando conversación...",
+      "loadingOlderMessages": "Cargando mensajes anteriores...",
       "typeMessagePlaceholder": "Escribe un mensaje...",
       "send": "Enviar",
+      "replyTo": "Responder a {'@'}{username}",
+      "replyingTo": "Respondiendo a {'@'}{username}",
+      "replyToMessage": "Responder al mensaje",
+      "goToRepliedMessage": "Ir al mensaje respondido",
+      "cancelReply": "Cancelar respuesta",
+      "messageFallback": "Mensaje",
       "errorLoadThreads": "No se pudieron cargar los hilos de chat.",
       "errorLoadConversation": "No se pudo cargar la conversación.",
       "errorInvalidRecipient": "Destinatario de chat inválido.",
@@ -90,6 +97,13 @@
       "previewSharedPost": "Compartió una publicación",
       "previewSharedImage": "Compartió una imagen",
       "previewSentChat": "Envió un chat"
+    },
+    "markdown": {
+      "insertLink": "Insertar enlace",
+      "displayText": "Texto visible",
+      "linkUrl": "URL del enlace",
+      "linkUrlPlaceholder": "https://example.com",
+      "invalidUrl": "Introduce una URL válida."
     },
     "messages": {
       "createGroupChat": "Crear chat de grupo",
@@ -289,6 +303,7 @@
     "profile": {
       "follow": "Seguir",
       "following": "Siguiendo",
+      "asks": "Preguntas",
       "chat": "Chat",
       "joinedLabel": "Se unió en {date}",
       "pronounsLabel": "Pronombres",

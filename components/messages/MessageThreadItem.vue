@@ -86,6 +86,13 @@
       <p class="light threadTime">
         {{ formattedDate }}
       </p>
+      <span
+        v-if="thread.unreadCount > 0"
+        class="unreadIndicator"
+        :aria-label="`${thread.unreadCount} unread messages`"
+      >
+        {{ thread.unreadCount > 99 ? '99+' : thread.unreadCount }}
+      </span>
     </HStack>
   </HStack>
 </template>
@@ -135,4 +142,15 @@
       .threadTime
         flex-shrink: 0
         white-space: nowrap
+
+      .unreadIndicator
+        flex-shrink: 0
+        min-width: 1.35rem
+        padding: 0.1rem 0.35rem
+        border-radius: 999px
+        background: themes.$accentColor
+        color: themes.$backgroundColor
+        font-size: x-small
+        font-weight: 700
+        text-align: center
 </style>

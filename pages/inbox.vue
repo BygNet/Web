@@ -29,7 +29,6 @@
   } from '@/data/pushAlerts'
   import { title } from '@/data/title'
   import type { BygNotification } from '@/types/notifications'
-  import { useEnv } from '@/utils/env'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
 
   definePageMeta({
@@ -38,7 +37,7 @@
   })
 
   const { t } = useI18n()
-  const { chatUrl } = useEnv()
+  const localePath = useLocalePath()
   const pageMeta = PageMetaByPath['/inbox']!
 
   watchEffect(() => {
@@ -137,10 +136,10 @@
     <HStack class="fullWidth controls">
       <HStack class="controlButtons fullWidth autoSpace">
         <HStack>
-          <a :href="chatUrl" target="_blank" rel="noopener">
+          <a :href="localePath('/messages')">
             <button class="prominent">
               <Icon name="solar:chat-round-line-line-duotone" />
-              {{ t('common.bygChat') }}
+              {{ t('common.messages') }}
             </button>
           </a>
           <button

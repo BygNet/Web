@@ -61,13 +61,13 @@
     <h2 v-else>{{ post.title }}</h2>
 
     <VStack class="bygPostContentWrapper">
-      <p
+      <div
         ref="contentEl"
         class="bygPostContent"
         :class="{ clipped: !detailMode && !expanded && isClippable }"
       >
-        <span v-html="renderedContent" />
-      </p>
+        <div class="markdownContent" v-html="renderedContent" />
+      </div>
 
       <button
         v-if="!detailMode && !expanded && isClippable"
@@ -135,11 +135,6 @@
 
     .bygPostContentWrapper
       position: relative
-
-      :deep(img)
-        max-width: 100%
-        max-height: 28rem
-        border-radius: 0.5rem
 
     .bygPostContent
       user-select: text

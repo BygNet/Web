@@ -80,8 +80,15 @@
       "loadingChats": "Загрузка чатов...",
       "noMessagesYet": "Сообщений пока нет. Начните разговор выше.",
       "loadingConversation": "Загрузка переписки...",
+      "loadingOlderMessages": "Загрузка старых сообщений...",
       "typeMessagePlaceholder": "Введите сообщение...",
       "send": "Отправить",
+      "replyTo": "Ответить {'@'}{username}",
+      "replyingTo": "Ответ на сообщение {'@'}{username}",
+      "replyToMessage": "Ответить на сообщение",
+      "goToRepliedMessage": "Перейти к исходному сообщению",
+      "cancelReply": "Отменить ответ",
+      "messageFallback": "Сообщение",
       "errorLoadThreads": "Не удалось загрузить чаты.",
       "errorLoadConversation": "Не удалось загрузить переписку.",
       "errorInvalidRecipient": "Некорректный получатель чата.",
@@ -90,6 +97,13 @@
       "previewSharedPost": "Поделился постом",
       "previewSharedImage": "Поделился изображением",
       "previewSentChat": "Отправил чат"
+    },
+    "markdown": {
+      "insertLink": "Вставить ссылку",
+      "displayText": "Текст ссылки",
+      "linkUrl": "URL ссылки",
+      "linkUrlPlaceholder": "https://example.com",
+      "invalidUrl": "Введите корректный URL."
     },
     "messages": {
       "createGroupChat": "Создать групповой чат",
@@ -289,6 +303,7 @@
     "profile": {
       "follow": "Подписаться",
       "following": "Вы подписаны",
+      "asks": "Вопросы",
       "chat": "Чат",
       "joinedLabel": "Присоединился в {date}",
       "pronounsLabel": "Местоимения",

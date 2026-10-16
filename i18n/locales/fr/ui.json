@@ -80,8 +80,15 @@
       "loadingChats": "Chargement des chats...",
       "noMessagesYet": "Pas encore de messages. Démarrez une conversation ci-dessus.",
       "loadingConversation": "Chargement de la conversation...",
+      "loadingOlderMessages": "Chargement des anciens messages...",
       "typeMessagePlaceholder": "Tapez un message...",
       "send": "Envoyer",
+      "replyTo": "Répondre à {'@'}{username}",
+      "replyingTo": "Réponse à {'@'}{username}",
+      "replyToMessage": "Répondre au message",
+      "goToRepliedMessage": "Accéder au message cité",
+      "cancelReply": "Annuler la réponse",
+      "messageFallback": "Message",
       "errorLoadThreads": "Impossible de charger les discussions.",
       "errorLoadConversation": "Impossible de charger la conversation.",
       "errorInvalidRecipient": "Destinataire du chat invalide.",
@@ -90,6 +97,13 @@
       "previewSharedPost": "A partagé une publication",
       "previewSharedImage": "A partagé une image",
       "previewSentChat": "A envoyé un chat"
+    },
+    "markdown": {
+      "insertLink": "Insérer un lien",
+      "displayText": "Texte affiché",
+      "linkUrl": "URL du lien",
+      "linkUrlPlaceholder": "https://example.com",
+      "invalidUrl": "Saisissez une URL valide."
     },
     "messages": {
       "createGroupChat": "Créer un chat de groupe",
@@ -293,6 +307,7 @@
     "profile": {
       "follow": "Suivre",
       "following": "Abonné",
+      "asks": "Questions",
       "chat": "Chat",
       "joinedLabel": "Inscrit en {date}",
       "pronounsLabel": "Pronoms",

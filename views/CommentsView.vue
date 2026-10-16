@@ -187,7 +187,10 @@
           <p>{{ formatDate(comment.createdDate) }}</p>
         </HStack>
 
-        <div class="commentContent" v-html="(comment as any).rendered" />
+        <div
+          class="commentContent markdownContent markdownContent--compact"
+          v-html="(comment as any).rendered"
+        />
       </div>
     </VStack>
 
@@ -235,7 +238,4 @@
       .commentContent
         width: 100%
         align-items: flex-start
-
-        :deep(p)
-          margin: 0
 </style>
