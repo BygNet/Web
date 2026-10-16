@@ -57,6 +57,23 @@
       }
     },
 
+    "exploreDashboard": {
+      "searchTitle": "Search with Byg",
+      "searchPlaceholder": "Search the web privately...",
+      "searchButton": "Search",
+      "latestPosts": "Latest posts",
+      "latestPostsEmpty": "No posts to preview yet.",
+      "latestPostsError": "Couldn't load the latest posts.",
+      "latestAsks": "Latest asks",
+      "latestAsksEmpty": "No asks yet.",
+      "suggestedApps": "Suggested apps",
+      "allApps": "All apps",
+      "profilePreview": "Your profile",
+      "editProfile": "Edit profile",
+      "themeSettings": "Theme settings",
+      "loading": "Loading..."
+    },
+
     "share": {
       "title": "Share",
       "by": "by",

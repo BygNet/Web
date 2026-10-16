@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { recordAppVisit } from '@/data/appUsage'
+
   interface Props {
     to: string
     external?: boolean
@@ -32,6 +34,10 @@
   const isExternal = computed(
     () => props.external || props.to.startsWith('http')
   )
+
+  function trackNavigation(): void {
+    if (!isExternal.value) recordAppVisit(props.to)
+  }
 </script>
 
 <template>
@@ -44,6 +50,7 @@
     v-else-if="!isExternal && !custom"
     v-bind="attrs"
     :to="href"
+    @click="trackNavigation"
     :target="newTab ? '_blank' : null"
     :rel="newTab ? 'noopener noreferrer' : undefined"
   >
@@ -56,6 +63,7 @@
     v-bind="attrs"
     :to="href"
     custom
+    @click="trackNavigation"
     v-slot="slotProps"
   >
     <slot v-bind="slotProps" />

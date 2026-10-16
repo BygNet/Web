@@ -51,6 +51,22 @@
         "title": "Página pública"
       }
     },
+    "exploreDashboard": {
+      "searchTitle": "Buscar con Byg",
+      "searchPlaceholder": "Busca en la web de forma privada...",
+      "searchButton": "Buscar",
+      "latestPosts": "Publicaciones recientes",
+      "latestPostsEmpty": "Aún no hay publicaciones para mostrar.",
+      "latestPostsError": "No se pudieron cargar las publicaciones recientes.",
+      "latestAsks": "Preguntas recientes",
+      "latestAsksEmpty": "Aún no hay preguntas.",
+      "suggestedApps": "Apps sugeridas",
+      "allApps": "Todas las apps",
+      "profilePreview": "Tu perfil",
+      "editProfile": "Editar perfil",
+      "themeSettings": "Ajustes del tema",
+      "loading": "Cargando..."
+    },
     "share": {
       "title": "Compartir",
       "by": "por",

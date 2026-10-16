@@ -51,6 +51,22 @@
         "title": "Публичная страница"
       }
     },
+    "exploreDashboard": {
+      "searchTitle": "Поиск с Byg",
+      "searchPlaceholder": "Ищите в интернете конфиденциально...",
+      "searchButton": "Найти",
+      "latestPosts": "Последние публикации",
+      "latestPostsEmpty": "Пока нет публикаций для просмотра.",
+      "latestPostsError": "Не удалось загрузить последние публикации.",
+      "latestAsks": "Последние вопросы",
+      "latestAsksEmpty": "Пока нет вопросов.",
+      "suggestedApps": "Рекомендуемые приложения",
+      "allApps": "Все приложения",
+      "profilePreview": "Ваш профиль",
+      "editProfile": "Изменить профиль",
+      "themeSettings": "Настройки темы",
+      "loading": "Загрузка..."
+    },
     "share": {
       "title": "Поделиться",
       "by": "от",

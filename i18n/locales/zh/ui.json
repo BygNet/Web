@@ -51,6 +51,22 @@
         "title": "公开页面"
       }
     },
+    "exploreDashboard": {
+      "searchTitle": "使用 Byg 搜索",
+      "searchPlaceholder": "私密搜索网页...",
+      "searchButton": "搜索",
+      "latestPosts": "最新帖子",
+      "latestPostsEmpty": "暂时没有可预览的帖子。",
+      "latestPostsError": "加载最新帖子失败。",
+      "latestAsks": "最新提问",
+      "latestAsksEmpty": "暂无提问。",
+      "suggestedApps": "推荐应用",
+      "allApps": "所有应用",
+      "profilePreview": "你的个人资料",
+      "editProfile": "编辑个人资料",
+      "themeSettings": "主题设置",
+      "loading": "正在加载..."
+    },
     "share": {
       "title": "分享",
       "by": "来自",

@@ -167,8 +167,7 @@
       .insertContent({
         type: 'text',
         text,
-        // eslint-disable-next-line array-bracket-spacing
-        marks: [{ type: 'link', attrs: { href } }],
+        marks: [ { type: 'link', attrs: { href } } ],
       })
       .run()
 
