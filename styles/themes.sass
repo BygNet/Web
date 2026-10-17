@@ -4,36 +4,52 @@
   --bastilleDay: #053166, white, #B10000
   --spain: red, yellow, red
   --ukraine: #004BC1, #ffe358
-  --gradientOfTheDay: var(--ukraine)
+  --halleysChildren: #151541, #9DB6E8
+  --gradientOfTheDay: var(--halleysChildren)
 
+// Clear theme colors
 html.clear
   --gradientOfTheDay: var(--foregroundOpaque)
 
-html.clear
   --backgroundColor: #49414e !important
   --foregroundColor: rgba(134, 134, 134, 0.25) !important
   --foregroundOpaque: rgb(160 150 172) !important
+
   --textColor: rgba(240, 240, 240, 0.9) !important
   --accentColor: rgb(113 95 115 / 0.7) !important
   --shadowColor: rgba(177, 161, 223, 0.8) !important
 
+  --buttonLighten: rgba(255, 255, 255, 0.2) !important
+  --buttonDarken: rgb(40 35 48 / 0.2) !important
+  --buttonGlow: rgba(255, 255, 255, 0.1) !important
+
 // Light theme colors
 html.auto, html.light
-  --backgroundColor: #e4ade6
-  --foregroundColor: rgb(255 228 249 / 0.3)
+  --backgroundColor: #caade6
+  --foregroundColor: rgb(255 210 245 / 0.3)
   --foregroundOpaque: rgb(247 214 255)
+
   --textColor: rgba(0, 0, 0, 0.9)
   --accentColor: rgb(232 117 182)
   --shadowColor: rgb(92 15 88 / 0.8)
 
+  --buttonLighten: rgba(255, 255, 255, 0.3)
+  --buttonDarken: rgba(0, 0, 0, 0.2)
+  --buttonGlow: rgba(255, 255, 255, 0.1)
+
 // Dark theme colors
 :root
   --dark-backgroundColor: #170023
-  --dark-foregroundColor: rgb(121 112 126 / 0.25)
+  --dark-foregroundColor: rgb(112 87 138 / 0.25)
   --dark-foregroundOpaque: rgb(76 53 89)
+
   --dark-textColor: rgba(240, 240, 240, 0.9)
   --dark-accentColor: rgb(209 20 149)
   --dark-shadowColor: rgb(223 161 196 / 0.8)
+
+  --dark-buttonLighten: rgb(185 178 195 / 0.2)
+  --dark-buttonDarken: rgba(0, 0, 0, 0.4)
+  --dark-buttonGlow: rgb(185 178 195 / 0.1)
 
 @media (prefers-color-scheme: dark)
   html.auto
@@ -43,6 +59,9 @@ html.auto, html.light
     --textColor: var(--dark-textColor)
     --accentColor: var(--dark-accentColor)
     --shadowColor: var(--dark-shadowColor)
+    --buttonLighten: var(--dark-buttonLighten)
+    --buttonDarken: var(--dark-buttonDarken)
+    --buttonGlow: var(--dark-buttonGlow)
 
 html.dark
   --backgroundColor: var(--dark-backgroundColor)
@@ -51,58 +70,63 @@ html.dark
   --textColor: var(--dark-textColor)
   --accentColor: var(--dark-accentColor)
   --shadowColor: var(--dark-shadowColor)
+  --buttonLighten: var(--dark-buttonLighten)
+  --buttonDarken: var(--dark-buttonDarken)
+  --buttonGlow: var(--dark-buttonGlow)
 
 // Legacy themes
 html.leg-light
   --backgroundColor: #add8e4
   --foregroundColor: rgb(219 255 251 / 0.25)
   --foregroundOpaque: rgb(220 252 255)
+
   --textColor: rgba(0, 0, 0, 0.9)
   --accentColor: rgb(117, 188, 232)
   --shadowColor: rgba(6, 63, 73, 0.8)
+
+  --buttonLighten: rgba(255, 255, 255, 0.3)
+  --buttonDarken: rgb(35 48 48 / 0.1)
+  --buttonGlow: rgba(255, 255, 255, 0.1)
 
 html.leg-dark
   --backgroundColor: #001823
   --foregroundColor: rgba(59, 94, 108, 0.25)
   --foregroundOpaque: rgb(45 74 87)
+
   --textColor: rgba(240, 240, 240, 0.9)
   --accentColor: rgb(20, 86, 209)
   --shadowColor: rgba(159, 189, 228, 0.8)
+
+  --buttonLighten: rgb(185 178 195 / 0.2)
+  --buttonDarken: rgba(0, 0, 0, 0.4)
+  --buttonGlow: rgb(185 178 195 / 0.1)
 
 // a35hie themes
 html.a35hie
   --backgroundColor: #b9a7ec
   --foregroundColor: rgb(228 209 255 / 0.25)
   --foregroundOpaque: rgb(218 202 255)
+
   --textColor: rgba(0, 0, 0, 0.9)
   --accentColor: rgb(159, 117, 232)
   --shadowColor: rgba(63, 15, 92, 0.8)
+
+  --buttonLighten: rgba(255, 255, 255, 0.3)
+  --buttonDarken: rgb(40 35 48 / 0.1)
+  --buttonGlow: rgba(255, 255, 255, 0.1)
 
 html.a35hie-dark
   --backgroundColor: #0c0023
   --foregroundColor: rgba(134, 134, 134, 0.25)
   --foregroundOpaque: rgb(89 75 108)
+
   --textColor: rgba(240, 240, 240, 0.9)
   --accentColor: rgb(114 51 227)
   --shadowColor: rgba(177, 161, 223, 0.8)
 
-// Neon Dark theme
-html.neon
-  --backgroundColor: #1a0755
-  --foregroundColor: rgba(119, 103, 158, 0.25)
-  --foregroundOpaque: rgb(110, 53, 182)
-  --textColor: rgba(255, 218, 147, 0.9)
-  --accentColor: rgb(209, 20, 206)
-  --shadowColor: rgba(154, 122, 255, 0.8)
-
-// Pastel Blue theme
-html.pastel-blue
-  --backgroundColor: #a7f2ff
-  --foregroundColor: rgb(202 255 253 / 0.25)
-  --foregroundOpaque: rgb(204 245 255)
-  --textColor: rgb(0 82 112 / 0.9)
-  --accentColor: rgb(65 227 255)
-  --shadowColor: rgb(9 74 94 / 0.8)
+  --buttonLighten: rgb(185 178 195 / 0.2)
+  --buttonDarken: rgba(0, 0, 0, 0.4)
+  --buttonGlow: rgb(185 178 195 / 0.1)
 
 
 // SASS aliases

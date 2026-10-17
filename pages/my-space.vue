@@ -89,6 +89,7 @@
     </HStack>
 
     <ThemePicker
+      class="glowEffect"
       v-if="showingAppearances"
       :profile="profile"
       @previewing="isPreviewingBaseTheme = true"

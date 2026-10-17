@@ -26,7 +26,15 @@
 .centerText
   text-align: center
 
+@mixin glowEffect
+  box-shadow: inset 0 0.1rem 0.2rem var(--buttonLighten), inset 0 -0.1rem 0.2rem var(--buttonDarken), inset 0 0.2rem 0.3rem var(--buttonGlow)
+
+.glowEffect
+  @include glowEffect
+
 @mixin itemBackground
+  @include glowEffect
+
   --postPadding: 0.75rem
   --cornerRadius: 1.75rem
 
@@ -34,7 +42,6 @@
   padding: 0.75rem
   background: themes.$foregroundColor
   border-radius: var(--cornerRadius)
-  box-shadow: inset 0 0.2rem 0.3rem var(--foregroundColor)
   backdrop-filter: blur(0.75rem)
 
 @mixin maxPaddedWidth

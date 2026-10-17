@@ -156,7 +156,10 @@
 
 <template>
   <Modal class="createViewModal" :visible="showingCreateModal">
-    <div class="createView" :class="{ composer: pickedType != undefined }">
+    <div
+      class="createView glowEffect"
+      :class="{ composer: pickedType != undefined }"
+    >
       <VStack v-if="pickedType == undefined" class="fullWidth">
         <HStack class="autoSpace fullWidth">
           <h2>{{ t('ui.create.title') }}</h2>

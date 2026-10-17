@@ -71,20 +71,6 @@ export const BygThemes: BygTheme[] = [
     colorPreview: '#0c0023',
     isDark: true,
   },
-  {
-    title: 'Neon Dark',
-    description: 'Purple + Yellow VScode-inspired neon theme.',
-    key: 'neon',
-    colorPreview: '#3a16a5',
-    isDark: true,
-  },
-  {
-    title: 'Pastel Blue',
-    description: 'Byg Classic pastel blue theme.',
-    key: 'pastel-blue',
-    colorPreview: '#a7f2ff',
-    isDark: false,
-  },
 ]
 
 function clearThemeClasses(): void {

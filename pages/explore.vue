@@ -337,6 +337,7 @@
       text-overflow: ellipsis
       white-space: nowrap
       transition: color 0.2s ease
+      max-width: 100%
 
     p
       display: -webkit-box

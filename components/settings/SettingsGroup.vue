@@ -11,7 +11,7 @@
 
 <template>
   <h3 class="settingsGroupTitle" v-if="title">{{ t(title) }}</h3>
-  <VStack class="settingsGroup" :class="{ plain }">
+  <VStack class="settingsGroup glowEffect" :class="{ plain }">
     <slot />
   </VStack>
 </template>
@@ -28,7 +28,6 @@
 
     &:not(.plain)
       background: themes.$foregroundColor
-      box-shadow: inset 0 0.2rem 0.3rem var(--foregroundColor)
       padding: 0.95rem
       border-radius: 1.75rem
 

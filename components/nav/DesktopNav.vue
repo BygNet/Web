@@ -100,7 +100,7 @@
 
 <style scoped lang="sass">
   @use "@/styles/variables"
-  @use "@/styles/themes"
+  @use "@/styles/utils"
 
   .desktopNav
     display: none
@@ -125,9 +125,10 @@
           padding: 0
 
           .icon
+            @include utils.glowEffect
             border-radius: 1.25rem
             padding: 0.45rem 0.65rem
-            background-color: themes.$foregroundColor
+            background-color: var(--foregroundColor)
 
     &:hover
       width: 18rem
@@ -136,9 +137,9 @@
       .desktopNavItem
         &:hover,
         &.selected
+          @include utils.glowEffect
           opacity: 1
-          background: themes.$foregroundColor
-          box-shadow: inset 0 0.1rem 0.2rem themes.$foregroundColor
+          background: var(--foregroundColor)
 
         .title
           width: 10rem
@@ -220,7 +221,7 @@
         min-width: 1.1rem
         padding: 0.25rem 0.5rem
         border-radius: 10rem
-        background: themes.$accentColor
+        background: var(--accentColor)
         font-size: small
         line-height: 1
         text-align: center
