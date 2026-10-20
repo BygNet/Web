@@ -28,7 +28,7 @@
 
 <template>
   <button class="shareButton bounceRightIcon" @click="share">
-    <Icon name="solar:square-share-line-line-duotone" />
+    <Icon name="solar:share-line-duotone" />
     {{ compact ? formatStat(shareCount) : formatNumber(shareCount) }}
   </button>
 </template>

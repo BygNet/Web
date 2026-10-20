@@ -216,11 +216,11 @@
         <!-- Stats -->
         <HStack class="stats">
           <VStack class="stat">
-            <h3>{{ followingCount ?? 0 }}</h3>
+            <h3>{{ formatStat(followingCount ?? 0) }}</h3>
             <p class="light">Following</p>
           </VStack>
           <VStack class="stat">
-            <h3>{{ followerCount ?? 0 }}</h3>
+            <h3>{{ formatStat(followerCount ?? 0) }}</h3>
             <p class="light">Followers</p>
           </VStack>
         </HStack>

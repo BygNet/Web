@@ -1,18 +1,21 @@
 export function formatStat(value: number): string {
-  if (value < 1_000) return String(value)
+  const abs = Math.abs(value)
+  const sign = Math.sign(value)
 
-  if (value < 1_000_000) {
-    const v: number = value / 1_000
-    return `${Math.floor(v * 10) / 10}k`
+  if (abs < 1_000) return String(value)
+
+  if (abs < 1_000_000) {
+    const v = (abs / 1_000) * sign
+    return `${Math.trunc(v * 10) / 10}k`
   }
 
-  if (value < 1_000_000_000) {
-    const v: number = value / 1_000_000
-    return `${Math.floor(v * 10) / 10}M`
+  if (abs < 1_000_000_000) {
+    const v = (abs / 1_000_000) * sign
+    return `${Math.trunc(v * 10) / 10}M`
   }
 
-  const v: number = value / 1_000_000_000
-  return `${Math.floor(v * 10) / 10}B`
+  const v = (abs / 1_000_000_000) * sign
+  return `${Math.trunc(v * 10) / 10}B`
 }
 
 export function formatNumber(value: number): string {

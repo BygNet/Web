@@ -6,7 +6,8 @@
   import VStack from '@/components/layout/VStack.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
   import type { BygNotification } from '@/types/notifications'
-  import { formatDate } from '@/utils/formatters'
+
+  const { format } = useRelativeTime()
 
   const props = defineProps<{
     notification: BygNotification
@@ -53,7 +54,7 @@
             :avatar-url="notification.actorAvatarUrl"
             :subscription-state="notification.actorSubscriptionState"
           />
-          <p class="light">{{ formatDate(notification.createdDate) }}</p>
+          <p class="light">{{ format(new Date(notification.createdDate)) }}</p>
         </HStack>
 
         <p>{{ notification.text }}</p>

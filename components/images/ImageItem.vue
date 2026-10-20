@@ -7,10 +7,10 @@
   import ReportButton from '@/components/posts/ReportButton.vue'
   import ShareButton from '@/components/posts/ShareButton.vue'
   import UsernameView from '@/components/posts/UsernameView.vue'
-  import { formatDate } from '@/utils/formatters'
   import { navigateTo } from '#app'
 
   const localePath = useLocalePath()
+  const { format } = useRelativeTime()
 
   const props = defineProps<{
     image: BygImage
@@ -33,7 +33,7 @@
 
         <VStack class="imageMeta noSpace">
           <UsernameView :name="image.author" />
-          <p>{{ formatDate(image.createdDate) }}</p>
+          <p>{{ format(new Date(image.createdDate)) }}</p>
         </VStack>
       </VStack>
 
@@ -90,7 +90,8 @@
       padding: 0
 
       img
-        border-radius: 1rem
+        margin-bottom: -4rem
+        mask-image: linear-gradient(to bottom, black 35%, transparent)
 
       .info
         padding: 0 0.75rem 0.75rem
@@ -111,6 +112,7 @@
       width: 100%
       border-radius: 0
       justify-content: space-between
+      z-index: 2
 
       .imageMeta p
         opacity: 0.7

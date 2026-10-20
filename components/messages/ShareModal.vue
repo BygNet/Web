@@ -143,7 +143,7 @@
       </VStack>
 
       <button class="fullWidth bounceRightIcon" @click="shareUsingSystemSheet">
-        <Icon name="solar:square-share-line-line-duotone" />
+        <Icon name="solar:share-line-duotone" />
         {{ t('ui.share.shareToOtherApps') }}
       </button>
 

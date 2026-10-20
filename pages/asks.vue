@@ -199,7 +199,7 @@
 
           <template #confirmationAction>
             <button class="prominent bounceRightIcon" @click="exportToImage()">
-              <Icon name="solar:square-share-line-line-duotone" />
+              <Icon name="solar:share-line-duotone" />
               {{ t('ui.asks.shareImage') }}
             </button>
           </template>
@@ -329,7 +329,6 @@
   .asksHeader
     @include utils.listItemBorder
 
-    border-radius: 0
     padding-bottom: 0.5rem
     margin-bottom: 1.5rem
     align-items: flex-start

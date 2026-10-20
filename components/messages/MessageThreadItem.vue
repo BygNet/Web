@@ -6,6 +6,8 @@
   import VStack from '@/components/layout/VStack.vue'
   import type { BygMessageThread } from '@/types/messages'
 
+  const { format } = useRelativeTime()
+
   const props = defineProps<{
     thread: BygMessageThread
     selected?: boolean
@@ -37,13 +39,6 @@
       ? (otherDirectMember.value?.subscriptionState ?? 'free')
       : 'free'
   })
-  const formattedDate = computed(() =>
-    new Intl.DateTimeFormat(undefined, {
-      day: '2-digit',
-      month: '2-digit',
-      year: '2-digit',
-    }).format(new Date(props.thread.lastMessageDate))
-  )
 </script>
 
 <template>
@@ -84,7 +79,7 @@
       </VStack>
 
       <p class="light threadTime">
-        {{ formattedDate }}
+        {{ format(new Date(thread.lastMessageDate)) }}
       </p>
       <span
         v-if="thread.unreadCount > 0"

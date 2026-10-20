@@ -12,7 +12,6 @@
   import { fetchUserSuggestions } from '@/data/mentions'
   import { taskList } from '@/data/tasks'
   import type { BygUserSuggestion } from '@/types/mentions'
-  import { formatDate } from '@/utils/formatters'
   import {
     applyMention,
     getMentionContext,
@@ -31,6 +30,7 @@
 
   const localePath = useLocalePath()
   const { t } = useI18n()
+  const { format } = useRelativeTime()
 
   const props = defineProps<{
     id: number
@@ -184,7 +184,7 @@
             :name="comment.author"
             :author="author == comment.author"
           />
-          <p>{{ formatDate(comment.createdDate) }}</p>
+          <p>{{ format(new Date(comment.createdDate)) }}</p>
         </HStack>
 
         <div
@@ -225,11 +225,9 @@
     width: 100%
 
     .comment
-      @include utils.itemBackground
-      @include utils.maxPaddedWidth
-
-      --padding: 0.75rem
-      --cornerRadius: 1rem
+      @include utils.listItemBorder
+      padding: 0.5rem 0
+      width: 100%
       align-items: flex-start
 
       .commentsMeta

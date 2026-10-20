@@ -15,6 +15,7 @@
   @use "@/styles/utils"
 
   .skeletonComment
-    @include utils.itemBackground
+    @include utils.listItemBorder
+    padding: 0.75rem 0
     width: 100%
 </style>

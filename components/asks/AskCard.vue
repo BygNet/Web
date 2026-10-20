@@ -53,7 +53,6 @@
   .askCard
     @include utils.listItemBorder
 
-    border-radius: 0
     padding: 0.75rem 0
     width: 100%
     align-items: flex-start

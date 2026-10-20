@@ -47,9 +47,8 @@
       font-size: 1rem !important
 
   .settingsBorder:not(.noBorder)
-    padding-bottom: 0.75rem !important
-    border-radius: 0
     @include utils.listItemBorder
+    padding-bottom: 0.75rem !important
 </style>
 
 <style scoped lang="sass">

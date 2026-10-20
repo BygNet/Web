@@ -30,7 +30,6 @@
 
   .bygAd
     @include utils.listItemBorder
-    border-radius: 0
     padding-bottom: 0.5rem
     align-items: flex-start
 
