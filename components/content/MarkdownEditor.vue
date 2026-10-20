@@ -1,12 +1,10 @@
 <script setup lang="ts">
   import Placeholder from '@tiptap/extension-placeholder'
-  import { Markdown } from '@tiptap/markdown'
-  import StarterKit from '@tiptap/starter-kit'
   import { EditorContent, useEditor } from '@tiptap/vue-3'
   import { computed, nextTick, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  import { MarkdownImage } from '@/utils/markdownImage'
+  import { createMarkdownExtensions } from '@/utils/markdownExtensions'
   import HStack from '~/components/layout/HStack.vue'
 
   interface ToolbarButton {
@@ -52,14 +50,7 @@
     content: model.value,
     contentType: 'markdown',
     extensions: [
-      StarterKit.configure({
-        link: {
-          autolink: false,
-          linkOnPaste: false,
-        },
-      }),
-      MarkdownImage,
-      Markdown,
+      ...createMarkdownExtensions(),
       Placeholder.configure({
         placeholder: placeholder.value,
       }),

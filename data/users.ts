@@ -1,1 +1,7 @@
-export const StaffUsers: string[] = [ 'devs@Byg', 'a35hie', 'dima', 'Byg', 'Gradients' ]
+export const StaffUsers: string[] = [
+  'devs@Byg',
+  'a35hie',
+  'dima',
+  'Byg',
+  'Gradients',
+]

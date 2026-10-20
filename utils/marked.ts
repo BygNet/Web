@@ -1,4 +1,4 @@
-import { marked } from 'marked'
+import { Marked } from 'marked'
 import markedShiki from 'marked-shiki'
 import { createHighlighter, type ThemeInput } from 'shiki'
 
@@ -56,15 +56,30 @@ export const tokyoDarkPurple: ThemeInput = {
 const highlighter = await createHighlighter({
   themes: [ tokyoDarkPurple ],
   langs: [
+    'bash',
     'ts',
     'js',
     'html',
     'css',
     'vue',
     'json',
+    'jsonc',
+    'markdown',
+    'yaml',
+    'sql',
+    'python',
+    'tsx',
+    'jsx',
     'sass',
     'c',
+    'cpp',
+    'csharp',
+    'go',
+    'php',
+    'ruby',
     'rust',
+    'swift',
+    'kotlin',
     'text',
     'javascript',
     'java',
@@ -72,13 +87,45 @@ const highlighter = await createHighlighter({
   ],
 })
 
-marked.use(
+const languageAliases: Record<string, string> = {
+  js: 'javascript',
+  jsx: 'jsx',
+  ts: 'typescript',
+  tsx: 'tsx',
+  sh: 'bash',
+  shell: 'bash',
+  yml: 'yaml',
+  md: 'markdown',
+  txt: 'text',
+  plaintext: 'text',
+  plain: 'text',
+}
+
+const loadedLanguages = new Set(highlighter.getLoadedLanguages())
+
+function resolveLanguage(language?: string): string {
+  const requested = language?.trim().split(/\s+/, 1)[0]?.toLowerCase()
+  const resolved = languageAliases[requested ?? ''] ?? requested
+
+  return resolved && loadedLanguages.has(resolved) ? resolved : 'text'
+}
+
+export function highlightCode(code: string, language?: string): string {
+  return highlighter.codeToHtml(code, {
+    lang: resolveLanguage(language),
+    theme: 'tokyo-dark-purple',
+  })
+}
+
+export const markedWithShiki = new Marked({
+  gfm: true,
+  breaks: false,
+})
+
+markedWithShiki.use(
   markedShiki({
-    async highlight(code, lang) {
-      return highlighter.codeToHtml(code, {
-        lang: lang || 'text',
-        theme: 'tokyo-dark-purple',
-      })
+    highlight(code, lang) {
+      return highlightCode(code, lang)
     },
   })
 )
