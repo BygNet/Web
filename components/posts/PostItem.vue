@@ -138,6 +138,7 @@
       position: relative
 
     .bygPostContent
+      border-radius: 0
       user-select: text
       --webkit-user-select: text
 
