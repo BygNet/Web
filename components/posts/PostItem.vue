@@ -134,6 +134,7 @@
       opacity: 0.7
 
     .bygPostContentWrapper
+      border-radius: 0
       position: relative
 
     .bygPostContent
