@@ -9,10 +9,30 @@ declare let self: ServiceWorkerGlobalScope & {
   }>
 }
 
+type BadgeCapableServiceWorkerRegistration = ServiceWorkerRegistration & {
+  setAppBadge?: (contents?: number) => Promise<void>
+  clearAppBadge?: () => Promise<void>
+}
+
 self.skipWaiting()
 clientsClaim()
 cleanupOutdatedCaches()
 precacheAndRoute(self.__WB_MANIFEST)
+
+self.addEventListener('message', event => {
+  const data = event.data as { type?: string; count?: number } | null
+  if (data?.type !== 'byg:app-badge') return
+
+  const count = Math.max(0, Math.floor(Number(data.count) || 0))
+  const registration =
+    self.registration as BadgeCapableServiceWorkerRegistration
+
+  event.waitUntil(
+    count > 0
+      ? (registration.setAppBadge?.(count) ?? Promise.resolve())
+      : (registration.clearAppBadge?.() ?? Promise.resolve())
+  )
+})
 
 self.addEventListener('push', event => {
   if (!event.data) return

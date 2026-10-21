@@ -11,10 +11,12 @@
   import { adCache } from '@/data/caches'
   import {
     fetchMessageThreads,
+    messageUnreadCount,
     subscribeToMessagesRealtime,
   } from '@/data/messages'
   import {
     fetchNotifications,
+    inboxUnreadCount,
     loadNotificationReadState,
   } from '@/data/notifications'
   import {
@@ -28,6 +30,7 @@
     showingNotificationsModal,
     showingReportPopup,
   } from '@/data/visibility'
+  import { syncAppBadge } from '@/utils/appBadge'
   import { consoleWarn } from '@/utils/consoleWarn'
   import { useEnv } from '@/utils/env'
   import { getFlag } from '@/utils/setUserFlag'
@@ -38,6 +41,9 @@
   const pushPermission: Ref<NotificationPermission | 'unsupported'> =
     ref('unsupported')
   const activeAccountKey = computed(() => auth.activeAccountId ?? 'guest')
+  const appBadgeCount = computed(
+    () => messageUnreadCount.value + inboxUnreadCount.value
+  )
   const canEnablePush = computed(() => {
     return (
       pushPermission.value === 'default' || pushPermission.value === 'granted'
@@ -191,6 +197,14 @@
         console.error('Push sync failed after account change', error)
       }
     }
+  )
+
+  watch(
+    appBadgeCount,
+    count => {
+      void syncAppBadge(count)
+    },
+    { immediate: true }
   )
 </script>
 
