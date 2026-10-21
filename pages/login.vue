@@ -12,6 +12,7 @@
   import { taskList } from '@/data/tasks'
   import { title } from '@/data/title'
   import { navigateTo } from '#app'
+  import OAuthButtons from '~/components/auth/OAuthButtons.vue'
 
   definePageMeta({ showBackButton: true })
 
@@ -224,6 +225,19 @@
             {{ error }}
           </p>
         </VStack>
+
+        <OAuthButtons
+          :service-redirect-uri="
+            typeof route.query.redirect_uri === 'string'
+              ? route.query.redirect_uri
+              : undefined
+          "
+          :service-state="
+            typeof route.query.state === 'string'
+              ? route.query.state
+              : undefined
+          "
+        />
       </form>
 
       <VStack class="accountSide">

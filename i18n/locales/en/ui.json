@@ -57,6 +57,13 @@
       }
     },
 
+    "yandexInstant": {
+      "title": "Continue with Yandex",
+      "description": "Use your Yandex account to get back to Byg quickly.",
+      "error": "Yandex sign-in could not be completed.",
+      "continue": "Continue"
+    },
+
     "exploreDashboard": {
       "searchTitle": "Search with Byg",
       "searchPlaceholder": "Search the web privately...",
@@ -237,6 +244,26 @@
         "openAuthenticatorApp": "Open In Authenticator App",
         "enable2fa": "Enable 2FA",
         "enabling2fa": "Enabling..."
+      },
+
+      "oauth": {
+        "title": "OAuth accounts",
+        "heading": "Sign-in providers",
+        "description": "Connect another account so you can sign in to Byg without another password.",
+        "loading": "Loading providers...",
+        "connectedAs": "Connected as {username}",
+        "notConnected": "Not connected",
+        "notAvailable": "No providers are currently available.",
+        "connect": "Connect",
+        "disconnect": "Disconnect",
+        "working": "Working...",
+        "connected": "OAuth account connected.",
+        "disconnected": "OAuth account disconnected.",
+        "errorConnect": "Could not start the connection.",
+        "errorLoad": "Could not load sign-in providers.",
+        "errorDisconnect": "Could not disconnect this account.",
+        "errorLastAccount": "Keep at least one sign-in method connected.",
+        "confirmDisconnect": "Disconnect {provider} from your Byg account?"
       },
 
       "security": {

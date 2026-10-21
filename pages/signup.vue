@@ -10,6 +10,7 @@
   import VStack from '@/components/layout/VStack.vue'
   import { title } from '@/data/title'
   import { navigateTo } from '#app'
+  import OAuthButtons from '~/components/auth/OAuthButtons.vue'
 
   definePageMeta({ showBackButton: true })
 
@@ -79,6 +80,19 @@
             loading ? t('auth.signupPage.creatingAccount') : t('auth.signup')
           }}
         </button>
+
+        <OAuthButtons
+          :service-redirect-uri="
+            typeof route.query.redirect_uri === 'string'
+              ? route.query.redirect_uri
+              : undefined
+          "
+          :service-state="
+            typeof route.query.state === 'string'
+              ? route.query.state
+              : undefined
+          "
+        />
 
         <p v-if="error" class="error">
           {{ error }}

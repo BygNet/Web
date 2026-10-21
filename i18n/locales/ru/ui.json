@@ -51,6 +51,13 @@
         "title": "Публичная страница"
       }
     },
+    "yandexInstant": {
+      "title": "Продолжить через Yandex",
+      "description": "Используйте аккаунт Yandex, чтобы быстро вернуться в Byg.",
+      "error": "Не удалось завершить вход через Yandex.",
+      "continue": "Продолжить"
+    },
+
     "exploreDashboard": {
       "searchTitle": "Поиск с Byg",
       "searchPlaceholder": "Ищите в интернете конфиденциально...",
@@ -222,6 +229,26 @@
         "enable2fa": "Включить 2FA",
         "enabling2fa": "Включение..."
       },
+      "oauth": {
+        "title": "OAuth-аккаунты",
+        "heading": "Способы входа",
+        "description": "Подключите другой аккаунт, чтобы входить в Byg без ещё одного пароля.",
+        "loading": "Загрузка провайдеров…",
+        "connectedAs": "Подключён как {username}",
+        "notConnected": "Не подключён",
+        "notAvailable": "Доступных провайдеров пока нет.",
+        "connect": "Подключить",
+        "disconnect": "Отключить",
+        "working": "Выполняется…",
+        "connected": "OAuth-аккаунт подключён.",
+        "disconnected": "OAuth-аккаунт отключён.",
+        "errorConnect": "Не удалось начать подключение.",
+        "errorLoad": "Не удалось загрузить способы входа.",
+        "errorDisconnect": "Не удалось отключить аккаунт.",
+        "errorLastAccount": "Оставьте хотя бы один способ входа.",
+        "confirmDisconnect": "Отключить {provider} от аккаунта Byg?"
+      },
+
       "security": {
         "messageEmailSent": "Письмо с подтверждением отправлено.",
         "messageEmailVerified": "Ваша электронная почта подтверждена.",

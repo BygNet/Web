@@ -51,6 +51,13 @@
         "title": "公开页面"
       }
     },
+    "yandexInstant": {
+      "title": "使用 Yandex 继续",
+      "description": "使用 Yandex 账号快速返回 Byg。",
+      "error": "无法完成 Yandex 登录。",
+      "continue": "继续"
+    },
+
     "exploreDashboard": {
       "searchTitle": "使用 Byg 搜索",
       "searchPlaceholder": "私密搜索网页...",
@@ -222,6 +229,26 @@
         "enable2fa": "启用 2FA",
         "enabling2fa": "正在启用..."
       },
+      "oauth": {
+        "title": "OAuth 账号",
+        "heading": "登录方式",
+        "description": "连接其他账号，无需额外密码即可登录 Byg。",
+        "loading": "正在加载登录方式…",
+        "connectedAs": "已连接：{username}",
+        "notConnected": "未连接",
+        "notAvailable": "当前没有可用的登录方式。",
+        "connect": "连接",
+        "disconnect": "断开连接",
+        "working": "处理中…",
+        "connected": "OAuth 账号已连接。",
+        "disconnected": "OAuth 账号已断开连接。",
+        "errorConnect": "无法开始连接。",
+        "errorLoad": "无法加载登录方式。",
+        "errorDisconnect": "无法断开此账号。",
+        "errorLastAccount": "请至少保留一种登录方式。",
+        "confirmDisconnect": "要从 Byg 账号断开 {provider} 吗？"
+      },
+
       "security": {
         "messageEmailSent": "验证邮件已发送。",
         "messageEmailVerified": "你的电子邮件已验证。",

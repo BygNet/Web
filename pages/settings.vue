@@ -18,6 +18,7 @@
   import { buildProfileThemeVars } from '@/utils/profileTheme'
   import { setHeadMetaKeys } from '@/utils/setHeadMeta'
   import SafeLink from '~/components/base/SafeLink.vue'
+  import OAuthSettings from '~/components/settings/OAuthSettings.vue'
   import SessionsSettings from '~/components/settings/SessionsSettings.vue'
   import SettingsColorInput from '~/components/settings/SettingsColorInput.vue'
   import SettingsImageInput from '~/components/settings/SettingsImageInput.vue'
@@ -636,6 +637,8 @@
             </VStack>
           </template>
         </SettingsGroup>
+
+        <OAuthSettings />
 
         <p v-if="securityMessage" class="message success">
           {{ securityMessage }}

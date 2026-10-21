@@ -51,6 +51,13 @@
         "title": "Página pública"
       }
     },
+    "yandexInstant": {
+      "title": "Continuar con Yandex",
+      "description": "Usa tu cuenta de Yandex para volver rápidamente a Byg.",
+      "error": "No se pudo completar el acceso con Yandex.",
+      "continue": "Continuar"
+    },
+
     "exploreDashboard": {
       "searchTitle": "Buscar con Byg",
       "searchPlaceholder": "Busca en la web de forma privada...",
@@ -222,6 +229,26 @@
         "enable2fa": "Activar 2FA",
         "enabling2fa": "Activando..."
       },
+      "oauth": {
+        "title": "Cuentas OAuth",
+        "heading": "Proveedores de acceso",
+        "description": "Conecta otra cuenta para acceder a Byg sin otra contraseña.",
+        "loading": "Cargando proveedores…",
+        "connectedAs": "Conectado como {username}",
+        "notConnected": "No conectado",
+        "notAvailable": "No hay proveedores disponibles.",
+        "connect": "Conectar",
+        "disconnect": "Desconectar",
+        "working": "Procesando…",
+        "connected": "Cuenta OAuth conectada.",
+        "disconnected": "Cuenta OAuth desconectada.",
+        "errorConnect": "No se pudo iniciar la conexión.",
+        "errorLoad": "No se pudieron cargar los proveedores de acceso.",
+        "errorDisconnect": "No se pudo desconectar esta cuenta.",
+        "errorLastAccount": "Mantén al menos un método de acceso conectado.",
+        "confirmDisconnect": "¿Desconectar {provider} de tu cuenta de Byg?"
+      },
+
       "security": {
         "messageEmailSent": "Correo de verificación enviado.",
         "messageEmailVerified": "Tu correo electrónico está verificado.",

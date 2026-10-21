@@ -12,6 +12,7 @@
   import { useI18n } from 'vue-i18n'
 
   import { auth } from '@/auth/session'
+  import YandexInstantButton from '@/components/auth/YandexInstantButton.vue'
   import SafeLink from '@/components/base/SafeLink.vue'
   import ContentArea from '@/components/layout/ContentArea.vue'
   import ErrorState from '@/components/layout/ErrorState.vue'
@@ -163,6 +164,10 @@
   <ContentArea class="bygSocial">
     <p id="top" />
 
+    <div v-if="!auth.user" class="homeAuth">
+      <YandexInstantButton />
+    </div>
+
     <VStack v-if="!isLoaded" class="postList">
       <SkeletonPost v-for="i in 100" :key="i" class="fullWidth" />
     </VStack>
@@ -197,6 +202,12 @@
 
 <!-- Unscoped for use in /u/:username pages -->
 <style lang="sass">
+  .homeAuth
+    width: 100%
+    display: flex
+    justify-content: center
+    margin-bottom: 1rem
+
   .postList, .postContainer
     width: 100%
     gap: 0
