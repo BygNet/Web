@@ -21,6 +21,8 @@
   const { t } = useI18n()
 
   title.value = t('auth.login')
+  setHeadMeta({ page: t('auth.login'), subtitle: t('pages.login.description') })
+
   const email = ref('')
   const password = ref('')
   const twoFactorCode = ref('')
@@ -186,6 +188,19 @@
           {{ t('auth.loginPage.backToAccounts') }}
         </button>
 
+        <OAuthButtons
+          :service-redirect-uri="
+            typeof route.query.redirect_uri === 'string'
+              ? route.query.redirect_uri
+              : undefined
+          "
+          :service-state="
+            typeof route.query.state === 'string'
+              ? route.query.state
+              : undefined
+          "
+        />
+
         <VStack class="loginFormItems">
           <label>
             {{ t('auth.email') }}
@@ -225,19 +240,6 @@
             {{ error }}
           </p>
         </VStack>
-
-        <OAuthButtons
-          :service-redirect-uri="
-            typeof route.query.redirect_uri === 'string'
-              ? route.query.redirect_uri
-              : undefined
-          "
-          :service-state="
-            typeof route.query.state === 'string'
-              ? route.query.state
-              : undefined
-          "
-        />
       </form>
 
       <VStack class="accountSide">

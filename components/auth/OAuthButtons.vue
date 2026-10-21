@@ -46,28 +46,21 @@
 
 <template>
   <VStack v-if="providers.length" class="oauthButtons">
-    <div class="oauthDivider">
-      <span>{{ t('auth.oauth.orContinueWith') }}</span>
-    </div>
-
     <HStack class="oauthProviderList">
       <button
         v-for="provider in providers"
         :key="provider.id"
-        type="button"
         class="oauthButton"
         :disabled="loading !== null"
         @click="begin(provider)"
       >
-        <Icon :name="provider.icon" />
-        <span>{{
-          t('auth.oauth.continueWith', { provider: provider.label })
-        }}</span>
         <Icon
-          v-if="loading === provider.id"
-          name="svg-spinners:ring-resize"
-          class="loadingIcon"
+          :name="
+            loading === provider.id ? 'svg-spinners:ring-resize' : provider.icon
+          "
         />
+
+        {{ t('auth.oauth.continueWith', { provider: provider.label }) }}
       </button>
     </HStack>
 
@@ -81,33 +74,14 @@
   .oauthButtons
     width: 100%
     gap: 0.75rem
-
-  .oauthDivider
-    width: 100%
-    display: flex
-    align-items: center
-    gap: 0.75rem
-    color: var(--textColorLight)
-    font-size: 0.85rem
-
-    &::before, &::after
-      content: ''
-      flex: 1
-      height: 1px
-      background: var(--borderColor)
+    margin-bottom: 2rem
 
   .oauthProviderList
     width: 100%
     flex-wrap: wrap
 
   .oauthButton
-    flex: 1 1 14rem
-    justify-content: center
-    min-height: 2.75rem
-    gap: 0.5rem
-
-    .loadingIcon
-      margin-left: auto
+    width: 100%
 
   .oauthError
     color: var(--errorColor, #d45)

@@ -9,7 +9,6 @@
     startOAuth,
   } from '@/auth/oauth'
   import { auth, upsertAccount } from '@/auth/session'
-  import HStack from '@/components/layout/HStack.vue'
   import VStack from '@/components/layout/VStack.vue'
   import { isThemeDark } from '@/data/themes'
   import { navigateTo } from '#app'
@@ -157,13 +156,10 @@
 
 <template>
   <VStack v-if="provider" class="yandexInstant">
-    <HStack class="instantCopy">
-      <Icon name="solar:login-2-line-duotone" />
-      <VStack>
-        <strong>{{ t('ui.yandexInstant.title') }}</strong>
-        <span>{{ t('ui.yandexInstant.description') }}</span>
-      </VStack>
-    </HStack>
+    <VStack class="noSpace copy">
+      <h4>{{ t('ui.yandexInstant.title') }}</h4>
+      <p>{{ t('ui.yandexInstant.description') }}</p>
+    </VStack>
 
     <div v-if="!isFallback" :id="containerId" class="yandexButton" />
     <button
@@ -203,25 +199,15 @@
 </template>
 
 <style scoped lang="sass">
+  @use "@/styles/utils"
+
   .yandexInstant
+    @include utils.itemBackground
     width: 100%
-    max-width: 32rem
-    padding: 0.8rem 1rem
-    gap: 0.65rem
-    border: 1px solid color-mix(in srgb, var(--accentColor) 35%, transparent)
-    border-radius: 1.25rem
-    background: color-mix(in srgb, var(--foregroundColor) 82%, transparent)
 
-  .instantCopy
-    gap: 0.6rem
-
-    > .icon
-      color: var(--accentColor)
-      font-size: 1.4rem
-
-    span
-      color: var(--textColorLight)
-      font-size: 0.85rem
+    .copy
+      *
+        margin: 0
 
   .yandexButton
     min-height: 2.75rem

@@ -199,7 +199,7 @@
     height: 2.6rem
     flex: 0 0 2.6rem
     border-radius: 0.9rem
-    background: var(--accentColor)
+    background: var(--foregroundColor)
     font-size: 1.35rem
 
   .summaryCopy, .providerCopy

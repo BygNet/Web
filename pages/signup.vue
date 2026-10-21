@@ -19,6 +19,11 @@
   const { t } = useI18n()
 
   title.value = t('auth.signup')
+  setHeadMeta({
+    page: t('auth.signup'),
+    subtitle: t('pages.signup.description'),
+  })
+
   const email = ref('')
   const username = ref('')
   const password = ref('')
@@ -48,6 +53,19 @@
   <ContentArea class="signup">
     <HStack class="loginItems">
       <form @submit.prevent="submit" class="loginForm">
+        <OAuthButtons
+          :service-redirect-uri="
+            typeof route.query.redirect_uri === 'string'
+              ? route.query.redirect_uri
+              : undefined
+          "
+          :service-state="
+            typeof route.query.state === 'string'
+              ? route.query.state
+              : undefined
+          "
+        />
+
         <label>
           {{ t('auth.email') }}
           <input v-model="email" type="email" autocomplete="email" required />
@@ -80,19 +98,6 @@
             loading ? t('auth.signupPage.creatingAccount') : t('auth.signup')
           }}
         </button>
-
-        <OAuthButtons
-          :service-redirect-uri="
-            typeof route.query.redirect_uri === 'string'
-              ? route.query.redirect_uri
-              : undefined
-          "
-          :service-state="
-            typeof route.query.state === 'string'
-              ? route.query.state
-              : undefined
-          "
-        />
 
         <p v-if="error" class="error">
           {{ error }}
