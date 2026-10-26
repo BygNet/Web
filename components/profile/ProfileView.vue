@@ -1,111 +1,111 @@
 <script setup lang="ts">
-  import type { BygUser } from '@bygnet/types'
-  import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import type { BygUser } from '@bygnet/types'
+import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { api } from '@/api/client'
-  import { auth } from '@/auth/session'
-  import SafeLink from '@/components/base/SafeLink.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import ReportButton from '@/components/posts/ReportButton.vue'
-  import UsernameView from '@/components/posts/UsernameView.vue'
-  import SongLink from '@/components/profile/SongLink.vue'
-  import { currentThemeKey, systemPrefersDark } from '@/data/themes'
-  import { capitalize } from '@/utils/formatters'
-  import {
-    applyProfileThemeToDocument,
-    clearDocumentProfileTheme,
-  } from '@/utils/profileTheme'
-  import { navigateTo } from '#app'
+import { api } from '@/api/client'
+import { auth } from '@/auth/session'
+import SafeLink from '@/components/base/SafeLink.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import ReportButton from '@/components/posts/ReportButton.vue'
+import UsernameView from '@/components/posts/UsernameView.vue'
+import SongLink from '@/components/profile/SongLink.vue'
+import { currentThemeKey, systemPrefersDark } from '@/data/themes'
+import { capitalize } from '@/utils/formatters'
+import {
+  applyProfileThemeToDocument,
+  clearDocumentProfileTheme,
+} from '@/utils/profileTheme'
+import { navigateTo } from '#app'
 
-  const localePath = useLocalePath()
-  const { t } = useI18n()
-  const props = withDefaults(
-    defineProps<{
-      user: BygUser
-      isOwnProfile?: boolean
-      isFollowing?: boolean
-      followerCount?: number
-      followingCount?: number
-      applyThemeToDocument?: boolean
-      showActions?: boolean
-    }>(),
-    {
-      applyThemeToDocument: true,
-      showActions: true,
-    }
-  )
-
-  const emit = defineEmits<{
-    follow: []
-  }>()
-
-  const isLoading: Ref<boolean> = ref(false)
-  const isOwnProfileResolved = computed(() => {
-    if (props.isOwnProfile) return true
-    if (!auth.user) return false
-    return auth.user.id === props.user.id
-  })
-
-  const joinDate = computed(() => {
-    return new Intl.DateTimeFormat(undefined, {
-      year: 'numeric',
-      month: 'long',
-    }).format(new Date(props.user.createdAt))
-  })
-
-  const displayName = computed(() => props.user.displayName?.trim() ?? '')
-  const pronouns = computed(() => props.user.pronouns?.trim() ?? '')
-
-  async function handleFollow() {
-    if (!auth.user) {
-      await navigateTo(localePath('login'))
-      return
-    }
-    if (isOwnProfileResolved.value) {
-      console.error('Unable to follow: cannot follow your own profile')
-      return
-    }
-    isLoading.value = true
-    try {
-      const res = await api(`/follow-user/${props.user.id}`, {
-        method: 'POST',
-      })
-      if (res.ok) {
-        emit('follow')
-      }
-    } finally {
-      isLoading.value = false
-    }
+const localePath = useLocalePath()
+const { t } = useI18n()
+const props = withDefaults(
+  defineProps<{
+    user: BygUser
+    isOwnProfile?: boolean
+    isFollowing?: boolean
+    followerCount?: number
+    followingCount?: number
+    applyThemeToDocument?: boolean
+    showActions?: boolean
+  }>(),
+  {
+    applyThemeToDocument: true,
+    showActions: true,
   }
+)
 
-  watch(
-    () => [ props.user.color, props.applyThemeToDocument ] as const,
-    ([ color, shouldApply ]) => {
-      if (!shouldApply) {
-        clearDocumentProfileTheme()
-        return
-      }
+const emit = defineEmits<{
+  follow: []
+}>()
 
-      applyProfileThemeToDocument(color)
-    },
-    { immediate: true }
-  )
+const isLoading: Ref<boolean> = ref(false)
+const isOwnProfileResolved = computed(() => {
+  if (props.isOwnProfile) return true
+  if (!auth.user) return false
+  return auth.user.id === props.user.id
+})
 
-  watch(
-    () => [ currentThemeKey.value, systemPrefersDark.value ] as const,
-    () => {
-      if (!props.applyThemeToDocument) return
-      applyProfileThemeToDocument(props.user.color)
+const joinDate = computed(() => {
+  return new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: 'long',
+  }).format(new Date(props.user.createdAt))
+})
+
+const displayName = computed(() => props.user.displayName?.trim() ?? '')
+const pronouns = computed(() => props.user.pronouns?.trim() ?? '')
+
+async function handleFollow() {
+  if (!auth.user) {
+    await navigateTo(localePath('login'))
+    return
+  }
+  if (isOwnProfileResolved.value) {
+    console.error('Unable to follow: cannot follow your own profile')
+    return
+  }
+  isLoading.value = true
+  try {
+    const res = await api(`/follow-user/${props.user.id}`, {
+      method: 'POST',
+    })
+    if (res.ok) {
+      emit('follow')
     }
-  )
+  } finally {
+    isLoading.value = false
+  }
+}
 
-  onUnmounted(() => {
-    if (props.applyThemeToDocument) {
+watch(
+  () => [ props.user.color, props.applyThemeToDocument ] as const,
+  ([ color, shouldApply ]) => {
+    if (!shouldApply) {
       clearDocumentProfileTheme()
+      return
     }
-  })
+
+    applyProfileThemeToDocument(color)
+  },
+  { immediate: true }
+)
+
+watch(
+  () => [ currentThemeKey.value, systemPrefersDark.value ] as const,
+  () => {
+    if (!props.applyThemeToDocument) return
+    applyProfileThemeToDocument(props.user.color)
+  }
+)
+
+onUnmounted(() => {
+  if (props.applyThemeToDocument) {
+    clearDocumentProfileTheme()
+  }
+})
 </script>
 
 <template>
@@ -230,81 +230,81 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
-  @use "@/styles/themes"
-  @use "@/styles/fonts"
+@use "@/styles/utils"
+@use "@/styles/themes"
+@use "@/styles/fonts"
 
-  .profileCardContainer
+.profileCardContainer
+  width: 100%
+  justify-content: stretch
+
+.profileCard
+  @include utils.itemBackground
+
+  width: 100%
+  gap: 0
+  overflow: hidden
+  margin-bottom: 1rem
+  padding: 0
+
+  .banner, .bannerPlaceholder
     width: 100%
-    justify-content: stretch
+    aspect-ratio: 3/1
+    background-size: cover
+    background-position: center
+    mask: linear-gradient(to bottom, black, transparent)
 
-  .profileCard
-    @include utils.itemBackground
+  .bannerPlaceholder
+    background: linear-gradient(135deg, themes.$accentColor 0%, rgba(0,0,0,0.1) 100%)
 
+  .profileContent
+    padding: max(var(--padding), 1rem)
+    margin-top: -3.5rem
     width: 100%
-    gap: 0
-    overflow: hidden
-    margin-bottom: 1rem
-    padding: 0
 
-    .banner, .bannerPlaceholder
-      width: 100%
-      aspect-ratio: 3/1
-      background-size: cover
-      background-position: center
-      mask: linear-gradient(to bottom, black, transparent)
+    .avatarSection
+      gap: 1rem
+      align-items: flex-end
 
-    .bannerPlaceholder
-      background: linear-gradient(135deg, themes.$accentColor 0%, rgba(0,0,0,0.1) 100%)
+      .avatar, .avatarPlaceholder
+        width: 6rem
+        height: 6rem
+        border-radius: 50%
+        background: themes.$backgroundColor
+        flex-shrink: 0
 
-    .profileContent
-      padding: max(var(--padding), 1rem)
-      margin-top: -3.5rem
-      width: 100%
+      .avatar
+        object-fit: cover
 
-      .avatarSection
-        gap: 1rem
-        align-items: flex-end
+      .avatarPlaceholder
+        display: flex
+        align-items: center
+        justify-content: center
 
-        .avatar, .avatarPlaceholder
-          width: 6rem
-          height: 6rem
-          border-radius: 50%
-          background: themes.$backgroundColor
-          flex-shrink: 0
+        span.iconify
+          width: 2.5rem
+          height: 2.5rem
+          opacity: 0.5
 
-        .avatar
-          object-fit: cover
+    .songWidget
+      margin-top: 1rem
 
-        .avatarPlaceholder
-          display: flex
-          align-items: center
-          justify-content: center
+    .actionButtons
+      margin-bottom: 1rem
 
-          span.iconify
-            width: 2.5rem
-            height: 2.5rem
-            opacity: 0.5
+    .bio
+      line-height: 1.5
 
-      .songWidget
-        margin-top: 1rem
+    .pronounsLabel
+      margin: 0
 
-      .actionButtons
-        margin-bottom: 1rem
+    .stats
+      gap: 2rem
+      margin-top: 1rem
 
-      .bio
-        line-height: 1.5
+    .stat
+      gap: 0.25rem
 
-      .pronounsLabel
-        margin: 0
-
-      .stats
-        gap: 2rem
-        margin-top: 1rem
-
-      .stat
-        gap: 0.25rem
-
-        h3
-          font-family: fonts.$code
+      h3
+        font-family: fonts.$code
 </style>

@@ -6,5 +6,5 @@
   "arrowParens": "avoid",
   "endOfLine": "lf",
   "tabWidth": 2,
-  "vueIndentScriptAndStyle": true
+  "vueIndentScriptAndStyle": false
 }

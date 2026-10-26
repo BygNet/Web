@@ -1,51 +1,51 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import { computed, ref, useAttrs } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { api } from '@/api/client'
-  import { auth } from '@/auth/session'
-  import SafeLink from '@/components/base/SafeLink.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { useRoute } from '#app'
+import { api } from '@/api/client'
+import { auth } from '@/auth/session'
+import SafeLink from '@/components/base/SafeLink.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { useRoute } from '#app'
 
-  const attrs = useAttrs()
-  const route = useRoute()
-  const { t } = useI18n()
-  const resendMessage = ref<string | null>(null)
-  const isResending = ref(false)
+const attrs = useAttrs()
+const route = useRoute()
+const { t } = useI18n()
+const resendMessage = ref<string | null>(null)
+const isResending = ref(false)
 
-  defineProps<{
-    hideTermsLink?: boolean
-    leftAlign?: boolean
-  }>()
+defineProps<{
+  hideTermsLink?: boolean
+  leftAlign?: boolean
+}>()
 
-  defineOptions({
-    inheritAttrs: false,
-  })
+defineOptions({
+  inheritAttrs: false,
+})
 
-  const showEmailVerificationBanner = computed(() => {
-    return (
-      !!auth.user?.emailVerificationCode && route.name !== 'email-verification'
-    )
-  })
+const showEmailVerificationBanner = computed(() => {
+  return (
+    !!auth.user?.emailVerificationCode && route.name !== 'email-verification'
+  )
+})
 
-  async function resendVerificationEmail(): Promise<void> {
-    resendMessage.value = null
-    isResending.value = true
+async function resendVerificationEmail(): Promise<void> {
+  resendMessage.value = null
+  isResending.value = true
 
-    try {
-      const res = await api('/auth/resend-email-verification', {
-        method: 'POST',
-      })
+  try {
+    const res = await api('/auth/resend-email-verification', {
+      method: 'POST',
+    })
 
-      resendMessage.value = res.ok
-        ? t('ui.emailVerificationBanner.resendSuccess')
-        : t('ui.emailVerificationBanner.resendFailure')
-    } finally {
-      isResending.value = false
-    }
+    resendMessage.value = res.ok
+      ? t('ui.emailVerificationBanner.resendSuccess')
+      : t('ui.emailVerificationBanner.resendFailure')
+  } finally {
+    isResending.value = false
   }
+}
 </script>
 
 <template>
@@ -100,32 +100,32 @@
 </template>
 
 <style scoped lang="sass">
-  .contentArea
+.contentArea
+  width: 100%
+  margin: var(--padding) 0
+  padding: 0 var(--padding)
+  position: relative
+
+  .contentContainer
     width: 100%
-    margin: var(--padding) 0
-    padding: 0 var(--padding)
-    position: relative
+    height: 100%
+    min-height: 100vh
 
-    .contentContainer
+    &.leftAlign
+      align-items: flex-start
+
+    .emailVerificationBanner
+      gap: 1rem
       width: 100%
-      height: 100%
-      min-height: 100vh
+      padding: 1rem 0.5rem
 
-      &.leftAlign
-        align-items: flex-start
+      .bannerCopy
+        gap: 0.2rem
 
-      .emailVerificationBanner
-        gap: 1rem
-        width: 100%
-        padding: 1rem 0.5rem
+        p
+          margin: 0
 
-        .bannerCopy
-          gap: 0.2rem
-
-          p
-            margin: 0
-
-      .termsLink
-        text-align: center
-        margin-top: 1rem
+    .termsLink
+      text-align: center
+      margin-top: 1rem
 </style>

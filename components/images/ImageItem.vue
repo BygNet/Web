@@ -1,26 +1,26 @@
 <script setup lang="ts">
-  import type { BygImage } from '@bygnet/types'
+import type { BygImage } from '@bygnet/types'
 
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import LikeButton from '@/components/posts/LikeButton.vue'
-  import ReportButton from '@/components/posts/ReportButton.vue'
-  import ShareButton from '@/components/posts/ShareButton.vue'
-  import UsernameView from '@/components/posts/UsernameView.vue'
-  import { navigateTo } from '#app'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import LikeButton from '@/components/posts/LikeButton.vue'
+import ReportButton from '@/components/posts/ReportButton.vue'
+import ShareButton from '@/components/posts/ShareButton.vue'
+import UsernameView from '@/components/posts/UsernameView.vue'
+import { navigateTo } from '#app'
 
-  const localePath = useLocalePath()
-  const { format } = useRelativeTime()
+const localePath = useLocalePath()
+const { format } = useRelativeTime()
 
-  const props = defineProps<{
-    image: BygImage
-    detailMode?: boolean
-  }>()
+const props = defineProps<{
+  image: BygImage
+  detailMode?: boolean
+}>()
 
-  function openDetails() {
-    if (props.detailMode) return
-    navigateTo(localePath(`/image/${props.image.id}`))
-  }
+function openDetails() {
+  if (props.detailMode) return
+  navigateTo(localePath(`/image/${props.image.id}`))
+}
 </script>
 
 <template>
@@ -74,46 +74,46 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .imageItem
-    overflow: hidden
-    display: flex
-    flex-direction: column
-    cursor: pointer
+.imageItem
+  overflow: hidden
+  display: flex
+  flex-direction: column
+  cursor: pointer
 
-    &.detail
-      border-radius: 0
+  &.detail
+    border-radius: 0
 
-    &:not(.detail)
-      @include utils.itemBackground
-      padding: 0
-
-      img
-        margin-bottom: -4rem
-        mask-image: linear-gradient(to bottom, black 35%, transparent)
-
-      .info
-        padding: 0 0.75rem 0.75rem
-
-    &.detail
-      cursor: default
-
-      img
-        height: auto
+  &:not(.detail)
+    @include utils.itemBackground
+    padding: 0
 
     img
-      width: 100%
-      height: 18rem
-      object-fit: cover
+      margin-bottom: -4rem
+      mask-image: linear-gradient(to bottom, black 35%, transparent)
 
     .info
-      flex-grow: 1
-      width: 100%
-      border-radius: 0
-      justify-content: space-between
-      z-index: 2
+      padding: 0 0.75rem 0.75rem
 
-      .imageMeta p
-        opacity: 0.7
+  &.detail
+    cursor: default
+
+    img
+      height: auto
+
+  img
+    width: 100%
+    height: 18rem
+    object-fit: cover
+
+  .info
+    flex-grow: 1
+    width: 100%
+    border-radius: 0
+    justify-content: space-between
+    z-index: 2
+
+    .imageMeta p
+      opacity: 0.7
 </style>

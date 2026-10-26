@@ -1,157 +1,157 @@
 <script setup lang="ts">
-  import type { CreateType } from '@bygnet/types'
-  import { computed, nextTick, type Ref, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import type { CreateType } from '@bygnet/types'
+import { computed, nextTick, type Ref, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { api } from '@/api/client'
-  import { auth } from '@/auth/session'
-  import HStack from '@/components/layout/HStack.vue'
-  import Modal from '@/components/layout/Modal.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
-  import { imageReloader, reloader } from '@/data/events'
-  import { fetchUserSuggestions } from '@/data/mentions'
-  import { taskList } from '@/data/tasks'
-  import { showingCreateModal } from '@/data/visibility'
-  import type { BygUserSuggestion } from '@/types/mentions'
-  import { getMentionContext, type MentionContext } from '@/utils/mentions'
-  import MarkdownEditor from '~/components/content/MarkdownEditor.vue'
+import { api } from '@/api/client'
+import { auth } from '@/auth/session'
+import HStack from '@/components/layout/HStack.vue'
+import Modal from '@/components/layout/Modal.vue'
+import VStack from '@/components/layout/VStack.vue'
+import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
+import { imageReloader, reloader } from '@/data/events'
+import { fetchUserSuggestions } from '@/data/mentions'
+import { taskList } from '@/data/tasks'
+import { showingCreateModal } from '@/data/visibility'
+import type { BygUserSuggestion } from '@/types/mentions'
+import { getMentionContext, type MentionContext } from '@/utils/mentions'
+import MarkdownEditor from '~/components/content/MarkdownEditor.vue'
 
-  const { t } = useI18n()
+const { t } = useI18n()
 
-  const pickedType: Ref<CreateType | undefined> = ref(undefined)
+const pickedType: Ref<CreateType | undefined> = ref(undefined)
 
-  const postText = ref('')
-  const postTitle = ref('')
-  const imageUrl = ref('')
-  const imageTitle = ref('')
-  const postEditor = ref<InstanceType<typeof MarkdownEditor> | null>(null)
-  const postMentionSuggestions: Ref<BygUserSuggestion[]> = ref([])
-  const postMentionContext: Ref<MentionContext | null> = ref(null)
-  const showingPostMentionSuggestions: Ref<boolean> = ref(false)
-  let postMentionRequestId = 0
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+const postText = ref('')
+const postTitle = ref('')
+const imageUrl = ref('')
+const imageTitle = ref('')
+const postEditor = ref<InstanceType<typeof MarkdownEditor> | null>(null)
+const postMentionSuggestions: Ref<BygUserSuggestion[]> = ref([])
+const postMentionContext: Ref<MentionContext | null> = ref(null)
+const showingPostMentionSuggestions: Ref<boolean> = ref(false)
+let postMentionRequestId = 0
+const loading = ref(false)
+const error = ref<string | null>(null)
 
-  const charCount = computed(() => postText.value.length)
-  const charLimit = 1000
+const charCount = computed(() => postText.value.length)
+const charLimit = 1000
 
-  function clearPostMentionSuggestions(): void {
-    showingPostMentionSuggestions.value = false
-    postMentionSuggestions.value = []
-    postMentionContext.value = null
-  }
+function clearPostMentionSuggestions(): void {
+  showingPostMentionSuggestions.value = false
+  postMentionSuggestions.value = []
+  postMentionContext.value = null
+}
 
-  async function updatePostMentionSuggestions(): Promise<void> {
-    const editor = postEditor.value
-    if (!editor) {
-      clearPostMentionSuggestions()
-      return
-    }
-
-    const mentionText = editor.getMentionText()
-    const caret = editor.getMentionCaret()
-    const context = getMentionContext(mentionText, caret)
-    if (!context || context.query.length < 1) {
-      clearPostMentionSuggestions()
-      return
-    }
-
-    postMentionContext.value = context
-    const requestId = ++postMentionRequestId
-    const suggestions = await fetchUserSuggestions(context.query)
-
-    if (requestId !== postMentionRequestId) {
-      return
-    }
-
-    postMentionSuggestions.value = suggestions
-    showingPostMentionSuggestions.value = suggestions.length > 0
-  }
-
-  function onPostTextareaInteraction(): void {
-    updatePostMentionSuggestions().catch((): void => {
-      clearPostMentionSuggestions()
-    })
-  }
-
-  async function insertPostMention(username: string): Promise<void> {
-    if (!postMentionContext.value) return
-
-    postEditor.value?.replaceMention(username)
+async function updatePostMentionSuggestions(): Promise<void> {
+  const editor = postEditor.value
+  if (!editor) {
     clearPostMentionSuggestions()
-    await nextTick()
-    postEditor.value?.focusEditor()
+    return
   }
 
-  async function submitPost() {
-    if (!auth.token) {
-      error.value = t('ui.create.errorNotLoggedIn')
-      return
-    }
-
-    taskList.value.push('posting')
-    loading.value = true
-    error.value = null
-
-    const res = await api('/create-post', {
-      method: 'POST',
-      json: {
-        title: postTitle.value,
-        content: postText.value,
-      },
-      offlineQueue: true,
-    })
-
-    loading.value = false
-    taskList.value.remove('posting')
-
-    if (!res.ok) {
-      error.value = t('ui.create.errorCreatePost')
-      return
-    }
-
-    postText.value = ''
-    postTitle.value = ''
+  const mentionText = editor.getMentionText()
+  const caret = editor.getMentionCaret()
+  const context = getMentionContext(mentionText, caret)
+  if (!context || context.query.length < 1) {
     clearPostMentionSuggestions()
-    pickedType.value = undefined
-    showingCreateModal.value = false
-    reloader.emit('reload')
+    return
   }
 
-  async function submitImage() {
-    if (!auth.token) {
-      error.value = t('ui.create.errorNotLoggedIn')
-      return
-    }
+  postMentionContext.value = context
+  const requestId = ++postMentionRequestId
+  const suggestions = await fetchUserSuggestions(context.query)
 
-    taskList.value.push('uploading')
-    loading.value = true
-    error.value = null
-
-    const res = await api('/upload-image', {
-      method: 'POST',
-      json: {
-        title: imageTitle.value,
-        imageUrl: imageUrl.value,
-      },
-      offlineQueue: true,
-    })
-
-    taskList.value.remove('uploading')
-    loading.value = false
-
-    if (!res.ok) {
-      error.value = t('ui.create.errorUploadImage')
-      return
-    }
-
-    imageUrl.value = ''
-    imageTitle.value = ''
-    pickedType.value = undefined
-    showingCreateModal.value = false
-    imageReloader.emit('reload')
+  if (requestId !== postMentionRequestId) {
+    return
   }
+
+  postMentionSuggestions.value = suggestions
+  showingPostMentionSuggestions.value = suggestions.length > 0
+}
+
+function onPostTextareaInteraction(): void {
+  updatePostMentionSuggestions().catch((): void => {
+    clearPostMentionSuggestions()
+  })
+}
+
+async function insertPostMention(username: string): Promise<void> {
+  if (!postMentionContext.value) return
+
+  postEditor.value?.replaceMention(username)
+  clearPostMentionSuggestions()
+  await nextTick()
+  postEditor.value?.focusEditor()
+}
+
+async function submitPost() {
+  if (!auth.token) {
+    error.value = t('ui.create.errorNotLoggedIn')
+    return
+  }
+
+  taskList.value.push('posting')
+  loading.value = true
+  error.value = null
+
+  const res = await api('/create-post', {
+    method: 'POST',
+    json: {
+      title: postTitle.value,
+      content: postText.value,
+    },
+    offlineQueue: true,
+  })
+
+  loading.value = false
+  taskList.value.remove('posting')
+
+  if (!res.ok) {
+    error.value = t('ui.create.errorCreatePost')
+    return
+  }
+
+  postText.value = ''
+  postTitle.value = ''
+  clearPostMentionSuggestions()
+  pickedType.value = undefined
+  showingCreateModal.value = false
+  reloader.emit('reload')
+}
+
+async function submitImage() {
+  if (!auth.token) {
+    error.value = t('ui.create.errorNotLoggedIn')
+    return
+  }
+
+  taskList.value.push('uploading')
+  loading.value = true
+  error.value = null
+
+  const res = await api('/upload-image', {
+    method: 'POST',
+    json: {
+      title: imageTitle.value,
+      imageUrl: imageUrl.value,
+    },
+    offlineQueue: true,
+  })
+
+  taskList.value.remove('uploading')
+  loading.value = false
+
+  if (!res.ok) {
+    error.value = t('ui.create.errorUploadImage')
+    return
+  }
+
+  imageUrl.value = ''
+  imageTitle.value = ''
+  pickedType.value = undefined
+  showingCreateModal.value = false
+  imageReloader.emit('reload')
+}
 </script>
 
 <template>
@@ -274,81 +274,81 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
-  @use "@/styles/variables"
+@use "@/styles/themes"
+@use "@/styles/variables"
 
-  .createView
+.createView
+  background: themes.$foregroundColor
+  border-radius: 2rem
+  padding: 1rem
+
+  &.composer
+    min-width: 20rem
+    max-width: 100%
+
+.postPreview
+  width: 100%
+  align-items: flex-start
+
+  .markdownPreview
+    white-space: normal
+
+.typePicker
+  gap: 0.5rem
+  width: 100%
+
+  .type
     background: themes.$foregroundColor
-    border-radius: 2rem
-    padding: 1rem
+    padding: 0.75rem
+    border-radius: 1.25rem
+    cursor: pointer
+    font-size: large
+    flex-grow: 1
 
-    &.composer
-      min-width: 20rem
-      max-width: 100%
+    span.iconify
+      width: 3rem
+      height: 3rem
 
-  .postPreview
+.form
+  width: 100%
+  gap: 0.25rem
+
+textarea
+  min-height: 10rem
+
+textarea, input
+  width: 100%
+
+.mentionComposer
+  width: 100%
+  gap: 0.25rem
+
+.counter
+  text-align: right
+  font-size: small
+  opacity: 0.7
+
+.previewImage
+  max-width: 10rem
+  max-height: 10rem
+  min-height: 2rem
+
+@media (max-width: variables.$mobileWidth)
+  .createView
+    background: themes.$backgroundColor
     width: 100%
-    align-items: flex-start
+    border-bottom-left-radius: 0
+    border-bottom-right-radius: 0
+    padding-bottom: max(1rem, calc(1rem + env(safe-area-inset-bottom)))
 
-    .markdownPreview
-      white-space: normal
+  .createViewModal
+    z-index: 10000
+    justify-content: flex-end
+    padding: 0
 
-  .typePicker
-    gap: 0.5rem
-    width: 100%
-
-    .type
-      background: themes.$foregroundColor
-      padding: 0.75rem
-      border-radius: 1.25rem
-      cursor: pointer
-      font-size: large
-      flex-grow: 1
-
-      span.iconify
-        width: 3rem
-        height: 3rem
-
-  .form
-    width: 100%
-    gap: 0.25rem
-
-  textarea
-    min-height: 10rem
-
-  textarea, input
-    width: 100%
-
-  .mentionComposer
-    width: 100%
-    gap: 0.25rem
-
-  .counter
-    text-align: right
-    font-size: small
-    opacity: 0.7
-
-  .previewImage
-    max-width: 10rem
-    max-height: 10rem
-    min-height: 2rem
-
-  @media (max-width: variables.$mobileWidth)
-    .createView
-      background: themes.$backgroundColor
+    :deep(.fullScreenCoverContent), :deep(.modalContent)
       width: 100%
-      border-bottom-left-radius: 0
-      border-bottom-right-radius: 0
-      padding-bottom: max(1rem, calc(1rem + env(safe-area-inset-bottom)))
-
-    .createViewModal
-      z-index: 10000
-      justify-content: flex-end
-      padding: 0
-
-      :deep(.fullScreenCoverContent), :deep(.modalContent)
-        width: 100%
-        max-width: 100%
-        border-radius: 0
-        margin: 0
+      max-width: 100%
+      border-radius: 0
+      margin: 0
 </style>

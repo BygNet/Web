@@ -1,389 +1,389 @@
 <script setup lang="ts">
-  import type { BygAuthUser, BygProfile } from '@bygnet/types'
-  import { computed, onMounted, type Ref, ref, watchEffect } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import type { BygAuthUser, BygProfile } from '@bygnet/types'
+import { computed, onMounted, type Ref, ref, watchEffect } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { api } from '@/api/client'
-  import { auth, updateActiveUser } from '@/auth/session'
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import ProfileView from '@/components/profile/ProfileView.vue'
-  import { PageMetaByPath } from '@/data/pages'
-  import { fetchCurrentUserProfile } from '@/data/profiles'
-  import { taskList } from '@/data/tasks'
-  import { isThemeDark } from '@/data/themes'
-  import { title } from '@/data/title'
-  import { capitalize } from '@/utils/formatters'
-  import { buildProfileThemeVars } from '@/utils/profileTheme'
-  import { setHeadMetaKeys } from '@/utils/setHeadMeta'
-  import SafeLink from '~/components/base/SafeLink.vue'
-  import OAuthSettings from '~/components/settings/OAuthSettings.vue'
-  import SessionsSettings from '~/components/settings/SessionsSettings.vue'
-  import SettingsColorInput from '~/components/settings/SettingsColorInput.vue'
-  import SettingsImageInput from '~/components/settings/SettingsImageInput.vue'
-  import SettingsInput from '~/components/settings/SettingsInput.vue'
-  import SettingsStatusIndicator from '~/components/settings/SettingsStatusIndicator.vue'
-  import SettingsTextArea from '~/components/settings/SettingsTextArea.vue'
-  import ThemePicker from '~/components/settings/ThemePicker.vue'
+import { api } from '@/api/client'
+import { auth, updateActiveUser } from '@/auth/session'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import ProfileView from '@/components/profile/ProfileView.vue'
+import { PageMetaByPath } from '@/data/pages'
+import { fetchCurrentUserProfile } from '@/data/profiles'
+import { taskList } from '@/data/tasks'
+import { isThemeDark } from '@/data/themes'
+import { title } from '@/data/title'
+import { capitalize } from '@/utils/formatters'
+import { buildProfileThemeVars } from '@/utils/profileTheme'
+import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+import SafeLink from '~/components/base/SafeLink.vue'
+import OAuthSettings from '~/components/settings/OAuthSettings.vue'
+import SessionsSettings from '~/components/settings/SessionsSettings.vue'
+import SettingsColorInput from '~/components/settings/SettingsColorInput.vue'
+import SettingsImageInput from '~/components/settings/SettingsImageInput.vue'
+import SettingsInput from '~/components/settings/SettingsInput.vue'
+import SettingsStatusIndicator from '~/components/settings/SettingsStatusIndicator.vue'
+import SettingsTextArea from '~/components/settings/SettingsTextArea.vue'
+import ThemePicker from '~/components/settings/ThemePicker.vue'
 
-  definePageMeta({
-    middleware: 'auth',
+definePageMeta({
+  middleware: 'auth',
+})
+
+const route = useRoute()
+const router = useRouter()
+
+type SettingSection =
+  | 'sessions'
+  | 'profile'
+  | 'subscription'
+  | 'security'
+  | 'interface'
+  | 'advanced'
+
+interface TwoFactorSetup {
+  secret: string
+  manualEntryKey: string
+  otpauthUrl: string
+}
+interface SettingsPage {
+  key: SettingSection
+  icon: string
+  titleKey: string
+}
+
+const { locale, locales, setLocale, t } = useI18n()
+const pageMeta = PageMetaByPath['/settings']!
+
+watchEffect(() => {
+  title.value = t(pageMeta.titleKey)
+})
+
+setHeadMetaKeys({
+  pageKey: pageMeta.titleKey,
+  subtitleKey: pageMeta.descriptionKey,
+})
+
+const validSections: SettingSection[] = [
+  'profile',
+  'subscription',
+  'security',
+  'sessions',
+  'interface',
+  'advanced',
+]
+
+function getSectionFromHash(): SettingSection {
+  const hash = route.hash.slice(1)
+
+  return validSections.includes(hash as SettingSection)
+    ? (hash as SettingSection)
+    : 'profile'
+}
+
+function setActiveSection(section: SettingSection): void {
+  activeSection.value = section
+
+  router.replace({
+    hash: `#${section}`,
   })
+}
 
-  const route = useRoute()
-  const router = useRouter()
+const activeSection: Ref<SettingSection> = ref(getSectionFromHash())
+const settingsPages: SettingsPage[] = [
+  {
+    key: 'profile',
+    icon: 'solar:user-circle-line-duotone',
+    titleKey: 'ui.settings.sidebar.profile',
+  },
+  {
+    key: 'interface',
+    icon: 'solar:palette-round-line-duotone',
+    titleKey: 'ui.settings.sidebar.interface',
+  },
+  {
+    key: 'security',
+    icon: 'solar:shield-keyhole-line-duotone',
+    titleKey: 'ui.settings.sidebar.security',
+  },
+  {
+    key: 'sessions',
+    icon: 'solar:devices-line-duotone',
+    titleKey: 'ui.settings.sidebar.sessions',
+  },
+  {
+    key: 'subscription',
+    icon: 'solar:crown-star-line-duotone',
+    titleKey: 'ui.settings.sidebar.subscription',
+  },
+  {
+    key: 'advanced',
+    icon: 'solar:code-bold-duotone',
+    titleKey: 'Advanced',
+  },
+]
+const profile: Ref<BygProfile | null> = ref(null)
+const isLoading: Ref<boolean> = ref(true)
+const isSaving: Ref<boolean> = ref(false)
+const saveMessage: Ref<string | null> = ref(null)
 
-  type SettingSection =
-    | 'sessions'
-    | 'profile'
-    | 'subscription'
-    | 'security'
-    | 'interface'
-    | 'advanced'
+const securityMessage = ref<string | null>(null)
+const securityError = ref<string | null>(null)
+const emailCode = ref('')
+const isResendingEmail = ref(false)
+const isVerifyingEmail = ref(false)
+const isLoadingTwoFactorSetup = ref(false)
+const isSavingTwoFactor = ref(false)
+const twoFactorCode = ref('')
+const twoFactorSetup = ref<TwoFactorSetup | null>(null)
 
-  interface TwoFactorSetup {
-    secret: string
-    manualEntryKey: string
-    otpauthUrl: string
+const bio: Ref<string> = ref('')
+const displayName: Ref<string> = ref('')
+const pronouns: Ref<string> = ref('')
+const songLinkUrl: Ref<string> = ref('')
+const avatarUrl: Ref<string> = ref('')
+const bannerUrl: Ref<string> = ref('')
+const color: Ref<string> = ref('')
+const goToUrl: Ref<string> = ref('')
+
+const wallpaperMode = useCookie<boolean>('bygWallpaperMode', {
+  default: () => false,
+})
+
+const wallpaperUrl = useCookie<string>('bygWallpaperUrl', {
+  default: () => '',
+})
+
+watch(
+  () => route.hash,
+  () => {
+    activeSection.value = getSectionFromHash()
   }
-  interface SettingsPage {
-    key: SettingSection
-    icon: string
-    titleKey: string
+)
+
+const canEditProfileColor = computed(() => {
+  const subscriptionState = profile.value?.user.subscriptionState
+  return subscriptionState != null && subscriptionState !== 'free'
+})
+
+const isEmailVerified = computed(() => !auth.user?.emailVerificationCode)
+
+const previewThemeStyle = computed(() => {
+  return buildProfileThemeVars(color.value || null, isThemeDark())
+})
+
+const previewUser = computed(() => {
+  const currentProfile = profile.value
+  if (!currentProfile) return null
+
+  return {
+    ...currentProfile.user,
+    displayName: displayName.value || null,
+    pronouns: pronouns.value || null,
+    songLinkUrl: songLinkUrl.value || null,
+    bio: bio.value || null,
+    avatarUrl: avatarUrl.value || null,
+    bannerUrl: bannerUrl.value || null,
+    color: color.value || null,
   }
+})
+function applyAuthUser(user: BygAuthUser): void {
+  updateActiveUser(user)
+}
 
-  const { locale, locales, setLocale, t } = useI18n()
-  const pageMeta = PageMetaByPath['/settings']!
+function clearSecurityFeedback(): void {
+  securityMessage.value = null
+  securityError.value = null
+}
 
-  watchEffect(() => {
-    title.value = t(pageMeta.titleKey)
-  })
+async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
+  isLoading.value = true
+  try {
+    profile.value = await fetchCurrentUserProfile(options)
+    if (!profile.value) return
 
-  setHeadMetaKeys({
-    pageKey: pageMeta.titleKey,
-    subtitleKey: pageMeta.descriptionKey,
-  })
-
-  const validSections: SettingSection[] = [
-    'profile',
-    'subscription',
-    'security',
-    'sessions',
-    'interface',
-    'advanced',
-  ]
-
-  function getSectionFromHash(): SettingSection {
-    const hash = route.hash.slice(1)
-
-    return validSections.includes(hash as SettingSection)
-      ? (hash as SettingSection)
-      : 'profile'
+    displayName.value = profile.value.user.displayName || ''
+    pronouns.value = profile.value.user.pronouns || ''
+    songLinkUrl.value = profile.value.user.songLinkUrl || ''
+    bio.value = profile.value.user.bio || ''
+    avatarUrl.value = profile.value.user.avatarUrl || ''
+    bannerUrl.value = profile.value.user.bannerUrl || ''
+    color.value = profile.value.user.color || ''
+  } finally {
+    isLoading.value = false
   }
+}
 
-  function setActiveSection(section: SettingSection): void {
-    activeSection.value = section
-
-    router.replace({
-      hash: `#${section}`,
+async function saveProfile() {
+  taskList.value.push('saving')
+  isSaving.value = true
+  saveMessage.value = null
+  try {
+    const res = await api('/update-profile', {
+      method: 'POST',
+      json: {
+        displayName: displayName.value || null,
+        pronouns: pronouns.value || null,
+        songLinkUrl: songLinkUrl.value || null,
+        bio: bio.value || null,
+        avatarUrl: avatarUrl.value || null,
+        bannerUrl: bannerUrl.value || null,
+        ...(canEditProfileColor.value ? { color: color.value || null } : {}),
+      },
     })
-  }
 
-  const activeSection: Ref<SettingSection> = ref(getSectionFromHash())
-  const settingsPages: SettingsPage[] = [
-    {
-      key: 'profile',
-      icon: 'solar:user-circle-line-duotone',
-      titleKey: 'ui.settings.sidebar.profile',
-    },
-    {
-      key: 'interface',
-      icon: 'solar:palette-round-line-duotone',
-      titleKey: 'ui.settings.sidebar.interface',
-    },
-    {
-      key: 'security',
-      icon: 'solar:shield-keyhole-line-duotone',
-      titleKey: 'ui.settings.sidebar.security',
-    },
-    {
-      key: 'sessions',
-      icon: 'solar:devices-line-duotone',
-      titleKey: 'ui.settings.sidebar.sessions',
-    },
-    {
-      key: 'subscription',
-      icon: 'solar:crown-star-line-duotone',
-      titleKey: 'ui.settings.sidebar.subscription',
-    },
-    {
-      key: 'advanced',
-      icon: 'solar:code-bold-duotone',
-      titleKey: 'Advanced',
-    },
-  ]
-  const profile: Ref<BygProfile | null> = ref(null)
-  const isLoading: Ref<boolean> = ref(true)
-  const isSaving: Ref<boolean> = ref(false)
-  const saveMessage: Ref<string | null> = ref(null)
-
-  const securityMessage = ref<string | null>(null)
-  const securityError = ref<string | null>(null)
-  const emailCode = ref('')
-  const isResendingEmail = ref(false)
-  const isVerifyingEmail = ref(false)
-  const isLoadingTwoFactorSetup = ref(false)
-  const isSavingTwoFactor = ref(false)
-  const twoFactorCode = ref('')
-  const twoFactorSetup = ref<TwoFactorSetup | null>(null)
-
-  const bio: Ref<string> = ref('')
-  const displayName: Ref<string> = ref('')
-  const pronouns: Ref<string> = ref('')
-  const songLinkUrl: Ref<string> = ref('')
-  const avatarUrl: Ref<string> = ref('')
-  const bannerUrl: Ref<string> = ref('')
-  const color: Ref<string> = ref('')
-  const goToUrl: Ref<string> = ref('')
-
-  const wallpaperMode = useCookie<boolean>('bygWallpaperMode', {
-    default: () => false,
-  })
-
-  const wallpaperUrl = useCookie<string>('bygWallpaperUrl', {
-    default: () => '',
-  })
-
-  watch(
-    () => route.hash,
-    () => {
-      activeSection.value = getSectionFromHash()
+    if (res.ok) {
+      saveMessage.value = t('ui.settings.saveSuccess')
+      setTimeout(() => {
+        saveMessage.value = null
+      }, 3000)
+      await loadProfile({ force: true })
+    } else if (res.status === 400) {
+      saveMessage.value = t('ui.settings.saveInvalidSongLink')
+    } else if (res.status === 403) {
+      saveMessage.value = t('ui.settings.savePremiumLocked')
+    } else {
+      saveMessage.value = t('ui.settings.saveFailed')
     }
-  )
+  } finally {
+    taskList.value.remove('saving')
+    isSaving.value = false
+  }
+}
 
-  const canEditProfileColor = computed(() => {
-    const subscriptionState = profile.value?.user.subscriptionState
-    return subscriptionState != null && subscriptionState !== 'free'
-  })
+async function resendVerificationEmail(): Promise<void> {
+  clearSecurityFeedback()
+  isResendingEmail.value = true
 
-  const isEmailVerified = computed(() => !auth.user?.emailVerificationCode)
+  try {
+    const res = await api('/auth/resend-email-verification', {
+      method: 'POST',
+    })
 
-  const previewThemeStyle = computed(() => {
-    return buildProfileThemeVars(color.value || null, isThemeDark())
-  })
-
-  const previewUser = computed(() => {
-    const currentProfile = profile.value
-    if (!currentProfile) return null
-
-    return {
-      ...currentProfile.user,
-      displayName: displayName.value || null,
-      pronouns: pronouns.value || null,
-      songLinkUrl: songLinkUrl.value || null,
-      bio: bio.value || null,
-      avatarUrl: avatarUrl.value || null,
-      bannerUrl: bannerUrl.value || null,
-      color: color.value || null,
+    if (!res.ok) {
+      securityError.value = t('ui.settings.security.errorEmailResend')
+      return
     }
-  })
-  function applyAuthUser(user: BygAuthUser): void {
-    updateActiveUser(user)
+
+    securityMessage.value = t('ui.settings.security.messageEmailSent')
+  } finally {
+    isResendingEmail.value = false
   }
+}
 
-  function clearSecurityFeedback(): void {
-    securityMessage.value = null
-    securityError.value = null
-  }
+async function verifyEmail(): Promise<void> {
+  clearSecurityFeedback()
+  isVerifyingEmail.value = true
 
-  async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
-    isLoading.value = true
-    try {
-      profile.value = await fetchCurrentUserProfile(options)
-      if (!profile.value) return
+  try {
+    const res = await api('/auth/verify-email', {
+      method: 'POST',
+      json: {
+        code: emailCode.value,
+      },
+    })
 
-      displayName.value = profile.value.user.displayName || ''
-      pronouns.value = profile.value.user.pronouns || ''
-      songLinkUrl.value = profile.value.user.songLinkUrl || ''
-      bio.value = profile.value.user.bio || ''
-      avatarUrl.value = profile.value.user.avatarUrl || ''
-      bannerUrl.value = profile.value.user.bannerUrl || ''
-      color.value = profile.value.user.color || ''
-    } finally {
-      isLoading.value = false
+    if (!res.ok) {
+      securityError.value = t('ui.settings.security.errorInvalidCode')
+      return
     }
-  }
 
-  async function saveProfile() {
-    taskList.value.push('saving')
-    isSaving.value = true
-    saveMessage.value = null
-    try {
-      const res = await api('/update-profile', {
-        method: 'POST',
-        json: {
-          displayName: displayName.value || null,
-          pronouns: pronouns.value || null,
-          songLinkUrl: songLinkUrl.value || null,
-          bio: bio.value || null,
-          avatarUrl: avatarUrl.value || null,
-          bannerUrl: bannerUrl.value || null,
-          ...(canEditProfileColor.value ? { color: color.value || null } : {}),
-        },
+    if (auth.user) {
+      applyAuthUser({
+        ...auth.user,
+        emailVerificationCode: null,
       })
-
-      if (res.ok) {
-        saveMessage.value = t('ui.settings.saveSuccess')
-        setTimeout(() => {
-          saveMessage.value = null
-        }, 3000)
-        await loadProfile({ force: true })
-      } else if (res.status === 400) {
-        saveMessage.value = t('ui.settings.saveInvalidSongLink')
-      } else if (res.status === 403) {
-        saveMessage.value = t('ui.settings.savePremiumLocked')
-      } else {
-        saveMessage.value = t('ui.settings.saveFailed')
-      }
-    } finally {
-      taskList.value.remove('saving')
-      isSaving.value = false
     }
+
+    emailCode.value = ''
+    securityMessage.value = t('ui.settings.security.messageEmailVerified')
+  } finally {
+    isVerifyingEmail.value = false
   }
+}
 
-  async function resendVerificationEmail(): Promise<void> {
-    clearSecurityFeedback()
-    isResendingEmail.value = true
+async function loadTwoFactorSetup(): Promise<void> {
+  clearSecurityFeedback()
+  isLoadingTwoFactorSetup.value = true
 
-    try {
-      const res = await api('/auth/resend-email-verification', {
-        method: 'POST',
-      })
+  try {
+    const res = await api('/auth/2fa/setup')
 
-      if (!res.ok) {
-        securityError.value = t('ui.settings.security.errorEmailResend')
-        return
-      }
-
-      securityMessage.value = t('ui.settings.security.messageEmailSent')
-    } finally {
-      isResendingEmail.value = false
+    if (!res.ok) {
+      securityError.value = t('ui.settings.security.errorSetup2fa')
+      return
     }
+
+    twoFactorSetup.value = await res.json()
+    twoFactorCode.value = ''
+  } finally {
+    isLoadingTwoFactorSetup.value = false
   }
+}
 
-  async function verifyEmail(): Promise<void> {
-    clearSecurityFeedback()
-    isVerifyingEmail.value = true
+async function enableTwoFactor(): Promise<void> {
+  if (!twoFactorSetup.value) return
 
-    try {
-      const res = await api('/auth/verify-email', {
-        method: 'POST',
-        json: {
-          code: emailCode.value,
-        },
-      })
+  clearSecurityFeedback()
+  isSavingTwoFactor.value = true
 
-      if (!res.ok) {
-        securityError.value = t('ui.settings.security.errorInvalidCode')
-        return
-      }
+  try {
+    const res = await api('/auth/2fa/enable', {
+      method: 'POST',
+      json: {
+        secret: twoFactorSetup.value.secret,
+        code: twoFactorCode.value,
+      },
+    })
 
-      if (auth.user) {
-        applyAuthUser({
-          ...auth.user,
-          emailVerificationCode: null,
-        })
-      }
-
-      emailCode.value = ''
-      securityMessage.value = t('ui.settings.security.messageEmailVerified')
-    } finally {
-      isVerifyingEmail.value = false
+    if (!res.ok) {
+      securityError.value = t('ui.settings.security.errorEnable2fa')
+      return
     }
+
+    applyAuthUser(await res.json())
+    twoFactorSetup.value = null
+    twoFactorCode.value = ''
+    securityMessage.value = t('ui.settings.security.message2faEnabled')
+  } finally {
+    isSavingTwoFactor.value = false
   }
+}
 
-  async function loadTwoFactorSetup(): Promise<void> {
-    clearSecurityFeedback()
-    isLoadingTwoFactorSetup.value = true
+async function disableTwoFactor(): Promise<void> {
+  clearSecurityFeedback()
+  isSavingTwoFactor.value = true
 
-    try {
-      const res = await api('/auth/2fa/setup')
+  try {
+    const res = await api('/auth/2fa/disable', {
+      method: 'POST',
+    })
 
-      if (!res.ok) {
-        securityError.value = t('ui.settings.security.errorSetup2fa')
-        return
-      }
-
-      twoFactorSetup.value = await res.json()
-      twoFactorCode.value = ''
-    } finally {
-      isLoadingTwoFactorSetup.value = false
+    if (!res.ok) {
+      securityError.value = t('ui.settings.security.errorDisable2fa')
+      return
     }
+
+    applyAuthUser(await res.json())
+    twoFactorSetup.value = null
+    twoFactorCode.value = ''
+    securityMessage.value = t('ui.settings.security.message2faDisabled')
+  } finally {
+    isSavingTwoFactor.value = false
   }
+}
 
-  async function enableTwoFactor(): Promise<void> {
-    if (!twoFactorSetup.value) return
+onMounted(() => {
+  loadProfile()
+})
 
-    clearSecurityFeedback()
-    isSavingTwoFactor.value = true
-
-    try {
-      const res = await api('/auth/2fa/enable', {
-        method: 'POST',
-        json: {
-          secret: twoFactorSetup.value.secret,
-          code: twoFactorCode.value,
-        },
-      })
-
-      if (!res.ok) {
-        securityError.value = t('ui.settings.security.errorEnable2fa')
-        return
-      }
-
-      applyAuthUser(await res.json())
-      twoFactorSetup.value = null
-      twoFactorCode.value = ''
-      securityMessage.value = t('ui.settings.security.message2faEnabled')
-    } finally {
-      isSavingTwoFactor.value = false
-    }
+function toggleRtl(): void {
+  if (import.meta.client && document) {
+    document.documentElement.dir =
+      document.documentElement.dir === 'rtl' ? 'ltr' : 'rtl'
   }
-
-  async function disableTwoFactor(): Promise<void> {
-    clearSecurityFeedback()
-    isSavingTwoFactor.value = true
-
-    try {
-      const res = await api('/auth/2fa/disable', {
-        method: 'POST',
-      })
-
-      if (!res.ok) {
-        securityError.value = t('ui.settings.security.errorDisable2fa')
-        return
-      }
-
-      applyAuthUser(await res.json())
-      twoFactorSetup.value = null
-      twoFactorCode.value = ''
-      securityMessage.value = t('ui.settings.security.message2faDisabled')
-    } finally {
-      isSavingTwoFactor.value = false
-    }
-  }
-
-  onMounted(() => {
-    loadProfile()
-  })
-
-  function toggleRtl(): void {
-    if (import.meta.client && document) {
-      document.documentElement.dir =
-        document.documentElement.dir === 'rtl' ? 'ltr' : 'rtl'
-    }
-  }
+}
 </script>
 
 <template>
@@ -765,54 +765,54 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .settingsTabBar
-    @include utils.itemBackground
-    flex-wrap: nowrap
-    overflow: scroll
-    padding: 0.5rem
-    border-radius: 2rem
-    margin-bottom: 1.5rem
-    gap: 0.25rem
-    max-width: 100%
-    position: sticky
-    top: var(--headerHeight)
-    z-index: 110
-    backdrop-filter: blur(1rem)
+.settingsTabBar
+  @include utils.itemBackground
+  flex-wrap: nowrap
+  overflow: scroll
+  padding: 0.5rem
+  border-radius: 2rem
+  margin-bottom: 1.5rem
+  gap: 0.25rem
+  max-width: 100%
+  position: sticky
+  top: var(--headerHeight)
+  z-index: 110
+  backdrop-filter: blur(1rem)
 
-    button
-      text-wrap: nowrap
+  button
+    text-wrap: nowrap
 
-      &.selected
-        background: var(--accentColor)
-        padding: 0.5rem 0.75rem
+    &.selected
+      background: var(--accentColor)
+      padding: 0.5rem 0.75rem
 
-  .content
-    min-width: 15rem
-    flex-grow: 2
-    width: 100%
+.content
+  min-width: 15rem
+  flex-grow: 2
+  width: 100%
 
-  .section, .formContainer, .profileThemePreview
-    width: 100%
+.section, .formContainer, .profileThemePreview
+  width: 100%
 
-  .languageGrid
-    width: 100%
-    display: grid
-    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr))
-    gap: 0.5rem
+.languageGrid
+  width: 100%
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr))
+  gap: 0.5rem
 
-  .setupBox
-    width: 100%
-    gap: 0.75rem
+.setupBox
+  width: 100%
+  gap: 0.75rem
 
-  .actionRow
-    gap: 0.75rem
-    flex-wrap: wrap
+.actionRow
+  gap: 0.75rem
+  flex-wrap: wrap
 
-  .message
-    color: #c33
+.message
+  color: #c33
 
-    &.success
-      color: #3c3
+  &.success
+    color: #3c3
 </style>

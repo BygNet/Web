@@ -1,44 +1,44 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+import { computed } from 'vue'
 
-  import { auth } from '@/auth/session'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import type { BygMessageThread } from '@/types/messages'
+import { auth } from '@/auth/session'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import type { BygMessageThread } from '@/types/messages'
 
-  const { format } = useRelativeTime()
+const { format } = useRelativeTime()
 
-  const props = defineProps<{
-    thread: BygMessageThread
-    selected?: boolean
-    typing?: boolean
-  }>()
+const props = defineProps<{
+  thread: BygMessageThread
+  selected?: boolean
+  typing?: boolean
+}>()
 
-  const emit = defineEmits<{
-    select: []
-    info: []
-  }>()
+const emit = defineEmits<{
+  select: []
+  info: []
+}>()
 
-  const otherDirectMember = computed(() => {
-    return props.thread.members.find(member => member.userId !== auth.user?.id)
-  })
-  const displayName = computed(() => {
-    if (props.thread.type === 'group') {
-      return props.thread.title ?? 'Group chat'
-    }
+const otherDirectMember = computed(() => {
+  return props.thread.members.find(member => member.userId !== auth.user?.id)
+})
+const displayName = computed(() => {
+  if (props.thread.type === 'group') {
+    return props.thread.title ?? 'Group chat'
+  }
 
-    return otherDirectMember.value?.username ?? 'Direct chat'
-  })
-  const avatarUrl = computed(() => {
-    return props.thread.type === 'direct'
-      ? (otherDirectMember.value?.avatarUrl ?? null)
-      : props.thread.imageUrl
-  })
-  const subscriptionState = computed(() => {
-    return props.thread.type === 'direct'
-      ? (otherDirectMember.value?.subscriptionState ?? 'free')
-      : 'free'
-  })
+  return otherDirectMember.value?.username ?? 'Direct chat'
+})
+const avatarUrl = computed(() => {
+  return props.thread.type === 'direct'
+    ? (otherDirectMember.value?.avatarUrl ?? null)
+    : props.thread.imageUrl
+})
+const subscriptionState = computed(() => {
+  return props.thread.type === 'direct'
+    ? (otherDirectMember.value?.subscriptionState ?? 'free')
+    : 'free'
+})
 </script>
 
 <template>
@@ -93,59 +93,59 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
-  @use "@/styles/utils"
+@use "@/styles/themes"
+@use "@/styles/utils"
 
-  .threadItem
-    border-radius: 0
-    padding: 0.75rem
+.threadItem
+  border-radius: 0
+  padding: 0.75rem
+  width: 100%
+
+  &:not(.selected)
+    @include utils.listItemBorder
+
+  &.selected
+    border-radius: 1rem
+    background: themes.$accentColor
+
+  .threadRow
     width: 100%
+    justify-content: space-between
+    align-items: center
+    flex-wrap: nowrap
 
-    &:not(.selected)
-      @include utils.listItemBorder
+    .threadMain
+      gap: 0
+      flex-grow: 1
+      flex-shrink: 1
+      min-width: 0
 
-    &.selected
-      border-radius: 1rem
-      background: themes.$accentColor
+      .threadTitle
+        img, .avatarFallback
+          width: 2rem
+          height: 2rem
+          border-radius: 50%
+          object-fit: cover
 
-    .threadRow
-      width: 100%
-      justify-content: space-between
-      align-items: center
-      flex-wrap: nowrap
-
-      .threadMain
-        gap: 0
-        flex-grow: 1
-        flex-shrink: 1
-        min-width: 0
-
-        .threadTitle
-          img, .avatarFallback
-            width: 2rem
-            height: 2rem
-            border-radius: 50%
-            object-fit: cover
-
-        .preview
-          width: 100%
-          text-align: start
-          overflow: hidden
-          text-overflow: ellipsis
-          white-space: nowrap
-
-      .threadTime
-        flex-shrink: 0
+      .preview
+        width: 100%
+        text-align: start
+        overflow: hidden
+        text-overflow: ellipsis
         white-space: nowrap
 
-      .unreadIndicator
-        flex-shrink: 0
-        min-width: 1.35rem
-        padding: 0.1rem 0.35rem
-        border-radius: 999px
-        background: themes.$accentColor
-        color: themes.$backgroundColor
-        font-size: x-small
-        font-weight: 700
-        text-align: center
+    .threadTime
+      flex-shrink: 0
+      white-space: nowrap
+
+    .unreadIndicator
+      flex-shrink: 0
+      min-width: 1.35rem
+      padding: 0.1rem 0.35rem
+      border-radius: 999px
+      background: themes.$accentColor
+      color: themes.$backgroundColor
+      font-size: x-small
+      font-weight: 700
+      text-align: center
 </style>

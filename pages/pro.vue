@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import UnavailableState from '@/components/layout/UnavailableState.vue'
-  import { title } from '@/data/title'
+import UnavailableState from '@/components/layout/UnavailableState.vue'
+import { title } from '@/data/title'
 
-  title.value = 'Pro'
+title.value = 'Pro'
 </script>
 
 <template>

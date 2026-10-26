@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import HStack from '~/components/layout/HStack.vue'
+import HStack from '~/components/layout/HStack.vue'
 
-  defineProps<{
-    status: string
-    enabled: boolean
-    icon: string
-    noBorder?: boolean
-  }>()
+defineProps<{
+  status: string
+  enabled: boolean
+  icon: string
+  noBorder?: boolean
+}>()
 
-  const { t } = useI18n()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -22,15 +22,15 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
+@use "@/styles/themes"
 
-  .settingsStatusIndicator
-    width: 100%
+.settingsStatusIndicator
+  width: 100%
 
-    &.enabled.noBorder
-      background: themes.$accentColor
-      border-radius: 1.25rem
-      padding: 0.5rem
-      margin: -0.5rem
-      width: calc(100% + 1rem)
+  &.enabled.noBorder
+    background: themes.$accentColor
+    border-radius: 1.25rem
+    padding: 0.5rem
+    margin: -0.5rem
+    width: calc(100% + 1rem)
 </style>

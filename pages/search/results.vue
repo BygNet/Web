@@ -1,236 +1,236 @@
 <script setup lang="ts">
-  import { computed, type Ref, ref, watch } from 'vue'
+import { computed, type Ref, ref, watch } from 'vue'
 
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import EmptyState from '@/components/layout/EmptyState.vue'
-  import ErrorState from '@/components/layout/ErrorState.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { fetchBygSearch } from '@/data/search'
-  import { title } from '@/data/title'
-  import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
-  import setHeadMeta from '@/utils/setHeadMeta'
-  import { navigateTo, useRoute } from '#app'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import EmptyState from '@/components/layout/EmptyState.vue'
+import ErrorState from '@/components/layout/ErrorState.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { fetchBygSearch } from '@/data/search'
+import { title } from '@/data/title'
+import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
+import setHeadMeta from '@/utils/setHeadMeta'
+import { navigateTo, useRoute } from '#app'
 
-  interface SearchCategoryOption {
-    id: BygSearchCategory
-    label: string
-    icon: string
+interface SearchCategoryOption {
+  id: BygSearchCategory
+  label: string
+  icon: string
+}
+
+const searchCategoryOptions: SearchCategoryOption[] = [
+  {
+    id: 'web',
+    label: 'Web',
+    icon: 'solar:global-line-duotone',
+  },
+  {
+    id: 'images',
+    label: 'Images',
+    icon: 'solar:gallery-round-line-duotone',
+  },
+  {
+    id: 'videos',
+    label: 'Videos',
+    icon: 'solar:clapperboard-play-line-duotone',
+  },
+  {
+    id: 'music',
+    label: 'Music',
+    icon: 'solar:music-note-2-line-duotone',
+  },
+  {
+    id: 'news',
+    label: 'News',
+    icon: 'solar:document-text-line-duotone',
+  },
+  {
+    id: 'science',
+    label: 'Science',
+    icon: 'solar:test-tube-line-duotone',
+  },
+  {
+    id: 'files',
+    label: 'Files',
+    icon: 'solar:file-text-line-duotone',
+  },
+  {
+    id: 'social',
+    label: 'Social',
+    icon: 'solar:users-group-two-rounded-line-duotone',
+  },
+]
+
+const starterSuggestions = [
+  'latest AI news',
+  'ambient music playlists',
+  'beautiful wallpapers',
+  'typescript tips',
+  'open source social media projects',
+]
+
+title.value = 'Results'
+setHeadMeta({
+  page: 'Search',
+  subtitle: 'Search the web, images, videos, music and more with Byg Search.',
+})
+definePageMeta({ showBackButton: true })
+
+const route = useRoute()
+
+const query: Ref<string> = ref('')
+const selectedCategory: Ref<BygSearchCategory> = ref('web')
+const page: Ref<number> = ref(1)
+const loading: Ref<boolean> = ref(false)
+const error: Ref<string | null> = ref(null)
+const searchResponse: Ref<BygSearchResponse | null> = ref(null)
+
+const selectedCategoryLabel = computed(() => {
+  return (
+    searchCategoryOptions.find(option => option.id === selectedCategory.value)
+      ?.label ?? 'Web'
+  )
+})
+
+const hasResults = computed(() => {
+  return (searchResponse.value?.results.length ?? 0) > 0
+})
+
+const isImageCategory = computed(() => {
+  return selectedCategory.value === 'images'
+})
+
+const activeSuggestions = computed(() => {
+  if (!searchResponse.value) return []
+  return searchResponse.value.suggestions.slice(0, 6)
+})
+
+function categoryFromRoute(rawCategory: unknown): BygSearchCategory {
+  const normalized =
+    typeof rawCategory === 'string' ? rawCategory.trim().toLowerCase() : ''
+  if (searchCategoryOptions.some(option => option.id === normalized)) {
+    return normalized as BygSearchCategory
   }
+  return 'web'
+}
 
-  const searchCategoryOptions: SearchCategoryOption[] = [
-    {
-      id: 'web',
-      label: 'Web',
-      icon: 'solar:global-line-duotone',
-    },
-    {
-      id: 'images',
-      label: 'Images',
-      icon: 'solar:gallery-round-line-duotone',
-    },
-    {
-      id: 'videos',
-      label: 'Videos',
-      icon: 'solar:clapperboard-play-line-duotone',
-    },
-    {
-      id: 'music',
-      label: 'Music',
-      icon: 'solar:music-note-2-line-duotone',
-    },
-    {
-      id: 'news',
-      label: 'News',
-      icon: 'solar:document-text-line-duotone',
-    },
-    {
-      id: 'science',
-      label: 'Science',
-      icon: 'solar:test-tube-line-duotone',
-    },
-    {
-      id: 'files',
-      label: 'Files',
-      icon: 'solar:file-text-line-duotone',
-    },
-    {
-      id: 'social',
-      label: 'Social',
-      icon: 'solar:users-group-two-rounded-line-duotone',
-    },
-  ]
+function pageFromRoute(rawPage: unknown): number {
+  const parsed = typeof rawPage === 'string' ? Number(rawPage) : Number.NaN
+  if (!Number.isFinite(parsed)) return 1
+  return Math.max(1, Math.trunc(parsed))
+}
 
-  const starterSuggestions = [
-    'latest AI news',
-    'ambient music playlists',
-    'beautiful wallpapers',
-    'typescript tips',
-    'open source social media projects',
-  ]
-
-  title.value = 'Results'
-  setHeadMeta({
-    page: 'Search',
-    subtitle: 'Search the web, images, videos, music and more with Byg Search.',
-  })
-  definePageMeta({ showBackButton: true })
-
-  const route = useRoute()
-
-  const query: Ref<string> = ref('')
-  const selectedCategory: Ref<BygSearchCategory> = ref('web')
-  const page: Ref<number> = ref(1)
-  const loading: Ref<boolean> = ref(false)
-  const error: Ref<string | null> = ref(null)
-  const searchResponse: Ref<BygSearchResponse | null> = ref(null)
-
-  const selectedCategoryLabel = computed(() => {
-    return (
-      searchCategoryOptions.find(option => option.id === selectedCategory.value)
-        ?.label ?? 'Web'
-    )
-  })
-
-  const hasResults = computed(() => {
-    return (searchResponse.value?.results.length ?? 0) > 0
-  })
-
-  const isImageCategory = computed(() => {
-    return selectedCategory.value === 'images'
-  })
-
-  const activeSuggestions = computed(() => {
-    if (!searchResponse.value) return []
-    return searchResponse.value.suggestions.slice(0, 6)
-  })
-
-  function categoryFromRoute(rawCategory: unknown): BygSearchCategory {
-    const normalized =
-      typeof rawCategory === 'string' ? rawCategory.trim().toLowerCase() : ''
-    if (searchCategoryOptions.some(option => option.id === normalized)) {
-      return normalized as BygSearchCategory
-    }
-    return 'web'
+function hostnameFromUrl(urlValue: string): string {
+  try {
+    return new URL(urlValue).hostname.replace(/^www\./, '')
+  } catch {
+    return urlValue
   }
+}
 
-  function pageFromRoute(rawPage: unknown): number {
-    const parsed = typeof rawPage === 'string' ? Number(rawPage) : Number.NaN
-    if (!Number.isFinite(parsed)) return 1
-    return Math.max(1, Math.trunc(parsed))
-  }
+async function applyRouteSearch(): Promise<void> {
+  const nextQuery =
+    typeof route.query.q === 'string' ? route.query.q.trim() : ''
+  const nextCategory = categoryFromRoute(route.query.category)
+  const nextPage = pageFromRoute(route.query.page)
 
-  function hostnameFromUrl(urlValue: string): string {
-    try {
-      return new URL(urlValue).hostname.replace(/^www\./, '')
-    } catch {
-      return urlValue
-    }
-  }
+  query.value = nextQuery
+  selectedCategory.value = nextCategory
+  page.value = nextPage
 
-  async function applyRouteSearch(): Promise<void> {
-    const nextQuery =
-      typeof route.query.q === 'string' ? route.query.q.trim() : ''
-    const nextCategory = categoryFromRoute(route.query.category)
-    const nextPage = pageFromRoute(route.query.page)
-
-    query.value = nextQuery
-    selectedCategory.value = nextCategory
-    page.value = nextPage
-
-    if (!nextQuery) {
-      loading.value = false
-      error.value = null
-      searchResponse.value = null
-      return
-    }
-
-    loading.value = true
-    error.value = null
-
-    const loadedSearch = await fetchBygSearch({
-      query: nextQuery,
-      category: nextCategory,
-      page: nextPage,
-      safeSearch: 1,
-    })
-
+  if (!nextQuery) {
     loading.value = false
-
-    if (!loadedSearch) {
-      error.value = 'Failed to load Byg Search results.'
-      return
-    }
-
-    searchResponse.value = loadedSearch
+    error.value = null
+    searchResponse.value = null
+    return
   }
 
-  async function pushRouteSearchState(
-    nextQuery: string,
-    nextCategory: BygSearchCategory,
-    nextPage: number
-  ): Promise<void> {
-    if (!nextQuery.trim()) {
-      await navigateTo({
-        name: 'search-results',
-        query: {
-          category: nextCategory === 'web' ? undefined : nextCategory,
-        },
-        replace: true,
-      })
-      return
-    }
+  loading.value = true
+  error.value = null
 
+  const loadedSearch = await fetchBygSearch({
+    query: nextQuery,
+    category: nextCategory,
+    page: nextPage,
+    safeSearch: 1,
+  })
+
+  loading.value = false
+
+  if (!loadedSearch) {
+    error.value = 'Failed to load Byg Search results.'
+    return
+  }
+
+  searchResponse.value = loadedSearch
+}
+
+async function pushRouteSearchState(
+  nextQuery: string,
+  nextCategory: BygSearchCategory,
+  nextPage: number
+): Promise<void> {
+  if (!nextQuery.trim()) {
     await navigateTo({
       name: 'search-results',
       query: {
-        q: nextQuery.trim(),
         category: nextCategory === 'web' ? undefined : nextCategory,
-        page: nextPage > 1 ? String(nextPage) : undefined,
       },
       replace: true,
     })
+    return
   }
 
-  async function submitSearch(): Promise<void> {
-    await pushRouteSearchState(query.value, selectedCategory.value, 1)
-  }
-
-  async function pickCategory(category: BygSearchCategory): Promise<void> {
-    selectedCategory.value = category
-    await pushRouteSearchState(query.value, category, 1)
-  }
-
-  async function pickSuggestion(suggestion: string): Promise<void> {
-    query.value = suggestion
-    await pushRouteSearchState(suggestion, selectedCategory.value, 1)
-  }
-
-  async function goToPreviousPage(): Promise<void> {
-    if (page.value <= 1 || loading.value) return
-    await pushRouteSearchState(
-      query.value,
-      selectedCategory.value,
-      page.value - 1
-    )
-  }
-
-  async function goToNextPage(): Promise<void> {
-    if (loading.value || !query.value.trim()) return
-    await pushRouteSearchState(
-      query.value,
-      selectedCategory.value,
-      page.value + 1
-    )
-  }
-
-  watch(
-    () => [ route.query.q, route.query.category, route.query.page ] as const,
-    async () => {
-      await applyRouteSearch()
+  await navigateTo({
+    name: 'search-results',
+    query: {
+      q: nextQuery.trim(),
+      category: nextCategory === 'web' ? undefined : nextCategory,
+      page: nextPage > 1 ? String(nextPage) : undefined,
     },
-    { immediate: true }
+    replace: true,
+  })
+}
+
+async function submitSearch(): Promise<void> {
+  await pushRouteSearchState(query.value, selectedCategory.value, 1)
+}
+
+async function pickCategory(category: BygSearchCategory): Promise<void> {
+  selectedCategory.value = category
+  await pushRouteSearchState(query.value, category, 1)
+}
+
+async function pickSuggestion(suggestion: string): Promise<void> {
+  query.value = suggestion
+  await pushRouteSearchState(suggestion, selectedCategory.value, 1)
+}
+
+async function goToPreviousPage(): Promise<void> {
+  if (page.value <= 1 || loading.value) return
+  await pushRouteSearchState(
+    query.value,
+    selectedCategory.value,
+    page.value - 1
   )
+}
+
+async function goToNextPage(): Promise<void> {
+  if (loading.value || !query.value.trim()) return
+  await pushRouteSearchState(
+    query.value,
+    selectedCategory.value,
+    page.value + 1
+  )
+}
+
+watch(
+  () => [ route.query.q, route.query.category, route.query.page ] as const,
+  async () => {
+    await applyRouteSearch()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -409,160 +409,160 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
-  @use "@/styles/variables"
+@use "@/styles/themes"
+@use "@/styles/variables"
 
-  :deep(.bygSearchResults)
-    margin-top: env(safe-area-inset-top)
+:deep(.bygSearchResults)
+  margin-top: env(safe-area-inset-top)
 
-  .searchHeaderCard, .searchLandingCard, .searchResultsSection
+.searchHeaderCard, .searchLandingCard, .searchResultsSection
+  width: 100%
+  max-width: 60rem
+  margin: 0.75rem 0
+
+.searchHeaderCard
+  gap: 0.75rem
+
+  .searchForm
     width: 100%
-    max-width: 60rem
-    margin: 0.75rem 0
+    height: auto
+    gap: 0.5rem
 
-  .searchHeaderCard
-    gap: 0.75rem
+  .searchCategoryBar
+    width: 100%
+    overflow: scroll
+    flex-wrap: nowrap
+    gap: 0.5rem
 
-    .searchForm
+    .searchCategoryButton
+      flex-shrink: 0
+
+.searchResultsSection
+  gap: 0.75rem
+
+  .resultsMeta
+    width: 100%
+    align-items: center
+
+    p
+      margin: 0
+
+  .answerRow
+    width: 100%
+    padding: 0.75rem
+    border-radius: 1rem
+    background: themes.$foregroundOpaque
+    align-items: center
+
+    p
+      margin: 0
+
+  .suggestionRow
+    width: 100%
+    gap: 0.5rem
+    overflow: scroll
+    flex-wrap: nowrap
+
+    .suggestionButton
+      flex-shrink: 0
+      padding: 0.45rem 0.7rem
+
+  .resultList
+    width: 100%
+    gap: 0.5rem
+
+    .resultCard
       width: 100%
-      height: auto
-      gap: 0.5rem
+      background: themes.$foregroundColor
+      border-radius: 1.5rem
+      padding: 1rem
+      align-items: flex-start
+      text-align: left
+      gap: 0.45rem
 
-    .searchCategoryBar
-      width: 100%
-      overflow: scroll
-      flex-wrap: nowrap
-      gap: 0.5rem
-
-      .searchCategoryButton
-        flex-shrink: 0
-
-  .searchResultsSection
-    gap: 0.75rem
-
-    .resultsMeta
-      width: 100%
-      align-items: center
-
-      p
-        margin: 0
-
-    .answerRow
-      width: 100%
-      padding: 0.75rem
-      border-radius: 1rem
-      background: themes.$foregroundOpaque
-      align-items: center
-
-      p
-        margin: 0
-
-    .suggestionRow
-      width: 100%
-      gap: 0.5rem
-      overflow: scroll
-      flex-wrap: nowrap
-
-      .suggestionButton
-        flex-shrink: 0
-        padding: 0.45rem 0.7rem
-
-    .resultList
-      width: 100%
-      gap: 0.5rem
-
-      .resultCard
+      .result
         width: 100%
-        background: themes.$foregroundColor
-        border-radius: 1.5rem
-        padding: 1rem
+
+      .resultHeading
+        width: 100%
+        flex-wrap: nowrap
+        gap: 0.35rem
+
+        h3
+          margin: 0
+          min-width: 0
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+
+      .resultSnippet
+        margin: 0
+        width: 100%
+        display: -webkit-box
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
+        overflow: hidden
+
+      .resultFooter
+        width: 100%
+        p
+          margin: 0
+
+  .imageResultGrid
+    display: grid
+    width: 100%
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr))
+    gap: 0.6rem
+
+    .imageResultCard
+      display: flex
+      flex-direction: column
+      background: themes.$foregroundColor
+      border: 0.1rem solid themes.$foregroundOpaque
+      border-radius: 1rem
+      overflow: hidden
+      text-align: left
+      gap: 0
+
+      .imagePreview
+        width: 100%
+        aspect-ratio: 4 / 3
+        background: themes.$foregroundOpaque
+        border-radius: 0
+        overflow: hidden
+
+        img
+          width: 100%
+          height: 100%
+          object-fit: cover
+          border-radius: 0
+
+        .imagePreviewFallback
+          width: 100%
+          height: 100%
+          justify-content: center
+
+          span.iconify
+            width: 2rem
+            height: 2rem
+
+      .imageCardMeta
+        width: 100%
+        padding: 0.65rem
+        gap: 0.15rem
         align-items: flex-start
-        text-align: left
-        gap: 0.45rem
 
-        .result
-          width: 100%
-
-        .resultHeading
-          width: 100%
-          flex-wrap: nowrap
-          gap: 0.35rem
-
-          h3
-            margin: 0
-            min-width: 0
-            overflow: hidden
-            text-overflow: ellipsis
-            white-space: nowrap
-
-        .resultSnippet
+        h3, p
           margin: 0
           width: 100%
-          display: -webkit-box
-          -webkit-line-clamp: 3
-          -webkit-box-orient: vertical
           overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
 
-        .resultFooter
-          width: 100%
-          p
-            margin: 0
+  .paginationBar
+    width: 100%
+    align-items: center
 
-    .imageResultGrid
-      display: grid
-      width: 100%
-      grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr))
-      gap: 0.6rem
-
-      .imageResultCard
-        display: flex
-        flex-direction: column
-        background: themes.$foregroundColor
-        border: 0.1rem solid themes.$foregroundOpaque
-        border-radius: 1rem
-        overflow: hidden
-        text-align: left
-        gap: 0
-
-        .imagePreview
-          width: 100%
-          aspect-ratio: 4 / 3
-          background: themes.$foregroundOpaque
-          border-radius: 0
-          overflow: hidden
-
-          img
-            width: 100%
-            height: 100%
-            object-fit: cover
-            border-radius: 0
-
-          .imagePreviewFallback
-            width: 100%
-            height: 100%
-            justify-content: center
-
-            span.iconify
-              width: 2rem
-              height: 2rem
-
-        .imageCardMeta
-          width: 100%
-          padding: 0.65rem
-          gap: 0.15rem
-          align-items: flex-start
-
-          h3, p
-            margin: 0
-            width: 100%
-            overflow: hidden
-            text-overflow: ellipsis
-            white-space: nowrap
-
-    .paginationBar
-      width: 100%
-      align-items: center
-
-      p
-        margin: 0
+    p
+      margin: 0
 </style>

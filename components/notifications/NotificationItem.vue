@@ -1,40 +1,40 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+import { computed } from 'vue'
 
-  import SafeLink from '@/components/base/SafeLink.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import UsernameView from '@/components/posts/UsernameView.vue'
-  import type { BygNotification } from '@/types/notifications'
+import SafeLink from '@/components/base/SafeLink.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import UsernameView from '@/components/posts/UsernameView.vue'
+import type { BygNotification } from '@/types/notifications'
 
-  const { format } = useRelativeTime()
+const { format } = useRelativeTime()
 
-  const props = defineProps<{
-    notification: BygNotification
-    unread?: boolean
-  }>()
+const props = defineProps<{
+  notification: BygNotification
+  unread?: boolean
+}>()
 
-  const notificationIcon = computed(() => {
-    switch (props.notification.type) {
-      case 'follow':
-        return 'solar:user-check-line-duotone'
-      case 'image_comment':
-        return 'solar:gallery-wide-line-duotone'
-      case 'post_mention':
-        return 'solar:at-line-duotone'
-      case 'comment_mention':
-        return 'solar:chat-round-line-line-duotone'
-      case 'ask':
-        return 'solar:question-square-line-duotone'
-      case 'message':
-        return 'solar:chat-round-line-line-duotone'
-      case 'post_comment':
-      default:
-        return 'solar:chat-round-line-line-duotone'
-    }
-  })
+const notificationIcon = computed(() => {
+  switch (props.notification.type) {
+    case 'follow':
+      return 'solar:user-check-line-duotone'
+    case 'image_comment':
+      return 'solar:gallery-wide-line-duotone'
+    case 'post_mention':
+      return 'solar:at-line-duotone'
+    case 'comment_mention':
+      return 'solar:chat-round-line-line-duotone'
+    case 'ask':
+      return 'solar:question-square-line-duotone'
+    case 'message':
+      return 'solar:chat-round-line-line-duotone'
+    case 'post_comment':
+    default:
+      return 'solar:chat-round-line-line-duotone'
+  }
+})
 
-  const isExternal = computed(() => props.notification.path.startsWith('http'))
+const isExternal = computed(() => props.notification.path.startsWith('http'))
 </script>
 
 <template>
@@ -64,33 +64,33 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
-  @use "@/styles/utils"
+@use "@/styles/themes"
+@use "@/styles/utils"
 
-  .notificationLink
-    width: 100%
+.notificationLink
+  width: 100%
 
-  .notificationItem
-    @include utils.itemBackground
-    @include utils.maxPostPaddedWidth
+.notificationItem
+  @include utils.itemBackground
+  @include utils.maxPostPaddedWidth
 
-    width: 100%
-    gap: 0.75rem
+  width: 100%
+  gap: 0.75rem
+  align-items: flex-start
+  cursor: pointer
+
+  &.unread
+    border: 0.1rem solid themes.$accentColor
+
+  .notificationIcon
+    width: 1.5rem
+    height: 1.5rem
+    margin-top: 0.1rem
+
+  .notificationBody
     align-items: flex-start
-    cursor: pointer
+    width: 100%
 
-    &.unread
-      border: 0.1rem solid themes.$accentColor
-
-    .notificationIcon
-      width: 1.5rem
-      height: 1.5rem
-      margin-top: 0.1rem
-
-    .notificationBody
+    .topLine
       align-items: flex-start
-      width: 100%
-
-      .topLine
-        align-items: flex-start
 </style>

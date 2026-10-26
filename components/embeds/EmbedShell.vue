@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import HStack from '@/components/layout/HStack.vue'
+import HStack from '@/components/layout/HStack.vue'
 
-  defineProps<{
-    title: string
-  }>()
+defineProps<{
+  title: string
+}>()
 
-  definePageMeta({ layout: 'plain' })
+definePageMeta({ layout: 'plain' })
 
-  onMounted(() => {
-    // use dark color theme
-    document.documentElement.classList.add('dark')
-  })
+onMounted(() => {
+  // use dark color theme
+  document.documentElement.classList.add('dark')
+})
 </script>
 
 <template>
@@ -27,28 +27,28 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
+@use "@/styles/themes"
 
-  .bygEmbedShell
-    padding: 0.75rem
-    background: themes.$foregroundOpaque
+.bygEmbedShell
+  padding: 0.75rem
+  background: themes.$foregroundOpaque
+  width: 100%
+  height: 100%
+  border-radius: 0
+  gap: 0.5rem
+
+  .embedTitle
+    padding: 0.5rem 0.5rem 0
+
+    .logo
+      width: 2.5rem
+      height: 2.5rem
+
+  .embedContent
+    background: themes.$backgroundColor
     width: 100%
     height: 100%
-    border-radius: 0
-    gap: 0.5rem
-
-    .embedTitle
-      padding: 0.5rem 0.5rem 0
-
-      .logo
-        width: 2.5rem
-        height: 2.5rem
-
-    .embedContent
-      background: themes.$backgroundColor
-      width: 100%
-      height: 100%
-      overflow: scroll
-      border-radius: 1.5rem
-      padding: 0.75rem
+    overflow: scroll
+    border-radius: 1.5rem
+    padding: 0.75rem
 </style>

@@ -1,21 +1,21 @@
 <script setup lang="ts">
-  import PersonCredit from '@/components/credits/PersonCredit.vue'
-  import ProviderCredit from '@/components/credits/ProviderCredit.vue'
-  import TechnologyCredit from '@/components/credits/TechnologyCredit.vue'
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { title } from '@/data/title'
-  import setHeadMeta from '@/utils/setHeadMeta'
+import PersonCredit from '@/components/credits/PersonCredit.vue'
+import ProviderCredit from '@/components/credits/ProviderCredit.vue'
+import TechnologyCredit from '@/components/credits/TechnologyCredit.vue'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { title } from '@/data/title'
+import setHeadMeta from '@/utils/setHeadMeta'
 
-  definePageMeta({ showBackButton: true })
+definePageMeta({ showBackButton: true })
 
-  title.value = 'Credits'
+title.value = 'Credits'
 
-  setHeadMeta({
-    page: 'Credits',
-    subtitle: 'Credits to the people and technologies that make Byg possible.',
-  })
+setHeadMeta({
+  page: 'Credits',
+  subtitle: 'Credits to the people and technologies that make Byg possible.',
+})
 </script>
 
 <template>
@@ -135,20 +135,20 @@
 </template>
 
 <style scoped lang="sass">
-  section
-    display: flex
-    flex-direction: column
-    align-items: center
-    margin-top: 1.5rem
+section
+  display: flex
+  flex-direction: column
+  align-items: center
+  margin-top: 1.5rem
+  width: 100%
+  gap: 0
+
+  p
+    margin-bottom: 1rem
+
+  .peopleGrid
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr))
+    gap: 1rem
     width: 100%
-    gap: 0
-
-    p
-      margin-bottom: 1rem
-
-    .peopleGrid
-      display: grid
-      grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr))
-      gap: 1rem
-      width: 100%
 </style>

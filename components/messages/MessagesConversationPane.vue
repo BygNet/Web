@@ -1,51 +1,51 @@
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import ErrorState from '@/components/layout/ErrorState.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import MessageBubble from '@/components/messages/MessageBubble.vue'
-  import type { BygMessage, BygMessageThread } from '@/types/messages'
-  import type { ConversationEntry } from '@/types/messages-ui'
+import ErrorState from '@/components/layout/ErrorState.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import MessageBubble from '@/components/messages/MessageBubble.vue'
+import type { BygMessage, BygMessageThread } from '@/types/messages'
+import type { ConversationEntry } from '@/types/messages-ui'
 
-  const props = defineProps<{
-    visible: boolean
-    isMobileConversationView: boolean
-    selectedThread: BygMessageThread | null
-    connectedLive: boolean
-    error: string | null
-    loadingConversation: boolean
-    loadingOlderMessages: boolean
-    conversationEntries: ConversationEntry[]
-    replyToMessage: BygMessage | null
-    typing: boolean
-    composerText: string
-    sendingMessage: boolean
-    getThreadDisplayName: (thread: BygMessageThread) => string
-  }>()
+const props = defineProps<{
+  visible: boolean
+  isMobileConversationView: boolean
+  selectedThread: BygMessageThread | null
+  connectedLive: boolean
+  error: string | null
+  loadingConversation: boolean
+  loadingOlderMessages: boolean
+  conversationEntries: ConversationEntry[]
+  replyToMessage: BygMessage | null
+  typing: boolean
+  composerText: string
+  sendingMessage: boolean
+  getThreadDisplayName: (thread: BygMessageThread) => string
+}>()
 
-  const emit = defineEmits<{
-    closeMobile: []
-    scroll: []
-    reply: [message: BygMessage]
-    openReply: [messageId: number]
-    'update:composerText': [value: string]
-    composerInput: []
-    composerBlur: []
-    cancelReply: []
-    send: []
-  }>()
+const emit = defineEmits<{
+  closeMobile: []
+  scroll: []
+  reply: [message: BygMessage]
+  openReply: [messageId: number]
+  'update:composerText': [value: string]
+  composerInput: []
+  composerBlur: []
+  cancelReply: []
+  send: []
+}>()
 
-  const { t } = useI18n()
-  const conversationScroller = ref<HTMLDivElement | null>(null)
-  const composerInput = ref<HTMLTextAreaElement | null>(null)
-  const composerTextModel = computed({
-    get: () => props.composerText,
-    set: (value: string) => emit('update:composerText', value),
-  })
+const { t } = useI18n()
+const conversationScroller = ref<HTMLDivElement | null>(null)
+const composerInput = ref<HTMLTextAreaElement | null>(null)
+const composerTextModel = computed({
+  get: () => props.composerText,
+  set: (value: string) => emit('update:composerText', value),
+})
 
-  defineExpose({ conversationScroller, composerInput })
+defineExpose({ conversationScroller, composerInput })
 </script>
 
 <template>
@@ -189,132 +189,132 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
+@use "@/styles/themes"
 
-  .conversationPane
+.conversationPane
+  width: 100%
+  height: 100%
+  padding: 0.2rem
+  display: flex
+  flex-direction: column
+  min-height: 0
+  overflow: hidden
+
+  .conversationHeader
     width: 100%
-    height: 100%
-    padding: 0.2rem
+    flex-shrink: 0
+    gap: 0.5rem
+
+    .conversationTitleWrap
+      width: 100%
+      flex-wrap: nowrap
+      justify-content: space-between
+      align-items: flex-start
+      gap: 0.6rem
+
+    .conversationTitle
+      width: 100%
+      min-width: 0
+      align-items: flex-start
+      gap: 0.25rem
+
+      h3
+        margin: 0
+        word-break: break-word
+
+    .connectionState
+      align-items: center
+      gap: 0.25rem
+
+  .conversationEmpty
+    width: 100%
+    min-height: 0
+    flex: 1 1 auto
+    justify-content: center
+    gap: 0.35rem
+    text-align: center
+
+  .conversationBody
     display: flex
     flex-direction: column
+    flex: 1 1 auto
     min-height: 0
-    overflow: hidden
+    width: 100%
+    gap: 0.75rem
 
-    .conversationHeader
+    .loadingConversationText
+      margin: 0
+
+    .historyLoading
+      width: 100%
+      margin: 0.25rem 0
+      text-align: center
+      font-size: x-small
+
+    .messageList
+      flex: 1 1 auto
+      min-height: 0
+      overflow: auto
+      width: 100%
+      align-items: stretch
+      gap: 0.25rem
+      border-radius: 0
+      padding-right: 0.2rem
+      padding-bottom: 0.2rem
+
+      .messageGapMarker
+        margin: 0.45rem auto 0.65rem
+        width: fit-content
+        font-size: x-small
+        text-align: center
+
+    .composer
       width: 100%
       flex-shrink: 0
-      gap: 0.5rem
+      padding: 0.1rem
 
-      .conversationTitleWrap
+      .replyComposerPreview
+        width: 100%
+        justify-content: space-between
+        align-items: center
+        padding: 0.35rem 0.5rem
+        background: themes.$foregroundColor
+        border-radius: 1.25rem
+
+        p
+          max-width: 80%
+          margin: 0
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+
+          &:first-child
+            font-size: small
+            font-weight: 600
+
+      .typingIndicator
+        width: 100%
+        gap: 0.25rem
+        align-items: center
+
+        p
+          margin: 0
+
+      .composerInputRow
+        gap: 0.5rem
         width: 100%
         flex-wrap: nowrap
-        justify-content: space-between
-        align-items: flex-start
-        gap: 0.6rem
+        align-items: flex-end
 
-      .conversationTitle
-        width: 100%
-        min-width: 0
-        align-items: flex-start
-        gap: 0.25rem
+        .composerInput
+          min-height: 2.5rem
+          max-height: 8rem
+          resize: none
+          overflow-y: auto
+          border-radius: 1rem
+          flex-grow: 1
 
-        h3
-          margin: 0
-          word-break: break-word
-
-      .connectionState
-        align-items: center
-        gap: 0.25rem
-
-    .conversationEmpty
-      width: 100%
-      min-height: 0
-      flex: 1 1 auto
-      justify-content: center
-      gap: 0.35rem
-      text-align: center
-
-    .conversationBody
-      display: flex
-      flex-direction: column
-      flex: 1 1 auto
-      min-height: 0
-      width: 100%
-      gap: 0.75rem
-
-      .loadingConversationText
-        margin: 0
-
-      .historyLoading
-        width: 100%
-        margin: 0.25rem 0
-        text-align: center
-        font-size: x-small
-
-      .messageList
-        flex: 1 1 auto
-        min-height: 0
-        overflow: auto
-        width: 100%
-        align-items: stretch
-        gap: 0.25rem
-        border-radius: 0
-        padding-right: 0.2rem
-        padding-bottom: 0.2rem
-
-        .messageGapMarker
-          margin: 0.45rem auto 0.65rem
-          width: fit-content
-          font-size: x-small
-          text-align: center
-
-      .composer
-        width: 100%
-        flex-shrink: 0
-        padding: 0.1rem
-
-        .replyComposerPreview
-          width: 100%
-          justify-content: space-between
-          align-items: center
-          padding: 0.35rem 0.5rem
-          background: themes.$foregroundColor
-          border-radius: 1.25rem
-
-          p
-            max-width: 80%
-            margin: 0
-            overflow: hidden
-            text-overflow: ellipsis
-            white-space: nowrap
-
-            &:first-child
-              font-size: small
-              font-weight: 600
-
-        .typingIndicator
-          width: 100%
-          gap: 0.25rem
-          align-items: center
-
-          p
-            margin: 0
-
-        .composerInputRow
-          gap: 0.5rem
-          width: 100%
-          flex-wrap: nowrap
-          align-items: flex-end
-
-          .composerInput
-            min-height: 2.5rem
-            max-height: 8rem
-            resize: none
-            overflow-y: auto
-            border-radius: 1rem
-            flex-grow: 1
-
-          .sendButton
-            flex: 0 0 auto
-            align-self: flex-end
+        .sendButton
+          flex: 0 0 auto
+          align-self: flex-end
 </style>

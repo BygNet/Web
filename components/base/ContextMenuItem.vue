@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  const props = defineProps<{
-    title: string
-    icon: string
-  }>()
+const props = defineProps<{
+  title: string
+  icon: string
+}>()
 
-  defineEmits<{
-    click: []
-  }>()
+defineEmits<{
+  click: []
+}>()
 </script>
 
 <template>
@@ -17,8 +17,8 @@
 </template>
 
 <style scoped lang="sass">
-  .contextMenuItem
-    width: 100%
-    justify-content: flex-start
-    text-align: left
+.contextMenuItem
+  width: 100%
+  justify-content: flex-start
+  text-align: left
 </style>

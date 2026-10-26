@@ -1,151 +1,151 @@
 <script setup lang="ts">
-  import type { BygComment } from '@bygnet/types'
-  import { nextTick, onMounted, type Ref, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import type { BygComment } from '@bygnet/types'
+import { nextTick, onMounted, type Ref, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { api } from '@/api/client'
-  import { auth } from '@/auth/session'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
-  import UsernameView from '@/components/posts/UsernameView.vue'
-  import { fetchUserSuggestions } from '@/data/mentions'
-  import { taskList } from '@/data/tasks'
-  import type { BygUserSuggestion } from '@/types/mentions'
-  import {
-    applyMention,
-    getMentionContext,
-    type MentionContext,
-  } from '@/utils/mentions'
-  import { renderMarkdown } from '@/utils/renderMarkdown'
+import { api } from '@/api/client'
+import { auth } from '@/auth/session'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import MentionSuggestions from '@/components/posts/MentionSuggestions.vue'
+import UsernameView from '@/components/posts/UsernameView.vue'
+import { fetchUserSuggestions } from '@/data/mentions'
+import { taskList } from '@/data/tasks'
+import type { BygUserSuggestion } from '@/types/mentions'
+import {
+  applyMention,
+  getMentionContext,
+  type MentionContext,
+} from '@/utils/mentions'
+import { renderMarkdown } from '@/utils/renderMarkdown'
 
-  const comments: Ref<BygComment[]> = ref([])
-  const writtenComment: Ref<string> = ref('')
-  const commentTextarea: Ref<HTMLTextAreaElement | null> = ref(null)
-  const sendingComment: Ref<boolean> = ref(false)
-  const mentionSuggestions: Ref<BygUserSuggestion[]> = ref([])
-  const mentionContext: Ref<MentionContext | null> = ref(null)
-  const showingMentionSuggestions: Ref<boolean> = ref(false)
-  let mentionRequestId = 0
+const comments: Ref<BygComment[]> = ref([])
+const writtenComment: Ref<string> = ref('')
+const commentTextarea: Ref<HTMLTextAreaElement | null> = ref(null)
+const sendingComment: Ref<boolean> = ref(false)
+const mentionSuggestions: Ref<BygUserSuggestion[]> = ref([])
+const mentionContext: Ref<MentionContext | null> = ref(null)
+const showingMentionSuggestions: Ref<boolean> = ref(false)
+let mentionRequestId = 0
 
-  const localePath = useLocalePath()
-  const { t } = useI18n()
-  const { format } = useRelativeTime()
+const localePath = useLocalePath()
+const { t } = useI18n()
+const { format } = useRelativeTime()
 
-  const props = defineProps<{
-    id: number
-    author: string
-    getUrl: string
-    postUrl: string
-    count: number
-  }>()
+const props = defineProps<{
+  id: number
+  author: string
+  getUrl: string
+  postUrl: string
+  count: number
+}>()
 
-  const fetchComments = async () => {
-    const res = await api(`${props.getUrl}/${props.id}`)
-    if (!res.ok) {
-      console.error('Failed to fetch comments')
-      comments.value = []
-      return
-    }
-    const data = (await res.json()) as BygComment[]
+const fetchComments = async () => {
+  const res = await api(`${props.getUrl}/${props.id}`)
+  if (!res.ok) {
+    console.error('Failed to fetch comments')
+    comments.value = []
+    return
+  }
+  const data = (await res.json()) as BygComment[]
 
-    for (const c of data) {
-      ;(c as any).rendered = renderMarkdown(c.content ?? '')
-    }
-
-    comments.value = data
+  for (const c of data) {
+    ;(c as any).rendered = renderMarkdown(c.content ?? '')
   }
 
-  function clearMentionSuggestions(): void {
-    showingMentionSuggestions.value = false
-    mentionSuggestions.value = []
-    mentionContext.value = null
-  }
+  comments.value = data
+}
 
-  async function updateMentionSuggestions(): Promise<void> {
-    const textarea = commentTextarea.value
-    if (!textarea) {
-      clearMentionSuggestions()
-      return
-    }
+function clearMentionSuggestions(): void {
+  showingMentionSuggestions.value = false
+  mentionSuggestions.value = []
+  mentionContext.value = null
+}
 
-    const caret = textarea.selectionStart ?? writtenComment.value.length
-    const context = getMentionContext(writtenComment.value, caret)
-    if (!context || context.query.length < 1) {
-      clearMentionSuggestions()
-      return
-    }
-
-    mentionContext.value = context
-    const requestId = ++mentionRequestId
-    const suggestions = await fetchUserSuggestions(context.query)
-
-    if (requestId !== mentionRequestId) {
-      return
-    }
-
-    mentionSuggestions.value = suggestions
-    showingMentionSuggestions.value = suggestions.length > 0
-  }
-
-  function onCommentTextareaInteraction(): void {
-    updateMentionSuggestions().catch((): void => {
-      clearMentionSuggestions()
-    })
-  }
-
-  async function insertMention(username: string): Promise<void> {
-    if (!mentionContext.value) return
-
-    const result = applyMention(
-      writtenComment.value,
-      mentionContext.value,
-      username
-    )
-    writtenComment.value = result.text
+async function updateMentionSuggestions(): Promise<void> {
+  const textarea = commentTextarea.value
+  if (!textarea) {
     clearMentionSuggestions()
-
-    await nextTick()
-    commentTextarea.value?.focus()
-    commentTextarea.value?.setSelectionRange(result.caret, result.caret)
+    return
   }
 
-  async function postComment(): Promise<void> {
-    if (!auth.user) {
-      await navigateTo(localePath('login'))
-      return
-    }
-
-    if (!writtenComment.value.trim()) {
-      return
-    }
-
-    sendingComment.value = true
-    taskList.value.push('commenting')
-    try {
-      const res = await api(props.postUrl, {
-        method: 'POST',
-        json: { id: props.id, content: writtenComment.value },
-        offlineQueue: true,
-      })
-
-      if (!res.ok && res.status !== 202) {
-        console.error('Failed to post comment')
-        return
-      }
-
-      writtenComment.value = ''
-      clearMentionSuggestions()
-      if (res.status !== 202) await fetchComments()
-    } finally {
-      sendingComment.value = false
-      taskList.value.remove('commenting')
-    }
+  const caret = textarea.selectionStart ?? writtenComment.value.length
+  const context = getMentionContext(writtenComment.value, caret)
+  if (!context || context.query.length < 1) {
+    clearMentionSuggestions()
+    return
   }
 
-  onMounted(() => {
-    fetchComments()
+  mentionContext.value = context
+  const requestId = ++mentionRequestId
+  const suggestions = await fetchUserSuggestions(context.query)
+
+  if (requestId !== mentionRequestId) {
+    return
+  }
+
+  mentionSuggestions.value = suggestions
+  showingMentionSuggestions.value = suggestions.length > 0
+}
+
+function onCommentTextareaInteraction(): void {
+  updateMentionSuggestions().catch((): void => {
+    clearMentionSuggestions()
   })
+}
+
+async function insertMention(username: string): Promise<void> {
+  if (!mentionContext.value) return
+
+  const result = applyMention(
+    writtenComment.value,
+    mentionContext.value,
+    username
+  )
+  writtenComment.value = result.text
+  clearMentionSuggestions()
+
+  await nextTick()
+  commentTextarea.value?.focus()
+  commentTextarea.value?.setSelectionRange(result.caret, result.caret)
+}
+
+async function postComment(): Promise<void> {
+  if (!auth.user) {
+    await navigateTo(localePath('login'))
+    return
+  }
+
+  if (!writtenComment.value.trim()) {
+    return
+  }
+
+  sendingComment.value = true
+  taskList.value.push('commenting')
+  try {
+    const res = await api(props.postUrl, {
+      method: 'POST',
+      json: { id: props.id, content: writtenComment.value },
+      offlineQueue: true,
+    })
+
+    if (!res.ok && res.status !== 202) {
+      console.error('Failed to post comment')
+      return
+    }
+
+    writtenComment.value = ''
+    clearMentionSuggestions()
+    if (res.status !== 202) await fetchComments()
+  } finally {
+    sendingComment.value = false
+    taskList.value.remove('commenting')
+  }
+}
+
+onMounted(() => {
+  fetchComments()
+})
 </script>
 
 <template>
@@ -199,41 +199,41 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  #writeComment
+#writeComment
+  width: 100%
+  align-items: flex-start
+
+
+  .commentInput
+    flex-grow: 1
+    min-width: 20rem
+    gap: 0.25rem
+
+    &, *
+      border-radius: 0
+
+    textarea
+      padding: 0
+      width: 100%
+      resize: vertical
+      background: transparent
+      outline: none
+
+.commentsView
+  width: 100%
+
+  .comment
+    @include utils.listItemBorder
+    padding: 0.5rem 0
     width: 100%
     align-items: flex-start
 
+    .commentsMeta
+      opacity: 0.7
 
-    .commentInput
-      flex-grow: 1
-      min-width: 20rem
-      gap: 0.25rem
-
-      &, *
-        border-radius: 0
-
-      textarea
-        padding: 0
-        width: 100%
-        resize: vertical
-        background: transparent
-        outline: none
-
-  .commentsView
-    width: 100%
-
-    .comment
-      @include utils.listItemBorder
-      padding: 0.5rem 0
+    .commentContent
       width: 100%
       align-items: flex-start
-
-      .commentsMeta
-        opacity: 0.7
-
-      .commentContent
-        width: 100%
-        align-items: flex-start
 </style>

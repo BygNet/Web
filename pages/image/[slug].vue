@@ -1,89 +1,89 @@
 <script setup lang="ts">
-  import type { BygImage } from '@bygnet/types'
-  import { type Ref, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import type { BygImage } from '@bygnet/types'
+import { type Ref, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import ImageItem from '@/components/images/ImageItem.vue'
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import Divider from '@/components/layout/Divider.vue'
-  import SkeletonComment from '@/components/layout/skeletons/SkeletonComment.vue'
-  import SkeletonText from '@/components/layout/skeletons/SkeletonText.vue'
-  import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { getCachedImageDetail, setCachedImageDetail } from '@/data/caches'
-  import { title } from '@/data/title'
-  import { useEnv } from '@/utils/env'
-  import CommentsView from '@/views/CommentsView.vue'
-  import { useRoute } from '#app'
-  import { useHead, useLazyAsyncData } from '#imports'
+import ImageItem from '@/components/images/ImageItem.vue'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import Divider from '@/components/layout/Divider.vue'
+import SkeletonComment from '@/components/layout/skeletons/SkeletonComment.vue'
+import SkeletonText from '@/components/layout/skeletons/SkeletonText.vue'
+import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { getCachedImageDetail, setCachedImageDetail } from '@/data/caches'
+import { title } from '@/data/title'
+import { useEnv } from '@/utils/env'
+import CommentsView from '@/views/CommentsView.vue'
+import { useRoute } from '#app'
+import { useHead, useLazyAsyncData } from '#imports'
 
-  definePageMeta({ showBackButton: true })
+definePageMeta({ showBackButton: true })
 
-  const route = useRoute()
-  const { t } = useI18n()
-  const slug = route.params.slug
-  const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
-  const error: Ref<string | null> = ref(null)
+const route = useRoute()
+const { t } = useI18n()
+const slug = route.params.slug
+const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
+const error: Ref<string | null> = ref(null)
 
-  title.value = t('ui.details.imageTitle')
+title.value = t('ui.details.imageTitle')
 
-  // Fetch image data - track for meta tags
-  let imageMetaData: BygImage | null = null
-  const { data: image } = await useLazyAsyncData(
-    `image-${id}`,
-    async () => {
-      if (!id) return null
+// Fetch image data - track for meta tags
+let imageMetaData: BygImage | null = null
+const { data: image } = await useLazyAsyncData(
+  `image-${id}`,
+  async () => {
+    if (!id) return null
 
-      const cached = getCachedImageDetail(id)
-      if (cached) {
-        imageMetaData = cached
-        return cached
-      }
-
-      try {
-        const response = await fetch(`${useEnv().apiBase}/image-details/${id}`)
-        if (!response.ok) throw new Error(`API error: ${response.status}`)
-        const json = (await response.json()) as BygImage
-        setCachedImageDetail(id, json)
-        imageMetaData = json
-        return json
-      } catch (err) {
-        console.error('Failed to fetch image:', err)
-        return null
-      }
-    },
-    {
-      server: import.meta.server,
-      lazy: import.meta.client,
-    }
-  )
-
-  // Set meta tags for SEO with fetched image data
-  useHead(() => {
-    if (imageMetaData) {
-      return {
-        title: t('ui.details.imageMetaTitle', { title: imageMetaData.title }),
-        meta: [
-          {
-            name: 'description',
-            content: t('ui.details.imageMetaDescription', {
-              author: imageMetaData.author,
-            }),
-          },
-        ],
-      }
+    const cached = getCachedImageDetail(id)
+    if (cached) {
+      imageMetaData = cached
+      return cached
     }
 
+    try {
+      const response = await fetch(`${useEnv().apiBase}/image-details/${id}`)
+      if (!response.ok) throw new Error(`API error: ${response.status}`)
+      const json = (await response.json()) as BygImage
+      setCachedImageDetail(id, json)
+      imageMetaData = json
+      return json
+    } catch (err) {
+      console.error('Failed to fetch image:', err)
+      return null
+    }
+  },
+  {
+    server: import.meta.server,
+    lazy: import.meta.client,
+  }
+)
+
+// Set meta tags for SEO with fetched image data
+useHead(() => {
+  if (imageMetaData) {
     return {
-      title: t('ui.details.imageMetaFallbackTitle'),
+      title: t('ui.details.imageMetaTitle', { title: imageMetaData.title }),
       meta: [
         {
           name: 'description',
-          content: t('ui.details.imageMetaFallbackDescription'),
+          content: t('ui.details.imageMetaDescription', {
+            author: imageMetaData.author,
+          }),
         },
       ],
     }
-  })
+  }
+
+  return {
+    title: t('ui.details.imageMetaFallbackTitle'),
+    meta: [
+      {
+        name: 'description',
+        content: t('ui.details.imageMetaFallbackDescription'),
+      },
+    ],
+  }
+})
 </script>
 
 <template>
@@ -121,6 +121,6 @@
 </template>
 
 <style scoped lang="sass">
-  .imageDetail
-    width: 100%
+.imageDetail
+  width: 100%
 </style>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import VStack from '~/components/layout/VStack.vue'
+import VStack from '~/components/layout/VStack.vue'
 
-  const props = defineProps<{
-    label: string
-    placeholder?: string
-  }>()
+const props = defineProps<{
+  label: string
+  placeholder?: string
+}>()
 
-  const value = defineModel<string>({
-    required: true,
-  })
+const value = defineModel<string>({
+  required: true,
+})
 
-  const { t } = useI18n()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -25,10 +25,10 @@
 </template>
 
 <style scoped lang="sass">
-  .settingsTextArea
-    width: 100%
+.settingsTextArea
+  width: 100%
 
-    textarea
-      width: 100%
-      resize: vertical
+  textarea
+    width: 100%
+    resize: vertical
 </style>

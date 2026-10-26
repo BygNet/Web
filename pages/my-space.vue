@@ -1,68 +1,68 @@
 <script setup lang="ts">
-  import type { BygProfile } from '@bygnet/types'
-  import { computed, onMounted, type Ref, ref, watch } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import type { BygProfile } from '@bygnet/types'
+import { computed, onMounted, type Ref, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { auth } from '@/auth/session'
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
-  import ProfileView from '@/components/profile/ProfileView.vue'
-  import { fetchCurrentUserProfile } from '@/data/profiles'
-  import { title } from '@/data/title'
-  import setHeadMeta from '@/utils/setHeadMeta'
-  import { navigateTo } from '#app'
-  import ThemePicker from '~/components/settings/ThemePicker.vue'
+import { auth } from '@/auth/session'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import AccountSwitcher from '@/components/nav/AccountSwitcher.vue'
+import ProfileView from '@/components/profile/ProfileView.vue'
+import { fetchCurrentUserProfile } from '@/data/profiles'
+import { title } from '@/data/title'
+import setHeadMeta from '@/utils/setHeadMeta'
+import { navigateTo } from '#app'
+import ThemePicker from '~/components/settings/ThemePicker.vue'
 
-  const localePath = useLocalePath()
-  const { t } = useI18n()
+const localePath = useLocalePath()
+const { t } = useI18n()
 
-  title.value = t('nav.profile')
-  setHeadMeta({
-    page: t('nav.profile'),
-    subtitle: t('ui.profilePage.subtitle'),
-  })
-  const isLoggedIn = computed(() => !!auth.user)
-  const hasAccounts = computed(() => auth.accounts.length > 0)
-  const showingAppearances: Ref<boolean> = ref(false)
-  const profile: Ref<BygProfile | null> = ref(null)
-  const isPreviewingBaseTheme: Ref<boolean> = ref(false)
-  const AppVersion = __AppVersion
+title.value = t('nav.profile')
+setHeadMeta({
+  page: t('nav.profile'),
+  subtitle: t('ui.profilePage.subtitle'),
+})
+const isLoggedIn = computed(() => !!auth.user)
+const hasAccounts = computed(() => auth.accounts.length > 0)
+const showingAppearances: Ref<boolean> = ref(false)
+const profile: Ref<BygProfile | null> = ref(null)
+const isPreviewingBaseTheme: Ref<boolean> = ref(false)
+const AppVersion = __AppVersion
 
-  async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
-    profile.value = await fetchCurrentUserProfile(options)
+async function loadProfile(options: { force?: boolean } = {}): Promise<void> {
+  profile.value = await fetchCurrentUserProfile(options)
+}
+
+function goLogin() {
+  navigateTo(localePath('login'))
+}
+
+function goSignup() {
+  navigateTo(localePath('signup'))
+}
+
+function goSettings() {
+  navigateTo(localePath('/settings'))
+}
+
+onMounted(() => {
+  if (isLoggedIn.value) {
+    loadProfile()
   }
+})
 
-  function goLogin() {
-    navigateTo(localePath('login'))
-  }
-
-  function goSignup() {
-    navigateTo(localePath('signup'))
-  }
-
-  function goSettings() {
-    navigateTo(localePath('/settings'))
-  }
-
-  onMounted(() => {
-    if (isLoggedIn.value) {
-      loadProfile()
+watch(
+  () => auth.user?.id,
+  async (nextId, previousId) => {
+    if (!nextId) {
+      profile.value = null
+      return
     }
-  })
-
-  watch(
-    () => auth.user?.id,
-    async (nextId, previousId) => {
-      if (!nextId) {
-        profile.value = null
-        return
-      }
-      if (nextId === previousId) return
-      await loadProfile({ force: true })
-    }
-  )
+    if (nextId === previousId) return
+    await loadProfile({ force: true })
+  }
+)
 </script>
 
 <template>
@@ -142,17 +142,17 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
-  @use "@/styles/themes"
+@use "@/styles/utils"
+@use "@/styles/themes"
 
-  .quickSettings
-    margin-bottom: 0.5rem
+.quickSettings
+  margin-bottom: 0.5rem
 
-  .guest, .quickSettings, .bygTheme
-    @include utils.maxPostPaddedWidth
-    @include utils.itemBackground
+.guest, .quickSettings, .bygTheme
+  @include utils.maxPostPaddedWidth
+  @include utils.itemBackground
 
-  .accountSwitcherSection
-    @include utils.maxPostPaddedWidth
-    @include utils.itemBackground
+.accountSwitcherSection
+  @include utils.maxPostPaddedWidth
+  @include utils.itemBackground
 </style>

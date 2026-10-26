@@ -1,27 +1,27 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+import { ref } from 'vue'
 
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import setHeadMeta from '@/utils/setHeadMeta'
-  import { navigateTo } from '#app'
-  import { title } from '~/data/title.ts'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import setHeadMeta from '@/utils/setHeadMeta'
+import { navigateTo } from '#app'
+import { title } from '~/data/title.ts'
 
-  const localePath = useLocalePath()
-  const query = ref('')
+const localePath = useLocalePath()
+const query = ref('')
 
-  setHeadMeta({
-    page: 'Search',
-    subtitle: 'Search the web privately.',
-  })
+setHeadMeta({
+  page: 'Search',
+  subtitle: 'Search the web privately.',
+})
 
-  title.value = 'Search'
+title.value = 'Search'
 
-  async function submitSearch() {
-    if (!query.value.trim()) return
-    await navigateTo(localePath('/search/results?q=' + query.value.trim()))
-  }
+async function submitSearch() {
+  if (!query.value.trim()) return
+  await navigateTo(localePath('/search/results?q=' + query.value.trim()))
+}
 </script>
 
 <template>
@@ -49,25 +49,25 @@
 </template>
 
 <style scoped lang="sass">
-  .homeWrap
-    flex-wrap: nowrap
-    align-items: center
-    gap: 1.5rem
-    margin-top: 30vh
-    width: 100%
+.homeWrap
+  flex-wrap: nowrap
+  align-items: center
+  gap: 1.5rem
+  margin-top: 30vh
+  width: 100%
 
+  .bygLogo
+    h1
+      font-size: 4rem
+      font-style: italic
+
+  .searchForm
+    width: 55rem
+    max-width: 100%
+
+@media (max-width: 40rem)
+  .homeWrap
     .bygLogo
       h1
-        font-size: 4rem
-        font-style: italic
-
-    .searchForm
-      width: 55rem
-      max-width: 100%
-
-  @media (max-width: 40rem)
-    .homeWrap
-      .bygLogo
-        h1
-          font-size: 2rem
+        font-size: 2rem
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import EmptyView from '@/components/layout/EmptyView.vue'
-  import HStack from '@/components/layout/HStack.vue'
+import EmptyView from '@/components/layout/EmptyView.vue'
+import HStack from '@/components/layout/HStack.vue'
 </script>
 
 <template>
@@ -18,11 +18,11 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
+@use "@/styles/themes"
 
-  .modalActions
-    border-top: 0.1rem solid themes.$foregroundColor
-    padding-top: 0.5rem
-    border-radius: 0
-    margin-top: 1rem
+.modalActions
+  border-top: 0.1rem solid themes.$foregroundColor
+  padding-top: 0.5rem
+  border-radius: 0
+  margin-top: 1rem
 </style>

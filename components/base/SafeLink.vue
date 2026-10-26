@@ -1,43 +1,41 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+import { computed, useAttrs } from 'vue'
 
-  import { recordAppVisit } from '@/data/appUsage'
+import { recordAppVisit } from '@/data/appUsage'
 
-  interface Props {
-    to: string
-    external?: boolean
-    newTab?: boolean
-    custom?: boolean
-    disable?: boolean
-  }
+interface Props {
+  to: string
+  external?: boolean
+  newTab?: boolean
+  custom?: boolean
+  disable?: boolean
+}
 
-  const props = withDefaults(defineProps<Props>(), {
-    external: false,
-    newTab: false,
-  })
+const props = withDefaults(defineProps<Props>(), {
+  external: false,
+  newTab: false,
+})
 
-  const localePath = useLocalePath()
-  const attrs = useAttrs()
+const localePath = useLocalePath()
+const attrs = useAttrs()
 
-  const href = computed(() => {
-    if (props.external) return props.to
+const href = computed(() => {
+  if (props.external) return props.to
 
-    if (props.to.startsWith('#')) {
-      return {
-        hash: props.to,
-      }
+  if (props.to.startsWith('#')) {
+    return {
+      hash: props.to,
     }
-
-    return localePath(props.to)
-  })
-
-  const isExternal = computed(
-    () => props.external || props.to.startsWith('http')
-  )
-
-  function trackNavigation(): void {
-    if (!isExternal.value) recordAppVisit(props.to)
   }
+
+  return localePath(props.to)
+})
+
+const isExternal = computed(() => props.external || props.to.startsWith('http'))
+
+function trackNavigation(): void {
+  if (!isExternal.value) recordAppVisit(props.to)
+}
 </script>
 
 <template>

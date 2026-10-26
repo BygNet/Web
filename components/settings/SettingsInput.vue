@@ -1,20 +1,20 @@
 <script setup lang="ts">
-  import { type HTMLInputType } from '@/types/html'
-  import HStack from '~/components/layout/HStack.vue'
+import { type HTMLInputType } from '@/types/html'
+import HStack from '~/components/layout/HStack.vue'
 
-  defineProps<{
-    type?: HTMLInputType
-    label: string
-    placeholder?: string
-    noBorder?: boolean
-    slotted?: boolean
-  }>()
+defineProps<{
+  type?: HTMLInputType
+  label: string
+  placeholder?: string
+  noBorder?: boolean
+  slotted?: boolean
+}>()
 
-  const { t } = useI18n()
+const { t } = useI18n()
 
-  const value = defineModel<string>({
-    required: false,
-  })
+const value = defineModel<string>({
+  required: false,
+})
 </script>
 
 <template>
@@ -34,34 +34,34 @@
 
 <!-- UNSCOPED styles for SettingsTextArea/SettingsInput/SettingsImageInput -->
 <style lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
+.settingsInputLabel
+  flex-shrink: 0
+  font-weight: bold
+  font-size: 0.85rem
+  width: fit-content
+
+@media (min-width: 40rem)
   .settingsInputLabel
-    flex-shrink: 0
-    font-weight: bold
-    font-size: 0.85rem
-    width: fit-content
+    font-size: 1rem !important
 
-  @media (min-width: 40rem)
-    .settingsInputLabel
-      font-size: 1rem !important
-
-  .settingsBorder:not(.noBorder)
-    @include utils.listItemBorder
-    padding-bottom: 0.75rem !important
+.settingsBorder:not(.noBorder)
+  @include utils.listItemBorder
+  padding-bottom: 0.75rem !important
 </style>
 
 <style scoped lang="sass">
-  .settingsInput
-    width: 100%
-    justify-content: space-between
-    flex-wrap: nowrap
-    padding: 0.35rem 0
+.settingsInput
+  width: 100%
+  justify-content: space-between
+  flex-wrap: nowrap
+  padding: 0.35rem 0
 
-    .settingsInputInput
-      flex-grow: 1
-      flex-shrink: 1
-      text-align: end
-      text-overflow: ellipsis
-      min-width: 0
+  .settingsInputInput
+    flex-grow: 1
+    flex-shrink: 1
+    text-align: end
+    text-overflow: ellipsis
+    min-width: 0
 </style>

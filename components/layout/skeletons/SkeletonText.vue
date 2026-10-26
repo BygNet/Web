@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import VStack from '@/components/layout/VStack.vue'
-  import { generateLines } from '@/utils/skeletons'
+import VStack from '@/components/layout/VStack.vue'
+import { generateLines } from '@/utils/skeletons'
 
-  const props = defineProps<{
-    lines: number
-  }>()
+const props = defineProps<{
+  lines: number
+}>()
 </script>
 
 <template>
@@ -19,9 +19,9 @@
 </template>
 
 <style scoped lang="sass">
-  .skeletonText
-    gap: 0.25rem
+.skeletonText
+  gap: 0.25rem
 
-    .text
-      height: 1.25rem
+  .text
+    height: 1.25rem
 </style>

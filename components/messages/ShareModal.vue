@@ -1,121 +1,119 @@
 <script setup lang="ts">
-  import { computed, onMounted, type Ref, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import { computed, onMounted, type Ref, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { api } from '@/api/client'
-  import { auth } from '@/auth/session'
-  import HStack from '@/components/layout/HStack.vue'
-  import Modal from '@/components/layout/Modal.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { fetchMessageShareTargets, sendMessage } from '@/data/messages'
-  import {
-    activeShareRequest,
-    closeShareModal,
-    notifyShareCompleted,
-    showingShareModal,
-  } from '@/data/share'
-  import type { BygMessageShareTarget } from '@/types/messages'
-  import { navigateTo } from '#app'
+import { api } from '@/api/client'
+import { auth } from '@/auth/session'
+import HStack from '@/components/layout/HStack.vue'
+import Modal from '@/components/layout/Modal.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { fetchMessageShareTargets, sendMessage } from '@/data/messages'
+import {
+  activeShareRequest,
+  closeShareModal,
+  notifyShareCompleted,
+  showingShareModal,
+} from '@/data/share'
+import type { BygMessageShareTarget } from '@/types/messages'
+import { navigateTo } from '#app'
 
-  const localePath = useLocalePath()
-  const { t } = useI18n()
+const localePath = useLocalePath()
+const { t } = useI18n()
 
-  const loadingTargets: Ref<boolean> = ref(false)
-  const sendingUserId: Ref<number | null> = ref(null)
-  const targets: Ref<BygMessageShareTarget[]> = ref([])
-  const statusMessage: Ref<string | null> = ref(null)
+const loadingTargets: Ref<boolean> = ref(false)
+const sendingUserId: Ref<number | null> = ref(null)
+const targets: Ref<BygMessageShareTarget[]> = ref([])
+const statusMessage: Ref<string | null> = ref(null)
 
-  const shareItem = computed(() => activeShareRequest.value?.item ?? null)
+const shareItem = computed(() => activeShareRequest.value?.item ?? null)
 
-  async function loadShareTargets(): Promise<void> {
-    if (!auth.user) {
-      targets.value = []
+async function loadShareTargets(): Promise<void> {
+  if (!auth.user) {
+    targets.value = []
+    return
+  }
+
+  loadingTargets.value = true
+  try {
+    targets.value = await fetchMessageShareTargets({
+      force: true,
+    })
+  } finally {
+    loadingTargets.value = false
+  }
+}
+
+async function shareUsingSystemSheet(): Promise<void> {
+  if (!shareItem.value) return
+
+  statusMessage.value = null
+
+  try {
+    const response = await api(
+      `${shareItem.value.shareApiPath}/${shareItem.value.id}`
+    )
+    if (!response.ok) {
+      statusMessage.value = t('ui.share.statusFailedShareLink')
       return
     }
 
-    loadingTargets.value = true
-    try {
-      targets.value = await fetchMessageShareTargets({
-        force: true,
+    const shareUrl = await response.text()
+
+    if (navigator.share) {
+      await navigator.share({
+        url: shareUrl,
       })
-    } finally {
-      loadingTargets.value = false
-    }
-  }
-
-  async function shareUsingSystemSheet(): Promise<void> {
-    if (!shareItem.value) return
-
-    statusMessage.value = null
-
-    try {
-      const response = await api(
-        `${shareItem.value.shareApiPath}/${shareItem.value.id}`
-      )
-      if (!response.ok) {
-        statusMessage.value = t('ui.share.statusFailedShareLink')
-        return
-      }
-
-      const shareUrl = await response.text()
-
-      if (navigator.share) {
-        await navigator.share({
-          url: shareUrl,
-        })
-      } else {
-        await navigator.clipboard.writeText(shareUrl)
-        statusMessage.value = t('ui.share.statusLinkCopied')
-      }
-
-      notifyShareCompleted()
-      closeShareModal()
-    } catch {
-      statusMessage.value = t('ui.share.statusUnableShareSheet')
-    }
-  }
-
-  async function sendShareToTarget(
-    target: BygMessageShareTarget
-  ): Promise<void> {
-    if (!shareItem.value) return
-
-    sendingUserId.value = target.userId
-    statusMessage.value = null
-
-    const payload =
-      shareItem.value.type === 'post'
-        ? {
-            recipientId: target.userId,
-            sharedPostId: shareItem.value.id,
-          }
-        : {
-            recipientId: target.userId,
-            sharedImageId: shareItem.value.id,
-          }
-
-    const sentMessage = await sendMessage(payload)
-    sendingUserId.value = null
-
-    if (!sentMessage) {
-      statusMessage.value = t('ui.share.statusFailedSendToUser', {
-        username: `@${target.username}`,
-      })
-      return
+    } else {
+      await navigator.clipboard.writeText(shareUrl)
+      statusMessage.value = t('ui.share.statusLinkCopied')
     }
 
     notifyShareCompleted()
     closeShareModal()
+  } catch {
+    statusMessage.value = t('ui.share.statusUnableShareSheet')
+  }
+}
+
+async function sendShareToTarget(target: BygMessageShareTarget): Promise<void> {
+  if (!shareItem.value) return
+
+  sendingUserId.value = target.userId
+  statusMessage.value = null
+
+  const payload =
+    shareItem.value.type === 'post'
+      ? {
+          recipientId: target.userId,
+          sharedPostId: shareItem.value.id,
+        }
+      : {
+          recipientId: target.userId,
+          sharedImageId: shareItem.value.id,
+        }
+
+  const sentMessage = await sendMessage(payload)
+  sendingUserId.value = null
+
+  if (!sentMessage) {
+    statusMessage.value = t('ui.share.statusFailedSendToUser', {
+      username: `@${target.username}`,
+    })
+    return
   }
 
-  async function openLogin(): Promise<void> {
-    closeShareModal()
-    await navigateTo(localePath('login'))
-  }
+  notifyShareCompleted()
+  closeShareModal()
+}
 
-  onMounted(() => {
-    loadShareTargets()
-  })
+async function openLogin(): Promise<void> {
+  closeShareModal()
+  await navigateTo(localePath('login'))
+}
+
+onMounted(() => {
+  loadShareTargets()
+})
 </script>
 
 <template>
@@ -224,55 +222,55 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .shareModal
-    @include utils.itemBackground
-    width: 24rem
-    max-width: calc(100vw - 1rem)
-    padding: 1rem
-    border-radius: 2rem
-    align-items: flex-start
-    gap: 0.75rem
+.shareModal
+  @include utils.itemBackground
+  width: 24rem
+  max-width: calc(100vw - 1rem)
+  padding: 1rem
+  border-radius: 2rem
+  align-items: flex-start
+  gap: 0.75rem
 
-  .shareItemPreview
-    align-items: flex-start
-    gap: 0
+.shareItemPreview
+  align-items: flex-start
+  gap: 0
 
-    img
-      width: 100%
-      border-radius: 0.75rem
-      margin-top: 0.5rem
+  img
+    width: 100%
+    border-radius: 0.75rem
+    margin-top: 0.5rem
 
-    .sharedContentPreview
-      width: 100%
-      max-height: 5rem
-      overflow: hidden
-      opacity: 0.9
+  .sharedContentPreview
+    width: 100%
+    max-height: 5rem
+    overflow: hidden
+    opacity: 0.9
 
-  .targetsSection
-    align-items: flex-start
-    gap: 0.4rem
+.targetsSection
+  align-items: flex-start
+  gap: 0.4rem
 
-  .emptyTargets
-    align-items: flex-start
+.emptyTargets
+  align-items: flex-start
 
-  .targetButton
-    justify-content: flex-start
-    padding: 0.5rem 0.6rem
+.targetButton
+  justify-content: flex-start
+  padding: 0.5rem 0.6rem
 
-    .targetMain
-      align-items: center
+  .targetMain
+    align-items: center
 
-      img, .targetAvatarFallback
-        width: 1.35rem
-        height: 1.35rem
-        border-radius: 50%
+    img, .targetAvatarFallback
+      width: 1.35rem
+      height: 1.35rem
+      border-radius: 50%
 
-      .targetInfo
-        align-items: flex-start
-        gap: 0
+    .targetInfo
+      align-items: flex-start
+      gap: 0
 
-    .targetMeta
-      align-items: center
+  .targetMeta
+    align-items: center
 </style>

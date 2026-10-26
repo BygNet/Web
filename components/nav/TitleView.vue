@@ -1,24 +1,24 @@
 <script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  import { ProgressiveBlur } from 'vue-progressive-blur'
+import { useI18n } from 'vue-i18n'
+import { ProgressiveBlur } from 'vue-progressive-blur'
 
-  import HStack from '@/components/layout/HStack.vue'
-  import { inboxUnreadCount } from '@/data/notifications'
-  import { taskList } from '@/data/tasks'
-  import { title } from '@/data/title'
-  import { isActive } from '@/utils/isActive'
-  import { useRoute } from '#app'
-  import { isDisconnected } from '~/data/visibility.ts'
+import HStack from '@/components/layout/HStack.vue'
+import { inboxUnreadCount } from '@/data/notifications'
+import { taskList } from '@/data/tasks'
+import { title } from '@/data/title'
+import { isActive } from '@/utils/isActive'
+import { useRoute } from '#app'
+import { isDisconnected } from '~/data/visibility.ts'
 
-  const localePath = useLocalePath()
-  const route = useRoute()
-  const router = useRouter()
-  const { t } = useI18n()
-  const unreadCount = inboxUnreadCount
+const localePath = useLocalePath()
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+const unreadCount = inboxUnreadCount
 
-  function goBack() {
-    router.back()
-  }
+function goBack() {
+  router.back()
+}
 </script>
 
 <template>
@@ -77,113 +77,113 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
-  @use "@/styles/utils"
-  @use "@/styles/variables"
+@use "@/styles/themes"
+@use "@/styles/utils"
+@use "@/styles/variables"
 
-  .titleView
-    width: 100%
-    display: flex
-    justify-content: center
-    position: sticky
-    top: 0
-    z-index: 100
-    padding: 0.5rem 0
+.titleView
+  width: 100%
+  display: flex
+  justify-content: center
+  position: sticky
+  top: 0
+  z-index: 100
+  padding: 0.5rem 0
 
-    .titleViewContent
-      z-index: 102
-      margin-top: calc(env(safe-area-inset-top) + 0.5rem)
-      gap: 0.75rem
-      flex-wrap: nowrap
-      width: 65rem
-      padding: 0 var(--padding)
+  .titleViewContent
+    z-index: 102
+    margin-top: calc(env(safe-area-inset-top) + 0.5rem)
+    gap: 0.75rem
+    flex-wrap: nowrap
+    width: 65rem
+    padding: 0 var(--padding)
 
-    .titleMain
-      gap: 0.5rem
-      flex-shrink: 1
-      flex-wrap: nowrap
+  .titleMain
+    gap: 0.5rem
+    flex-shrink: 1
+    flex-wrap: nowrap
+    min-width: 0
+
+    h2
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
       min-width: 0
+      flex-grow: 1
+      flex-shrink: 1
+      max-width: 100%
 
-      h2
-        white-space: nowrap
-        overflow: hidden
-        text-overflow: ellipsis
-        min-width: 0
-        flex-grow: 1
-        flex-shrink: 1
-        max-width: 100%
+    .tasksIndicator
+      position: relative
 
-      .tasksIndicator
-        position: relative
-
-        .tasksCount
-          position: absolute
-          top: -0.25rem
-          right: -0.25rem
-          background: themes.$accentColor
-          padding: 0.25rem
-          font-size: 0.75rem
-          border-radius: 10rem
-
-        .tasksLoader
-          width: 1.5rem
-          height: 1.5rem
-
-      .noConnection
-        background: var(--accentColor)
+      .tasksCount
+        position: absolute
+        top: -0.25rem
+        right: -0.25rem
+        background: themes.$accentColor
         padding: 0.25rem
+        font-size: 0.75rem
+        border-radius: 10rem
 
-        span.iconify
-          width: 1.5rem
-          height: 1.5rem
+      .tasksLoader
+        width: 1.5rem
+        height: 1.5rem
 
-  button.backButton
-    padding: 0.75rem
+    .noConnection
+      background: var(--accentColor)
+      padding: 0.25rem
 
-    span.iconify
-      width: 1.5rem !important
-      height: 1.5rem !important
+      span.iconify
+        width: 1.5rem
+        height: 1.5rem
 
-  button.alertsButton
-    position: relative
-    padding: 0.75rem
+button.backButton
+  padding: 0.75rem
 
-    span.iconify
-      width: 1.5rem !important
-      height: 1.5rem !important
+  span.iconify
+    width: 1.5rem !important
+    height: 1.5rem !important
 
-    .notificationBadge
-      position: absolute
-      top: -0.25rem
-      right: -0.25rem
-      min-width: 1.1rem
-      padding: 0.25rem 0.5rem
-      border-radius: 10rem
-      background: themes.$accentColor
-      font-size: small
-      line-height: 1
-      text-align: center
+button.alertsButton
+  position: relative
+  padding: 0.75rem
 
-  .clear
-    .titleMaskContainer
-      background: transparent
+  span.iconify
+    width: 1.5rem !important
+    height: 1.5rem !important
 
-  .titleMaskContainer
-    background: linear-gradient(to bottom, themes.$backgroundColor, transparent)
-    opacity: 0.7
-    z-index: -1
-
-  .titleBlurContainer
-    z-index: -2
-
-  .titleBlurContainer, .titleMaskContainer
+  .notificationBadge
     position: absolute
-    top: 0
-    bottom: -1.5rem
-    left: 0
-    right: 0
-    border-radius: 0
+    top: -0.25rem
+    right: -0.25rem
+    min-width: 1.1rem
+    padding: 0.25rem 0.5rem
+    border-radius: 10rem
+    background: themes.$accentColor
+    font-size: small
+    line-height: 1
+    text-align: center
 
-    .titleBlur
-      transform: rotate(180deg)
+.clear
+  .titleMaskContainer
+    background: transparent
+
+.titleMaskContainer
+  background: linear-gradient(to bottom, themes.$backgroundColor, transparent)
+  opacity: 0.7
+  z-index: -1
+
+.titleBlurContainer
+  z-index: -2
+
+.titleBlurContainer, .titleMaskContainer
+  position: absolute
+  top: 0
+  bottom: -1.5rem
+  left: 0
+  right: 0
+  border-radius: 0
+
+  .titleBlur
+    transform: rotate(180deg)
 </style>

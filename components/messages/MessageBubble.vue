@@ -1,60 +1,60 @@
 <script setup lang="ts">
-  import { computed, type Ref, ref, watch } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import { computed, type Ref, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import SafeLink from '@/components/base/SafeLink.vue'
-  import type { BygMessage } from '@/types/messages'
-  import { formatDate } from '@/utils/formatters'
-  import { renderMarkdown } from '@/utils/renderMarkdown'
+import SafeLink from '@/components/base/SafeLink.vue'
+import type { BygMessage } from '@/types/messages'
+import { formatDate } from '@/utils/formatters'
+import { renderMarkdown } from '@/utils/renderMarkdown'
 
-  type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
-  type MessageDeliveryState = 'sending' | 'sent'
-  const EMOJI_ONLY_PATTERN =
-    /^[\p{Extended_Pictographic}\p{Emoji_Component}\u200D\uFE0F\s]+$/u
+type MessageGroupPosition = 'single' | 'top' | 'middle' | 'bottom'
+type MessageDeliveryState = 'sending' | 'sent'
+const EMOJI_ONLY_PATTERN =
+  /^[\p{Extended_Pictographic}\p{Emoji_Component}\u200D\uFE0F\s]+$/u
 
-  const props = withDefaults(
-    defineProps<{
-      message: BygMessage
-      outgoing: boolean
-      showAvatar?: boolean
-      showSenderName?: boolean
-      groupPosition?: MessageGroupPosition
-      deliveryState?: MessageDeliveryState | null
-    }>(),
-    {
-      showAvatar: true,
-      showSenderName: false,
-      groupPosition: 'single',
-      deliveryState: null,
-    }
-  )
+const props = withDefaults(
+  defineProps<{
+    message: BygMessage
+    outgoing: boolean
+    showAvatar?: boolean
+    showSenderName?: boolean
+    groupPosition?: MessageGroupPosition
+    deliveryState?: MessageDeliveryState | null
+  }>(),
+  {
+    showAvatar: true,
+    showSenderName: false,
+    groupPosition: 'single',
+    deliveryState: null,
+  }
+)
 
-  const emit = defineEmits<{
-    reply: []
-    openReply: [messageId: number]
-  }>()
+const emit = defineEmits<{
+  reply: []
+  openReply: [messageId: number]
+}>()
 
-  const { t } = useI18n()
+const { t } = useI18n()
 
-  const renderedContent: Ref<string> = ref('')
-  const showingTime: Ref<boolean> = ref(false)
-  const isEmojiOnly = computed(() => {
-    if (props.message.sharedPost || props.message.sharedImage) {
-      return false
-    }
+const renderedContent: Ref<string> = ref('')
+const showingTime: Ref<boolean> = ref(false)
+const isEmojiOnly = computed(() => {
+  if (props.message.sharedPost || props.message.sharedImage) {
+    return false
+  }
 
-    const content = props.message.content.trim()
-    if (!content) return false
-    return EMOJI_ONLY_PATTERN.test(content)
-  })
+  const content = props.message.content.trim()
+  if (!content) return false
+  return EMOJI_ONLY_PATTERN.test(content)
+})
 
-  watch(
-    () => props.message.content,
-    () => {
-      renderedContent.value = renderMarkdown(props.message.content ?? '')
-    },
-    { immediate: true }
-  )
+watch(
+  () => props.message.content,
+  () => {
+    renderedContent.value = renderMarkdown(props.message.content ?? '')
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -172,180 +172,180 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
+@use "@/styles/themes"
 
-  .messageRow
-    position: relative
-    width: 100%
-    flex-direction: row
+.messageRow
+  position: relative
+  width: 100%
+  flex-direction: row
+  align-items: flex-end
+  justify-content: flex-start
+  gap: 0.35rem
+  min-width: 0
+  margin-bottom: 0.1rem
+
+  &.outgoing
+    justify-content: flex-end
+
+.senderAvatar
+  width: 1.3rem
+  height: 1.3rem
+  border-radius: 50%
+
+  &.fallback
+    border-radius: 0
+
+  &.spacer
+    display: block
+    flex-shrink: 0
+
+.bubbleWrap
+  max-width: min(38rem, 86%)
+  min-width: 0
+  align-items: flex-start
+  gap: 0.1rem
+
+  &.outgoing
     align-items: flex-end
-    justify-content: flex-start
-    gap: 0.35rem
-    min-width: 0
-    margin-bottom: 0.1rem
 
-    &.outgoing
-      justify-content: flex-end
+.senderName
+  font-size: x-small
+  margin: 0 0.25rem
 
-  .senderAvatar
-    width: 1.3rem
-    height: 1.3rem
-    border-radius: 50%
+.replyAction
+  flex: 0 0 auto
+  align-self: center
+  width: 1.8rem
+  height: 1.8rem
+  padding: 0.25rem
+  opacity: 0
+  transition: opacity 120ms ease
 
-    &.fallback
-      border-radius: 0
+  &:focus-visible
+    opacity: 0.85
 
-    &.spacer
-      display: block
-      flex-shrink: 0
+.messageRow:hover .replyAction,
+.messageRow:focus-within .replyAction
+  opacity: 0.7
 
-  .bubbleWrap
-    max-width: min(38rem, 86%)
-    min-width: 0
-    align-items: flex-start
-    gap: 0.1rem
-
-    &.outgoing
-      align-items: flex-end
-
-  .senderName
-    font-size: x-small
-    margin: 0 0.25rem
-
+@media (hover: none)
   .replyAction
-    flex: 0 0 auto
-    align-self: center
-    width: 1.8rem
-    height: 1.8rem
-    padding: 0.25rem
-    opacity: 0
-    transition: opacity 120ms ease
-
-    &:focus-visible
-      opacity: 0.85
-
-  .messageRow:hover .replyAction,
-  .messageRow:focus-within .replyAction
     opacity: 0.7
 
-  @media (hover: none)
-    .replyAction
-      opacity: 0.7
+.bubble
+  --cornerRadius: 1.25rem
+  --groupCornerRadius: 0.55rem
+  width: fit-content
+  max-width: 100%
+  align-items: flex-start
+  gap: 0.45rem
+  padding: 0.55rem 0.7rem
+  border-radius: var(--cornerRadius)
+  background: themes.$foregroundColor
 
-  .bubble
-    --cornerRadius: 1.25rem
-    --groupCornerRadius: 0.55rem
-    width: fit-content
+  &.group-top
+    border-bottom-left-radius: var(--groupCornerRadius)
+    border-bottom-right-radius: var(--groupCornerRadius)
+
+  &.group-middle
+    border-radius: var(--groupCornerRadius)
+
+  &.group-bottom
+    border-top-left-radius: var(--groupCornerRadius)
+    border-top-right-radius: var(--groupCornerRadius)
+
+  &.outgoing
+    background: themes.$accentColor
+
+  &.emojiOnly
+    background: transparent !important
+    padding: 0
+    border-radius: 0
+
+.messageRow.messageTarget .bubble
+  outline: 0.15rem solid themes.$accentColor
+  outline-offset: 0.1rem
+
+.messageContent
+  width: 100%
+  min-width: 0
+  align-items: flex-start
+
+  :deep(img)
     max-width: 100%
-    align-items: flex-start
-    gap: 0.45rem
-    padding: 0.55rem 0.7rem
-    border-radius: var(--cornerRadius)
-    background: themes.$foregroundColor
+    border-radius: 0.75rem
 
-    &.group-top
-      border-bottom-left-radius: var(--groupCornerRadius)
-      border-bottom-right-radius: var(--groupCornerRadius)
+  :deep(p)
+    margin: 0
 
-    &.group-middle
-      border-radius: var(--groupCornerRadius)
+  &.emojiOnly
+    :deep(p)
+      font-size: clamp(2rem, 7vw, 3rem)
+      line-height: 1.2
 
-    &.group-bottom
-      border-top-left-radius: var(--groupCornerRadius)
-      border-top-right-radius: var(--groupCornerRadius)
+.replyReference
+  display: block
+  width: 100%
+  padding: 0.35rem 0.5rem
+  border-left: 0.2rem solid themes.$accentColor
+  background: rgba(0, 0, 0, 0.08)
+  border-radius: 0.35rem
+  overflow: hidden
+  text-align: left
+  cursor: pointer
 
-    &.outgoing
-      background: themes.$accentColor
+  p
+    margin: 0
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
 
-    &.emojiOnly
-      background: transparent !important
-      padding: 0
-      border-radius: 0
+    &:first-child
+      font-size: x-small
+      font-weight: 600
 
-  .messageRow.messageTarget .bubble
-    outline: 0.15rem solid themes.$accentColor
-    outline-offset: 0.1rem
+.sharedEmbed
+  width: 100%
+  box-sizing: border-box
+  display: flex
+  flex-direction: column
+  gap: 0.35rem
+  align-items: flex-start
+  padding: 0.6rem
+  border-radius: 0.9rem
+  text-decoration: none
 
-  .messageContent
+  .embedPreview
     width: 100%
-    min-width: 0
-    align-items: flex-start
+    max-height: 4.5rem
+    overflow: hidden
 
-    :deep(img)
-      max-width: 100%
+  &.imageEmbed
+    .imageEmbedMeta
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: space-between
+      gap: 0.35rem
+
+      h4, p
+        margin: 0
+
+    img
+      width: 100%
       border-radius: 0.75rem
 
-    :deep(p)
-      margin: 0
+.bubbleTime
+  font-size: x-small
+  margin: 0.1rem 0.25rem
 
-    &.emojiOnly
-      :deep(p)
-        font-size: clamp(2rem, 7vw, 3rem)
-        line-height: 1.2
+.bubbleMeta
+  flex-direction: row
+  align-items: center
+  gap: 0.2rem
+  margin: 0 0.25rem
 
-  .replyReference
-    display: block
-    width: 100%
-    padding: 0.35rem 0.5rem
-    border-left: 0.2rem solid themes.$accentColor
-    background: rgba(0, 0, 0, 0.08)
-    border-radius: 0.35rem
-    overflow: hidden
-    text-align: left
-    cursor: pointer
-
-    p
-      margin: 0
-      overflow: hidden
-      text-overflow: ellipsis
-      white-space: nowrap
-
-      &:first-child
-        font-size: x-small
-        font-weight: 600
-
-  .sharedEmbed
-    width: 100%
-    box-sizing: border-box
-    display: flex
-    flex-direction: column
-    gap: 0.35rem
-    align-items: flex-start
-    padding: 0.6rem
-    border-radius: 0.9rem
-    text-decoration: none
-
-    .embedPreview
-      width: 100%
-      max-height: 4.5rem
-      overflow: hidden
-
-    &.imageEmbed
-      .imageEmbedMeta
-        width: 100%
-        display: flex
-        align-items: center
-        justify-content: space-between
-        gap: 0.35rem
-
-        h4, p
-          margin: 0
-
-      img
-        width: 100%
-        border-radius: 0.75rem
-
-  .bubbleTime
+  p
+    margin: 0
     font-size: x-small
-    margin: 0.1rem 0.25rem
-
-  .bubbleMeta
-    flex-direction: row
-    align-items: center
-    gap: 0.2rem
-    margin: 0 0.25rem
-
-    p
-      margin: 0
-      font-size: x-small
 </style>

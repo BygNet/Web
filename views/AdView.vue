@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import type { BygAd } from '@bygnet/types'
+import type { BygAd } from '@bygnet/types'
 
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import ReportButton from '@/components/posts/ReportButton.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import ReportButton from '@/components/posts/ReportButton.vue'
 
-  defineProps<{
-    ad: BygAd
-  }>()
+defineProps<{
+  ad: BygAd
+}>()
 </script>
 
 <template>
@@ -26,17 +26,17 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .bygAd
-    @include utils.listItemBorder
-    padding-bottom: 0.5rem
-    align-items: flex-start
+.bygAd
+  @include utils.listItemBorder
+  padding-bottom: 0.5rem
+  align-items: flex-start
 
-    img
-      width: 100%
-      border-radius: 1rem
+  img
+    width: 100%
+    border-radius: 1rem
 
-    .adMeta
-      align-items: flex-end
+  .adMeta
+    align-items: flex-end
 </style>

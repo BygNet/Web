@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import VStack from '@/components/layout/VStack.vue'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import VStack from '@/components/layout/VStack.vue'
 
-  defineProps<{
-    title: string
-  }>()
+defineProps<{
+  title: string
+}>()
 </script>
 
 <template>
@@ -18,8 +18,8 @@
 </template>
 
 <style scoped lang="sass">
-  .alertIcon
-    width: 4rem
-    height: 4rem
-    margin: 1rem 0
+.alertIcon
+  width: 4rem
+  height: 4rem
+  margin: 1rem 0
 </style>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import SkeletonText from '@/components/layout/skeletons/SkeletonText.vue'
-  import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import HStack from '~/components/layout/HStack.vue'
+import SkeletonText from '@/components/layout/skeletons/SkeletonText.vue'
+import SkeletonUser from '@/components/layout/skeletons/SkeletonUser.vue'
+import VStack from '@/components/layout/VStack.vue'
+import HStack from '~/components/layout/HStack.vue'
 </script>
 
 <template>
@@ -34,15 +34,15 @@
 </template>
 
 <style scoped lang="sass">
-  .skeletonPost
-    border-bottom: var(--foregroundColor) solid 0.1rem
-    border-radius: 0
-    padding: 0.75rem 0
-    margin-bottom: 0.5rem
+.skeletonPost
+  border-bottom: var(--foregroundColor) solid 0.1rem
+  border-radius: 0
+  padding: 0.75rem 0
+  margin-bottom: 0.5rem
 
-    .title
-      width: 40%
+  .title
+    width: 40%
 
-    .buttonContent
-      width: 2rem
+  .buttonContent
+    width: 2rem
 </style>

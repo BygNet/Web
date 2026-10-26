@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import UsernameView from '@/components/posts/UsernameView.vue'
+import UsernameView from '@/components/posts/UsernameView.vue'
 
-  defineProps<{
-    avatarUrl?: string
-    name: string
-    role: string
-    bygUsername?: string
-    homepage?: string
-  }>()
+defineProps<{
+  avatarUrl?: string
+  name: string
+  role: string
+  bygUsername?: string
+  homepage?: string
+}>()
 </script>
 
 <template>
@@ -33,28 +33,28 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
+@use "@/styles/themes"
 
-  .personCredit
-    justify-content: flex-start
-    height: 100%
+.personCredit
+  justify-content: flex-start
+  height: 100%
 
-    .avatar
-      border-radius: 50%
-      overflow: hidden
+  .avatar
+    border-radius: 50%
+    overflow: hidden
 
-      img, .placeholder
-        width: 6rem
-        height: 6rem
-        background: themes.$foregroundColor
-        justify-content: center
+    img, .placeholder
+      width: 6rem
+      height: 6rem
+      background: themes.$foregroundColor
+      justify-content: center
 
-        span.iconify
-          width: 3rem
-          height: 3rem
+      span.iconify
+        width: 3rem
+        height: 3rem
 
-    .link
-      margin: 0.25rem 0
-      padding: 0.2rem 0.5rem
-      gap: 0.1rem
+  .link
+    margin: 0.25rem 0
+    padding: 0.2rem 0.5rem
+    gap: 0.1rem
 </style>

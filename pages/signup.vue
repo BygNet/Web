@@ -1,52 +1,52 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { completeServiceLogin } from '@/auth/serviceLogin'
-  import { signup } from '@/auth/signup'
-  import SafeLink from '@/components/base/SafeLink.vue'
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { title } from '@/data/title'
-  import { navigateTo } from '#app'
-  import OAuthButtons from '~/components/auth/OAuthButtons.vue'
+import { completeServiceLogin } from '@/auth/serviceLogin'
+import { signup } from '@/auth/signup'
+import SafeLink from '@/components/base/SafeLink.vue'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { title } from '@/data/title'
+import { navigateTo } from '#app'
+import OAuthButtons from '~/components/auth/OAuthButtons.vue'
 
-  definePageMeta({ showBackButton: true })
+definePageMeta({ showBackButton: true })
 
-  const localePath = useLocalePath()
-  const route = useRoute()
-  const { t } = useI18n()
+const localePath = useLocalePath()
+const route = useRoute()
+const { t } = useI18n()
 
-  title.value = t('auth.signup')
-  setHeadMeta({
-    page: t('auth.signup'),
-    subtitle: t('pages.signup.description'),
-  })
+title.value = t('auth.signup')
+setHeadMeta({
+  page: t('auth.signup'),
+  subtitle: t('pages.signup.description'),
+})
 
-  const email = ref('')
-  const username = ref('')
-  const password = ref('')
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+const email = ref('')
+const username = ref('')
+const password = ref('')
+const loading = ref(false)
+const error = ref<string | null>(null)
 
-  async function submit() {
-    error.value = null
-    loading.value = true
+async function submit() {
+  error.value = null
+  loading.value = true
 
-    try {
-      await signup(email.value, username.value, password.value)
-      const serviceRedirect = await completeServiceLogin(
-        route.query.redirect_uri,
-        route.query.state
-      )
-      await navigateTo(serviceRedirect ?? localePath('/'))
-    } catch {
-      error.value = t('auth.signupPage.signupFailed')
-    } finally {
-      loading.value = false
-    }
+  try {
+    await signup(email.value, username.value, password.value)
+    const serviceRedirect = await completeServiceLogin(
+      route.query.redirect_uri,
+      route.query.state
+    )
+    await navigateTo(serviceRedirect ?? localePath('/'))
+  } catch {
+    error.value = t('auth.signupPage.signupFailed')
+  } finally {
+    loading.value = false
   }
+}
 </script>
 
 <template>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import HStack from '@/components/layout/HStack.vue'
+import HStack from '@/components/layout/HStack.vue'
 
-  defineProps<{
-    name: string
-    icon: string
-    link: string
-  }>()
+defineProps<{
+  name: string
+  icon: string
+  link: string
+}>()
 </script>
 
 <template>
@@ -18,10 +18,10 @@
 </template>
 
 <style scoped lang="sass">
-  .providerCredit
-    margin: 0 1rem
+.providerCredit
+  margin: 0 1rem
 
-    .icon
-      width: 3rem
-      height: 3rem
+  .icon
+    width: 3rem
+    height: 3rem
 </style>

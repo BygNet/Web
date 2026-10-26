@@ -1,23 +1,23 @@
 <script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
 
-  import Modal from '@/components/layout/Modal.vue'
-  import ModalActions from '@/components/layout/ModalActions.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { showingNotificationsModal } from '~/data/visibility'
+import Modal from '@/components/layout/Modal.vue'
+import ModalActions from '@/components/layout/ModalActions.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { showingNotificationsModal } from '~/data/visibility'
 
-  const localePath = useLocalePath()
-  const emit = defineEmits([ 'close' ])
-  const { t } = useI18n()
+const localePath = useLocalePath()
+const emit = defineEmits([ 'close' ])
+const { t } = useI18n()
 
-  function close(): void {
-    emit('close')
-  }
+function close(): void {
+  emit('close')
+}
 
-  function openNotifications(): void {
-    navigateTo(localePath('/inbox'))
-    close()
-  }
+function openNotifications(): void {
+  navigateTo(localePath('/inbox'))
+  close()
+}
 </script>
 
 <template>
@@ -45,8 +45,8 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .notificationsModal
-    @include utils.itemBackground
+.notificationsModal
+  @include utils.itemBackground
 </style>

@@ -1,25 +1,25 @@
 <script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  import { ProgressiveBlur } from 'vue-progressive-blur'
+import { useI18n } from 'vue-i18n'
+import { ProgressiveBlur } from 'vue-progressive-blur'
 
-  import SafeLink from '@/components/base/SafeLink.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { type BygPageMeta, BygPages, ExplorePage } from '@/data/pages'
-  import { showingCreateModal } from '@/data/visibility'
-  import { toggleCreateModal } from '@/utils/createModalManager'
-  import { isActive } from '@/utils/isActive'
-  import { useRoute } from '#app'
+import SafeLink from '@/components/base/SafeLink.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { type BygPageMeta, BygPages, ExplorePage } from '@/data/pages'
+import { showingCreateModal } from '@/data/visibility'
+import { toggleCreateModal } from '@/utils/createModalManager'
+import { isActive } from '@/utils/isActive'
+import { useRoute } from '#app'
 
-  const route = useRoute()
-  const { t } = useI18n()
-  function pageHref(page: BygPageMeta): string {
-    return page.path
-  }
+const route = useRoute()
+const { t } = useI18n()
+function pageHref(page: BygPageMeta): string {
+  return page.path
+}
 
-  function badgeValue(page: BygPageMeta): number {
-    return Math.max(0, page.badge?.value ?? 0)
-  }
+function badgeValue(page: BygPageMeta): number {
+  return Math.max(0, page.badge?.value ?? 0)
+}
 </script>
 
 <template>
@@ -62,80 +62,80 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/variables"
-  @use "@/styles/themes"
+@use "@/styles/variables"
+@use "@/styles/themes"
 
-  .bygMobileNav
-    --bottom: calc(max(env(safe-area-inset-bottom), 1rem) - var(--padding))
+.bygMobileNav
+  --bottom: calc(max(env(safe-area-inset-bottom), 1rem) - var(--padding))
 
-    display: none
-    flex-wrap: wrap
-    align-items: flex-end
-    gap: 1rem
-    position: sticky
-    bottom: 0
-    padding: 0 0.5rem
-    z-index: 5001
-    width: 100%
-    border-radius: 0
+  display: none
+  flex-wrap: wrap
+  align-items: flex-end
+  gap: 1rem
+  position: sticky
+  bottom: 0
+  padding: 0 0.5rem
+  z-index: 5001
+  width: 100%
+  border-radius: 0
 
-    &::before
-      background: linear-gradient(to var(--trailing), var(--gradientOfTheDay))
-      mask-image: linear-gradient(to top, black, transparent)
-      opacity: 0.3
+  &::before
+    background: linear-gradient(to var(--trailing), var(--gradientOfTheDay))
+    mask-image: linear-gradient(to top, black, transparent)
+    opacity: 0.3
 
-    .createButton
+  .createButton
+    span.iconify
+      transition: 0.2s ease-in-out
+    &.open
       span.iconify
-        transition: 0.2s ease-in-out
-      &.open
-        span.iconify
-          transform: rotate(45deg)
+        transform: rotate(45deg)
 
-    .mobileNavItems
-      width: 100%
-      padding: 0.25rem
+  .mobileNavItems
+    width: 100%
+    padding: 0.25rem
+    gap: 0
+    justify-content: space-around
+    margin-bottom: var(--bottom)
+
+    .mobileNavItem
+      position: relative
+      align-items: center
+      padding: 0.45rem 0.35rem
       gap: 0
-      justify-content: space-around
-      margin-bottom: var(--bottom)
+      border-radius: 10rem
 
-      .mobileNavItem
-        position: relative
-        align-items: center
-        padding: 0.45rem 0.35rem
-        gap: 0
+      &:not(.selected)
+        opacity: 0.6
+
+      span.iconify
+        width: 1.75rem
+        height: 1.75rem
+
+      p
+        font-size: 0.75rem
+
+      .navBadge
+        position: absolute
+        top: -0.5rem
+        right: -0.5rem
+        min-width: 1.1rem
+        padding: 0.25rem 0.5rem
         border-radius: 10rem
+        background: themes.$accentColor
+        font-size: small
+        line-height: 1
+        text-align: center
 
-        &:not(.selected)
-          opacity: 0.6
+  .navBlur
+    position: absolute
+    bottom: 0
+    width: 100%
+    height: 100%
+    z-index: -1
+    border-radius: var(--borderRadius)
 
-        span.iconify
-          width: 1.75rem
-          height: 1.75rem
-
-        p
-          font-size: 0.75rem
-
-        .navBadge
-          position: absolute
-          top: -0.5rem
-          right: -0.5rem
-          min-width: 1.1rem
-          padding: 0.25rem 0.5rem
-          border-radius: 10rem
-          background: themes.$accentColor
-          font-size: small
-          line-height: 1
-          text-align: center
-
-    .navBlur
-      position: absolute
-      bottom: 0
-      width: 100%
-      height: 100%
-      z-index: -1
-      border-radius: var(--borderRadius)
-
-  @media (max-width: variables.$mobileWidth)
-    .bygMobileNav
-      display: flex
+@media (max-width: variables.$mobileWidth)
+  .bygMobileNav
+    display: flex
 </style>

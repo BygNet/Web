@@ -1,48 +1,48 @@
 <script setup lang="ts">
-  import { SketchPicker, tinycolor } from 'vue-color'
+import { SketchPicker, tinycolor } from 'vue-color'
 
-  import VStack from '~/components/layout/VStack.vue'
-  import SettingsInput from '~/components/settings/SettingsInput.vue'
+import VStack from '~/components/layout/VStack.vue'
+import SettingsInput from '~/components/settings/SettingsInput.vue'
 
-  const showingColorPicker = ref(false)
-  const pickerContainerRef = ref<HTMLElement | null>(null)
-  const buttonRef = ref<HTMLElement | null>(null)
+const showingColorPicker = ref(false)
+const pickerContainerRef = ref<HTMLElement | null>(null)
+const buttonRef = ref<HTMLElement | null>(null)
 
-  defineProps<{
-    label: string
-  }>()
+defineProps<{
+  label: string
+}>()
 
-  const value = defineModel<string>({ required: true, default: '#474888' })
+const value = defineModel<string>({ required: true, default: '#474888' })
 
-  const pickerColor = computed({
-    get: () => tinycolor(value.value),
-    set: color => {
-      value.value = tinycolor(color).toHexString()
-    },
-  })
+const pickerColor = computed({
+  get: () => tinycolor(value.value),
+  set: color => {
+    value.value = tinycolor(color).toHexString()
+  },
+})
 
-  const cssColor = computed(() => value.value)
+const cssColor = computed(() => value.value)
 
-  const handleDocumentClick = (event: MouseEvent) => {
-    const target = event.target as Node
+const handleDocumentClick = (event: MouseEvent) => {
+  const target = event.target as Node
 
-    if (
-      pickerContainerRef.value?.contains(target) ||
-      buttonRef.value?.contains(target)
-    ) {
-      return
-    }
-
-    showingColorPicker.value = false
+  if (
+    pickerContainerRef.value?.contains(target) ||
+    buttonRef.value?.contains(target)
+  ) {
+    return
   }
 
-  onMounted(() => {
-    document.addEventListener('click', handleDocumentClick)
-  })
+  showingColorPicker.value = false
+}
 
-  onBeforeUnmount(() => {
-    document.removeEventListener('click', handleDocumentClick)
-  })
+onMounted(() => {
+  document.addEventListener('click', handleDocumentClick)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleDocumentClick)
+})
 </script>
 
 <template>
@@ -71,17 +71,17 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
+@use "@/styles/themes"
 
-  .settingsColorInputContainer
-    position: relative
-    width: 100%
+.settingsColorInputContainer
+  position: relative
+  width: 100%
 
-    .colorInput
-      background: var(--color)
+  .colorInput
+    background: var(--color)
 
-    .pickerContainer
-      position: absolute
-      z-index: 2
-      top: 1rem
+  .pickerContainer
+    position: absolute
+    z-index: 2
+    top: 1rem
 </style>

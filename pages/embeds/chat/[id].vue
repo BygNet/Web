@@ -1,58 +1,58 @@
 <script setup lang="ts">
-  import type { BygProfile } from '@bygnet/types'
-  import { computed, type Ref, ref } from 'vue'
+import type { BygProfile } from '@bygnet/types'
+import { computed, type Ref, ref } from 'vue'
 
-  import EmbedShell from '@/components/embeds/EmbedShell.vue'
-  import EmptyState from '@/components/layout/EmptyState.vue'
-  import ErrorState from '@/components/layout/ErrorState.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { fetchProfileByUsername } from '@/data/profiles'
-  import setHeadMeta from '@/utils/setHeadMeta'
-  import { useRoute } from '#app'
+import EmbedShell from '@/components/embeds/EmbedShell.vue'
+import EmptyState from '@/components/layout/EmptyState.vue'
+import ErrorState from '@/components/layout/ErrorState.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { fetchProfileByUsername } from '@/data/profiles'
+import setHeadMeta from '@/utils/setHeadMeta'
+import { useRoute } from '#app'
 
-  const route = useRoute()
-  const id = (route.params.id as string) || null
+const route = useRoute()
+const id = (route.params.id as string) || null
 
-  setHeadMeta({
-    page: 'Chat Embed',
-    subtitle: 'Open chat with Byg with your user.',
-  })
+setHeadMeta({
+  page: 'Chat Embed',
+  subtitle: 'Open chat with Byg with your user.',
+})
 
-  const profile: Ref<BygProfile | null> = ref(null)
-  const error: Ref<string | null> = ref(null)
-  const isLoading: Ref<boolean> = ref(true)
-  const isFollowing: Ref<boolean> = ref(false)
-  const username = computed(() => id)
+const profile: Ref<BygProfile | null> = ref(null)
+const error: Ref<string | null> = ref(null)
+const isLoading: Ref<boolean> = ref(true)
+const isFollowing: Ref<boolean> = ref(false)
+const username = computed(() => id)
 
-  async function loadProfile() {
-    if (!username.value) {
-      error.value = 'Invalid username'
-      isLoading.value = false
+async function loadProfile() {
+  if (!username.value) {
+    error.value = 'Invalid username'
+    isLoading.value = false
+    return
+  }
+
+  isLoading.value = true
+  error.value = null
+
+  try {
+    profile.value = await fetchProfileByUsername(username.value)
+    if (!profile.value) {
+      error.value = 'User not found'
       return
     }
-
-    isLoading.value = true
-    error.value = null
-
-    try {
-      profile.value = await fetchProfileByUsername(username.value)
-      if (!profile.value) {
-        error.value = 'User not found'
-        return
-      }
-      isFollowing.value = profile.value?.isFollowing ?? false
-    } catch (err) {
-      error.value = 'Failed to load profile'
-      console.error(err)
-    } finally {
-      isLoading.value = false
-    }
+    isFollowing.value = profile.value?.isFollowing ?? false
+  } catch (err) {
+    error.value = 'Failed to load profile'
+    console.error(err)
+  } finally {
+    isLoading.value = false
   }
+}
 
-  if (id) {
-    loadProfile()
-  }
+if (id) {
+  loadProfile()
+}
 </script>
 
 <template>
@@ -103,31 +103,31 @@
 </template>
 
 <style scoped lang="sass">
-  .bygChatEmbed
-    width: 100%
+.bygChatEmbed
+  width: 100%
+  justify-content: space-between
+
+  .profile
+    min-height: 100%
+    flex-wrap: nowrap
     justify-content: space-between
 
-    .profile
-      min-height: 100%
-      flex-wrap: nowrap
-      justify-content: space-between
+  .userAvatar
+    width: 3rem
+    height: 3rem
+    border-radius: 50%
+    object-fit: cover
 
-    .userAvatar
-      width: 3rem
-      height: 3rem
-      border-radius: 50%
-      object-fit: cover
+  .userMeta
+    gap: 0
 
-    .userMeta
-      gap: 0
+    *
+      margin: 0
 
-      *
-        margin: 0
+  .actions
+    a
+      flex-grow: 1
 
-    .actions
-      a
-        flex-grow: 1
-
-      button
-        width: 100%
+    button
+      width: 100%
 </style>

@@ -1,18 +1,18 @@
 <script setup lang="ts">
-  import { onMounted } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import HStack from '@/components/layout/HStack.vue'
-  import { showingReportPopup } from '@/data/visibility'
-  const { t } = useI18n()
+import HStack from '@/components/layout/HStack.vue'
+import { showingReportPopup } from '@/data/visibility'
+const { t } = useI18n()
 
-  onMounted(() => {
+onMounted(() => {
+  // @ts-ignore
+  if (window.Tally) {
     // @ts-ignore
-    if (window.Tally) {
-      // @ts-ignore
-      Tally.loadEmbeds()
-    }
-  })
+    Tally.loadEmbeds()
+  }
+})
 </script>
 
 <template>
@@ -36,22 +36,22 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .reportView
-    @include utils.itemBackground
+.reportView
+  @include utils.itemBackground
 
-    position: fixed
-    width: 50rem
-    max-width: calc(100vw - 2rem - var(--padding)*2)
-    z-index: 10000
-    backdrop-filter: blur(0.5rem)
-    bottom: 1rem
-    right: 1rem
-    align-items: flex-start
-    gap: 0.75rem
+  position: fixed
+  width: 50rem
+  max-width: calc(100vw - 2rem - var(--padding)*2)
+  z-index: 10000
+  backdrop-filter: blur(0.5rem)
+  bottom: 1rem
+  right: 1rem
+  align-items: flex-start
+  gap: 0.75rem
 
-    iframe
-      border: none
-      border-radius: 1rem
+  iframe
+    border: none
+    border-radius: 1rem
 </style>

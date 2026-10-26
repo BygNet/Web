@@ -1,55 +1,55 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import SettingsGroup from '@/components/settings/SettingsGroup.vue'
-  import {
-    type BygSession,
-    fetchSessions,
-    revokeSession,
-    setSessionExpiry,
-  } from '@/data/sessions'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import SettingsGroup from '@/components/settings/SettingsGroup.vue'
+import {
+  type BygSession,
+  fetchSessions,
+  revokeSession,
+  setSessionExpiry,
+} from '@/data/sessions'
 
-  const sessions = ref<BygSession[]>([])
-  const loading = ref(true)
-  const busy = ref<string | null>(null)
-  const { t } = useI18n()
+const sessions = ref<BygSession[]>([])
+const loading = ref(true)
+const busy = ref<string | null>(null)
+const { t } = useI18n()
 
-  function countryFlag(code: string | null): string {
-    if (!code || code.length !== 2) return 'solar:global-line-duotone'
-    return `circle-flags:${code.toLowerCase()}`
-  }
+function countryFlag(code: string | null): string {
+  if (!code || code.length !== 2) return 'solar:global-line-duotone'
+  return `circle-flags:${code.toLowerCase()}`
+}
 
-  function sessionDate(value: string): string {
-    return new Intl.DateTimeFormat(undefined, {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    }).format(new Date(value))
-  }
+function sessionDate(value: string): string {
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(new Date(value))
+}
 
-  async function refresh(): Promise<void> {
-    loading.value = true
-    sessions.value = await fetchSessions()
-    loading.value = false
-  }
+async function refresh(): Promise<void> {
+  loading.value = true
+  sessions.value = await fetchSessions()
+  loading.value = false
+}
 
-  async function toggleExpiry(session: BygSession): Promise<void> {
-    busy.value = session.id
-    await setSessionExpiry(session, session.expiresAt !== null)
-    busy.value = null
-  }
+async function toggleExpiry(session: BygSession): Promise<void> {
+  busy.value = session.id
+  await setSessionExpiry(session, session.expiresAt !== null)
+  busy.value = null
+}
 
-  async function remove(session: BygSession): Promise<void> {
-    busy.value = session.id
-    const removed = await revokeSession(session)
-    if (removed)
-      sessions.value = sessions.value.filter(item => item.id !== session.id)
-    busy.value = null
-  }
+async function remove(session: BygSession): Promise<void> {
+  busy.value = session.id
+  const removed = await revokeSession(session)
+  if (removed)
+    sessions.value = sessions.value.filter(item => item.id !== session.id)
+  busy.value = null
+}
 
-  onMounted(refresh)
+onMounted(refresh)
 </script>
 
 <template>
@@ -131,31 +131,31 @@
 </template>
 
 <style scoped lang="sass">
-  @use '@/styles/utils'
+@use '@/styles/utils'
 
-  .sessionsList
-    width: 100%
+.sessionsList
+  width: 100%
 
-  .sessionItem
-    width: 100%
-    gap: 0.35rem
-    border-radius: 0
+.sessionItem
+  width: 100%
+  gap: 0.35rem
+  border-radius: 0
 
-    &:not(:last-child)
-      @include utils.listItemBorder
-      padding-bottom: 0.75rem
-      margin-bottom: 0.5rem
+  &:not(:last-child)
+    @include utils.listItemBorder
+    padding-bottom: 0.75rem
+    margin-bottom: 0.5rem
 
 
-  .sessionHeader, .sessionExpiry
-    gap: 0.5rem
+.sessionHeader, .sessionExpiry
+  gap: 0.5rem
 
-  .sessionFlag
-    font-size: 1.35rem
+.sessionFlag
+  font-size: 1.35rem
 
-  .currentPill
-    padding: 0.2rem 0.45rem
-    border-radius: 1rem
-    background: var(--accentColor)
-    font-size: 0.75rem
+.currentPill
+  padding: 0.2rem 0.45rem
+  border-radius: 1rem
+  background: var(--accentColor)
+  font-size: 0.75rem
 </style>

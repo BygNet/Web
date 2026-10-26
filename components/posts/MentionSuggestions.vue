@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import type { BygUserSuggestion } from '@/types/mentions'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import type { BygUserSuggestion } from '@/types/mentions'
 
-  defineProps<{
-    suggestions: BygUserSuggestion[]
-  }>()
+defineProps<{
+  suggestions: BygUserSuggestion[]
+}>()
 
-  const emit = defineEmits<{
-    select: [username: string]
-  }>()
+const emit = defineEmits<{
+  select: [username: string]
+}>()
 </script>
 
 <template>
@@ -46,37 +46,37 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
-  @use "@/styles/utils"
+@use "@/styles/themes"
+@use "@/styles/utils"
 
-  .mentionSuggestions
-    flex-wrap: nowrap
-    position: absolute
-    width: 20rem
-    border-radius: 1.5rem
-    max-width: 100%
-    max-height: 12rem
-    overflow: scroll
-    align-items: flex-start
-    gap: 0.25rem
-    padding: 0.5rem
-    background: themes.$foregroundOpaque
-    z-index: 1000
+.mentionSuggestions
+  flex-wrap: nowrap
+  position: absolute
+  width: 20rem
+  border-radius: 1.5rem
+  max-width: 100%
+  max-height: 12rem
+  overflow: scroll
+  align-items: flex-start
+  gap: 0.25rem
+  padding: 0.5rem
+  background: themes.$foregroundOpaque
+  z-index: 1000
 
-    .mentionSuggestionItem
-      width: 100%
-      justify-content: flex-start
-      padding: 0.35rem 0.5rem
+  .mentionSuggestionItem
+    width: 100%
+    justify-content: flex-start
+    padding: 0.35rem 0.5rem
 
-      .mentionMain
-        gap: 0.4rem
-        align-items: center
+    .mentionMain
+      gap: 0.4rem
+      align-items: center
 
-      .suggestionAvatar
-        width: 1.2rem
-        height: 1.2rem
-        border-radius: 50%
+    .suggestionAvatar
+      width: 1.2rem
+      height: 1.2rem
+      border-radius: 50%
 
-        &.fallback
-          border-radius: 0
+      &.fallback
+        border-radius: 0
 </style>

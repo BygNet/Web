@@ -1,64 +1,63 @@
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import { logout } from '@/auth/logout'
-  import { auth, removeAccount, setActiveAccount } from '@/auth/session'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import UsernameView from '@/components/posts/UsernameView.vue'
+import { logout } from '@/auth/logout'
+import { auth, removeAccount, setActiveAccount } from '@/auth/session'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import UsernameView from '@/components/posts/UsernameView.vue'
 
-  const localePath = useLocalePath()
-  const { t } = useI18n()
+const localePath = useLocalePath()
+const { t } = useI18n()
 
-  const props = defineProps<{
-    variant?: 'sidebar' | 'profile'
-  }>()
+const props = defineProps<{
+  variant?: 'sidebar' | 'profile'
+}>()
 
-  const showingAccounts = ref(false)
+const showingAccounts = ref(false)
 
-  const accounts = computed(() => {
-    return [ ...auth.accounts ].sort((a, b) => b.lastUsed - a.lastUsed)
-  })
+const accounts = computed(() => {
+  return [ ...auth.accounts ].sort((a, b) => b.lastUsed - a.lastUsed)
+})
 
-  const activeAccount = computed(() => {
-    if (auth.activeAccountId === null) return null
-    return (
-      accounts.value.find(account => account.id === auth.activeAccountId) ??
-      null
-    )
-  })
+const activeAccount = computed(() => {
+  if (auth.activeAccountId === null) return null
+  return (
+    accounts.value.find(account => account.id === auth.activeAccountId) ?? null
+  )
+})
 
-  const isExpanded = computed(() => {
-    return props.variant === 'profile' ? true : showingAccounts.value
-  })
+const isExpanded = computed(() => {
+  return props.variant === 'profile' ? true : showingAccounts.value
+})
 
-  function toggleExpanded(): void {
-    if (props.variant === 'profile') return
-    showingAccounts.value = !showingAccounts.value
-  }
+function toggleExpanded(): void {
+  if (props.variant === 'profile') return
+  showingAccounts.value = !showingAccounts.value
+}
 
-  async function switchAccount(accountId: number): Promise<void> {
-    if (auth.activeAccountId === accountId) return
-    setActiveAccount(accountId)
-    showingAccounts.value = false
-  }
+async function switchAccount(accountId: number): Promise<void> {
+  if (auth.activeAccountId === accountId) return
+  setActiveAccount(accountId)
+  showingAccounts.value = false
+}
 
-  function removeLocalAccount(accountId: number): void {
-    removeAccount(accountId)
-  }
+function removeLocalAccount(accountId: number): void {
+  removeAccount(accountId)
+}
 
-  async function addAccount(): Promise<void> {
-    await navigateTo(localePath('/login'))
-  }
+async function addAccount(): Promise<void> {
+  await navigateTo(localePath('/login'))
+}
 
-  async function addSignup(): Promise<void> {
-    await navigateTo(localePath('/signup'))
-  }
+async function addSignup(): Promise<void> {
+  await navigateTo(localePath('/signup'))
+}
 
-  async function logoutActive(): Promise<void> {
-    await logout()
-  }
+async function logoutActive(): Promise<void> {
+  await logout()
+}
 </script>
 
 <template>
@@ -167,40 +166,40 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .accountSwitcher
-    width: 100%
+.accountSwitcher
+  width: 100%
 
-    &.profile
-      .accountList
-        background: transparent
-        padding: 0
-
-      .activeAccountButton
-        display: none
-
+  &.profile
     .accountList
-      width: 100%
+      background: transparent
+      padding: 0
 
     .activeAccountButton
-      width: 100%
-      justify-content: space-between
+      display: none
 
-    .toggleIcon
-      transition: transform 0.2s ease
+  .accountList
+    width: 100%
 
-      &.open
-        transform: rotate(180deg)
+  .activeAccountButton
+    width: 100%
+    justify-content: space-between
 
-    .emptyAccountState
-      @include utils.itemBackground
+  .toggleIcon
+    transition: transform 0.2s ease
 
-    .accountSelect
-      flex-grow: 1
-      justify-content: flex-start
+    &.open
+      transform: rotate(180deg)
 
-    .removeAccount, .activeIcon
-      position: absolute
-      right: 0.5rem
+  .emptyAccountState
+    @include utils.itemBackground
+
+  .accountSelect
+    flex-grow: 1
+    justify-content: flex-start
+
+  .removeAccount, .activeIcon
+    position: absolute
+    right: 0.5rem
 </style>

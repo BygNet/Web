@@ -1,83 +1,83 @@
 <script setup lang="ts">
-  import type { BygPost } from '@bygnet/types'
-  import { type Ref, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
+import type { BygPost } from '@bygnet/types'
+import { type Ref, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import Divider from '@/components/layout/Divider.vue'
-  import SkeletonComment from '@/components/layout/skeletons/SkeletonComment.vue'
-  import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import PostItem from '@/components/posts/PostItem.vue'
-  import { getCachedPostDetail, setCachedPostDetail } from '@/data/caches'
-  import { title } from '@/data/title'
-  import { useEnv } from '@/utils/env'
-  import CommentsView from '@/views/CommentsView.vue'
-  import { useRoute } from '#app'
-  import { useHead, useLazyAsyncData } from '#imports'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import Divider from '@/components/layout/Divider.vue'
+import SkeletonComment from '@/components/layout/skeletons/SkeletonComment.vue'
+import SkeletonPost from '@/components/layout/skeletons/SkeletonPost.vue'
+import VStack from '@/components/layout/VStack.vue'
+import PostItem from '@/components/posts/PostItem.vue'
+import { getCachedPostDetail, setCachedPostDetail } from '@/data/caches'
+import { title } from '@/data/title'
+import { useEnv } from '@/utils/env'
+import CommentsView from '@/views/CommentsView.vue'
+import { useRoute } from '#app'
+import { useHead, useLazyAsyncData } from '#imports'
 
-  definePageMeta({ showBackButton: true })
+definePageMeta({ showBackButton: true })
 
-  const route = useRoute()
-  const { t } = useI18n()
-  const slug = route.params.slug
-  const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
-  const error: Ref<string | null> = ref(null)
+const route = useRoute()
+const { t } = useI18n()
+const slug = route.params.slug
+const id = slug && !Number.isNaN(Number(slug)) ? Number(slug) : null
+const error: Ref<string | null> = ref(null)
 
-  title.value = t('ui.details.postTitle')
+title.value = t('ui.details.postTitle')
 
-  const { data: post } = await useLazyAsyncData(`post-${id}`, async () => {
-    if (!id) return null
+const { data: post } = await useLazyAsyncData(`post-${id}`, async () => {
+  if (!id) return null
 
-    const cached = getCachedPostDetail(id)
-    if (cached) return cached
+  const cached = getCachedPostDetail(id)
+  if (cached) return cached
 
-    try {
-      const response = await fetch(`${useEnv().apiBase}/post-details/${id}`)
-      if (!response.ok) throw new Error(`API error: ${response.status}`)
+  try {
+    const response = await fetch(`${useEnv().apiBase}/post-details/${id}`)
+    if (!response.ok) throw new Error(`API error: ${response.status}`)
 
-      const json = (await response.json()) as BygPost
-      setCachedPostDetail(id, json)
+    const json = (await response.json()) as BygPost
+    setCachedPostDetail(id, json)
 
-      return json
-    } catch (err) {
-      console.error('Failed to fetch post:', err)
-      return null
-    }
-  })
-
-  if (post.value) {
-    defineOgImage('PostPreview', {
-      post: post.value,
-    })
+    return json
+  } catch (err) {
+    console.error('Failed to fetch post:', err)
+    return null
   }
+})
 
-  // Set meta tags for SEO with fetched post data
-  useHead(() => {
-    if (post.value) {
-      return {
-        title: t('ui.details.postMetaTitle', { title: post.value.title }),
-        meta: [
-          {
-            name: 'description',
-            content: t('ui.details.postMetaDescription', {
-              author: post.value.author,
-            }),
-          },
-        ],
-      }
-    }
+if (post.value) {
+  defineOgImage('PostPreview', {
+    post: post.value,
+  })
+}
 
+// Set meta tags for SEO with fetched post data
+useHead(() => {
+  if (post.value) {
     return {
-      title: t('ui.details.postMetaFallbackTitle'),
+      title: t('ui.details.postMetaTitle', { title: post.value.title }),
       meta: [
         {
           name: 'description',
-          content: t('ui.details.postMetaFallbackDescription'),
+          content: t('ui.details.postMetaDescription', {
+            author: post.value.author,
+          }),
         },
       ],
     }
-  })
+  }
+
+  return {
+    title: t('ui.details.postMetaFallbackTitle'),
+    meta: [
+      {
+        name: 'description',
+        content: t('ui.details.postMetaFallbackDescription'),
+      },
+    ],
+  }
+})
 </script>
 
 <template>
@@ -112,8 +112,8 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .postDetail
-    width: 100%
+.postDetail
+  width: 100%
 </style>

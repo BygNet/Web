@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import VStack from '~/components/layout/VStack.vue'
+import VStack from '~/components/layout/VStack.vue'
 
-  const value = defineModel<string>({ required: true })
+const value = defineModel<string>({ required: true })
 
-  defineProps<{
-    label: string
-    placeholder?: string
-    noBorder?: boolean
-  }>()
+defineProps<{
+  label: string
+  placeholder?: string
+  noBorder?: boolean
+}>()
 
-  const { t } = useI18n()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -31,14 +31,14 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .settingsImageInput
-    width: 100%
-    border-radius: 0
+.settingsImageInput
+  width: 100%
+  border-radius: 0
 
-    .settingsImageInputImage
-      max-width: 10rem
-      max-height: 10rem
-      border-radius: 1rem
+  .settingsImageInputImage
+    max-width: 10rem
+    max-height: 10rem
+    border-radius: 1rem
 </style>

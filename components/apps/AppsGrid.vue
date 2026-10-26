@@ -1,18 +1,18 @@
 <script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
 
-  import SafeLink from '@/components/base/SafeLink.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import type { BygPageMeta } from '@/data/pages'
-  import { BygPages, MorePages } from '@/data/pages'
+import SafeLink from '@/components/base/SafeLink.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import type { BygPageMeta } from '@/data/pages'
+import { BygPages, MorePages } from '@/data/pages'
 
-  defineProps<{
-    embed?: boolean
-    apps?: BygPageMeta[]
-  }>()
+defineProps<{
+  embed?: boolean
+  apps?: BygPageMeta[]
+}>()
 
-  const { t } = useI18n()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -50,91 +50,91 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/variables"
+@use "@/styles/variables"
 
-  .clear
-    .appIcon
-      --tint: var(--foregroundColor) !important
-      backdrop-filter: blur(1rem)
+.clear
+  .appIcon
+    --tint: var(--foregroundColor) !important
+    backdrop-filter: blur(1rem)
 
-  .appsList
-    display: grid
-    align-content: start
-    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))
-    gap: 0.75rem
-    width: 100%
+.appsList
+  display: grid
+  align-content: start
+  grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr))
+  gap: 0.75rem
+  width: 100%
 
-    &.embed
-      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr))
+  &.embed
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr))
 
-    &:not(.embed)
-      row-gap: 2rem
-
-      .appItem
-        gap: 0.5rem
-
-        .appIcon
-          padding: 0.75rem
-
-          span.iconify
-            width: 2.25rem
-            height: 2.25rem
-
-          .appIconBackground
-            border-radius: 1.25rem
+  &:not(.embed)
+    row-gap: 2rem
 
     .appItem
-      *
-        white-space: nowrap
-        overflow: hidden
-        text-overflow: ellipsis
-
-      &:hover
-        .appIcon
-          scale: 1.05
-
-      &:active
-        .appIcon
-          scale: 0.95
+      gap: 0.5rem
 
       .appIcon
-        position: relative
-        padding: 0.5rem
-        filter: drop-shadow(0 0 3rem var(--tint))
-        transition: 0.2s ease
+        padding: 0.75rem
 
         span.iconify
-          width: 2rem
-          height: 2rem
-          z-index: 1
+          width: 2.25rem
+          height: 2.25rem
 
         .appIconBackground
-          position: absolute
-          top: 0
-          bottom: 0
-          left: 0
-          right: 0
-          border-radius: 1rem
-          background: linear-gradient(to bottom, var(--tint), hsl(from var(--tint) calc(h - 40) s l))
-          opacity: 0.7
+          border-radius: 1.25rem
 
-      .appInfo
-        gap: 0
+  .appItem
+    *
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
 
-        *
-          margin: 0
+    &:hover
+      .appIcon
+        scale: 1.05
 
-  @media (min-width: variables.$mobileWidth)
-    .appsList:not(.embed)
-      grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr))
-      row-gap: 5rem
+    &:active
+      .appIcon
+        scale: 0.95
 
-      .appItem
-        .appIcon
-          padding: 0.75rem
-          border-radius: 1.5rem
+    .appIcon
+      position: relative
+      padding: 0.5rem
+      filter: drop-shadow(0 0 3rem var(--tint))
+      transition: 0.2s ease
 
-          span.iconify
-            width: 3rem
-            height: 3rem
+      span.iconify
+        width: 2rem
+        height: 2rem
+        z-index: 1
+
+      .appIconBackground
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        border-radius: 1rem
+        background: linear-gradient(to bottom, var(--tint), hsl(from var(--tint) calc(h - 40) s l))
+        opacity: 0.7
+
+    .appInfo
+      gap: 0
+
+      *
+        margin: 0
+
+@media (min-width: variables.$mobileWidth)
+  .appsList:not(.embed)
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr))
+    row-gap: 5rem
+
+    .appItem
+      .appIcon
+        padding: 0.75rem
+        border-radius: 1.5rem
+
+        span.iconify
+          width: 3rem
+          height: 3rem
 </style>

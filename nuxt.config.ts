@@ -180,6 +180,16 @@ export default defineNuxtConfig({
     ],
   },
 
+  icon: {
+    clientBundle: {
+      scan: true,
+      icons: [],
+    },
+    serverBundle: {
+      collections: ['lucide', 'mingcute', 'solar', 'circle-flags'],
+    },
+  },
+
   pwa: {
     registerType: 'autoUpdate',
     includeAssets: [ 'favicon.ico', 'logos/BygLogo-Pwa.png', 'tos.md' ],
@@ -191,10 +201,8 @@ export default defineNuxtConfig({
       globPatterns: [
         '**/*.{js,css,html,ico,png,svg,webmanifest,woff2,woff,ttf,jpg,jpeg,json}',
       ],
-      maximumFileSizeToCacheInBytes: 7.5 * 1024 * 1024, // 7.5 MB
     },
     workbox: {
-      maximumFileSizeToCacheInBytes: 7.5 * 1024 * 1024, // 7.5 MB
       globPatterns: [
         '**/*.{js,css,html,ico,png,svg,webmanifest,woff2,woff,ttf,jpg,jpeg,json}',
       ],
@@ -216,7 +224,6 @@ export default defineNuxtConfig({
         'marked',
         'mitt',
         'posthog-js',
-        '@iconify-json/solar',
         '@tiptap/vue-3',
         '@tiptap/starter-kit',
         '@tiptap/extension-placeholder',

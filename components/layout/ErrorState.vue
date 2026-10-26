@@ -1,21 +1,21 @@
 <script setup lang="ts">
-  import VStack from '@/components/layout/VStack.vue'
-  import { navigateTo, useRoute } from '#app'
+import VStack from '@/components/layout/VStack.vue'
+import { navigateTo, useRoute } from '#app'
 
-  defineProps<{
-    message: string
-  }>()
+defineProps<{
+  message: string
+}>()
 
-  const route = useRoute()
+const route = useRoute()
 
-  function reload(): void {
-    navigateTo({
-      name: route.name!,
-      params: route.params,
-      query: { ...route.query, _r: Date.now() },
-      replace: true,
-    })
-  }
+function reload(): void {
+  navigateTo({
+    name: route.name!,
+    params: route.params,
+    query: { ...route.query, _r: Date.now() },
+    replace: true,
+  })
+}
 </script>
 
 <template>
@@ -33,11 +33,11 @@
 </template>
 
 <style scoped lang="sass">
-  .errorIcon
-    width: 4rem
-    height: 4rem
-    margin: 1rem 0
+.errorIcon
+  width: 4rem
+  height: 4rem
+  margin: 1rem 0
 
-  .reloadButton
-    margin-top: 1rem
+.reloadButton
+  margin-top: 1rem
 </style>

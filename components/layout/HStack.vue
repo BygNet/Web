@@ -5,13 +5,13 @@
 </template>
 
 <style scoped lang="sass">
-  .hStack
-    display: flex
-    flex-direction: row
-    flex-wrap: wrap
-    gap: 0.5rem
+.hStack
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  gap: 0.5rem
 
-  .hStack.spaced
-    column-gap: 1rem
-    row-gap: 0
+.hStack.spaced
+  column-gap: 1rem
+  row-gap: 0
 </style>

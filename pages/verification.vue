@@ -1,19 +1,19 @@
 <script setup lang="ts">
-  import ContentArea from '@/components/layout/ContentArea.vue'
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import { title } from '@/data/title'
-  import setHeadMeta from '@/utils/setHeadMeta'
-  import { getVerificationColor } from '@/utils/verificationData'
+import ContentArea from '@/components/layout/ContentArea.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import { title } from '@/data/title'
+import setHeadMeta from '@/utils/setHeadMeta'
+import { getVerificationColor } from '@/utils/verificationData'
 
-  definePageMeta({ showBackButton: true })
+definePageMeta({ showBackButton: true })
 
-  title.value = 'Verification'
+title.value = 'Verification'
 
-  setHeadMeta({
-    page: 'Verification',
-    subtitle: 'Verify your identity with Byg.',
-  })
+setHeadMeta({
+  page: 'Verification',
+  subtitle: 'Verify your identity with Byg.',
+})
 </script>
 
 <template>
@@ -67,14 +67,14 @@
 </template>
 
 <style scoped lang="sass">
-  .verificationTypes
-    margin: 1rem 0
-    max-width: 30rem
+.verificationTypes
+  margin: 1rem 0
+  max-width: 30rem
 
-    .vStack
-      align-items: center
+  .vStack
+    align-items: center
 
-      span.iconify
-        width: 4rem
-        height: 4rem
+    span.iconify
+      width: 4rem
+      height: 4rem
 </style>

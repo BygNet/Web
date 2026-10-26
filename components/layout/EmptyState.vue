@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import VStack from '@/components/layout/VStack.vue'
+import VStack from '@/components/layout/VStack.vue'
 
-  defineProps<{
-    message: string
-  }>()
+defineProps<{
+  message: string
+}>()
 </script>
 
 <template>
@@ -16,8 +16,8 @@
 </template>
 
 <style scoped lang="sass">
-  .loader
-    width: 4rem
-    height: 4rem
-    margin: 1rem 0
+.loader
+  width: 4rem
+  height: 4rem
+  margin: 1rem 0
 </style>

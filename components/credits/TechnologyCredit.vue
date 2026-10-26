@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
 
-  defineProps<{
-    name: string
-    description: string
-    icon: string
-    link: string
-  }>()
+defineProps<{
+  name: string
+  description: string
+  icon: string
+  link: string
+}>()
 </script>
 
 <template>
@@ -28,15 +28,15 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/utils"
+@use "@/styles/utils"
 
-  .technologyCredit
-    @include utils.itemBackground
+.technologyCredit
+  @include utils.itemBackground
 
-    .technologyInfo
-      gap: 1rem
+  .technologyInfo
+    gap: 1rem
 
-      span.iconify
-        width: 3rem
-        height: 3rem
+    span.iconify
+      width: 3rem
+      height: 3rem
 </style>

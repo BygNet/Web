@@ -1,49 +1,49 @@
 <script setup lang="ts">
-  import type { BygPost } from '@bygnet/types'
-  import { nextTick, ref, watchEffect } from 'vue'
+import type { BygPost } from '@bygnet/types'
+import { nextTick, ref, watchEffect } from 'vue'
 
-  import HStack from '@/components/layout/HStack.vue'
-  import VStack from '@/components/layout/VStack.vue'
-  import LikeButton from '@/components/posts/LikeButton.vue'
-  import ReportButton from '@/components/posts/ReportButton.vue'
-  import ShareButton from '@/components/posts/ShareButton.vue'
-  import UsernameView from '@/components/posts/UsernameView.vue'
-  import { renderMarkdown } from '@/utils/renderMarkdown'
+import HStack from '@/components/layout/HStack.vue'
+import VStack from '@/components/layout/VStack.vue'
+import LikeButton from '@/components/posts/LikeButton.vue'
+import ReportButton from '@/components/posts/ReportButton.vue'
+import ShareButton from '@/components/posts/ShareButton.vue'
+import UsernameView from '@/components/posts/UsernameView.vue'
+import { renderMarkdown } from '@/utils/renderMarkdown'
 
-  const { format } = useRelativeTime()
+const { format } = useRelativeTime()
 
-  const props = defineProps<{
-    post: BygPost
-    detailMode?: boolean
-  }>()
+const props = defineProps<{
+  post: BygPost
+  detailMode?: boolean
+}>()
 
-  defineEmits([ 'navigate' ])
+defineEmits([ 'navigate' ])
 
-  const renderedContent = ref('')
-  const expanded = ref(false)
-  const contentEl = ref<HTMLElement | null>(null)
-  const isClippable = ref(false)
+const renderedContent = ref('')
+const expanded = ref(false)
+const contentEl = ref<HTMLElement | null>(null)
+const isClippable = ref(false)
 
-  watchEffect(async () => {
-    renderedContent.value = renderMarkdown(props.post.content ?? '')
+watchEffect(async () => {
+  renderedContent.value = renderMarkdown(props.post.content ?? '')
+  await nextTick()
+
+  if (contentEl.value && !props.detailMode) {
+    const el = contentEl.value
+
+    // force clamp temporarily to measure overflow
+    el.classList.add('clipped')
+
     await nextTick()
 
-    if (contentEl.value && !props.detailMode) {
-      const el = contentEl.value
+    isClippable.value = el.scrollHeight > el.clientHeight + 1
 
-      // force clamp temporarily to measure overflow
-      el.classList.add('clipped')
-
-      await nextTick()
-
-      isClippable.value = el.scrollHeight > el.clientHeight + 1
-
-      // remove clamp if not needed
-      if (!isClippable.value) {
-        el.classList.remove('clipped')
-      }
+    // remove clamp if not needed
+    if (!isClippable.value) {
+      el.classList.remove('clipped')
     }
-  })
+  }
+})
 </script>
 
 <template>
@@ -114,44 +114,44 @@
 </template>
 
 <style scoped lang="sass">
-  @use "@/styles/themes"
-  @use "@/styles/variables"
-  @use "@/styles/utils"
+@use "@/styles/themes"
+@use "@/styles/variables"
+@use "@/styles/utils"
 
-  .bygPostItem
-    align-items: flex-start
-    width: 100%
+.bygPostItem
+  align-items: flex-start
+  width: 100%
+  border-radius: 0
+
+  &:not(.detailMode)
+    @include utils.listItemBorder
+
+    cursor: pointer
+    padding: 0.75rem 0
+    margin-bottom: 0.5rem
+
+  .postMeta p
+    opacity: 0.7
+
+  .bygPostContentWrapper
     border-radius: 0
+    position: relative
 
-    &:not(.detailMode)
-      @include utils.listItemBorder
+  .bygPostContent
+    border-radius: 0
+    user-select: text
+    --webkit-user-select: text
 
-      cursor: pointer
-      padding: 0.75rem 0
-      margin-bottom: 0.5rem
+    &.clipped
+      display: -webkit-box
+      -webkit-line-clamp: 5
+      -webkit-box-orient: vertical
+      overflow: hidden
+      mask: linear-gradient(to bottom, black, black, transparent)
 
-    .postMeta p
-      opacity: 0.7
+  .showMore
+    margin-top: 0.25rem
 
-    .bygPostContentWrapper
-      border-radius: 0
-      position: relative
-
-    .bygPostContent
-      border-radius: 0
-      user-select: text
-      --webkit-user-select: text
-
-      &.clipped
-        display: -webkit-box
-        -webkit-line-clamp: 5
-        -webkit-box-orient: vertical
-        overflow: hidden
-        mask: linear-gradient(to bottom, black, black, transparent)
-
-    .showMore
-      margin-top: 0.25rem
-
-    .postActions
-      margin-top: 0.75rem
+  .postActions
+    margin-top: 0.75rem
 </style>

@@ -1,29 +1,29 @@
 <script setup lang="ts">
-  import { onMounted, type Ref, ref } from 'vue'
+import { onMounted, type Ref, ref } from 'vue'
 
-  import { openShareModal } from '@/data/share'
-  import type { BygShareableContent } from '@/types/messages'
-  import { formatNumber, formatStat } from '@/utils/formatters'
+import { openShareModal } from '@/data/share'
+import type { BygShareableContent } from '@/types/messages'
+import { formatNumber, formatStat } from '@/utils/formatters'
 
-  const props = defineProps<{
-    shares: number
-    shareItem: BygShareableContent
-    compact?: boolean
-  }>()
+const props = defineProps<{
+  shares: number
+  shareItem: BygShareableContent
+  compact?: boolean
+}>()
 
-  const shareCount: Ref<number> = ref(0)
+const shareCount: Ref<number> = ref(0)
 
-  onMounted(() => {
-    shareCount.value = props.shares
+onMounted(() => {
+  shareCount.value = props.shares
+})
+
+function share(): void {
+  openShareModal(props.shareItem, {
+    onShared: () => {
+      shareCount.value++
+    },
   })
-
-  function share(): void {
-    openShareModal(props.shareItem, {
-      onShared: () => {
-        shareCount.value++
-      },
-    })
-  }
+}
 </script>
 
 <template>

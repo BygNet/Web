@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { showingReportPopup } from '@/data/visibility'
+import { showingReportPopup } from '@/data/visibility'
 
-  function showReportPopup(): void {
-    showingReportPopup.value = true
-  }
+function showReportPopup(): void {
+  showingReportPopup.value = true
+}
 </script>
 
 <template>

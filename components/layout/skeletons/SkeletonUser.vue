@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import HStack from '@/components/layout/HStack.vue'
+import HStack from '@/components/layout/HStack.vue'
 </script>
 
 <template>
@@ -10,12 +10,12 @@
 </template>
 
 <style scoped lang="sass">
-  .skeletonUser
-    .avatar
-      width: 1rem
-      height: 1rem
-      border-radius: 50%
+.skeletonUser
+  .avatar
+    width: 1rem
+    height: 1rem
+    border-radius: 50%
 
-    .username
-      width: 5rem
+  .username
+    width: 5rem
 </style>
