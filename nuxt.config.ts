@@ -180,16 +180,6 @@ export default defineNuxtConfig({
     ],
   },
 
-  icon: {
-    clientBundle: {
-      scan: true,
-      icons: [],
-    },
-    serverBundle: {
-      collections: ['lucide', 'mingcute', 'solar', 'circle-flags'],
-    },
-  },
-
   pwa: {
     registerType: 'autoUpdate',
     includeAssets: [ 'favicon.ico', 'logos/BygLogo-Pwa.png', 'tos.md' ],
