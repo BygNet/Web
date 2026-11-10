@@ -127,8 +127,10 @@ onMounted(refresh)
           class="oauthProviderCard"
         >
           <span class="providerIcon"><Icon :name="provider.icon" /></span>
+
           <VStack class="providerCopy">
             <strong>{{ provider.label }}</strong>
+
             <span v-if="accountFor(provider)?.username">
               {{
                 t('ui.settings.oauth.connectedAs', {
@@ -136,27 +138,30 @@ onMounted(refresh)
                 })
               }}
             </span>
+
             <span v-else>{{ t('ui.settings.oauth.notConnected') }}</span>
           </VStack>
+
           <button
             v-if="accountFor(provider)"
-            type="button"
             :disabled="busy === provider.id"
             @click="disconnect(provider)"
           >
+            <Icon name="solar:user-minus-rounded-line-duotone" />
             {{
               busy === provider.id
                 ? t('ui.settings.oauth.working')
                 : t('ui.settings.oauth.disconnect')
             }}
           </button>
+
           <button
             v-else
-            type="button"
             class="prominent"
             :disabled="busy === provider.id"
             @click="connect(provider)"
           >
+            <Icon name="solar:user-plus-rounded-line-duotone" />
             {{
               busy === provider.id
                 ? t('ui.settings.oauth.working')
@@ -225,7 +230,7 @@ details:not([open]) .summaryChevron
 .oauthProviderCard
   width: 100%
   gap: 0.75rem
-  padding: 0.75rem 0
+  padding: 0.75rem 0 0
 
   &:not(:last-child)
     @include utils.listItemBorder

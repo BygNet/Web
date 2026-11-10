@@ -51,10 +51,10 @@
         "title": "Page publique"
       }
     },
-    "yandexInstant": {
-      "title": "Continuer avec Yandex",
-      "description": "Utilisez votre compte Yandex pour revenir rapidement sur Byg.",
-      "error": "La connexion Yandex n'a pas pu être terminée.",
+
+    "instantLogin": {
+      "title": "Byg est encore mieux avec un compte.",
+      "error": "Erreur de connexion.",
       "continue": "Continuer"
     },
 

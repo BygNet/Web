@@ -51,10 +51,10 @@
         "title": "Página pública"
       }
     },
-    "yandexInstant": {
-      "title": "Continuar con Yandex",
-      "description": "Usa tu cuenta de Yandex para volver rápidamente a Byg.",
-      "error": "No se pudo completar el acceso con Yandex.",
+
+    "instantLogin": {
+      "title": "Byg es mejor con una cuenta.",
+      "error": "Error al iniciar sesión.",
       "continue": "Continuar"
     },
 

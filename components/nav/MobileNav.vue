@@ -13,6 +13,15 @@ import { useRoute } from '#app'
 
 const route = useRoute()
 const { t } = useI18n()
+
+const activePage = computed(() => {
+  const matchingPage = [...BygPages].find((page) =>
+    isActive(route.path, page.path),
+  )
+
+  return matchingPage ?? ExplorePage
+})
+
 function pageHref(page: BygPageMeta): string {
   return page.path
 }
@@ -41,11 +50,11 @@ function badgeValue(page: BygPageMeta): number {
       >
         <VStack
           class="mobileNavItem"
-          :class="{ selected: isActive(route.path, page.path) }"
+          :class="{ selected: activePage.path === page.path }"
         >
           <Icon
             :name="
-              isActive(route.path, page.path)
+              activePage.path === page.path
                 ? page.icon.replace('line-duotone', 'bold-duotone')
                 : page.icon
             "
@@ -82,7 +91,7 @@ function badgeValue(page: BygPageMeta): number {
   &::before
     background: linear-gradient(to var(--trailing), var(--gradientOfTheDay))
     mask-image: linear-gradient(to top, black, transparent)
-    opacity: 0.3
+    opacity: 0.5
 
   .createButton
     span.iconify

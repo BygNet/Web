@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.18.9",
+  "version": "2.18.10",
   "private": false,
   "type": "module",
   "scripts": {
@@ -54,7 +54,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "jiti": "^2.7.0",
-    "ky": "^2.2.0",
+    "ky": "1",
     "nuxt": "^4.6.2",
     "nuxtseo-devtools-host": "^1.0.2",
     "prettier": "^3.9.10",

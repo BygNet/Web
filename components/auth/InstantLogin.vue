@@ -12,6 +12,8 @@ import { auth, upsertAccount } from '@/auth/session'
 import VStack from '@/components/layout/VStack.vue'
 import { isThemeDark } from '@/data/themes'
 import { navigateTo } from '#app'
+import SafeLink from '~/components/base/SafeLink.vue'
+import HStack from '~/components/layout/HStack.vue'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -66,14 +68,14 @@ async function finishSignIn(accessToken: string): Promise<void> {
   }
 
   if (!response.ok) {
-    error.value = t('ui.yandexInstant.error')
+    error.value = t('ui.instantLogin.error')
     isLoading.value = false
     return
   }
 
   const result = await response.json()
   if (!result?.token || !result?.user) {
-    error.value = t('ui.yandexInstant.error')
+    error.value = t('ui.instantLogin.error')
     isLoading.value = false
     return
   }
@@ -100,10 +102,10 @@ async function startInstantSignIn(): Promise<void> {
         view: 'button',
         parentId: containerId,
         buttonView: 'main',
-        buttonTheme: isThemeDark() ? 'dark' : 'light',
-        buttonSize: 'm',
-        buttonBorderRadius: 14,
-        buttonIcon: 'yaEng',
+        buttonTheme: isThemeDark() ? 'light' : 'dark', // Inverted
+        buttonSize: 's',
+        buttonBorderRadius: 140,
+        buttonIcon: 'ya',
       }
     )
     const data = await result.handler()
@@ -113,7 +115,7 @@ async function startInstantSignIn(): Promise<void> {
   } catch {
     isFallback.value = true
     isLoading.value = false
-    error.value = t('ui.yandexInstant.error')
+    error.value = t('ui.instantLogin.error')
   }
 }
 
@@ -125,7 +127,7 @@ async function startFallback(): Promise<void> {
     await startOAuth(provider.value, 'signin')
   } catch {
     isLoading.value = false
-    error.value = t('ui.yandexInstant.error')
+    error.value = t('ui.instantLogin.error')
   }
 }
 
@@ -155,23 +157,31 @@ onMounted(async () => {
 </script>
 
 <template>
-  <VStack v-if="provider" class="yandexInstant">
-    <VStack class="noSpace copy">
-      <h4>{{ t('ui.yandexInstant.title') }}</h4>
-      <p>{{ t('ui.yandexInstant.description') }}</p>
-    </VStack>
+  <VStack v-if="provider" class="instantLogin autoSpace">
+    <HStack class="fullWidth autoSpace">
+      <h4>{{ t('ui.instantLogin.title') }}</h4>
 
-    <div v-if="!isFallback" :id="containerId" class="yandexButton" />
-    <button
-      v-else
-      type="button"
-      class="fallbackButton prominent"
-      :disabled="isLoading"
-      @click="startFallback"
-    >
-      <Icon name="solar:login-2-line-duotone" />
-      {{ t('auth.oauth.continueWith', { provider: 'Yandex' }) }}
-    </button>
+      <HStack>
+        <SafeLink to="/login">
+          <button>
+            <Icon name="solar:login-2-line-duotone" />
+            {{ t('pages.login.title') }}
+          </button>
+        </SafeLink>
+
+        <div v-if="!isFallback" :id="containerId" class="yandexButton" />
+        <button
+          v-else
+          type="button"
+          class="fallbackButton prominent"
+          :disabled="isLoading"
+          @click="startFallback"
+        >
+          <Icon name="solar:login-2-line-duotone" />
+          {{ t('auth.oauth.continueWith', { provider: 'Yandex' }) }}
+        </button>
+      </HStack>
+    </HStack>
 
     <form
       v-if="pendingToken"
@@ -189,8 +199,9 @@ onMounted(async () => {
           required
         />
       </label>
+
       <button type="submit" class="prominent" :disabled="isLoading">
-        {{ t('ui.yandexInstant.continue') }}
+        {{ t('ui.instantLogin.continue') }}
       </button>
     </form>
 
@@ -199,20 +210,24 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/utils"
-
-.yandexInstant
-  @include utils.itemBackground
+.instantLogin
   width: 100%
 
-  .copy
-    *
-      margin: 0
+  h4
+    margin: 0
 
 .yandexButton
-  min-height: 2.75rem
+  min-width: 6rem
+  min-height: 2rem
   display: flex
   justify-content: center
+
+:deep(.yaPersonalButton_main)
+  background: var(--foregroundColor) !important
+  transition: 0.4s
+
+:deep(.yaPreloadingSuggestBlock)
+  flex-direction: row
 
 .fallbackButton
   align-self: flex-start

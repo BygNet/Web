@@ -33,7 +33,7 @@ function create(page: BygPageMeta): void {
 </script>
 
 <template>
-  <nav class="desktopNav background">
+  <nav class="desktopNav">
     <VStack class="header">
       <SafeLink to="/">
         <HStack class="bygLogo">
@@ -105,6 +105,7 @@ function create(page: BygPageMeta): void {
 .desktopNav
   display: none
   position: relative
+  isolation: isolate
   height: 100vh
   padding: calc(var(--padding) / 2)
   gap: 2rem
@@ -117,6 +118,19 @@ function create(page: BygPageMeta): void {
   width: 7rem
   min-width: 0
   transition: width 0.25s ease, flex-basis 0.25s ease
+
+  &::before
+    content: ''
+    position: fixed
+    top: 0
+    bottom: 0
+    left: 0
+    width: inherit
+    z-index: -1
+    pointer-events: none
+    background: linear-gradient(to bottom, var(--gradientOfTheDay))
+    mask-image: linear-gradient(to var(--trailing), black, transparent)
+    opacity: 0.3
 
   &:not(:hover)
     .desktopNavItem
@@ -156,11 +170,6 @@ function create(page: BygPageMeta): void {
 
     .footer
       opacity: 1
-
-  &::before
-    background: linear-gradient(to bottom, var(--gradientOfTheDay))
-    mask-image: linear-gradient(to var(--trailing), black, transparent)
-    opacity: 0.3
 
 .header
   width: 100%

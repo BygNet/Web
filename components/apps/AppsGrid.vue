@@ -51,6 +51,7 @@ const { t } = useI18n()
 
 <style scoped lang="sass">
 @use "@/styles/variables"
+@use "@/styles/utils"
 
 .clear
   .appIcon
@@ -98,6 +99,7 @@ const { t } = useI18n()
         scale: 0.95
 
     .appIcon
+      @include utils.glowEffect
       position: relative
       padding: 0.5rem
       filter: drop-shadow(0 0 3rem var(--tint))
@@ -114,9 +116,8 @@ const { t } = useI18n()
         bottom: 0
         left: 0
         right: 0
-        border-radius: 1rem
         background: linear-gradient(to bottom, var(--tint), hsl(from var(--tint) calc(h - 40) s l))
-        opacity: 0.7
+        opacity: 0.5
 
     .appInfo
       gap: 0

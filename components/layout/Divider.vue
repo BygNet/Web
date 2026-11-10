@@ -6,9 +6,9 @@
 @use "@/styles/themes"
 
 .divider
-  width: calc(100% - 4rem)
-  margin: 1rem 2rem
-  height: 0.2rem
+  width: calc(100% - 3rem)
+  margin: 0.75rem 1.5rem
+  height: 0.1rem
   border-radius: 0.1rem
   background: themes.$textColor
   opacity: 0.1

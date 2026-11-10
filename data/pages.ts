@@ -64,7 +64,7 @@ export const MySpacePage: BygPageMeta = {
   descriptionKey: 'pages.mySpace.description',
   path: '/my-space',
   icon: 'solar:user-line-duotone',
-  color: '#3a986d',
+  color: '#5cc394',
 }
 
 export const BygPages: BygPageMeta[] = [
@@ -80,7 +80,7 @@ export const SearchPage: BygPageMeta = {
   descriptionKey: 'pages.search.description',
   path: '/search',
   icon: 'solar:minimalistic-magnifer-line-duotone',
-  color: '#ddd545',
+  color: '#d1ea66',
 }
 
 export const InboxPage: BygPageMeta = {
@@ -117,7 +117,7 @@ export const SettingsPage: BygPageMeta = {
   descriptionKey: 'pages.settings.description',
   path: '/settings',
   icon: 'solar:settings-minimalistic-line-duotone',
-  color: '#3e3255',
+  color: '#584d6e',
 }
 
 export const CreditsPage: BygPageMeta = {
@@ -126,7 +126,7 @@ export const CreditsPage: BygPageMeta = {
   descriptionKey: 'pages.credits.description',
   path: '/credits',
   icon: 'solar:hand-heart-line-duotone',
-  color: '#bea3ff',
+  color: '#b292ff',
 }
 
 export const MorePages: BygPageMeta[] = [

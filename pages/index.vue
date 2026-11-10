@@ -12,7 +12,6 @@ import {
 import { useI18n } from 'vue-i18n'
 
 import { auth } from '@/auth/session'
-import YandexInstantButton from '@/components/auth/YandexInstantButton.vue'
 import SafeLink from '@/components/base/SafeLink.vue'
 import ContentArea from '@/components/layout/ContentArea.vue'
 import ErrorState from '@/components/layout/ErrorState.vue'
@@ -34,6 +33,7 @@ import { title } from '@/data/title'
 import { useEnv } from '@/utils/env'
 import { setHeadMetaKeys } from '@/utils/setHeadMeta'
 import AdView from '@/views/AdView.vue'
+import InstantLogin from '~/components/auth/InstantLogin.vue'
 
 const posts: Ref<BygPost[]> = ref([])
 const isLoaded: Ref<boolean> = ref(false)
@@ -160,7 +160,7 @@ reloader.on('reload', () => {
     <p id="top" />
 
     <div v-if="!auth.user" class="homeAuth">
-      <YandexInstantButton />
+      <InstantLogin />
     </div>
 
     <VStack v-if="!isLoaded" class="postList">

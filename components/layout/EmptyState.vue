@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <VStack class="emptyState">
-    <Icon name="svg-spinners:90-ring-with-bg" class="loader" />
+    <Icon name="svg-spinners:ring-resize" class="loader" />
 
     <h3>Please wait...</h3>
     <p>{{ message }}</p>

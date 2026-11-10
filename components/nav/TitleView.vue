@@ -39,7 +39,7 @@ function goBack() {
           <p class="tasksCount" v-if="taskList.length > 1">
             {{ taskList.length }}
           </p>
-          <Icon name="svg-spinners:90-ring-with-bg" class="tasksLoader" />
+          <Icon name="svg-spinners:ring-resize" class="tasksLoader" />
         </div>
 
         <HStack class="noConnection" v-show="isDisconnected">

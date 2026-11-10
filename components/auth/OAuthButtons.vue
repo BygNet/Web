@@ -10,6 +10,7 @@ import {
 } from '@/auth/oauth'
 import HStack from '@/components/layout/HStack.vue'
 import VStack from '@/components/layout/VStack.vue'
+import Divider from '~/components/layout/Divider.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -64,7 +65,11 @@ onMounted(async () => {
       </button>
     </HStack>
 
-    <p v-if="error" class="oauthError">{{ t('auth.oauth.startFailed') }}</p>
+    <p v-if="error" class="oauthError">
+      {{ t('auth.oauth.startFailed') }}
+    </p>
+
+    <Divider />
   </VStack>
 </template>
 
@@ -74,7 +79,6 @@ onMounted(async () => {
 .oauthButtons
   width: 100%
   gap: 0.75rem
-  margin-bottom: 2rem
 
 .oauthProviderList
   width: 100%

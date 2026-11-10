@@ -8,14 +8,16 @@ const props = defineProps<{
 </script>
 
 <template>
-  <VStack class="skeletonText fullWidth">
-    <div
-      v-for="(line, i) in generateLines(props.lines)"
-      :key="i"
-      class="skeleton text"
-      :style="{ width: line + '%' }"
-    />
-  </VStack>
+  <ClientOnly>
+    <VStack class="skeletonText fullWidth">
+      <div
+        v-for="(line, i) in generateLines(props.lines)"
+        :key="i"
+        class="skeleton text"
+        :style="{ width: line + '%' }"
+      />
+    </VStack>
+  </ClientOnly>
 </template>
 
 <style scoped lang="sass">

@@ -57,10 +57,9 @@
       }
     },
 
-    "yandexInstant": {
-      "title": "Continue with Yandex",
-      "description": "Use your Yandex account to get back to Byg quickly.",
-      "error": "Yandex sign-in could not be completed.",
+    "instantLogin": {
+      "title": "Byg is better with an account.",
+      "error": "Sign-in error.",
       "continue": "Continue"
     },
 

@@ -6,28 +6,30 @@ import HStack from '~/components/layout/HStack.vue'
 </script>
 
 <template>
-  <VStack class="skeletonImage autoSpace">
-    <div class="skeleton image" />
-    <SkeletonUser />
-    <SkeletonText :lines="2" />
-    <HStack class="autoSpace fullWidth">
-      <button disabled>
-        <Icon name="solar:heart-outline" />
-        <SkeletonText :lines="1" class="buttonContent" />
-      </button>
-
-      <HStack>
+  <ClientOnly>
+    <VStack class="skeletonImage autoSpace">
+      <div class="skeleton image" />
+      <SkeletonUser />
+      <SkeletonText :lines="2" />
+      <HStack class="autoSpace fullWidth">
         <button disabled>
-          <Icon name="solar:share-line-duotone" />
+          <Icon name="solar:heart-outline" />
           <SkeletonText :lines="1" class="buttonContent" />
         </button>
 
-        <button disabled>
-          <Icon name="solar:flag-line-duotone" />
-        </button>
+        <HStack>
+          <button disabled>
+            <Icon name="solar:share-line-duotone" />
+            <SkeletonText :lines="1" class="buttonContent" />
+          </button>
+
+          <button disabled>
+            <Icon name="solar:flag-line-duotone" />
+          </button>
+        </HStack>
       </HStack>
-    </HStack>
-  </VStack>
+    </VStack>
+  </ClientOnly>
 </template>
 
 <style scoped lang="sass">

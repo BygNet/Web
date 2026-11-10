@@ -194,6 +194,7 @@ async function logoutActive(): Promise<void> {
 
   .emptyAccountState
     @include utils.itemBackground
+    width: 100%
 
   .accountSelect
     flex-grow: 1

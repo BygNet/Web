@@ -5,10 +5,12 @@ import VStack from '@/components/layout/VStack.vue'
 </script>
 
 <template>
-  <VStack class="skeletonComment">
-    <SkeletonUser />
-    <SkeletonText :lines="Math.floor(Math.random() * 3) + 1" />
-  </VStack>
+  <ClientOnly>
+    <VStack class="skeletonComment">
+      <SkeletonUser />
+      <SkeletonText :lines="Math.floor(Math.random() * 3) + 1" />
+    </VStack>
+  </ClientOnly>
 </template>
 
 <style scoped lang="sass">

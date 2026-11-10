@@ -34,6 +34,8 @@ import { getFlag } from '@/utils/setUserFlag'
 import CreateView from '@/views/CreateView.vue'
 import ReportView from '@/views/ReportView.vue'
 import { useHead } from '#imports'
+import EmptyState from '~/components/layout/EmptyState.vue'
+import { title } from '~/data/title.ts'
 
 const pushPermission: Ref<NotificationPermission | 'unsupported'> =
   ref('unsupported')
@@ -47,6 +49,11 @@ const canEnablePush = computed(() => {
   )
 })
 const pushEnabled = computed(() => pushPermission.value === 'granted')
+
+const loadingState: Ref<'loading' | 'preparing' | 'ready'> = ref('loading')
+
+const AppVersion = __AppVersion
+title.value = `Byg ${AppVersion}`
 
 const { locale } = useI18n()
 const manifestHref = computed(() => {
@@ -155,7 +162,8 @@ useHead(() => ({
 }))
 
 onMounted(async () => {
-  consoleWarn()
+  loadingState.value = 'preparing'
+
   pushPermission.value = getPushPermissionState()
   showingCookieBanner.value = getFlag('showCookieBanner', true)
 
@@ -172,6 +180,9 @@ onMounted(async () => {
 
   const adsRes: Response = await fetch(`${useEnv().adsBase}/index.json`)
   adCache.value = (await adsRes.json()) as BygAd[]
+
+  consoleWarn()
+  loadingState.value = 'ready'
 })
 
 onUnmounted(() => {
@@ -220,13 +231,22 @@ watch(
   <div class="wallpaper" aria-hidden="true" v-if="wallpaperMode" />
   <span class="yandexTag" style="display: none">a38l7prussk7odyw</span>
 
-  <Transition name="app" appear>
-    <div class="appShell">
-      <NuxtLayout>
-        <NuxtPage :key="activeAccountKey" />
-      </NuxtLayout>
-    </div>
-  </Transition>
+  <div class="appShell">
+    <NuxtLayout>
+      <template v-if="loadingState == 'loading'">
+        <EmptyState message="Byg is Loading." />
+      </template>
+      <template v-else-if="loadingState == 'preparing'">
+        <EmptyState message="Byg is Preparing..." />
+      </template>
+
+      <ClientOnly v-else>
+        <Transition name="app" appear>
+          <NuxtPage :key="activeAccountKey" />
+        </Transition>
+      </ClientOnly>
+    </NuxtLayout>
+  </div>
 </template>
 
 <!--Unscoped due to layouts-->
@@ -261,16 +281,29 @@ watch(
   width: 100vw
   height: 100dvh
 
-.app-enter-active
-  transition: opacity 0.4s ease, transform 0.4s ease
+.app-enter-active,
+.app-leave-active
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1), filter 220ms ease
 
 .app-enter-from
   opacity: 0
-  transform: scale(1.2)
+  transform: translateY(8px)
+  filter: blur(4px)
 
-.app-enter-to
-  opacity: 1
-  transform: scale(1)
+.app-leave-to
+  opacity: 0
+  transform: translateY(-4px)
+  filter: blur(2px)
+
+@media (prefers-reduced-motion: reduce)
+  .app-enter-active,
+  .app-leave-active
+    transition: opacity 120ms ease
+
+  .app-enter-from,
+  .app-leave-to
+    transform: none
+    filter: none
 
 main
   display: flex

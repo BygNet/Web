@@ -3,10 +3,12 @@ import HStack from '@/components/layout/HStack.vue'
 </script>
 
 <template>
-  <HStack class="skeletonUser">
-    <div class="skeleton avatar" />
-    <div class="skeleton username" />
-  </HStack>
+  <ClientOnly>
+    <HStack class="skeletonUser">
+      <div class="skeleton avatar" />
+      <div class="skeleton username" />
+    </HStack>
+  </ClientOnly>
 </template>
 
 <style scoped lang="sass">

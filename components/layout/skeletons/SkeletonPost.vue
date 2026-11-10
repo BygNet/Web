@@ -6,31 +6,33 @@ import HStack from '~/components/layout/HStack.vue'
 </script>
 
 <template>
-  <div class="skeletonPost">
-    <VStack class="fullWidth">
-      <SkeletonText :lines="1" class="title" />
-      <SkeletonUser />
-      <SkeletonText :lines="Math.floor(Math.random() * 9) + 4" />
+  <ClientOnly>
+    <div class="skeletonPost">
+      <VStack class="fullWidth">
+        <SkeletonText :lines="1" class="title" />
+        <SkeletonUser />
+        <SkeletonText :lines="Math.floor(Math.random() * 9) + 4" />
 
-      <HStack class="autoSpace fullWidth">
-        <button disabled>
-          <Icon name="solar:heart-outline" />
-          <SkeletonText :lines="1" class="buttonContent" />
-        </button>
-
-        <HStack>
+        <HStack class="autoSpace fullWidth">
           <button disabled>
-            <Icon name="solar:share-line-duotone" />
+            <Icon name="solar:heart-outline" />
             <SkeletonText :lines="1" class="buttonContent" />
           </button>
 
-          <button disabled>
-            <Icon name="solar:flag-line-duotone" />
-          </button>
+          <HStack>
+            <button disabled>
+              <Icon name="solar:share-line-duotone" />
+              <SkeletonText :lines="1" class="buttonContent" />
+            </button>
+
+            <button disabled>
+              <Icon name="solar:flag-line-duotone" />
+            </button>
+          </HStack>
         </HStack>
-      </HStack>
-    </VStack>
-  </div>
+      </VStack>
+    </div>
+  </ClientOnly>
 </template>
 
 <style scoped lang="sass">

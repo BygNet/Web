@@ -12,8 +12,6 @@ defineProps<{
 
 <template>
   <div class="bygAd">
-    <img class="adImage" :src="ad.image" :alt="ad.name" />
-
     <HStack class="fullWidth autoSpace adMeta">
       <VStack class="noSpace">
         <h3>{{ ad.name }}</h3>
@@ -22,21 +20,38 @@ defineProps<{
 
       <ReportButton />
     </HStack>
+
+    <img class="adImage" :src="ad.image" :alt="ad.name" />
   </div>
 </template>
 
 <style scoped lang="sass">
 @use "@/styles/utils"
+@use "@/styles/variables"
 
 .bygAd
   @include utils.listItemBorder
-  padding-bottom: 0.5rem
+  padding-bottom: 1rem
   align-items: flex-start
+  flex-direction: row
+  flex-wrap: nowrap
+  width: 100%
+  gap: 0.75rem
 
   img
-    width: 100%
+    object-fit: cover
+    min-height: 1rem
+    max-height: 4rem
     border-radius: 1rem
 
   .adMeta
     align-items: flex-end
+
+
+@media (max-width: variables.$mobileWidth)
+  .bygAd
+    flex-direction: column-reverse
+
+    img
+      width: 100%
 </style>
