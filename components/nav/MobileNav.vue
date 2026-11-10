@@ -15,8 +15,8 @@ const route = useRoute()
 const { t } = useI18n()
 
 const activePage = computed(() => {
-  const matchingPage = [...BygPages].find((page) =>
-    isActive(route.path, page.path),
+  const matchingPage = [ ...BygPages ].find(page =>
+    isActive(route.path, page.path)
   )
 
   return matchingPage ?? ExplorePage

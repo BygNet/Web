@@ -143,16 +143,12 @@ watch(
 
 <style scoped lang="sass">
 @use "@/styles/utils"
-@use "@/styles/themes"
 
 .quickSettings
   margin-bottom: 0.5rem
 
-.guest, .quickSettings, .bygTheme
-  @include utils.maxPostPaddedWidth
-  @include utils.itemBackground
-
+.guest, .quickSettings, .bygTheme,
 .accountSwitcherSection
-  @include utils.maxPostPaddedWidth
   @include utils.itemBackground
+  width: 100%
 </style>

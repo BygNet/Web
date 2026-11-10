@@ -176,7 +176,14 @@ function viewProfile(): void {
         />
       </SafeLink>
 
-      <HStack class="badges" v-if="!minimal">
+      <HStack
+        class="badges"
+        v-if="
+          (!minimal && isStaff) ||
+          author ||
+          (user?.subscriptionState && user.subscriptionState !== 'free')
+        "
+      >
         <HStack class="badge staff" v-if="isStaff">
           <Icon name="solar:shield-check-line-duotone" />
           Staff

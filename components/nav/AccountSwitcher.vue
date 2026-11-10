@@ -76,6 +76,7 @@ async function logoutActive(): Promise<void> {
             hide-follow-button
             no-link
           />
+
           <p class="light">{{ activeAccount.user.email }}</p>
         </VStack>
       </HStack>

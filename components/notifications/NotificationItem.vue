@@ -72,7 +72,6 @@ const isExternal = computed(() => props.notification.path.startsWith('http'))
 
 .notificationItem
   @include utils.itemBackground
-  @include utils.maxPostPaddedWidth
 
   width: 100%
   gap: 0.75rem
