@@ -179,9 +179,10 @@ function viewProfile(): void {
       <HStack
         class="badges"
         v-if="
-          (!minimal && isStaff) ||
-          author ||
-          (user?.subscriptionState && user.subscriptionState !== 'free')
+          !minimal &&
+          (isStaff ||
+            author ||
+            (user?.subscriptionState && user.subscriptionState !== 'free'))
         "
       >
         <HStack class="badge staff" v-if="isStaff">
