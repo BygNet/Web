@@ -44,6 +44,7 @@ function badgeValue(page: BygPageMeta): number {
 
     <HStack class="mobileNavItems">
       <SafeLink
+        no-preview
         v-for="page in [...BygPages, ExplorePage]"
         :to="pageHref(page)"
         class="mobileNavLink"
@@ -112,14 +113,19 @@ function badgeValue(page: BygPageMeta): number {
       align-items: center
       padding: 0.45rem 0.35rem
       gap: 0
-      border-radius: 10rem
+      transition: 0.2s ease
 
       &:not(.selected)
         opacity: 0.6
 
+      &:hover
+        scale: 1.05
+      &:active
+        scale: 0.95
+
       span.iconify
-        width: 1.75rem
-        height: 1.75rem
+        width: 2rem
+        height: 2rem
 
       p
         font-size: 0.75rem

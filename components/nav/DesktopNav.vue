@@ -35,7 +35,7 @@ function create(page: BygPageMeta): void {
 <template>
   <nav class="desktopNav">
     <VStack class="header">
-      <SafeLink to="/">
+      <SafeLink no-preview to="/">
         <HStack class="bygLogo">
           <BygLogo class="bygLogoImage" />
         </HStack>
@@ -43,6 +43,7 @@ function create(page: BygPageMeta): void {
 
       <VStack class="pages">
         <SafeLink
+          no-preview
           v-for="page in DesktopPages"
           :key="page.path"
           :to="pageHref(page)"

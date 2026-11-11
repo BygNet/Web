@@ -9,11 +9,13 @@ interface Props {
   newTab?: boolean
   custom?: boolean
   disable?: boolean
+  noPreview?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   external: false,
   newTab: false,
+  noPreview: false,
 })
 
 const localePath = useLocalePath()
@@ -51,6 +53,7 @@ function trackNavigation(): void {
     @click="trackNavigation"
     :target="newTab ? '_blank' : null"
     :rel="newTab ? 'noopener noreferrer' : undefined"
+    :class="{ noPreview }"
   >
     <slot />
   </NuxtLink>
@@ -63,6 +66,7 @@ function trackNavigation(): void {
     custom
     @click="trackNavigation"
     v-slot="slotProps"
+    :class="{ noPreview }"
   >
     <slot v-bind="slotProps" />
   </NuxtLink>
@@ -74,7 +78,16 @@ function trackNavigation(): void {
     :href="typeof href === 'string' ? href : href.hash"
     :target="newTab ? '_blank' : undefined"
     :rel="newTab ? 'noopener noreferrer' : undefined"
+    :class="{ noPreview }"
   >
     <slot />
   </a>
 </template>
+
+<style lang="sass">
+.noPreview
+  -webkit-touch-callout: none
+  -webkit-tap-highlight-color: transparent
+  -webkit-user-select: none
+  -webkit-user-drag: none
+</style>
