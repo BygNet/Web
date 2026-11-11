@@ -63,7 +63,6 @@ import type {
 import { setHeadMetaKeys } from '@/utils/setHeadMeta'
 
 const { t } = useI18n()
-const localePath = useLocalePath()
 const pageMeta = PageMetaByPath['/messages']!
 
 watchEffect(() => {
@@ -76,6 +75,7 @@ setHeadMetaKeys({
 
 const route = useRoute()
 
+const embeddedMode = computed(() => route.query.embedded === 'true' || false)
 const loadingThreads: Ref<boolean> = ref(true)
 const loadingConversation: Ref<boolean> = ref(false)
 const error: Ref<string | null> = ref(null)
@@ -869,7 +869,7 @@ async function closeMobileConversation(): Promise<void> {
 
   stopTypingSignal()
 
-  await navigateTo(localePath('/messages'))
+  await navigateTo({ path: '/messages', query: { embedded: embeddedMode.value } })
 }
 
 function pickThreadFromConversation(
@@ -1599,9 +1599,10 @@ watch(
 </script>
 
 <template>
-  <ContentArea class="messagesPage" hide-terms-link>
+  <ContentArea class="messagesPage" hide-terms-link :class="{ embeddedMode }">
     <HStack class="messagesLayout">
       <MessagesThreadsPane
+        :embedded="embeddedMode"
         :visible="shouldShowThreadsPane"
         :only="!shouldShowConversationPane"
         :loading="loadingThreads"
@@ -1832,6 +1833,11 @@ watch(
     </VStack>
   </Modal>
 </template>
+
+<style lang="sass">
+html:has(.embeddedMode), body:has(.embeddedMode)
+  background: transparent !important
+</style>
 
 <style scoped lang="sass">
 @use "@/styles/variables"

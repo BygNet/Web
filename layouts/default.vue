@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ChatBox from '~/components/layout/ChatBox.vue'
 import DesktopNav from '~/components/nav/DesktopNav.vue'
 import MobileNav from '~/components/nav/MobileNav.vue'
 import TitleView from '~/components/nav/TitleView.vue'
@@ -30,6 +31,7 @@ onUnmounted(() => {
 
 <template>
   <DesktopNav />
+  <ChatBox />
 
   <main class="defaultLayout">
     <TitleView />

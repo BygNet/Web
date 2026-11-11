@@ -18,6 +18,7 @@ const props = defineProps<{
   starterSuggestions: BygUserSuggestion[]
   showingStarterSuggestions: boolean
   getThreadTypingUserId: (thread: BygMessageThread) => number | null
+  embedded?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -39,7 +40,7 @@ const starterQueryModel = computed({
 <template>
   <aside v-if="visible" class="threadsPane" :class="{ only }">
     <header class="threadsHeader">
-      <SafeLink to="/">
+      <SafeLink to="/" v-if="!embedded">
         <button class="backButton transparent">
           <Icon name="solar:alt-arrow-left-line-duotone" />
           {{ $t('common.back') }}
