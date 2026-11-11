@@ -141,7 +141,6 @@ export default defineNuxtConfig({
           content: 'black-translucent',
         },
         { name: 'mobile-web-app-capable', content: 'yes' },
-        { property: 'og:image', content: '/logos/Byg2-6Preview.jpg' },
         { property: 'og:url', content: 'https://byg.gg/' },
         { property: 'og:type', content: 'website' },
         { name: 'twitter:card', content: 'summary_large_image' },

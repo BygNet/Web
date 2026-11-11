@@ -231,7 +231,6 @@ onUnmounted(() => {
 
 <style scoped lang="sass">
 @use "@/styles/utils"
-@use "@/styles/themes"
 @use "@/styles/fonts"
 
 .profileCardContainer
@@ -255,7 +254,7 @@ onUnmounted(() => {
     mask: linear-gradient(to bottom, black, transparent)
 
   .bannerPlaceholder
-    background: linear-gradient(135deg, themes.$accentColor 0%, rgba(0,0,0,0.1) 100%)
+    background: linear-gradient(135deg, var(--accentColor) 0%, rgba(0,0,0,0.1) 100%)
 
   .profileContent
     padding: max(var(--padding), 1rem)
@@ -270,7 +269,7 @@ onUnmounted(() => {
         width: 6rem
         height: 6rem
         border-radius: 50%
-        background: themes.$backgroundColor
+        background: var(--backgroundColor)
         flex-shrink: 0
 
       .avatar

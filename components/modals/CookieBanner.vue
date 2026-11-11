@@ -38,15 +38,13 @@ function close() {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .cookieBanner
   position: fixed
   left: 0
   right: 0
   z-index: 9999
   bottom: env(safe-area-inset-bottom, 0)
-  background: themes.$foregroundOpaque
+  background: var(--foregroundOpaque)
   border-radius: 0
   align-items: flex-start
   padding: 1.5rem

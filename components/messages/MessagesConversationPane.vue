@@ -189,8 +189,6 @@ defineExpose({ conversationScroller, composerInput })
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .conversationPane
   width: 100%
   height: 100%
@@ -282,7 +280,7 @@ defineExpose({ conversationScroller, composerInput })
         justify-content: space-between
         align-items: center
         padding: 0.35rem 0.5rem
-        background: themes.$foregroundColor
+        background: var(--foregroundColor)
         border-radius: 1.25rem
 
         p

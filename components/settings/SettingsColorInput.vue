@@ -71,8 +71,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .settingsColorInputContainer
   position: relative
   width: 100%

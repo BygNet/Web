@@ -15,13 +15,13 @@
   box-sizing: border-box
 
   &:focus-visible
-    outline: themes.$accentColor 0.1rem solid
+    outline: var(--accentColor) 0.1rem solid
 
 html
   height: 100vh
   width: 100vw
   overflow: hidden
-  background: themes.$backgroundColor
+  background: var(--backgroundColor)
 
 body
   position: fixed
@@ -33,7 +33,7 @@ body
   margin: 0
   padding: 0
 
-  color: themes.$textColor
+  color: var(--textColor)
   user-select: none
   -webkit-user-select: none
 
@@ -69,19 +69,19 @@ a
   align-items: center
   justify-content: center
   text-decoration: none
-  color: themes.$textColor
+  color: var(--textColor)
   cursor: pointer
 
 a.prominentLink, span a
   text-decoration: underline
-  text-decoration-color: themes.$accentColor
+  text-decoration-color: var(--accentColor)
 
 hr
   opacity: 0.2
   border-width: 0.1rem
 
 span.iconify
-  color: themes.$textColor
+  color: var(--textColor)
 
 form
   display: flex
@@ -98,9 +98,9 @@ input, textarea
   padding: 0.5rem 0.75rem
   border-radius: 1.25rem
   font-size: 1rem
-  background: themes.$foregroundColor
+  background: var(--foregroundColor)
   border: none
-  color: themes.$textColor
+  color: var(--textColor)
 
   &.plain
     padding: 0
@@ -118,4 +118,4 @@ li
   margin: -0.25rem 0
 
   &::marker
-    color: themes.$foregroundOpaque
+    color: var(--foregroundOpaque)

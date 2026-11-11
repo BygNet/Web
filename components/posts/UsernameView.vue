@@ -227,8 +227,6 @@ function viewProfile(): void {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .usernameFallback
   opacity: 0.6
   margin: 0
@@ -252,7 +250,7 @@ function viewProfile(): void {
 
     &:hover
       text-decoration: underline
-      text-decoration-color: themes.$accentColor
+      text-decoration-color: var(--accentColor)
 
   .verificationBadge
     width: 1.25rem
@@ -267,7 +265,7 @@ function viewProfile(): void {
 
   .badge
     gap: 0
-    background: themes.$accentColor
+    background: var(--accentColor)
 
     &.staff, &.author
       padding: 0.15rem 0.35rem

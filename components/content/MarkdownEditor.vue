@@ -366,8 +366,6 @@ watch(model, value => {
 </template>
 
 <style lang="sass">
-@use "@/styles/themes"
-
 .bygEditorToolbar
   width: 100%
   margin: 0.75rem 0 0.35rem
@@ -396,10 +394,10 @@ watch(model, value => {
     &:not(.plain)
       padding: 0.5rem 0.75rem
       border-radius: 1.25rem
-      background: themes.$foregroundColor
+      background: var(--foregroundColor)
 
       &:focus
-        outline: themes.$accentColor 0.1rem solid
+        outline: var(--accentColor) 0.1rem solid
 
     .plain
       outline: none !important
@@ -414,7 +412,7 @@ watch(model, value => {
   gap: 0.35rem
   padding: 0.5rem
   border-radius: 1.75rem
-  background: themes.$foregroundColor
+  background: var(--foregroundColor)
 
   input
     flex: 1 1 12rem

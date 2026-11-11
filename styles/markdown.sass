@@ -40,9 +40,9 @@
     display: inline
     width: auto
     max-width: 100%
-    color: themes.$textColor
+    color: var(--textColor)
     text-decoration: underline
-    text-decoration-color: themes.$accentColor
+    text-decoration-color: var(--accentColor)
     overflow-wrap: anywhere
     word-break: break-word
 
@@ -72,7 +72,7 @@
     width: auto
     margin: 0.75rem 0
     padding-inline-start: 0.75rem
-    border-inline-start: 0.2rem solid themes.$accentColor
+    border-inline-start: 0.2rem solid var(--accentColor)
     opacity: 0.9
 
   pre
@@ -83,7 +83,7 @@
     padding: 0.75rem
     overflow: auto
     border-radius: 0.5rem
-    background: themes.$backgroundColor
+    background: var(--backgroundColor)
     white-space: pre
 
     code
@@ -97,7 +97,7 @@
     width: auto
     padding: 0.1rem 0.25rem
     border-radius: 0.25rem
-    background: themes.$backgroundColor
+    background: var(--backgroundColor)
     font-family: monospace
     overflow-wrap: anywhere
 
@@ -114,5 +114,5 @@
 
   th, td
     padding: 0.35rem 0.5rem
-    border: 0.05rem solid themes.$foregroundOpaque
+    border: 0.05rem solid var(--foregroundOpaque)
     text-align: start

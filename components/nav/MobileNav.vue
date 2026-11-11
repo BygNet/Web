@@ -73,7 +73,6 @@ function badgeValue(page: BygPageMeta): number {
 
 <style scoped lang="sass">
 @use "@/styles/variables"
-@use "@/styles/themes"
 
 .bygMobileNav
   --bottom: calc(max(env(safe-area-inset-bottom), 1rem) - var(--padding))
@@ -137,7 +136,7 @@ function badgeValue(page: BygPageMeta): number {
         min-width: 1.1rem
         padding: 0.25rem 0.5rem
         border-radius: 10rem
-        background: themes.$accentColor
+        background: var(--accentColor)
         font-size: small
         line-height: 1
         text-align: center

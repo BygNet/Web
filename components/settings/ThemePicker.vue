@@ -79,8 +79,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .appearanceSidebar
   --padding: 0.75rem
   --margin: 1rem
@@ -94,7 +92,7 @@ onUnmounted(() => {
   &:not(.full)
     position: fixed
     top: env(safe-area-inset-top)
-    background: themes.$foregroundColor
+    background: var(--foregroundColor)
     bottom: 0
     right: 0
     height: calc(100vh - var(--padding)*2 - var(--margin)*2 - var(--tabBarHeight) - env(safe-area-inset-top) - env(safe-area-inset-bottom))
@@ -135,7 +133,7 @@ onUnmounted(() => {
       margin: 0.25rem
 
       &.selected
-        outline: 0.25rem solid themes.$accentColor
+        outline: 0.25rem solid var(--accentColor)
 
     .themeInfo
       gap: 0

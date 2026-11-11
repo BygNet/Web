@@ -46,7 +46,6 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
 @use "@/styles/utils"
 
 .mentionSuggestions
@@ -60,7 +59,7 @@ const emit = defineEmits<{
   align-items: flex-start
   gap: 0.25rem
   padding: 0.5rem
-  background: themes.$foregroundOpaque
+  background: var(--foregroundOpaque)
   z-index: 1000
 
   .mentionSuggestionItem

@@ -64,7 +64,6 @@ const isExternal = computed(() => props.notification.path.startsWith('http'))
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
 @use "@/styles/utils"
 
 .notificationLink
@@ -79,7 +78,7 @@ const isExternal = computed(() => props.notification.path.startsWith('http'))
   cursor: pointer
 
   &.unread
-    border: 0.1rem solid themes.$accentColor
+    border: 0.1rem solid var(--accentColor)
 
   .notificationIcon
     width: 1.5rem

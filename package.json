@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.18.13",
+  "version": "2.18.14",
   "private": false,
   "type": "module",
   "scripts": {
@@ -16,10 +16,10 @@
   },
   "dependencies": {
     "@eslint/compat": "^2.1.1",
-    "@nuxt/icon": "^2.6.1",
+    "@nuxt/icon": "^2.6.2",
     "@nuxtjs/i18n": "^10.6.0",
-    "@takumi-rs/core": "^2.18.1",
-    "@takumi-rs/wasm": "^2.18.1",
+    "@takumi-rs/core": "^2.20.0",
+    "@takumi-rs/wasm": "^2.20.0",
     "@tiptap/core": "^3.32.0",
     "@tiptap/extension-placeholder": "^3.32.0",
     "@tiptap/markdown": "^3.32.0",

@@ -33,8 +33,6 @@ defineProps<{
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .personCredit
   justify-content: flex-start
   height: 100%
@@ -46,7 +44,7 @@ defineProps<{
     img, .placeholder
       width: 6rem
       height: 6rem
-      background: themes.$foregroundColor
+      background: var(--foregroundColor)
       justify-content: center
 
       span.iconify

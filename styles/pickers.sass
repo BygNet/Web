@@ -1,7 +1,7 @@
 @use "themes"
 
 div.settingsColorPicker[data-picker]
-  background: themes.$foregroundOpaque
+  background: var(--foregroundOpaque)
   border-radius: 1.5rem
   padding: 0.5rem
 
@@ -30,11 +30,11 @@ div.settingsColorPicker[data-picker]
     input
       width: 100%
       box-shadow: none
-      background: themes.$foregroundColor
+      background: var(--foregroundColor)
       font-size: smaller
 
       &, label
-        color: themes.$textColor
+        color: var(--textColor)
 
     label
       opacity: 0.6

@@ -93,7 +93,6 @@ const subscriptionState = computed(() => {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
 @use "@/styles/utils"
 
 .threadItem
@@ -106,7 +105,7 @@ const subscriptionState = computed(() => {
 
   &.selected
     border-radius: 1rem
-    background: themes.$accentColor
+    background: var(--accentColor)
 
   .threadRow
     width: 100%
@@ -143,8 +142,8 @@ const subscriptionState = computed(() => {
       min-width: 1.35rem
       padding: 0.1rem 0.35rem
       border-radius: 999px
-      background: themes.$accentColor
-      color: themes.$backgroundColor
+      background: var(--accentColor)
+      color: var(--backgroundColor)
       font-size: x-small
       font-weight: 700
       text-align: center

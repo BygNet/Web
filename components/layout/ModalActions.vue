@@ -18,10 +18,8 @@ import HStack from '@/components/layout/HStack.vue'
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .modalActions
-  border-top: 0.1rem solid themes.$foregroundColor
+  border-top: 0.1rem solid var(--foregroundColor)
   padding-top: 0.5rem
   border-radius: 0
   margin-top: 1rem

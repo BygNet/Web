@@ -409,7 +409,6 @@ watch(
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
 @use "@/styles/variables"
 
 :deep(.bygSearchResults)
@@ -451,7 +450,7 @@ watch(
     width: 100%
     padding: 0.75rem
     border-radius: 1rem
-    background: themes.$foregroundOpaque
+    background: var(--foregroundOpaque)
     align-items: center
 
     p
@@ -473,7 +472,7 @@ watch(
 
     .resultCard
       width: 100%
-      background: themes.$foregroundColor
+      background: var(--foregroundColor)
       border-radius: 1.5rem
       padding: 1rem
       align-items: flex-start
@@ -517,8 +516,8 @@ watch(
     .imageResultCard
       display: flex
       flex-direction: column
-      background: themes.$foregroundColor
-      border: 0.1rem solid themes.$foregroundOpaque
+      background: var(--foregroundColor)
+      border: 0.1rem solid var(--foregroundOpaque)
       border-radius: 1rem
       overflow: hidden
       text-align: left
@@ -527,7 +526,7 @@ watch(
       .imagePreview
         width: 100%
         aspect-ratio: 4 / 3
-        background: themes.$foregroundOpaque
+        background: var(--foregroundOpaque)
         border-radius: 0
         overflow: hidden
 

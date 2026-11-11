@@ -172,8 +172,6 @@ watch(
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .messageRow
   position: relative
   width: 100%
@@ -241,7 +239,7 @@ watch(
   gap: 0.45rem
   padding: 0.55rem 0.7rem
   border-radius: var(--cornerRadius)
-  background: themes.$foregroundColor
+  background: var(--foregroundColor)
 
   &.group-top
     border-bottom-left-radius: var(--groupCornerRadius)
@@ -255,7 +253,7 @@ watch(
     border-top-right-radius: var(--groupCornerRadius)
 
   &.outgoing
-    background: themes.$accentColor
+    background: var(--accentColor)
 
   &.emojiOnly
     background: transparent !important
@@ -263,7 +261,7 @@ watch(
     border-radius: 0
 
 .messageRow.messageTarget .bubble
-  outline: 0.15rem solid themes.$accentColor
+  outline: 0.15rem solid var(--accentColor)
   outline-offset: 0.1rem
 
 .messageContent
@@ -287,7 +285,7 @@ watch(
   display: block
   width: 100%
   padding: 0.35rem 0.5rem
-  border-left: 0.2rem solid themes.$accentColor
+  border-left: 0.2rem solid var(--accentColor)
   background: rgba(0, 0, 0, 0.08)
   border-radius: 0.35rem
   overflow: hidden

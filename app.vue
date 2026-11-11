@@ -1,28 +1,42 @@
 <script setup lang="ts">
-import type {BygAd} from '@bygnet/types'
-import {computed, onMounted, onUnmounted, type Ref, ref, watch} from 'vue'
-import {useI18n} from 'vue-i18n'
+import type { BygAd } from '@bygnet/types'
+import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-import {resetActiveAccountState} from '@/auth/accountState'
-import {auth} from '@/auth/session'
+import { resetActiveAccountState } from '@/auth/accountState'
+import { auth } from '@/auth/session'
 import ShareModal from '@/components/messages/ShareModal.vue'
 import CookieBanner from '@/components/modals/CookieBanner.vue'
 import NotificationsModal from '@/components/modals/NotificationsModal.vue'
-import {adCache} from '@/data/caches'
-import {fetchMessageThreads, messageUnreadCount, subscribeToMessagesRealtime,} from '@/data/messages'
-import {fetchNotifications, inboxUnreadCount, loadNotificationReadState,} from '@/data/notifications'
-import {getPushPermissionState, syncPushSubscription} from '@/data/pushAlerts'
-import {loadTheme} from '@/data/themes'
-import {isDisconnected, showingCookieBanner, showingNotificationsModal, showingReportPopup,} from '@/data/visibility'
-import {syncAppBadge} from '@/utils/appBadge'
-import {consoleWarn} from '@/utils/consoleWarn'
-import {useEnv} from '@/utils/env'
-import {getFlag} from '@/utils/setUserFlag'
+import { adCache } from '@/data/caches'
+import {
+  fetchMessageThreads,
+  messageUnreadCount,
+  subscribeToMessagesRealtime,
+} from '@/data/messages'
+import {
+  fetchNotifications,
+  inboxUnreadCount,
+  loadNotificationReadState,
+} from '@/data/notifications'
+import { getPushPermissionState, syncPushSubscription } from '@/data/pushAlerts'
+import { loadTheme } from '@/data/themes'
+import {
+  isDisconnected,
+  showingCookieBanner,
+  showingNotificationsModal,
+  showingReportPopup,
+} from '@/data/visibility'
+import { syncAppBadge } from '@/utils/appBadge'
+import { consoleWarn } from '@/utils/consoleWarn'
+import { useEnv } from '@/utils/env'
+import { getFlag } from '@/utils/setUserFlag'
 import CreateView from '@/views/CreateView.vue'
 import ReportView from '@/views/ReportView.vue'
-import {useHead} from '#imports'
-import WaitingState from '~/components/layout/WaitingState.vue'
-import {title} from '~/data/title.ts'
+import { useHead } from '#imports'
+import VStack from '~/components/layout/VStack.vue'
+import { taskList } from '~/data/tasks.ts'
+import { title } from '~/data/title.ts'
 
 const pushPermission: Ref<NotificationPermission | 'unsupported'> =
   ref('unsupported')
@@ -39,7 +53,8 @@ const pushEnabled = computed(() => pushPermission.value === 'granted')
 
 const loadingState: Ref<'loading' | 'preparing' | 'ready'> = ref('loading')
 
-title.value = `Byg ${__AppVersion}`
+const AppVersion = __AppVersion
+title.value = ''
 
 const { locale } = useI18n()
 const manifestHref = computed(() => {
@@ -147,6 +162,7 @@ useHead(() => ({
   link: [ { rel: 'manifest', href: manifestHref.value } ],
 }))
 
+taskList.value.push('loading app')
 onMounted(async () => {
   loadingState.value = 'preparing'
 
@@ -168,6 +184,7 @@ onMounted(async () => {
   adCache.value = (await adsRes.json()) as BygAd[]
 
   consoleWarn()
+  taskList.value.remove('loading app')
   loadingState.value = 'ready'
 })
 
@@ -219,11 +236,17 @@ watch(
 
   <div class="appShell">
     <NuxtLayout>
-      <template v-if="loadingState == 'loading'">
-        <WaitingState message="Byg is Loading." />
-      </template>
-      <template v-else-if="loadingState == 'preparing'">
-        <WaitingState message="Byg is Preparing..." />
+      <template v-if="loadingState != 'ready'">
+        <VStack class="bygLoaderContainer">
+          <img src="/logos/BygLogo.png" alt="Byg Logo" class="bygLogoLoader" />
+
+          <h3 v-if="loadingState == 'loading'">
+            Byg {{ AppVersion }} is Loading...
+          </h3>
+          <h3 v-else-if="loadingState == 'preparing'">
+            Byg {{ AppVersion }} is Preparing...
+          </h3>
+        </VStack>
       </template>
 
       <ClientOnly v-else>
@@ -290,6 +313,25 @@ watch(
   .app-leave-to
     transform: none
     filter: none
+
+.bygLoaderContainer
+  min-height: 100vh
+  align-items: center !important
+  justify-content: center !important
+
+  .bygLogoLoader
+    width: 5rem
+    height: 5rem
+    animation: logoLoading 2s infinite
+
+@keyframes logoLoading
+  0%
+    scale: 1
+  60%
+    scale: 0.9
+    opacity: 0.6
+  100%
+    scale: 1
 
 main
   display: flex

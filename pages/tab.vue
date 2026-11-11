@@ -349,7 +349,6 @@ function favoriteMonogram(title: string): string {
 
 <style scoped lang="sass">
 @use "@/styles/utils"
-@use "@/styles/themes"
 
 .tabShell
   position: relative
@@ -430,7 +429,7 @@ function favoriteMonogram(title: string): string {
       width: 3.5rem
       height: 3.5rem
       border-radius: 1rem
-      background: themes.$foregroundColor
+      background: var(--foregroundColor)
       object-fit: cover
 
     .favoriteFallback
@@ -458,7 +457,7 @@ function favoriteMonogram(title: string): string {
       width: 2rem
       height: 2rem
       border-radius: 50%
-      background: themes.$foregroundColor
+      background: var(--foregroundColor)
       cursor: pointer
       user-select: none
 
@@ -473,8 +472,8 @@ function favoriteMonogram(title: string): string {
       right: 0
       width: 8rem
       padding: 0.5rem
-      background: themes.$foregroundColor
-      border: themes.$foregroundColor
+      background: var(--foregroundColor)
+      border: var(--foregroundColor)
       backdrop-filter: blur(1rem)
       border-radius: 1.5rem
 

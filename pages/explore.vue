@@ -262,7 +262,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
 @use "@/styles/utils"
 
 .exploreDashboard
@@ -317,7 +316,7 @@ onMounted(() => {
 .postPreview, .askPreview
   width: 100%
   padding: 0.75rem 0
-  border-bottom: 0.1rem solid themes.$foregroundColor
+  border-bottom: 0.1rem solid var(--foregroundColor)
   color: inherit
   text-decoration: none
 
@@ -368,7 +367,7 @@ onMounted(() => {
   > span.iconify
     width: 2rem
     height: 2rem
-    color: themes.$accentColor
+    color: var(--accentColor)
 
 .widgetEmptyText
   padding: 1rem 0
@@ -391,7 +390,7 @@ onMounted(() => {
   .profileAvatarPlaceholder
     display: grid
     place-items: center
-    background: themes.$foregroundOpaque
+    background: var(--foregroundOpaque)
 
     > span.iconify
       width: 2rem

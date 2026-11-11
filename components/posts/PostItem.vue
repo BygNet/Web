@@ -114,8 +114,6 @@ watchEffect(async () => {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-@use "@/styles/variables"
 @use "@/styles/utils"
 
 .bygPostItem

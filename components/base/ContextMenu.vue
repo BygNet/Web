@@ -86,11 +86,9 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .contextMenu
   padding: 0.5rem
-  background: themes.$foregroundColor
+  background: var(--foregroundColor)
   backdrop-filter: blur(1rem)
   border-radius: 1.75rem
   gap: 0.25rem

@@ -274,11 +274,10 @@ async function submitImage() {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
 @use "@/styles/variables"
 
 .createView
-  background: themes.$foregroundColor
+  background: var(--foregroundColor)
   border-radius: 2rem
   padding: 1rem
 
@@ -298,7 +297,7 @@ async function submitImage() {
   width: 100%
 
   .type
-    background: themes.$foregroundColor
+    background: var(--foregroundColor)
     padding: 0.75rem
     border-radius: 1.25rem
     cursor: pointer
@@ -335,7 +334,7 @@ textarea, input
 
 @media (max-width: variables.$mobileWidth)
   .createView
-    background: themes.$backgroundColor
+    background: var(--backgroundColor)
     width: 100%
     border-bottom-left-radius: 0
     border-bottom-right-radius: 0

@@ -8,8 +8,6 @@
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .fullScreenCover
   position: fixed
   display: flex

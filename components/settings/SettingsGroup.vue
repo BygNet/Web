@@ -17,8 +17,6 @@ const { t } = useI18n()
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .settingsGroupTitle
   padding: 0 0.95rem
 
@@ -27,7 +25,7 @@ const { t } = useI18n()
   margin-bottom: 0.75rem
 
   &:not(.plain)
-    background: themes.$foregroundColor
+    background: var(--foregroundColor)
     padding: 0.95rem
     border-radius: 1.75rem
 

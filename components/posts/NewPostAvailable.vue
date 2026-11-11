@@ -24,16 +24,14 @@ defineEmits<{
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .newPosts
   position: fixed
   align-items: flex-start
   padding: 1rem 1.5rem 1rem 1rem
 
   border-radius: 2rem
-  background: themes.$foregroundColor
-  border: 0.2rem solid themes.$foregroundColor
+  background: var(--foregroundColor)
+  border: 0.2rem solid var(--foregroundColor)
   backdrop-filter: blur(0.5rem)
   transition: 0.2s ease
   z-index: 100

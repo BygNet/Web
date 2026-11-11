@@ -1834,7 +1834,6 @@ watch(
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
 @use "@/styles/variables"
 @use "@/styles/utils"
 
@@ -1993,8 +1992,8 @@ watch(
           justify-content: space-between
           align-items: center
           padding: 0.35rem 0.5rem
-          border-left: 0.2rem solid themes.$accentColor
-          background: themes.$foregroundColor
+          border-left: 0.2rem solid var(--accentColor)
+          background: var(--foregroundColor)
           border-radius: 0.5rem
 
           p

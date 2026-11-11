@@ -77,10 +77,6 @@ function goBack() {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-@use "@/styles/utils"
-@use "@/styles/variables"
-
 .titleView
   width: 100%
   display: flex
@@ -120,10 +116,11 @@ function goBack() {
         position: absolute
         top: -0.25rem
         right: -0.25rem
-        background: themes.$accentColor
+        background: var(--accentColor)
         padding: 0.25rem
         font-size: 0.75rem
         border-radius: 10rem
+        z-index: 10
 
       .tasksLoader
         width: 1.5rem
@@ -159,7 +156,7 @@ button.alertsButton
     min-width: 1.1rem
     padding: 0.25rem 0.5rem
     border-radius: 10rem
-    background: themes.$accentColor
+    background: var(--accentColor)
     font-size: small
     line-height: 1
     text-align: center
@@ -169,7 +166,7 @@ button.alertsButton
     background: transparent
 
 .titleMaskContainer
-  background: linear-gradient(to bottom, themes.$backgroundColor, transparent)
+  background: linear-gradient(to bottom, var(--backgroundColor), transparent)
   opacity: 0.7
   z-index: -1
 

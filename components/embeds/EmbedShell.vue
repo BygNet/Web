@@ -27,11 +27,9 @@ onMounted(() => {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .bygEmbedShell
   padding: 0.75rem
-  background: themes.$foregroundOpaque
+  background: var(--foregroundOpaque)
   width: 100%
   height: 100%
   border-radius: 0
@@ -45,7 +43,7 @@ onMounted(() => {
       height: 2.5rem
 
   .embedContent
-    background: themes.$backgroundColor
+    background: var(--backgroundColor)
     width: 100%
     height: 100%
     overflow: scroll

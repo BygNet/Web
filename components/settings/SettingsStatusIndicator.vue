@@ -22,13 +22,11 @@ const { t } = useI18n()
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/themes"
-
 .settingsStatusIndicator
   width: 100%
 
   &.enabled.noBorder
-    background: themes.$accentColor
+    background: var(--accentColor)
     border-radius: 1.25rem
     padding: 0.5rem
     margin: -0.5rem
