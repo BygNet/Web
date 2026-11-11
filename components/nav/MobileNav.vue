@@ -90,8 +90,8 @@ function badgeValue(page: BygPageMeta): number {
 
   &::before
     background: linear-gradient(to var(--trailing), var(--gradientOfTheDay))
-    mask-image: linear-gradient(to top, black, transparent)
-    opacity: 0.5
+    mask-image: linear-gradient(to top, black 30%, transparent)
+    opacity: 0.7
 
   .createButton
     span.iconify

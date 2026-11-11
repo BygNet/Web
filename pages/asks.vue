@@ -7,7 +7,6 @@ import { useI18n } from 'vue-i18n'
 import { auth } from '@/auth/session'
 import AskCard from '@/components/asks/AskCard.vue'
 import ContentArea from '@/components/layout/ContentArea.vue'
-import EmptyState from '@/components/layout/EmptyState.vue'
 import ErrorState from '@/components/layout/ErrorState.vue'
 import HStack from '@/components/layout/HStack.vue'
 import VStack from '@/components/layout/VStack.vue'
@@ -16,6 +15,7 @@ import { PageMetaByPath } from '@/data/pages'
 import { title } from '@/data/title'
 import { useEnv } from '@/utils/env'
 import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+import EmptyState from '~/components/layout/EmptyState.vue'
 import Modal from '~/components/layout/Modal.vue'
 import ModalActions from '~/components/layout/ModalActions.vue'
 import SkeletonText from '~/components/layout/skeletons/SkeletonText.vue'
@@ -242,6 +242,7 @@ watch(
 
     <EmptyState
       v-else-if="asks.length < 1"
+      icon="solar:question-square-line-duotone"
       :message="t('ui.asks.emptyState')"
     />
 

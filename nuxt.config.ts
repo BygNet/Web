@@ -1,5 +1,7 @@
 import { fileURLToPath } from 'node:url'
 
+import { defineNuxtConfig } from 'nuxt/config'
+
 import pkg from './package.json'
 
 export default defineNuxtConfig({
@@ -55,7 +57,6 @@ export default defineNuxtConfig({
           'en/auth.json',
           'en/common.json',
           'en/messages.json',
-          'en/nav.json',
           'en/pages.json',
           'en/ui.json',
           'en/asks.json',
@@ -70,7 +71,6 @@ export default defineNuxtConfig({
           'fr/auth.json',
           'fr/common.json',
           'fr/messages.json',
-          'fr/nav.json',
           'fr/pages.json',
           'fr/ui.json',
           'fr/asks.json',
@@ -85,7 +85,6 @@ export default defineNuxtConfig({
           'es/auth.json',
           'es/common.json',
           'es/messages.json',
-          'es/nav.json',
           'es/pages.json',
           'es/ui.json',
           'es/asks.json',
@@ -100,7 +99,6 @@ export default defineNuxtConfig({
           'zh/auth.json',
           'zh/common.json',
           'zh/messages.json',
-          'zh/nav.json',
           'zh/pages.json',
           'zh/ui.json',
           'zh/asks.json',
@@ -115,7 +113,6 @@ export default defineNuxtConfig({
           'ru/auth.json',
           'ru/common.json',
           'ru/messages.json',
-          'ru/nav.json',
           'ru/pages.json',
           'ru/ui.json',
           'ru/asks.json',

@@ -3,7 +3,6 @@ import type { BygPost, BygProfile } from '@bygnet/types'
 import { computed, type Ref, ref, watch } from 'vue'
 
 import ContentArea from '@/components/layout/ContentArea.vue'
-import EmptyState from '@/components/layout/EmptyState.vue'
 import ErrorState from '@/components/layout/ErrorState.vue'
 import ProfileView from '@/components/profile/ProfileView.vue'
 import { fetchProfileByUsername } from '@/data/profiles'
@@ -12,6 +11,7 @@ import setHeadMeta from '@/utils/setHeadMeta'
 import { useLazyAsyncData, useRoute } from '#app'
 import SafeLink from '~/components/base/SafeLink.vue'
 import VStack from '~/components/layout/VStack.vue'
+import WaitingState from '~/components/layout/WaitingState.vue'
 import PostItem from '~/components/posts/PostItem.vue'
 
 definePageMeta({ showBackButton: true })
@@ -84,7 +84,7 @@ watch(
 
 <template>
   <ContentArea class="profilePage">
-    <EmptyState message="Loading profile..." v-if="isLoading" />
+    <WaitingState message="Loading profile..." v-if="isLoading" />
     <ErrorState v-else-if="error" :message="error" />
 
     <ProfileView

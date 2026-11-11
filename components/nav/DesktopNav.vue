@@ -250,7 +250,14 @@ function create(page: BygPageMeta): void {
   opacity: 0
   transform: translateY(0.5rem)
   pointer-events: none
-  transition: opacity 0.05s ease, transform 0.05s ease
+  transition: opacity 0.1s ease 0s, transform 0.1s ease 0s
+
+.desktopNav:hover
+  .accountSection
+    opacity: 1
+    transform: translateY(0)
+    pointer-events: auto
+    transition: opacity 0.15s ease 0.25s, transform 0.15s ease 0.25s
 
 .footer
   opacity: 0

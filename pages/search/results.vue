@@ -2,7 +2,6 @@
 import { computed, type Ref, ref, watch } from 'vue'
 
 import ContentArea from '@/components/layout/ContentArea.vue'
-import EmptyState from '@/components/layout/EmptyState.vue'
 import ErrorState from '@/components/layout/ErrorState.vue'
 import HStack from '@/components/layout/HStack.vue'
 import VStack from '@/components/layout/VStack.vue'
@@ -11,6 +10,7 @@ import { title } from '@/data/title'
 import type { BygSearchCategory, BygSearchResponse } from '@/types/search'
 import setHeadMeta from '@/utils/setHeadMeta'
 import { navigateTo, useRoute } from '#app'
+import WaitingState from '~/components/layout/WaitingState.vue'
 
 interface SearchCategoryOption {
   id: BygSearchCategory
@@ -268,7 +268,7 @@ watch(
 
     <ErrorState v-if="error" :message="error" />
 
-    <EmptyState
+    <WaitingState
       v-else-if="loading"
       :message="`Searching ${selectedCategoryLabel.toLowerCase()}...`"
     />

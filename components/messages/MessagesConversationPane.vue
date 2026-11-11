@@ -96,7 +96,7 @@ defineExpose({ conversationScroller, composerInput })
       v-else-if="!selectedThread && !loadingConversation"
       class="conversationEmpty"
     >
-      <Icon name="solar:chat-round-line-line-duotone" />
+      <Icon name="solar:plane-line-duotone" />
       <h3>{{ t('ui.chat.emptyState') }}</h3>
     </div>
 
@@ -233,6 +233,10 @@ defineExpose({ conversationScroller, composerInput })
     justify-content: center
     gap: 0.35rem
     text-align: center
+
+    span.iconify
+      width: 4rem
+      height: 4rem
 
   .conversationBody
     display: flex

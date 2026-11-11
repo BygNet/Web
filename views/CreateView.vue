@@ -342,8 +342,8 @@ textarea, input
     padding-bottom: max(1rem, calc(1rem + env(safe-area-inset-bottom)))
 
   .createViewModal
-    z-index: 10000
-    justify-content: flex-end
+    z-index: 10000 !important
+    justify-content: flex-end !important
     padding: 0
 
     :deep(.fullScreenCoverContent), :deep(.modalContent)

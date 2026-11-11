@@ -18,10 +18,10 @@ import ThemePicker from '~/components/settings/ThemePicker.vue'
 const localePath = useLocalePath()
 const { t } = useI18n()
 
-title.value = t('nav.profile')
+title.value = t('pages.mySpace.title')
 setHeadMeta({
-  page: t('nav.profile'),
-  subtitle: t('ui.profilePage.subtitle'),
+  page: t('pages.mySpace.title'),
+  subtitle: t('pages.mySpace.description'),
 })
 const isLoggedIn = computed(() => !!auth.user)
 const hasAccounts = computed(() => auth.accounts.length > 0)

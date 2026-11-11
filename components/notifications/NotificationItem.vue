@@ -27,10 +27,10 @@ const notificationIcon = computed(() => {
     case 'ask':
       return 'solar:question-square-line-duotone'
     case 'message':
-      return 'solar:chat-round-line-line-duotone'
+      return 'solar:plane-line-duotone'
     case 'post_comment':
     default:
-      return 'solar:chat-round-line-line-duotone'
+      return 'solar:bell-ring-line-duotone'
   }
 })
 

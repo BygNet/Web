@@ -3,13 +3,13 @@ import type { BygProfile } from '@bygnet/types'
 import { computed, type Ref, ref } from 'vue'
 
 import EmbedShell from '@/components/embeds/EmbedShell.vue'
-import EmptyState from '@/components/layout/EmptyState.vue'
 import ErrorState from '@/components/layout/ErrorState.vue'
 import HStack from '@/components/layout/HStack.vue'
 import VStack from '@/components/layout/VStack.vue'
 import { fetchProfileByUsername } from '@/data/profiles'
 import setHeadMeta from '@/utils/setHeadMeta'
 import { useRoute } from '#app'
+import WaitingState from '~/components/layout/WaitingState.vue'
 
 const route = useRoute()
 const id = (route.params.id as string) || null
@@ -98,7 +98,7 @@ if (id) {
 
     <ErrorState message="User not found." v-else-if="error" />
 
-    <EmptyState message="Loading..." v-else-if="isLoading" />
+    <WaitingState message="Loading..." v-else-if="isLoading" />
   </EmbedShell>
 </template>
 

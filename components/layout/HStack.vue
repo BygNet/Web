@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<style scoped lang="sass">
+<style lang="sass">
 .hStack
   display: flex
   flex-direction: row

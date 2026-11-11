@@ -10,7 +10,6 @@ import {
 import { useI18n } from 'vue-i18n'
 
 import ContentArea from '@/components/layout/ContentArea.vue'
-import EmptyState from '@/components/layout/EmptyState.vue'
 import ErrorState from '@/components/layout/ErrorState.vue'
 import HStack from '@/components/layout/HStack.vue'
 import VStack from '@/components/layout/VStack.vue'
@@ -27,6 +26,9 @@ import { getPushPermissionState, syncPushSubscription } from '@/data/pushAlerts'
 import { title } from '@/data/title'
 import type { BygNotification } from '@/types/notifications'
 import { setHeadMetaKeys } from '@/utils/setHeadMeta'
+import SafeLink from '~/components/base/SafeLink.vue'
+import EmptyState from '~/components/layout/EmptyState.vue'
+import WaitingState from '~/components/layout/WaitingState.vue'
 
 definePageMeta({
   middleware: 'auth',
@@ -131,12 +133,12 @@ onUnmounted(() => {
     <HStack class="fullWidth controls">
       <HStack class="controlButtons fullWidth autoSpace">
         <HStack>
-          <a :href="localePath('/messages')">
+          <SafeLink :to="localePath('/messages')">
             <button class="prominent">
-              <Icon name="solar:chat-round-line-line-duotone" />
-              {{ t('common.messages') }}
+              <Icon name="solar:plane-line-duotone" />
+              {{ t('pages.messages.title') }}
             </button>
-          </a>
+          </SafeLink>
           <button
             v-if="canEnablePush && !pushEnabled"
             @click="enablePushAlerts"
@@ -169,11 +171,12 @@ onUnmounted(() => {
       {{ pushMessage }}
     </p>
 
-    <EmptyState v-if="loading" :message="t('common.loadingNotifications')" />
+    <WaitingState v-if="loading" :message="t('common.loadingNotifications')" />
     <ErrorState v-else-if="error" :message="error" />
 
     <EmptyState
       v-else-if="notifications.length < 1"
+      icon="solar:inbox-line-line-duotone"
       :message="t('common.noNotificationsYet')"
     />
 

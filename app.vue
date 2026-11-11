@@ -1,41 +1,28 @@
 <script setup lang="ts">
-import type { BygAd } from '@bygnet/types'
-import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+import type {BygAd} from '@bygnet/types'
+import {computed, onMounted, onUnmounted, type Ref, ref, watch} from 'vue'
+import {useI18n} from 'vue-i18n'
 
-import { resetActiveAccountState } from '@/auth/accountState'
-import { auth } from '@/auth/session'
+import {resetActiveAccountState} from '@/auth/accountState'
+import {auth} from '@/auth/session'
 import ShareModal from '@/components/messages/ShareModal.vue'
 import CookieBanner from '@/components/modals/CookieBanner.vue'
 import NotificationsModal from '@/components/modals/NotificationsModal.vue'
-import { adCache } from '@/data/caches'
-import {
-  fetchMessageThreads,
-  messageUnreadCount,
-  subscribeToMessagesRealtime,
-} from '@/data/messages'
-import {
-  fetchNotifications,
-  inboxUnreadCount,
-  loadNotificationReadState,
-} from '@/data/notifications'
-import { getPushPermissionState, syncPushSubscription } from '@/data/pushAlerts'
-import { loadTheme } from '@/data/themes'
-import {
-  isDisconnected,
-  showingCookieBanner,
-  showingNotificationsModal,
-  showingReportPopup,
-} from '@/data/visibility'
-import { syncAppBadge } from '@/utils/appBadge'
-import { consoleWarn } from '@/utils/consoleWarn'
-import { useEnv } from '@/utils/env'
-import { getFlag } from '@/utils/setUserFlag'
+import {adCache} from '@/data/caches'
+import {fetchMessageThreads, messageUnreadCount, subscribeToMessagesRealtime,} from '@/data/messages'
+import {fetchNotifications, inboxUnreadCount, loadNotificationReadState,} from '@/data/notifications'
+import {getPushPermissionState, syncPushSubscription} from '@/data/pushAlerts'
+import {loadTheme} from '@/data/themes'
+import {isDisconnected, showingCookieBanner, showingNotificationsModal, showingReportPopup,} from '@/data/visibility'
+import {syncAppBadge} from '@/utils/appBadge'
+import {consoleWarn} from '@/utils/consoleWarn'
+import {useEnv} from '@/utils/env'
+import {getFlag} from '@/utils/setUserFlag'
 import CreateView from '@/views/CreateView.vue'
 import ReportView from '@/views/ReportView.vue'
-import { useHead } from '#imports'
-import EmptyState from '~/components/layout/EmptyState.vue'
-import { title } from '~/data/title.ts'
+import {useHead} from '#imports'
+import WaitingState from '~/components/layout/WaitingState.vue'
+import {title} from '~/data/title.ts'
 
 const pushPermission: Ref<NotificationPermission | 'unsupported'> =
   ref('unsupported')
@@ -52,8 +39,7 @@ const pushEnabled = computed(() => pushPermission.value === 'granted')
 
 const loadingState: Ref<'loading' | 'preparing' | 'ready'> = ref('loading')
 
-const AppVersion = __AppVersion
-title.value = `Byg ${AppVersion}`
+title.value = `Byg ${__AppVersion}`
 
 const { locale } = useI18n()
 const manifestHref = computed(() => {
@@ -234,10 +220,10 @@ watch(
   <div class="appShell">
     <NuxtLayout>
       <template v-if="loadingState == 'loading'">
-        <EmptyState message="Byg is Loading." />
+        <WaitingState message="Byg is Loading." />
       </template>
       <template v-else-if="loadingState == 'preparing'">
-        <EmptyState message="Byg is Preparing..." />
+        <WaitingState message="Byg is Preparing..." />
       </template>
 
       <ClientOnly v-else>

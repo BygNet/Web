@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<style scoped lang="sass">
+<style lang="sass">
 .vStack
   display: flex
   flex-direction: column
