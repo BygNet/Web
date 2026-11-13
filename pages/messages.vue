@@ -869,7 +869,10 @@ async function closeMobileConversation(): Promise<void> {
 
   stopTypingSignal()
 
-  await navigateTo({ path: '/messages', query: { embedded: embeddedMode.value } })
+  await navigateTo({
+    path: '/messages',
+    query: { embedded: embeddedMode.value },
+  })
 }
 
 function pickThreadFromConversation(

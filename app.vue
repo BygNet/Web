@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BygAd } from '@bygnet/types'
 import { computed, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { resetActiveAccountState } from '@/auth/accountState'
 import { auth } from '@/auth/session'
@@ -55,12 +54,6 @@ const loadingState: Ref<'loading' | 'preparing' | 'ready'> = ref('loading')
 
 const AppVersion = __AppVersion
 title.value = ''
-
-const { locale } = useI18n()
-const manifestHref = computed(() => {
-  const code = locale.value || 'en'
-  return `/manifest.${code}.webmanifest`
-})
 
 const theme = useCookie<string>('bygTheme')
 const themeClass = theme.value ?? 'auto'
@@ -158,10 +151,6 @@ useHead(() => ({
   },
 }))
 
-useHead(() => ({
-  link: [ { rel: 'manifest', href: manifestHref.value } ],
-}))
-
 taskList.value.push('loading app')
 onMounted(async () => {
   loadingState.value = 'preparing'
@@ -220,6 +209,8 @@ watch(
 </script>
 
 <template>
+  <NuxtPwaManifest />
+
   <ClientOnly>
     <CreateView />
     <ReportView v-if="showingReportPopup" />

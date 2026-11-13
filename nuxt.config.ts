@@ -179,7 +179,24 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     includeAssets: [ 'favicon.ico', 'logos/BygLogo-Pwa.png', 'tos.md' ],
-    manifest: false,
+    manifest: {
+      name: 'Byg',
+      short_name: 'Byg',
+      description: 'Byg Media app.',
+      start_url: '/',
+      scope: '/',
+      display: 'standalone',
+      background_color: '#170023',
+      theme_color: '#D11495',
+      icons: [
+        {
+          src: '/logos/BygLogo-Pwa.png',
+          sizes: '1024x1024',
+          type: 'image/png',
+          purpose: 'any maskable',
+        },
+      ],
+    },
     strategies: 'injectManifest',
     srcDir: '.',
     filename: 'sw.ts',
