@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BygProfile } from '@bygnet/types'
 import { computed, onMounted, type Ref, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { auth } from '@/auth/session'
 import ContentArea from '@/components/layout/ContentArea.vue'

@@ -2,7 +2,6 @@
 import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 import { computed, nextTick, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { createMarkdownExtensions } from '@/utils/markdownExtensions'
 import HStack from '~/components/layout/HStack.vue'

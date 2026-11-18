@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BygUser } from '@bygnet/types'
 import { computed, onUnmounted, type Ref, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { api } from '@/api/client'
 import { auth } from '@/auth/session'

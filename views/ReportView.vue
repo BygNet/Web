@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import HStack from '@/components/layout/HStack.vue'
 import { showingReportPopup } from '@/data/visibility'

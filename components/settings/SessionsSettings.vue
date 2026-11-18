@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import HStack from '@/components/layout/HStack.vue'
 import VStack from '@/components/layout/VStack.vue'

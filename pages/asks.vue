@@ -2,7 +2,6 @@
 import { type BygAsk, getAskGradient, getAskVariantById } from '@bygnet/types'
 import domtoimage from 'dom-to-image'
 import { computed, type Ref, ref, watch, watchEffect } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { auth } from '@/auth/session'
 import AskCard from '@/components/asks/AskCard.vue'

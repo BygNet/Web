@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, type Ref, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import SafeLink from '@/components/base/SafeLink.vue'
 import type { BygMessage } from '@/types/messages'

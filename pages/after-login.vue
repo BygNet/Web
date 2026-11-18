@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
 import SafeLink from '@/components/base/SafeLink.vue'
 import ContentArea from '@/components/layout/ContentArea.vue'
 import HStack from '@/components/layout/HStack.vue'

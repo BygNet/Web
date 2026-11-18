@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-
 import Modal from '@/components/layout/Modal.vue'
 import ModalActions from '@/components/layout/ModalActions.vue'
 import VStack from '@/components/layout/VStack.vue'

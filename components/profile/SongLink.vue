@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BygSongLinkInfo } from '@bygnet/types'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import ContextMenu from '@/components/base/ContextMenu.vue'
 import ContextMenuItem from '@/components/base/ContextMenuItem.vue'

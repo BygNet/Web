@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BygAuthUser, BygProfile } from '@bygnet/types'
 import { computed, onMounted, type Ref, ref, watchEffect } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { api } from '@/api/client'
 import { auth, updateActiveUser } from '@/auth/session'

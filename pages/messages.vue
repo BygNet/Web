@@ -18,8 +18,6 @@ definePageMeta({
   middleware: 'auth',
 })
 
-import { useI18n } from 'vue-i18n'
-
 import { auth } from '@/auth/session'
 import ContentArea from '@/components/layout/ContentArea.vue'
 import HStack from '@/components/layout/HStack.vue'

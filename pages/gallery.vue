@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BygImage } from '@bygnet/types'
 import { onMounted, type Ref, ref, watchEffect } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { api } from '@/api/client'
 import ImageItem from '@/components/images/ImageItem.vue'

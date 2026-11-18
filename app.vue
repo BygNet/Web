@@ -37,6 +37,7 @@ import VStack from '~/components/layout/VStack.vue'
 import { taskList } from '~/data/tasks.ts'
 import { title } from '~/data/title.ts'
 
+const route = useRoute()
 const pushPermission: Ref<NotificationPermission | 'unsupported'> =
   ref('unsupported')
 const activeAccountKey = computed(() => auth.activeAccountId ?? 'guest')
@@ -65,6 +66,14 @@ const wallpaperMode = useCookie<boolean>('bygWallpaperMode', {
 const wallpaperUrl = useCookie<string>('bygWallpaperUrl', {
   default: () => '',
 })
+
+const liteModeCookie = useCookie<boolean>('lite-mode', {
+  default: () => false,
+  maxAge: 60 * 60 * 24 * 365,
+  sameSite: 'lax',
+})
+
+const liteMode = useState<boolean>('liteMode', () => liteModeCookie.value)
 
 let stopMessageRealtime: (() => void) | null = null
 let pingInterval: ReturnType<typeof setInterval> | null = null
@@ -203,6 +212,20 @@ watch(
   appBadgeCount,
   count => {
     void syncAppBadge(count)
+  },
+  { immediate: true }
+)
+
+watch(
+  () => route.query.lite,
+  value => {
+    if (value === 'true') {
+      liteMode.value = true
+      liteModeCookie.value = true
+    } else if (value === 'false') {
+      liteMode.value = false
+      liteModeCookie.value = false
+    }
   },
   { immediate: true }
 )

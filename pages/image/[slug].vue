@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BygImage } from '@bygnet/types'
 import { type Ref, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import ImageItem from '@/components/images/ImageItem.vue'
 import ContentArea from '@/components/layout/ContentArea.vue'

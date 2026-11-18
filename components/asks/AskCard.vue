@@ -2,7 +2,6 @@
 import type { BygAsk } from '@bygnet/types'
 import { getAskGradient, getAskVariantById } from '@bygnet/types'
 import { computed, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import HStack from '@/components/layout/HStack.vue'
 import VStack from '@/components/layout/VStack.vue'

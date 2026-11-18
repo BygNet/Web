@@ -1,6 +1,6 @@
 {
   "name": "@bygnet/web",
-  "version": "2.18.16",
+  "version": "2.18.17",
   "private": false,
   "type": "module",
   "scripts": {
@@ -34,7 +34,7 @@
     "marked": "^17.0.4",
     "marked-shiki": "^1.2.1",
     "mitt": "^3.0.1",
-    "nuxt-og-image": "^7.0.7",
+    "nuxt-og-image": "6",
     "posthog-js": "^1.438.23",
     "shiki": "^4.5.0",
     "unstorage": "^1.15.0",
@@ -47,7 +47,6 @@
     "@iconify-json/lucide": "^1.2.147",
     "@iconify-json/mingcute": "^1.2.8",
     "@iconify-json/solar": "^1.2.13",
-    "@nuxt/cli": "4.0.2",
     "@nuxt/fonts": "^1.2.0",
     "@types/dom-to-image": "^2.6.7",
     "@types/node": "^26.6.5",

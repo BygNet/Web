@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BygPost } from '@bygnet/types'
 import { type Ref, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import ContentArea from '@/components/layout/ContentArea.vue'
 import Divider from '@/components/layout/Divider.vue'

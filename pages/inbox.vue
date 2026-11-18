@@ -7,7 +7,6 @@ import {
   ref,
   watchEffect,
 } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import ContentArea from '@/components/layout/ContentArea.vue'
 import ErrorState from '@/components/layout/ErrorState.vue'

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import {
   exchangeOAuthAccessToken,
@@ -10,7 +9,6 @@ import {
 } from '@/auth/oauth'
 import { auth, upsertAccount } from '@/auth/session'
 import VStack from '@/components/layout/VStack.vue'
-import { isThemeDark } from '@/data/themes'
 import { navigateTo } from '#app'
 import SafeLink from '~/components/base/SafeLink.vue'
 import HStack from '~/components/layout/HStack.vue'
@@ -19,30 +17,9 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const provider = ref<OAuthProvider | null>(null)
 const isLoading = ref(true)
-const isFallback = ref(false)
 const pendingToken = ref<string | null>(null)
 const twoFactorCode = ref('')
 const error = ref<string | null>(null)
-const containerId = `byg-yandex-button-${Math.random().toString(36).slice(2)}`
-
-let sdkPromise: Promise<void> | null = null
-
-function loadSdk(): Promise<void> {
-  if (window.YaAuthSuggest) return Promise.resolve()
-  if (sdkPromise) return sdkPromise
-
-  sdkPromise = new Promise((resolve, reject) => {
-    const script = document.createElement('script')
-    script.src =
-      'https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js'
-    script.async = true
-    script.onload = () => resolve()
-    script.onerror = () => reject(new Error('Yandex SDK failed to load'))
-    document.head.appendChild(script)
-  })
-
-  return sdkPromise
-}
 
 async function finishSignIn(accessToken: string): Promise<void> {
   pendingToken.value = accessToken
@@ -85,37 +62,25 @@ async function finishSignIn(accessToken: string): Promise<void> {
   await navigateTo(localePath('/'))
 }
 
-async function startInstantSignIn(): Promise<void> {
+async function startInstantSignIn() {
   if (!provider.value?.clientId || !window.YaAuthSuggest) return
 
-  isLoading.value = true
-  error.value = null
-  try {
-    const result = await window.YaAuthSuggest.init(
-      {
-        client_id: provider.value.clientId,
-        response_type: 'token',
-        redirect_uri: `${window.location.origin}/oauth/yandex-token`,
-      },
-      window.location.origin,
-      {
-        view: 'button',
-        parentId: containerId,
-        buttonView: 'main',
-        buttonTheme: isThemeDark() ? 'light' : 'dark', // Inverted
-        buttonSize: 's',
-        buttonBorderRadius: 140,
-        buttonIcon: 'ya',
-      }
-    )
-    const data = await result.handler()
-    const accessToken = data.access_token ?? data.token
-    if (!accessToken) throw new Error('Yandex did not return a token')
+  const result = await window.YaAuthSuggest.init(
+    {
+      client_id: provider.value.clientId,
+      response_type: 'token',
+      redirect_uri: `${window.location.origin}/oauth/yandex-token`,
+    },
+    window.location.origin
+  )
+
+  if (result.status !== 'ok') return
+
+  const data = await result.handler()
+  const accessToken = data.access_token ?? data.token
+
+  if (accessToken) {
     await finishSignIn(accessToken)
-  } catch {
-    isFallback.value = true
-    isLoading.value = false
-    error.value = t('ui.instantLogin.error')
   }
 }
 
@@ -147,10 +112,8 @@ onMounted(async () => {
     provider.value =
       (await loadOAuthProviders()).find(item => item.id === 'yandex') ?? null
     if (!provider.value?.clientId) return
-    await loadSdk()
     await startInstantSignIn()
   } catch {
-    isFallback.value = true
     isLoading.value = false
   }
 })
@@ -169,15 +132,12 @@ onMounted(async () => {
           </button>
         </SafeLink>
 
-        <div v-if="!isFallback" :id="containerId" class="yandexButton" />
         <button
-          v-else
-          type="button"
-          class="fallbackButton prominent"
+          class="yandexButton"
           :disabled="isLoading"
           @click="startFallback"
         >
-          <Icon name="solar:login-2-line-duotone" />
+          <Icon name="thesvg-color:yandex" />
           {{ t('auth.oauth.continueWith', { provider: 'Yandex' }) }}
         </button>
       </HStack>
@@ -215,22 +175,6 @@ onMounted(async () => {
 
   h4
     margin: 0
-
-.yandexButton
-  min-width: 6rem
-  min-height: 2rem
-  display: flex
-  justify-content: center
-
-:deep(.yaPersonalButton_main)
-  background: var(--foregroundColor) !important
-  transition: 0.4s
-
-:deep(.yaPreloadingSuggestBlock)
-  flex-direction: row
-
-.fallbackButton
-  align-self: flex-start
 
 .twoFactorForm
   width: 100%

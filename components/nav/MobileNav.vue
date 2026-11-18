@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import { ProgressiveBlur } from 'vue-progressive-blur'
 
 import SafeLink from '@/components/base/SafeLink.vue'

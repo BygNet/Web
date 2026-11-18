@@ -157,7 +157,12 @@ export default defineNuxtConfig({
           href: 'https://emojis.byg.a35.dev/FluentEmojiColor.css',
         },
       ],
-      script: [ { src: 'https://tally.so/widgets/embed.js' } ],
+      script: [
+        { src: 'https://tally.so/widgets/embed.js' },
+        {
+          src: 'https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js',
+        },
+      ],
     },
   },
 

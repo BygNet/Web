@@ -4,7 +4,6 @@ import type {
   ResolvableMeta,
 } from '@unhead/vue/types'
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { useHead } from '#imports'
 

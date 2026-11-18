@@ -9,7 +9,6 @@ import {
   ref,
   watchEffect,
 } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { auth } from '@/auth/session'
 import SafeLink from '@/components/base/SafeLink.vue'

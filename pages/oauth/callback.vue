@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { clearOAuthFlow, exchangeOAuthGrant, readOAuthFlow } from '@/auth/oauth'
 import { completeServiceLogin } from '@/auth/serviceLogin'
