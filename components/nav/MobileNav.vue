@@ -3,13 +3,11 @@ import SafeLink from '@/components/base/SafeLink.vue'
 import HStack from '@/components/layout/HStack.vue'
 import VStack from '@/components/layout/VStack.vue'
 import { type BygPageMeta, BygPages, ExplorePage } from '@/data/pages'
-import { showingCreateModal } from '@/data/visibility'
 import { toggleCreateModal } from '@/utils/createModalManager'
 import { isActive } from '@/utils/isActive'
 import { useRoute } from '#app'
 
 const route = useRoute()
-const { t } = useI18n()
 
 const activePage = computed(() => {
   const matchingPage = [ ...BygPages ].find(page =>
@@ -29,17 +27,12 @@ function badgeValue(page: BygPageMeta): number {
 </script>
 
 <template>
-  <div class="bygMobileNav">
-    <button
-      class="createButton prominent large"
-      @click="toggleCreateModal()"
-      :class="{ open: showingCreateModal }"
-    >
-      <Icon name="mingcute:add-fill" />
-      {{ t('common.createEllipsis') }}
+  <div class="bygMobileNav background">
+    <button class="createButton prominent large" @click="toggleCreateModal()">
+      <Icon name="solar:pen-line-duotone" />
     </button>
 
-    <HStack class="mobileNavItems background glowEffect">
+    <HStack class="mobileNavItems glowEffect">
       <SafeLink
         no-preview
         v-for="page in [...BygPages, ExplorePage]"
@@ -48,7 +41,9 @@ function badgeValue(page: BygPageMeta): number {
       >
         <VStack
           class="mobileNavItem"
-          :class="{ 'selected glowEffect': activePage.path === page.path }"
+          :class="{
+            'selected glowEffect background': activePage.path === page.path,
+          }"
         >
           <Icon
             :name="
@@ -75,7 +70,7 @@ function badgeValue(page: BygPageMeta): number {
   display: none
   flex-wrap: wrap
   align-items: flex-end
-  gap: 0.75rem
+  gap: 0.5rem
   position: sticky
   bottom: 0
   padding-inline-start: max(env(safe-area-inset-left), var(--bottom))
@@ -84,14 +79,12 @@ function badgeValue(page: BygPageMeta): number {
   width: 100%
   border-radius: 0
 
-  .createButton
-    margin-inline-end: 1rem
+  &::before
+    background: linear-gradient(to top, var(--backgroundColor), transparent)
+    opacity: 0.7
 
-    span.iconify
-      transition: 0.2s ease-in-out
-    &.open
-      span.iconify
-        transform: rotate(45deg)
+  .createButton
+    margin-inline-end: 0.75rem
 
   .mobileNavItems
     position: relative
@@ -100,14 +93,10 @@ function badgeValue(page: BygPageMeta): number {
     gap: 0
     margin-bottom: var(--bottom)
     background: var(--foregroundColor)
-    backdrop-filter: blur(0.25rem)
+    backdrop-filter: blur(0.5rem)
 
     &, &::before
       border-radius: 2.5rem
-
-    &::before
-      background: linear-gradient(to var(--trailing), var(--gradientOfTheDay))
-      opacity: 0.3
 
     :deep(.mobileNavLink)
       flex-grow: 1
@@ -121,10 +110,16 @@ function badgeValue(page: BygPageMeta): number {
       gap: 0
       transition: 0.2s ease
       width: 100%
-      border-radius: 2.5rem
+
+      &, &::before
+        border-radius: 2.5rem
 
       &.selected
         background: var(--foregroundColor)
+
+        &::before
+          background: linear-gradient(135deg, var(--gradientOfTheDay))
+          opacity: 0.3
 
       &:not(.selected)
         opacity: 0.6

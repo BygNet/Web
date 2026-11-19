@@ -159,7 +159,7 @@ button.alertsButton
 
 .titleMaskContainer
   background: var(--backgroundColor)
-  opacity: 0.5
+  opacity: 0.4
   z-index: -1
   box-shadow: inset 0 -0.1rem 0.1rem var(--buttonLighten)
 
