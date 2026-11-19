@@ -117,6 +117,7 @@ function create(page: BygPageMeta): void {
   width: 7rem
   min-width: 0
   transition: width 0.25s ease, flex-basis 0.25s ease
+  box-shadow: inset -0.1rem 0 0.1rem var(--buttonLighten)
 
   &::before
     content: ''
@@ -133,13 +134,15 @@ function create(page: BygPageMeta): void {
 
   &:not(:hover)
     .desktopNavItem
+      justify-content: center
+
       &:hover,
       &.selected
         padding: 0
 
         .icon
           @include utils.glowEffect
-          border-radius: 1.25rem
+          border-radius: 2rem
           padding: 0.45rem 0.65rem
           background-color: var(--foregroundColor)
 
@@ -206,7 +209,7 @@ function create(page: BygPageMeta): void {
   height: 3rem
   padding: 0.45rem 0.65rem
   gap: 0.5rem
-  border-radius: 1.25rem
+  border-radius: 2rem
   cursor: pointer
   opacity: 0.9
 
@@ -271,7 +274,7 @@ function create(page: BygPageMeta): void {
     transform: translateX(0)
     opacity: 1
 
-@media (min-width: variables.$mobileWidth)
+@media (min-width: variables.$mobileWidth + 0.001rem)
   .desktopNav
     display: flex
     flex-direction: column

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ProgressiveBlur } from 'vue-progressive-blur'
-
 import HStack from '@/components/layout/HStack.vue'
 import { inboxUnreadCount } from '@/data/notifications'
 import { taskList } from '@/data/tasks'
@@ -69,9 +67,7 @@ function goBack() {
     </HStack>
 
     <div class="titleMaskContainer" />
-    <div class="titleBlurContainer">
-      <ProgressiveBlur class="titleBlur" :blur="24" :border-radius="0" />
-    </div>
+    <div class="titleBlurContainer" />
   </header>
 </template>
 
@@ -83,11 +79,12 @@ function goBack() {
   position: sticky
   top: 0
   z-index: 100
-  padding: 0.5rem 0
+  padding: 0.25rem 0
 
   .titleViewContent
     z-index: 102
     margin-top: calc(env(safe-area-inset-top) + 0.5rem)
+    margin-bottom: 0.5rem
     gap: 0.75rem
     flex-wrap: nowrap
     width: 65rem
@@ -133,20 +130,16 @@ function goBack() {
         width: 1.5rem
         height: 1.5rem
 
-button.backButton
-  padding: 0.75rem
+  button
+    --buttonRadius: 2rem
+    padding: 0.75rem
 
-  span.iconify
-    width: 1.5rem !important
-    height: 1.5rem !important
+    span.iconify
+      width: 1.5rem !important
+      height: 1.5rem !important
 
 button.alertsButton
   position: relative
-  padding: 0.75rem
-
-  span.iconify
-    width: 1.5rem !important
-    height: 1.5rem !important
 
   .notificationBadge
     position: absolute
@@ -165,21 +158,21 @@ button.alertsButton
     background: transparent
 
 .titleMaskContainer
-  background: linear-gradient(to bottom, var(--backgroundColor), transparent)
-  opacity: 0.7
+  background: var(--backgroundColor)
+  opacity: 0.5
   z-index: -1
+  box-shadow: inset 0 -0.1rem 0.1rem var(--buttonLighten)
 
 .titleBlurContainer
   z-index: -2
+  backdrop-filter: blur(0.5rem)
+  background: rgba(0, 0, 0, 0.001)
 
 .titleBlurContainer, .titleMaskContainer
   position: absolute
   top: 0
-  bottom: -1.5rem
+  bottom: 0
   left: 0
   right: 0
   border-radius: 0
-
-  .titleBlur
-    transform: rotate(180deg)
 </style>

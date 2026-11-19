@@ -3,7 +3,6 @@ import { MarkdownManager } from '@tiptap/markdown'
 import DOMPurify from 'dompurify'
 
 import { createMarkdownExtensions } from '@/utils/markdownExtensions'
-import { highlightCode } from '@/utils/marked'
 
 const markdownExtensions = createMarkdownExtensions()
 const markdownManager = new MarkdownManager({
@@ -113,7 +112,10 @@ function renderNode(node: JSONContent): string {
       return `<li>${renderChildren(node)}</li>`
     case 'codeBlock': {
       const language = node.attrs?.language
-      return highlightCode(getTextContent(node), language)
+
+      return `<pre><code${renderAttributes({
+        class: language ? `language-${language}` : undefined,
+      })}>${escapeHtml(getTextContent(node))}</code></pre>`
     }
     case 'horizontalRule':
       return '<hr>'

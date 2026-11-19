@@ -148,7 +148,7 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'icon', type: 'image/png', href: '/logos/BygLogo.png' },
-        { rel: 'apple-touch-icon', href: '/logos/BygLogo-Pwa.png', },
+        { rel: 'apple-touch-icon', href: '/logos/BygLogo-Pwa.png' },
         { rel: 'dns-prefetch', href: 'https://fonts.googleapis.com' },
         { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' },
         { rel: 'dns-prefetch', href: 'https://cdn.jsdelivr.net' },

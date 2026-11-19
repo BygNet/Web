@@ -31,7 +31,7 @@ onUnmounted(() => {
 
 <template>
   <DesktopNav />
-  <ChatBox />
+  <!--  <ChatBox />-->
 
   <main class="defaultLayout">
     <TitleView />

@@ -169,12 +169,12 @@ async function submitImage() {
         </HStack>
 
         <HStack class="typePicker">
-          <VStack class="type" @click="pickedType = 'post'">
+          <VStack class="type glowEffect" @click="pickedType = 'post'">
             <Icon name="solar:pen-line-duotone" />
             {{ t('ui.create.typePost') }}
           </VStack>
 
-          <VStack class="type" @click="pickedType = 'image'">
+          <VStack class="type glowEffect" @click="pickedType = 'image'">
             <Icon name="solar:gallery-send-line-duotone" />
             {{ t('ui.create.typeImage') }}
           </VStack>
